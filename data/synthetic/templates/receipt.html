@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page {
+        size: 80mm 200mm;
+        margin: 5mm;
+    }
+    body {
+        font-family: 'Courier New', Courier, monospace;
+        color: #000;
+        margin: 0;
+        padding: 0;
+        font-size: 9pt;
+        line-height: 1.3;
+        background-color: #fff;
+    }
+    .receipt-container {
+        width: 100%;
+        text-align: center;
+    }
+    .store-name {
+        font-size: 14pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+    .store-details {
+        font-size: 8pt;
+        margin-bottom: 15px;
+    }
+    .divider {
+        border-top: 1px dashed #000;
+        margin: 10px 0;
+    }
+    .meta-table, .items-table, .totals-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 8.5pt;
+    }
+    .items-table th {
+        font-weight: bold;
+        border-bottom: 1px dashed #000;
+        padding-bottom: 5px;
+    }
+    .items-table td {
+        padding: 4px 0;
+        vertical-align: top;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .totals-table td {
+        padding: 3px 0;
+    }
+    .totals-table tr.total-row {
+        font-weight: bold;
+        font-size: 11pt;
+    }
+    .barcode-container {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .barcode {
+        font-family: 'Libre Barcode 39', 'Courier New', monospace;
+        font-size: 28pt;
+        letter-spacing: 2px;
+    }
+    .footer-msg {
+        font-size: 7.5pt;
+        margin-top: 15px;
+    }
+</style>
+</head>
+<body>
+
+<div class="receipt-container">
+    <div class="store-name">{{ store_name }}</div>
+    <div class="store-details">
+        {{ store_address }}<br>
+        Phone: {{ store_phone }}<br>
+        Store #{{ store_id }} | Register #{{ register_id }}
+    </div>
+    
+    <div class="divider"></div>
+    
+    <table class="meta-table">
+        <tr>
+            <td>Date: {{ txn_date }}</td>
+            <td class="text-right">Time: {{ txn_time }}</td>
+        </tr>
+        <tr>
+            <td>Cashier: {{ cashier_name }}</td>
+            <td class="text-right">Txn #: {{ txn_id }}</td>
+        </tr>
+    </table>
+    
+    <div class="divider"></div>
+    
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th style="width: 55%;">Item</th>
+                <th style="width: 15%;" class="text-center">Qty</th>
+                <th style="width: 30%;" class="text-right">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    {{ item.name }}<br>
+                    <span style="font-size: 7.5pt; color: #555;">{{ item.barcode }}</span>
+                </td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-right">{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="divider"></div>
+    
+    <table class="totals-table">
+        <tr>
+            <td>Subtotal</td>
+            <td class="text-right">{{ subtotal }}</td>
+        </tr>
+        <tr>
+            <td>Tax ({{ tax_rate }}%)</td>
+            <td class="text-right">{{ tax_amount }}</td>
+        </tr>
+        {% if discount_amount != "$0.00" %}
+        <tr>
+            <td>Discount</td>
+            <td class="text-right">-{{ discount_amount }}</td>
+        </tr>
+        {% endif %}
+        <tr class="total-row">
+            <td>TOTAL</td>
+            <td class="text-right">{{ total }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><div class="divider" style="margin: 5px 0;"></div></td>
+        </tr>
+        <tr>
+            <td>Payment Type: {{ payment_type }}</td>
+            <td class="text-right">Tendered: {{ amount_tendered }}</td>
+        </tr>
+        <tr>
+            <td>Change Due</td>
+            <td class="text-right">{{ change_due }}</td>
+        </tr>
+    </table>
+    
+    <div class="divider"></div>
+    
+    <div class="barcode-container">
+        <div class="barcode">*{{ txn_id }}*</div>
+        <div style="font-size: 8pt; margin-top: 3px;">{{ txn_id }}</div>
+    </div>
+    
+    <div class="footer-msg">
+        {{ footer_message }}<br>
+        Thank you for shopping with us!<br>
+        Please keep receipt for returns.
+    </div>
+</div>
+
+</body>
+</html>

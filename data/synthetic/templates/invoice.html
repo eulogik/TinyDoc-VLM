@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page {
+        size: A4;
+        margin: 20mm;
+    }
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        font-size: 11pt;
+        line-height: 1.4;
+    }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+    }
+    .company-details {
+        text-align: left;
+    }
+    .company-name {
+        font-size: 24pt;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin-bottom: 5px;
+    }
+    .invoice-title {
+        text-align: right;
+        font-size: 28pt;
+        font-weight: bold;
+        color: #3b82f6;
+    }
+    .meta-details {
+        text-align: right;
+        font-size: 10pt;
+        color: #666;
+        margin-top: 5px;
+    }
+    .billing-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
+    .bill-to {
+        width: 45%;
+    }
+    .ship-to {
+        width: 45%;
+        text-align: right;
+    }
+    .section-title {
+        font-size: 12pt;
+        font-weight: bold;
+        color: #1e3a8a;
+        text-transform: uppercase;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+    }
+    table.invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    table.invoice-table th {
+        background-color: #f3f4f6;
+        color: #1e3a8a;
+        font-weight: bold;
+        text-align: left;
+        padding: 10px;
+        border-bottom: 2px solid #3b82f6;
+        font-size: 10pt;
+    }
+    table.invoice-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 10pt;
+    }
+    table.invoice-table tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .totals-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .totals-table {
+        width: 40%;
+        border-collapse: collapse;
+    }
+    .totals-table td {
+        padding: 8px 10px;
+        font-size: 11pt;
+    }
+    .totals-table tr.grand-total {
+        font-weight: bold;
+        font-size: 13pt;
+        color: #1e3a8a;
+        background-color: #eff6ff;
+        border-top: 2px solid #3b82f6;
+        border-bottom: 2px solid #3b82f6;
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 9pt;
+        color: #9ca3af;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+    <div class="company-details">
+        <div class="company-name">{{ vendor_name }}</div>
+        <div>{{ vendor_address }}</div>
+        <div>Phone: {{ vendor_phone }} | Email: {{ vendor_email }}</div>
+    </div>
+    <div>
+        <div class="invoice-title">INVOICE</div>
+        <div class="meta-details">
+            <div><strong>Invoice No:</strong> {{ invoice_number }}</div>
+            <div><strong>Date:</strong> {{ invoice_date }}</div>
+            <div><strong>Due Date:</strong> {{ due_date }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="billing-container">
+    <div class="bill-to">
+        <div class="section-title">Bill To</div>
+        <div><strong>{{ customer_name }}</strong></div>
+        <div>{{ customer_address }}</div>
+        <div>Email: {{ customer_email }}</div>
+    </div>
+    <div class="ship-to">
+        <div class="section-title">Payment Info</div>
+        <div><strong>Bank Name:</strong> {{ bank_name }}</div>
+        <div><strong>Account No:</strong> {{ account_number }}</div>
+        <div><strong>SWIFT/BIC:</strong> {{ swift_code }}</div>
+    </div>
+</div>
+
+<table class="invoice-table">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Description</th>
+            <th style="width: 15%;" class="text-right">Unit Price</th>
+            <th style="width: 15%;" class="text-right">Quantity</th>
+            <th style="width: 20%;" class="text-right">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.description }}</td>
+            <td class="text-right">{{ item.unit_price }}</td>
+            <td class="text-right">{{ item.quantity }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="totals-container">
+    <table class="totals-table">
+        <tr>
+            <td>Subtotal</td>
+            <td class="text-right">{{ subtotal }}</td>
+        </tr>
+        <tr>
+            <td>Tax ({{ tax_rate }}%)</td>
+            <td class="text-right">{{ tax_amount }}</td>
+        </tr>
+        <tr class="grand-total">
+            <td>Total Due</td>
+            <td class="text-right">{{ total }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="footer">
+    Thank you for your business! If you have any questions about this invoice, please contact us.
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tinydoc-vlm"
+version = "0.1.0"
+description = "A tiny vision-language model specialized for document understanding"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "transformers>=4.48.0",
+    "accelerate>=0.34.0",
+    "sentencepiece>=0.2.0",
+    "tokenizers>=0.21.0",
+    "pillow>=10.0.0",
+    "numpy>=1.26.0",
+    "pandas>=2.1.0",
+    "tqdm>=4.66.0",
+    "pyyaml>=6.0.1",
+    "gradio>=4.40.0",
+    "optimum>=1.22.0",
+    "onnx>=1.16.0",
+    "onnxruntime>=1.19.0",
+    "einops>=0.8.0",
+    "weasyprint>=62.0",
+    "pdf2image>=1.17.0",
+    "augraphy>=8.2.0",
+    "albumentations>=1.4.0",
+    "faker>=26.0.0",
+    "jinja2>=3.1.0",
+    "pydantic>=2.8.0",
+]
+
+[tool.setuptools]
+packages = ["tinydoc_vlm"]
