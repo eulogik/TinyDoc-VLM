@@ -352,29 +352,40 @@ print(processor.tokenizer.decode(outputs[0]))
 
 ## 10. What's Next (Immediate Next Steps)
 
-### Priority 1: Generate synthetic data at scale
+### Priority 1: Generate synthetic data at scale ✅
 ```bash
-cd data/synthetic
-# Install rendering dependencies
-pip install weasyprint pdf2image
-# Generate 10K documents
-python generator.py --num-docs 10000 --output-dir output
+# Running: 10K docs via PIL renderer (~9 min)
+nohup python data/synthetic/generator.py --num-docs 10000 --output-dir data/synthetic/output --seed 42 --no-augment &
 ```
 
 ### Priority 2: Run Stage 1 pretraining
 ```bash
+# After 10K docs generated:
 python training/run.py --config training/stage1_layout_pretrain.yaml
 ```
 
-### Priority 3: Build remaining HTML templates
-- id_card.html, chart.html, contract.html, letter.html
+### Priority 3: Build demo app ✅
+```bash
+# Gradio demo with JSON/KV/Table/OCR extraction
+python demo/app.py --model-path checkpoints/best
+```
 
-### Priority 4: Integrate output heads into main model forward
-- Wire MultiTaskOutputHeads into TinyDocVLMForConditionalGeneration
-- Add multi-task loss to training loop
+### Priority 4: Download benchmark datasets
+```bash
+python evaluation/download_benchmarks.py --data-dir evaluation/data
+```
 
-### Priority 5: Download benchmark datasets
-- DocVQA, OCRBench, FUNSD, CORD → `evaluation/data/`
+### Priority 5: Export to ONNX/GGUF (after training)
+```bash
+python export/export_onnx.py --model-path checkpoints/best --output tinydoc-vlm.onnx
+python export/export_gguf.py --model-path checkpoints/best --output tinydoc-vlm.gguf
+```
+
+### Priority 6: Push CI workflow (requires PAT with `workflow` scope)
+The `.github/workflows/ci.yml` exists locally but the PAT token lacks `workflow` scope.
+To enable CI, either:
+- Regenerate the PAT with `workflow` scope, or
+- Push the file manually via the GitHub web interface
 
 ---
 
