@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from typing import Dict, Any, Optional, List, Tuple, Union
-from transformers import PreTrainedModel
+from transformers import PreTrainedModel, GenerationMixin
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from .configuration import TinyDocVLMConfig
@@ -26,7 +26,7 @@ class TinyDocVLMPreTrainedModel(PreTrainedModel):
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
 
-class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
+class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMixin):
     """
     TinyDoc-VLM: The World's Smallest Document Understanding Model.
     Coordinates SigLIP Vision Encoder, PixelShuffle Compressor, and SmolLM2 Decoder.
