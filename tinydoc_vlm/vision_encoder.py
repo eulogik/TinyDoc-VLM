@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
-from typing import Dict, Any, Union, Optional, Tuple
-from transformers import SiglipVisionModel, PreTrainedModel, AutoConfig
+from transformers import SiglipVisionModel
 from .configuration import TinyDocVLMConfig
 
 class SigLIPVisionEncoder(nn.Module):

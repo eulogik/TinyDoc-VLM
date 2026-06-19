@@ -1,4 +1,3 @@
-import os
 from typing import Dict, Any, Union
 from transformers import PretrainedConfig, AutoConfig
 

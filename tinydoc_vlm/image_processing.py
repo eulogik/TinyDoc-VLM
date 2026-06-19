@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from typing import Dict, Any, Union, Optional, List, Tuple
+from typing import Optional, List
 import torch
 import torchvision.transforms as T
 from transformers.image_processing_base import ImageProcessingMixin

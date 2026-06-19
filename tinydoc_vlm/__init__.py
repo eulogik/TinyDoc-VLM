@@ -10,7 +10,27 @@ from .data import DocumentDataset
 from .losses import CombinedLoss
 from .trainer import TinyDocVLMTrainer, TrainerConfig
 
-# Register configurations and models for HuggingFace Auto classes
+__all__ = [
+    "TinyDocVLMConfig",
+    "SigLIPVisionEncoder",
+    "PixelShuffleTokenCompressor",
+    "TinyDocDecoder",
+    "TinyDocVLMForConditionalGeneration",
+    "TinyDocVLMPreTrainedModel",
+    "TinyDocImageProcessor",
+    "TinyDocVLMProcessor",
+    "MultiTaskOutputHeads",
+    "JSONHead",
+    "KVHead",
+    "TableHead",
+    "OCRHead",
+    "QAHead",
+    "DocumentDataset",
+    "CombinedLoss",
+    "TinyDocVLMTrainer",
+    "TrainerConfig",
+]
+
 from transformers import AutoConfig, AutoModelForCausalLM
 
 try:

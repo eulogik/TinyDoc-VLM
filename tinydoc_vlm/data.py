@@ -1,11 +1,9 @@
 import json
-import random
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Union
 
 import torch
-import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 from PIL import Image
 
 from .image_processing import TinyDocImageProcessor

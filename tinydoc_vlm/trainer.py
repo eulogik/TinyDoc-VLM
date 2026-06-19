@@ -1,13 +1,10 @@
 import os
-import math
-import json
 import time
 import logging
 from pathlib import Path
-from typing import Dict, Optional, Union, Callable, List
+from typing import Dict, Optional
 
 import torch
-import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR, SequentialLR
@@ -16,7 +13,7 @@ from torch.cuda.amp import autocast, GradScaler
 from .modeling import TinyDocVLMForConditionalGeneration
 from .processing import TinyDocVLMProcessor
 from .losses import CombinedLoss
-from .data import DocumentDataset, collate_fn
+from .data import collate_fn
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +151,6 @@ class TinyDocVLMTrainer:
                     labels=labels,
                     task=task,
                 )
-                lm_loss = outputs["lm_outputs"].loss
                 head_outputs = outputs["head_outputs"]
                 loss_dict = self.loss_fn(
                     lm_logits=outputs["lm_outputs"].logits,
@@ -241,7 +237,7 @@ class TinyDocVLMTrainer:
 
         if benchmark_name:
             try:
-                from evaluation.evaluate import BENCHMARKS, evaluate_model
+                from evaluation.evaluate import evaluate_model
                 data_dir = Path("evaluation/data")
                 if data_dir.exists():
                     results = evaluate_model(self.model, self.processor, [benchmark_name], data_dir)
@@ -287,7 +283,7 @@ class TinyDocVLMTrainer:
 
         for epoch in range(self.config.num_epochs):
             self.epoch = epoch
-            metrics = self.train_epoch()
+            self.train_epoch()
             self.save_checkpoint(f"epoch_{epoch+1}")
 
         logger.info("Training complete.")

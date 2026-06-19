@@ -1,13 +1,9 @@
-import pytest
 import torch
 from PIL import Image
 import numpy as np
 
 from tinydoc_vlm import (
     TinyDocVLMConfig,
-    SigLIPVisionEncoder,
-    PixelShuffleTokenCompressor,
-    TinyDocDecoder,
     TinyDocVLMForConditionalGeneration,
     TinyDocImageProcessor,
     TinyDocVLMProcessor,

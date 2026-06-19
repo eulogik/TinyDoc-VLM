@@ -1,5 +1,5 @@
 from PIL import Image
-from typing import Dict, Any, Union, Optional, List, Tuple
+from typing import Dict, Any, Union, Optional, List
 import torch
 from transformers import AutoTokenizer, ProcessorMixin
 

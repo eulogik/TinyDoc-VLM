@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from typing import Dict, Any, Optional, List
-from transformers import LlamaForCausalLM, LlamaConfig, PreTrainedModel
+from typing import Optional, List
+from transformers import LlamaForCausalLM, LlamaConfig
 
 class TinyDocDecoder(nn.Module):
     """

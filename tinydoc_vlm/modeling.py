@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from typing import Dict, Any, Optional, List, Tuple, Union
-from transformers import PreTrainedModel, LlamaConfig, AutoConfig
+from transformers import PreTrainedModel
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from .configuration import TinyDocVLMConfig
@@ -9,7 +9,6 @@ from .vision_encoder import SigLIPVisionEncoder
 from .token_compressor import PixelShuffleTokenCompressor
 from .decoder import TinyDocDecoder
 from .output_heads import MultiTaskOutputHeads
-from .attention import get_2d_sincos_pos_embed
 
 class TinyDocVLMPreTrainedModel(PreTrainedModel):
     config_class = TinyDocVLMConfig
@@ -52,7 +51,6 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
         self.image_token_id = getattr(config, "image_token_id", 49153)
         
         # 2D Positional Embeddings for visual features (added to tokens before projection)
-        num_patches = (config.image_size // config.patch_size) ** 2
         s = config.pixel_shuffle_scale
         compressed_grid_size = (config.image_size // config.patch_size) // s
         compressed_patches = compressed_grid_size ** 2
