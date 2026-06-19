@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 25mm 30mm; }
+    body { font-family: 'Times New Roman', Times, serif; color: #111; margin: 0; padding: 0; font-size: 11pt; line-height: 1.6; }
+    .letterhead { text-align: center; border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 25px; }
+    .company { font-size: 16pt; font-weight: bold; color: #1e3a8a; }
+    .contact { font-size: 9pt; color: #555; }
+    .date-line { text-align: right; margin-bottom: 20px; }
+    .recipient { margin-bottom: 20px; }
+    .subject { font-weight: bold; margin-bottom: 15px; font-size: 11pt; }
+    .body-text { margin-bottom: 20px; }
+    .closing { margin-top: 30px; }
+    .signature { font-weight: bold; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="letterhead">
+    <div class="company">{{ company_name }}</div>
+    <div class="contact">{{ company_address }} | Phone: {{ company_phone }} | Email: {{ company_email }}</div>
+</div>
+
+<div class="date-line">{{ letter_date }}</div>
+
+<div class="recipient">
+    {{ recipient_name }}<br>
+    {{ recipient_address }}
+</div>
+
+<div class="subject">Re: {{ subject }}</div>
+
+{% for paragraph in body_paragraphs %}
+<div class="body-text">{{ paragraph }}</div>
+{% endfor %}
+
+<div class="closing">
+    {{ closing_sentence }}<br><br>
+    Sincerely,
+</div>
+<div class="signature">{{ sender_name }}<br>{{ sender_title }}</div>
+</body>
+</html>

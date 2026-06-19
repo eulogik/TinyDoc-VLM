@@ -8,6 +8,7 @@ from .configuration import TinyDocVLMConfig
 from .vision_encoder import SigLIPVisionEncoder
 from .token_compressor import PixelShuffleTokenCompressor
 from .decoder import TinyDocDecoder
+from .output_heads import MultiTaskOutputHeads
 from .attention import get_2d_sincos_pos_embed
 
 class TinyDocVLMPreTrainedModel(PreTrainedModel):
@@ -61,6 +62,12 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
             torch.zeros(1, 1, compressed_patches, config.decoder_config.hidden_size)
         )
         
+        # 4. Structured Output Heads (multi-task)
+        self.output_heads = MultiTaskOutputHeads(
+            hidden_size=config.decoder_config.hidden_size,
+            vocab_size=config.decoder_config.vocab_size,
+        )
+        
         # Initialize weights
         self.post_init()
 
@@ -83,15 +90,15 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple, CausalLMOutputWithPast]:
+        task: Optional[str] = None,
+    ) -> Union[Tuple, Dict, CausalLMOutputWithPast]:
         
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        output_hidden_states = True if task else output_hidden_states
         
         # If we already have past_key_values, we do not need to process pixel_values again
         if past_key_values is not None:
-            # We are generating subsequent tokens, just pass inputs_embeds or input_ids
-            # (inputs_embeds is prepared by prepare_inputs_for_generation)
-            return self.decoder(
+            outputs = self.decoder(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
                 position_ids=position_ids,
@@ -103,44 +110,35 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
                 output_hidden_states=output_hidden_states,
                 return_dict=return_dict,
             )
+            if task:
+                hidden = outputs.hidden_states[-1] if hasattr(outputs, "hidden_states") else outputs[2]
+                head_outputs = self.output_heads(hidden, task=task)
+                return {"lm_outputs": outputs, "head_outputs": head_outputs}
+            return outputs
 
-        # First pass: we need to construct inputs_embeds by merging text and visual tokens
+        # First pass: construct inputs_embeds by merging text and visual tokens
         if inputs_embeds is None:
             inputs_embeds = self.decoder.get_input_embeddings()(input_ids)
             
         if pixel_values is not None:
-            # 1. Encode images: (B, N, num_patches, encoder_dim)
             visual_features = self.vision_encoder(pixel_values)
-            
-            # 2. Compress tokens: (B, N, compressed_patches, decoder_dim)
             compressed_features = self.compressor(visual_features)
-            
-            # 3. Add 2D Positional Embeddings
-            # Broadcast self.visual_pos_embed (1, 1, compressed_patches, decoder_dim) to match shape
             compressed_features = compressed_features + self.visual_pos_embed
             
-            # 4. Flatten tiles dimension: (B, N * compressed_patches, decoder_dim)
             batch_size, num_tiles, compressed_patches, decoder_dim = compressed_features.shape
             flat_visual_features = compressed_features.view(
                 batch_size, num_tiles * compressed_patches, decoder_dim
             )
             
-            # 5. Overwrite the placeholder tokens in inputs_embeds
-            # Find index where input_ids matches self.image_token_id
             image_mask = (input_ids == self.image_token_id)
-            
-            # For each batch element, overwrite inputs_embeds at image_mask positions with flat_visual_features
             for b in range(batch_size):
-                # Number of placeholder tokens in this batch element
                 num_places = image_mask[b].sum().item()
                 if num_places > 0:
-                    # Crop visual features if they exceed the placeholders, or vice versa
                     features_to_insert = flat_visual_features[b][:num_places]
                     inputs_embeds[b, image_mask[b]] = features_to_insert
 
-        # Forward through decoder
         outputs = self.decoder(
-            input_ids=None,  # We pass inputs_embeds instead of input_ids
+            input_ids=None,
             attention_mask=attention_mask,
             position_ids=position_ids,
             past_key_values=past_key_values,
@@ -151,6 +149,11 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
+        
+        if task:
+            hidden = outputs.hidden_states[-1] if hasattr(outputs, "hidden_states") else outputs[-1]
+            head_outputs = self.output_heads(hidden, task=task)
+            return {"lm_outputs": outputs, "head_outputs": head_outputs}
         
         return outputs
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4 landscape; margin: 15mm; }
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        font-size: 9pt;
+    }
+    .table-title {
+        font-size: 16pt;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin-bottom: 15px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+    th {
+        background-color: #1e3a8a;
+        color: white;
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 9pt;
+    }
+    td {
+        padding: 6px 10px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    tr:nth-child(even) { background-color: #f9fafb; }
+    tr:hover { background-color: #eff6ff; }
+    .text-right { text-align: right; }
+    .footnote {
+        font-size: 8pt;
+        color: #6b7280;
+        margin-top: 10px;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+<div class="table-title">{{ table_title }}</div>
+
+<table>
+    <thead>
+        <tr>
+            {% for header in headers %}
+            <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            {% for header in headers %}
+            <td>{{ row.get(header, "") }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if footnote %}
+<div class="footnote">{{ footnote }}</div>
+{% endif %}
+</body>
+</html>

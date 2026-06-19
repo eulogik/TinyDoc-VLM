@@ -13,11 +13,13 @@ class TinyDocVLMProcessor(ProcessorMixin):
     image_processor_class = "AutoImageProcessor"
     tokenizer_class = "AutoTokenizer"
 
-    def __init__(self, image_processor=None, tokenizer=None, **kwargs):
+    def __init__(self, image_processor=None, tokenizer=None, config=None, **kwargs):
         if image_processor is None:
             image_processor = TinyDocImageProcessor()
         if tokenizer is None:
             tokenizer = AutoTokenizer.from_pretrained("HuggingFaceTB/SmolLM2-135M-Instruct")
+
+        self.config = config
             
         super().__init__(image_processor, tokenizer, **kwargs)
         self.image_processor = image_processor
@@ -84,8 +86,8 @@ class TinyDocVLMProcessor(ProcessorMixin):
         # Each image token needs to be expanded to match the compressed sequence length of its corresponding image.
         # Number of tokens per tile = (image_size / patch_size / scale_factor) ** 2
         # For default 384 size, 16 patch, scale 3: (384/16/3)^2 = 8^2 = 64 tokens.
-        scale = 3  # default scale
-        patch_size = 16  # default patch size
+        scale = getattr(self.config, "pixel_shuffle_scale", 3) if self.config else 3
+        patch_size = getattr(self.config, "patch_size", 16) if self.config else 16
         tokens_per_tile = (self.image_processor.image_size // patch_size // scale) ** 2
 
         if isinstance(text, list):
@@ -120,6 +122,9 @@ class TinyDocVLMProcessor(ProcessorMixin):
         }
         if pixel_values is not None:
             inputs["pixel_values"] = pixel_values
+
+        # Expose image_token_id in the output so the model can use it
+        inputs["image_token_id"] = self.image_token_id
 
         return inputs
 

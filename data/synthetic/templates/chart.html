@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; font-size: 10pt; }
+    .chart-title { font-size: 16pt; font-weight: bold; color: #1e3a8a; text-align: center; margin-bottom: 20px; }
+    .chart-container { width: 100%; text-align: center; margin-bottom: 20px; }
+    table { width: 80%; margin: 0 auto; border-collapse: collapse; font-size: 9pt; }
+    th { background: #1e3a8a; color: white; padding: 6px 10px; }
+    td { padding: 4px 10px; border-bottom: 1px solid #e5e7eb; text-align: center; }
+    .bar { display: inline-block; background: #3b82f6; margin: 0 2px; border-radius: 2px 2px 0 0; min-width: 20px; }
+    .bar-row { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 200px; padding: 10px; }
+    .bar-label { font-size: 7pt; text-align: center; margin-top: 4px; }
+    .bar-item { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+<div class="chart-title">{{ chart_title }}</div>
+<div class="chart-container">
+    <div class="bar-row">
+        {% for item in data %}
+        <div class="bar-item">
+            <div class="bar" style="height: {{ item.value / max_value * 180 }}px; width: 40px;">
+                <div style="font-size: 7pt; padding-top: 4px; color: white; text-align: center;">{{ item.value }}</div>
+            </div>
+            <div class="bar-label">{{ item.label }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% if footnote %}<div style="text-align: center; font-size: 8pt; color: #6b7280; font-style: italic;">{{ footnote }}</div>{% endif %}
+</body>
+</html>

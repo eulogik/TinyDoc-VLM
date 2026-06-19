@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 20mm 25mm; }
+    body { font-family: 'Times New Roman', Times, serif; color: #111; margin: 0; padding: 0; font-size: 11pt; line-height: 1.5; }
+    .contract-title { text-align: center; font-size: 14pt; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
+    .party-info { margin-bottom: 25px; }
+    .party-block { margin: 10px 0; padding: 8px; border: 1px solid #ccc; }
+    .party-label { font-weight: bold; font-size: 10pt; }
+    .section { margin: 20px 0; }
+    .section-title { font-weight: bold; font-size: 11pt; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 8px; }
+    .clause { margin: 8px 0; padding-left: 15px; }
+    .effective-date { text-align: center; margin: 20px 0; font-style: italic; }
+    .signature-block { margin-top: 40px; }
+    .sig-line { display: inline-block; width: 200px; border-bottom: 1px solid #000; margin-right: 20px; }
+    .sig-row { margin: 20px 0; }
+</style>
+</head>
+<body>
+<div class="contract-title">{{ contract_title }}</div>
+
+<div class="party-info">
+    <div class="party-block"><span class="party-label">Party A:</span> {{ party_a }}</div>
+    <div class="party-block"><span class="party-label">Party B:</span> {{ party_b }}</div>
+</div>
+
+<div class="effective-date">Effective Date: {{ effective_date }}</div>
+
+{% for section in sections %}
+<div class="section">
+    <div class="section-title">{{ section.title }}</div>
+    {% for clause in section.clauses %}
+    <div class="clause">{{ clause }}</div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<div class="signature-block">
+    <div style="border-top: 1px solid #000; margin-bottom: 20px;"></div>
+    <div class="sig-row"><span class="sig-line"></span> {{ party_a }} (Signature)</div>
+    <div class="sig-row"><span class="sig-line"></span> {{ party_b }} (Signature)</div>
+    <div style="font-size: 9pt; color: #555; margin-top: 10px;">Date: {{ signature_date }}</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; font-size: 10pt; }
+    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #374151; padding-bottom: 10px; margin-bottom: 20px; }
+    .title { font-size: 18pt; font-weight: bold; color: #111827; }
+    .subtitle { font-size: 9pt; color: #6b7280; }
+    .two-col { display: flex; gap: 20px; }
+    .col { flex: 1; }
+    .section-title { font-size: 11pt; font-weight: bold; color: #374151; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; margin: 12px 0 8px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 9pt; }
+    th { background: #f3f4f6; color: #374151; padding: 5px 8px; text-align: left; font-weight: 600; }
+    td { padding: 4px 8px; border-bottom: 1px solid #e5e7eb; }
+    .text-right { text-align: right; }
+    .highlight { background: #fef3c7; padding: 8px; border-radius: 3px; margin: 10px 0; font-size: 9pt; }
+    .chart-container { display: flex; align-items: flex-end; gap: 6px; height: 100px; margin: 10px 0; }
+    .bar { width: 25px; background: #3b82f6; border-radius: 2px 2px 0 0; }
+    .bar-label { font-size: 6pt; text-align: center; margin-top: 3px; }
+</style>
+</head>
+<body>
+<div class="header">
+    <div>
+        <div class="title">{{ report_title }}</div>
+        <div class="subtitle">{{ report_subtitle }}</div>
+    </div>
+    <div class="subtitle">{{ report_date }}</div>
+</div>
+
+<div class="highlight">
+    <strong>Executive Summary:</strong> {{ summary }}
+</div>
+
+<div class="two-col">
+    <div class="col">
+        <div class="section-title">Key Metrics</div>
+        <table>
+            {% for metric in metrics %}
+            <tr><td>{{ metric.label }}</td><td class="text-right"><strong>{{ metric.value }}</strong></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col">
+        <div class="section-title">Chart</div>
+        <div class="chart-container">
+            {% for item in chart_data %}
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="bar" style="height: {{ item.value }}px;"></div>
+                <div class="bar-label">{{ item.label }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="section-title">Details</div>
+<div class="two-col">
+    <div class="col">
+        <h4 style="font-size: 10pt;">Table A</h4>
+        <table>
+            <tr><th>{{ table_a.headers[0] }}</th><th>{{ table_a.headers[1] }}</th><th class="text-right">{{ table_a.headers[2] }}</th></tr>
+            {% for row in table_a.rows %}
+            <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td class="text-right">{{ row[2] }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col">
+        <h4 style="font-size: 10pt;">Table B</h4>
+        <table>
+            <tr><th>{{ table_b.headers[0] }}</th><th>{{ table_b.headers[1] }}</th></tr>
+            {% for row in table_b.rows %}
+            <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div style="font-size: 8pt; color: #9ca3af; margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 8px;">
+    {{ footer }}
+</div>
+</body>
+</html>

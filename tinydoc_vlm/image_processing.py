@@ -3,8 +3,9 @@ from PIL import Image
 from typing import Dict, Any, Union, Optional, List, Tuple
 import torch
 import torchvision.transforms as T
+from transformers.image_processing_base import ImageProcessingMixin
 
-class TinyDocImageProcessor:
+class TinyDocImageProcessor(ImageProcessingMixin):
     """
     Image processor for TinyDoc-VLM.
     Handles resizing, normalization, and optional tiling (splitting) of document images.
@@ -15,11 +16,14 @@ class TinyDocImageProcessor:
         mean: Optional[List[float]] = None,
         std: Optional[List[float]] = None,
         tiling_mode: str = "auto",  # "none", "auto" (split if large)
+        **kwargs,
     ):
         self.image_size = image_size
         self.mean = mean or [0.5, 0.5, 0.5]
         self.std = std or [0.5, 0.5, 0.5]
         self.tiling_mode = tiling_mode
+
+        super().__init__(**kwargs)
         
         # Base torchvision transforms for single tile
         self.transform = T.Compose([

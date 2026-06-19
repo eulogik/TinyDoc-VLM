@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; margin: 0; padding: 0; font-size: 10pt; }
+    .header { border-bottom: 3px solid #059669; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+    .facility-name { font-size: 16pt; font-weight: bold; color: #059669; }
+    .record-type { font-size: 12pt; color: #047857; font-weight: bold; }
+    .patient-info { background: #f0fdf4; padding: 12px; border-radius: 4px; margin-bottom: 20px; display: flex; gap: 30px; flex-wrap: wrap; }
+    .info-group { flex: 1; min-width: 150px; }
+    .info-label { font-size: 8pt; color: #6b7280; text-transform: uppercase; }
+    .info-value { font-weight: bold; font-size: 10pt; }
+    .section-title { font-size: 11pt; font-weight: bold; color: #059669; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; margin: 15px 0 8px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 9pt; }
+    th { background: #d1fae5; color: #065f46; padding: 6px 8px; text-align: left; }
+    td { padding: 5px 8px; border-bottom: 1px solid #e5e7eb; }
+    .footer { font-size: 8pt; color: #9ca3af; text-align: center; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+</style>
+</head>
+<body>
+<div class="header">
+    <div>
+        <div class="facility-name">{{ facility_name }}</div>
+        <div>{{ facility_address }}</div>
+    </div>
+    <div class="record-type">{{ record_type }}</div>
+</div>
+
+<div class="patient-info">
+    <div class="info-group">
+        <div class="info-label">Patient Name</div>
+        <div class="info-value">{{ patient_name }}</div>
+    </div>
+    <div class="info-group">
+        <div class="info-label">DOB</div>
+        <div class="info-value">{{ patient_dob }}</div>
+    </div>
+    <div class="info-group">
+        <div class="info-label">MRN</div>
+        <div class="info-value">{{ mrn }}</div>
+    </div>
+    <div class="info-group">
+        <div class="info-label">Date</div>
+        <div class="info-value">{{ visit_date }}</div>
+    </div>
+    <div class="info-group">
+        <div class="info-label">Provider</div>
+        <div class="info-value">{{ provider_name }}</div>
+    </div>
+</div>
+
+<div class="section-title">Vital Signs</div>
+<table>
+    <tr><th>BP</th><th>HR</th><th>RR</th><th>Temp</th><th>SpO2</th></tr>
+    <tr><td>{{ vitals.bp }}</td><td>{{ vitals.hr }}</td><td>{{ vitals.rr }}</td><td>{{ vitals.temp }}</td><td>{{ vitals.spo2 }}</td></tr>
+</table>
+
+<div class="section-title">Diagnosis</div>
+<p><strong>{{ diagnosis.primary }}</strong></p>
+{% if diagnosis.secondary %}<p>{{ diagnosis.secondary }}</p>{% endif %}
+
+<div class="section-title">Medications</div>
+<table>
+    <tr><th>Medication</th><th>Dosage</th><th>Frequency</th></tr>
+    {% for med in medications %}
+    <tr><td>{{ med.name }}</td><td>{{ med.dosage }}</td><td>{{ med.frequency }}</td></tr>
+    {% endfor %}
+</table>
+
+<div class="section-title">Notes</div>
+<p>{{ notes }}</p>
+
+<div class="footer">{{ disclaimer }}</div>
+</body>
+</html>

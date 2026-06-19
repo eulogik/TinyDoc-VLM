@@ -80,16 +80,20 @@ def test_processor_integration():
     # Reduce size for speed
     config.vision_config.num_hidden_layers = 1
     config.decoder_config.num_hidden_layers = 1
-    config.decoder_config.vocab_size = 1000
-    config.image_token_id = 999
     
     model = TinyDocVLMForConditionalGeneration(config)
     processor = TinyDocVLMProcessor()
-    # Overwrite image_token_id in processor
-    processor.image_token_id = 999
     
-    # Mock tokenizer output specs
-    processor.tokenizer.pad_token_id = 0
+    # Resize model embeddings to match the extended tokenizer vocab
+    model.decoder.resize_token_embeddings(len(processor.tokenizer))
+    model.config.decoder_config.vocab_size = len(processor.tokenizer)
+    # Use the processor's image_token_id in the model
+    model.config.image_token_id = processor.image_token_id
+    model.image_token_id = processor.image_token_id
+    
+    # Ensure pad token id is set
+    if processor.tokenizer.pad_token_id is None:
+        processor.tokenizer.pad_token_id = processor.tokenizer.eos_token_id
     
     # Generate some dummy images
     img1 = Image.fromarray(np.uint8(np.random.rand(400, 400, 3) * 255))

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    @page { size: A4; margin: 15mm; }
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        font-size: 10pt;
+    }
+    .form-header {
+        border-bottom: 2px solid #2563eb;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .form-title {
+        font-size: 18pt;
+        font-weight: bold;
+        color: #1e3a8a;
+    }
+    .form-id {
+        color: #6b7280;
+        font-size: 9pt;
+    }
+    .instructions {
+        background: #f3f4f6;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-size: 9pt;
+        color: #4b5563;
+    }
+    .field-group {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+    }
+    .field-label {
+        font-weight: bold;
+        font-size: 10pt;
+        margin-bottom: 3px;
+    }
+    .field-value {
+        padding: 6px 8px;
+        border: 1px solid #d1d5db;
+        border-radius: 3px;
+        background: #f9fafb;
+        min-height: 16px;
+        font-size: 10pt;
+    }
+    .required-mark {
+        color: #dc2626;
+    }
+    .checkbox {
+        display: inline-block;
+        width: 14px; height: 14px;
+        border: 1px solid #374151;
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+    .signature-area {
+        border-top: 1px solid #d1d5db;
+        padding-top: 20px;
+        margin-top: 30px;
+    }
+    .signature-line {
+        border-bottom: 1px solid #000;
+        width: 50%;
+        height: 30px;
+        margin-top: 5px;
+    }
+</style>
+</head>
+<body>
+<div class="form-header">
+    <div class="form-title">{{ form_title }}</div>
+    <div class="form-id">Form ID: {{ form_id }}</div>
+</div>
+<div class="instructions">{{ instructions }}</div>
+
+{% for field in fields %}
+<div class="field-group">
+    <div class="field-label">{{ field.label }}{% if field.required %}<span class="required-mark"> *</span>{% endif %}</div>
+    {% if field.type == "checkbox" %}
+    <div><span class="checkbox">{% if field.value == "Yes" %}✓{% endif %}</span> {{ field.value }}</div>
+    {% else %}
+    <div class="field-value">{{ field.value }}</div>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% if has_signature %}
+<div class="signature-area">
+    <strong>Signature:</strong>
+    <div class="signature-line"></div>
+    <div style="font-size: 8pt; color: #6b7280; margin-top: 4px;">Date: ______________</div>
+</div>
+{% endif %}
+
+</body>
+</html>
