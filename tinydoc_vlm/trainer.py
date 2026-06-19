@@ -4,7 +4,7 @@ import json
 import time
 import logging
 from pathlib import Path
-from typing import Dict, Optional, Union, Callable
+from typing import Dict, Optional, Union, Callable, List
 
 import torch
 import torch.nn as nn
@@ -217,9 +217,10 @@ class TinyDocVLMTrainer:
                     )
 
                 if self.global_step % self.config.eval_every_steps == 0 and self.eval_loader:
-                    eval_loss = self.evaluate()
+                    eval_metrics = self.evaluate()
+                    eval_loss = eval_metrics.get("eval_loss", float("inf"))
                     logger.info(f"Eval loss: {eval_loss:.4f}")
-                    if eval_loss < self.best_eval_loss:
+                    if isinstance(eval_loss, (int, float)) and eval_loss < self.best_eval_loss:
                         self.best_eval_loss = eval_loss
                         self.save_checkpoint("best")
 
@@ -232,32 +233,49 @@ class TinyDocVLMTrainer:
 
         return {"loss": avg_epoch_loss, "epoch": self.epoch + 1, "steps": self.global_step}
 
-    def evaluate(self) -> float:
+    def evaluate(self, benchmark_name: Optional[str] = None) -> float:
         self.model.eval()
         total_loss = 0.0
         num_batches = 0
+        all_metrics = {}
 
-        with torch.no_grad():
-            for batch in self.eval_loader:
-                input_ids = batch["input_ids"].to(self.device)
-                attention_mask = batch["attention_mask"].to(self.device)
-                pixel_values = batch["pixel_values"].to(self.device)
-                labels = batch["labels"].to(self.device)
+        if benchmark_name:
+            try:
+                from evaluation.evaluate import BENCHMARKS, evaluate_model
+                data_dir = Path("evaluation/data")
+                if data_dir.exists():
+                    results = evaluate_model(self.model, self.processor, [benchmark_name], data_dir)
+                    all_metrics = results.get(benchmark_name, {})
+                    logger.info(f"Benchmark {benchmark_name}: {all_metrics}")
+                else:
+                    logger.warning(f"Benchmark data not found at {data_dir}")
+            except ImportError:
+                logger.warning("Evaluation module not available")
 
-                with autocast(enabled=self.config.use_fp16):
-                    outputs = self.model(
-                        input_ids=input_ids,
-                        pixel_values=pixel_values,
-                        attention_mask=attention_mask,
-                        labels=labels,
-                    )
-                    loss = outputs.loss if hasattr(outputs, "loss") else outputs[0]
+        if self.eval_loader:
+            with torch.no_grad():
+                for batch in self.eval_loader:
+                    input_ids = batch["input_ids"].to(self.device)
+                    attention_mask = batch["attention_mask"].to(self.device)
+                    pixel_values = batch["pixel_values"].to(self.device)
+                    labels = batch["labels"].to(self.device)
 
-                total_loss += loss.item()
-                num_batches += 1
+                    with autocast(enabled=self.config.use_fp16):
+                        outputs = self.model(
+                            input_ids=input_ids,
+                            pixel_values=pixel_values,
+                            attention_mask=attention_mask,
+                            labels=labels,
+                        )
+                        loss = outputs.loss if hasattr(outputs, "loss") else outputs[0]
+
+                    total_loss += loss.item()
+                    num_batches += 1
 
         self.model.train()
-        return total_loss / max(num_batches, 1)
+        eval_loss = total_loss / max(num_batches, 1) if num_batches > 0 else float("inf")
+        all_metrics["eval_loss"] = eval_loss
+        return all_metrics
 
     def train(self):
         logger.info(f"Starting training on {self.device}")

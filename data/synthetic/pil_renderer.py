@@ -30,8 +30,13 @@ def _get_font(size: int = 12) -> ImageFont.FreeTypeFont:
 def _draw_text(draw: ImageDraw.Draw, xy, text, font_size=12, fill=(0, 0, 0), bold=False, align="left"):
     if not text:
         return
-    font = _get_font(font_size)
     try:
+        font = _get_font(font_size)
+        if bold:
+            try:
+                font = ImageFont.truetype("/System/Library/Fonts/Helvetica-Bold.ttc", font_size)
+            except (IOError, OSError):
+                pass
         draw.text(xy, str(text), font=font, fill=fill, align=align)
     except Exception:
         pass
@@ -213,7 +218,7 @@ def render_table(content: Dict) -> Image.Image:
         y += 22
 
     if content.get("footnote"):
-        _draw_text(draw, (30, y + 10), content["footnote"], font_size=8, fill=(100, 100, 100), italic=True)
+        _draw_text(draw, (30, y + 10), content["footnote"], font_size=8, fill=(100, 100, 100))
 
     return img
 
