@@ -8,7 +8,13 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR, SequentialLR
-from torch.cuda.amp import autocast, GradScaler
+from torch.cuda.amp import autocast
+try:
+    from torch.amp import GradScaler as AmpGradScaler
+    _has_new_amp = True
+except ImportError:
+    from torch.cuda.amp import GradScaler as AmpGradScaler
+    _has_new_amp = False
 
 from .modeling import TinyDocVLMForConditionalGeneration
 from .processing import TinyDocVLMProcessor
@@ -37,6 +43,7 @@ class TrainerConfig:
         eval_every_steps: int = 500,
         log_every_steps: int = 10,
         gradient_checkpointing: bool = True,
+        num_workers: int = 4,
     ):
         self.output_dir = output_dir
         self.num_epochs = num_epochs
@@ -54,6 +61,7 @@ class TrainerConfig:
         self.eval_every_steps = eval_every_steps
         self.log_every_steps = log_every_steps
         self.gradient_checkpointing = gradient_checkpointing
+        self.num_workers = num_workers
 
     def to_dict(self) -> Dict:
         return {k: v for k, v in self.__dict__.items()}
@@ -113,7 +121,10 @@ class TinyDocVLMTrainer:
         cosine_scheduler = CosineAnnealingLR(self.optimizer, T_max=max(1, total_steps - self.config.warmup_steps), eta_min=self.config.min_learning_rate)
         self.scheduler = SequentialLR(self.optimizer, schedulers=[warmup_scheduler, cosine_scheduler], milestones=[self.config.warmup_steps])
 
-        self.scaler = GradScaler(enabled=self.config.use_fp16)
+        if _has_new_amp and torch.cuda.is_available():
+            self.scaler = AmpGradScaler('cuda', enabled=self.config.use_fp16)
+        else:
+            self.scaler = AmpGradScaler(enabled=self.config.use_fp16)
         self.loss_fn = CombinedLoss(stage=self.config.stage)
 
         self.train_loader = DataLoader(
@@ -121,7 +132,7 @@ class TinyDocVLMTrainer:
             batch_size=self.config.batch_size,
             shuffle=True,
             collate_fn=lambda batch: collate_fn(batch, self.processor.tokenizer, self.processor.image_token_id, self.config.max_seq_length),
-            num_workers=4,
+            num_workers=self.config.num_workers,
             pin_memory=True,
         )
 
@@ -131,7 +142,7 @@ class TinyDocVLMTrainer:
                 batch_size=self.config.batch_size,
                 shuffle=False,
                 collate_fn=lambda batch: collate_fn(batch, self.processor.tokenizer, self.processor.image_token_id, self.config.max_seq_length),
-                num_workers=4,
+                num_workers=self.config.num_workers,
                 pin_memory=True,
             )
 
