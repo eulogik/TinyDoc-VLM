@@ -66,6 +66,16 @@ class TinyDocVLMConfig(PretrainedConfig):
         self.image_size = image_size
         self.patch_size = patch_size
 
+    def __getattr__(self, name):
+        if name in ('decoder_config', 'vision_config'):
+            raise AttributeError(name)
+        if 'decoder_config' in self.__dict__:
+            try:
+                return getattr(self.decoder_config, name)
+            except AttributeError:
+                pass
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+
     def to_dict(self) -> Dict[str, Any]:
         output = super().to_dict()
         output["vision_config"] = self.vision_config.to_dict()
