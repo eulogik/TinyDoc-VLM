@@ -304,6 +304,7 @@ class TinyDocVLMTrainer:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         self.model.save_pretrained(str(output_dir))
+        torch.save(self.model.state_dict(), output_dir / "model_state.pt")
         self.processor.tokenizer.save_pretrained(str(output_dir))
 
         trainer_state = {
@@ -319,7 +320,13 @@ class TinyDocVLMTrainer:
 
     def load_checkpoint(self, checkpoint_dir: str):
         checkpoint_dir = Path(checkpoint_dir)
-        self.model = TinyDocVLMForConditionalGeneration.from_pretrained(str(checkpoint_dir))
+        model_state_path = checkpoint_dir / "model_state.pt"
+        if model_state_path.exists():
+            model = TinyDocVLMForConditionalGeneration(self.model.config)
+            model.load_state_dict(torch.load(str(model_state_path), map_location=self.device, weights_only=True))
+            self.model = model
+        else:
+            self.model = TinyDocVLMForConditionalGeneration.from_pretrained(str(checkpoint_dir))
         self.model.to(self.device)
 
         trainer_state = torch.load(checkpoint_dir / "trainer_state.pt", map_location=self.device)
