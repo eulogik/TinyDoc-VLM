@@ -316,7 +316,10 @@ class TinyDocVLMTrainer:
             "config": self.config.to_dict(),
         }
         torch.save(trainer_state, output_dir / "trainer_state.pt")
-        logger.info(f"Checkpoint saved to {output_dir}")
+        saved_files = list(output_dir.iterdir())
+        logger.info(f"Checkpoint saved to {output_dir} ({len(saved_files)} files: {[f.name for f in saved_files]})")
+        if not any(f.name.endswith('.bin') or f.name.endswith('.safetensors') or f.name == 'model_state.pt' for f in saved_files):
+            logger.error(f"No weight file found in checkpoint! Files: {[f.name for f in saved_files]}")
 
     def load_checkpoint(self, checkpoint_dir: str):
         checkpoint_dir = Path(checkpoint_dir)
