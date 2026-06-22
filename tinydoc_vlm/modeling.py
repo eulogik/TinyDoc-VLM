@@ -94,10 +94,8 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         output_hidden_states = True if task else output_hidden_states
         
-        # Check cache is actually populated (not an empty DynamicCache from `_prefill`)
-        has_cache = past_key_values is not None and len(past_key_values) > 0
-
-        if has_cache:
+        # Decoding pass (no new visual input, reuse cached states)
+        if pixel_values is None and past_key_values is not None:
             outputs = self.decoder(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
@@ -116,7 +114,7 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
                 return {"lm_outputs": outputs, "head_outputs": head_outputs}
             return outputs
 
-        # First pass: construct inputs_embeds by merging text and visual tokens
+        # Prefill pass: merge text and visual tokens into inputs_embeds
         if inputs_embeds is None:
             inputs_embeds = self.decoder.get_input_embeddings()(input_ids)
             
@@ -169,19 +167,17 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
         """
         Overridden to support KV caching during auto-regressive generation.
         """
-        has_cache = past_key_values is not None and len(past_key_values) > 0
+        is_decoding = past_key_values is not None and pixel_values is None
 
-        if has_cache:
+        if is_decoding:
             input_ids = input_ids[:, -1:]
-            # We don't need inputs_embeds or pixel_values anymore as they are stored in the cache
             inputs_embeds = None
-            pixel_values = None
             
         position_ids = kwargs.get("position_ids", None)
         if attention_mask is not None and position_ids is None:
             position_ids = attention_mask.long().cumsum(-1) - 1
             position_ids.masked_fill_(attention_mask == 0, 1)
-            if has_cache:
+            if is_decoding:
                 position_ids = position_ids[:, -input_ids.shape[-1]:]
 
         return {
