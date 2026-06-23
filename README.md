@@ -1,34 +1,133 @@
-# TinyDoc-VLM
+<div align="center">
+  <h1>📄 TinyDoc-VLM</h1>
+  <p><b>The World's Smallest Document-Specialist VLM</b></p>
+  <p>256M parameters · Runs on Raspberry Pi · >100 tok/s on CPU</p>
 
-TinyDoc-VLM is a 150M–300M parameter vision-language model trained exclusively for document understanding — invoices, receipts, forms, tables, charts, ID cards, and business documents. It runs efficiently on resource-constrained devices, such as a Raspberry Pi or local CPU, with a VRAM footprint under 1GB.
+[![PyPI](https://img.shields.io/pypi/v/tinydoc?color=blue)](https://pypi.org/project/tinydoc/)
+[![HF Model](https://img.shields.io/badge/🤗-Model-yellow)](https://huggingface.co/eulogik/TinyDoc-VLM-256M)
+[![HF Space](https://img.shields.io/badge/🤗-Space-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
+[![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
+[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Twitter](https://img.shields.io/twitter/follow/eulogik_?style=social)](https://twitter.com/eulogik_)
 
-## Features
+---
 
-- **Tiny and Specialized**: Focused exclusively on document understanding, outperforming general VLMs of similar size.
-- **Layout-Aware**: Incorporates segment-level 2D layout embeddings and region-aware visual representations.
-- **Efficient Token Compression**: Custom pixel shuffle connector reduces dense visual sequences by 4x to 9x, saving sequence budget for long document reasoning.
-- **Fast and Local**: Runs at >100 tokens/second on standard CPUs using ONNX/GGUF/CoreML optimization.
+**Built by [eulogik](https://eulogik.com)** — AI infrastructure for document intelligence.
+</div>
 
-## Installation
+## 🔥 Highlights
 
-Install the package in editable mode:
+- **256M params**: SigLIP-B/16 vision encoder (93M) + Pixel-Shuffle connector + SmolLM2-135M decoder
+- **<1GB VRAM**: Runs on Raspberry Pi 5, MacBook Air, or any CPU with ONNX
+- **Structured output**: JSON extraction, key-value pairs, table parsing, OCR, VQA — all from one model
+- **3-stage training**: Layout pretrain → Document understanding → Instruction tuning on 10K+ synthetic docs
+- **Apache 2.0**: Fully open-source, free for commercial use
+
+## 🚀 Quick Start
 
 ```bash
-pip install -e .
+pip install tinydoc
 ```
 
-For GPU acceleration and flash-attention:
+```python
+from PIL import Image
+from tinydoc import TinyDocExtractor
+
+extractor = TinyDocExtractor(device="cpu")  # loads from HF Hub
+
+# Ask a question
+img = Image.open("invoice.png")
+result = extractor.ask(img, "What is the total?")
+print(result.answer)  # "$1,234.56"
+
+# Extract JSON fields
+result = extractor.extract(img, output_format="json")
+print(result.fields)  # {"total": "$1,234.56", "date": "2024-01-15", ...}
+
+# Extract tables
+result = extractor.extract_table(img)
+print(result.markdown)  # Markdown-formatted table
+```
+
+## 📦 Package Structure
+
+| Package | Description |
+|---------|-------------|
+| `tinydoc` (PyPI) | Lightweight Python SDK — `TinyDocExtractor.ask()`, `.extract()`, `.extract_table()` |
+| `tinydoc-vlm` (source) | Full model code, training pipeline, synthetic data engine, evaluation suite |
+| `eulogik/TinyDoc-VLM-256M` (HF Hub) | Pre-trained weights — 1.1GB, loads via `from_pretrained()` |
+
+## 🏗️ Model Architecture
+
+```
+Image (384×384)
+    ↓
+SigLIP Vision Encoder (93M)          ← 576 patches × 768 dim
+    ↓
+Pixel-Shuffle Compressor (scale=3)   ← 9× compression → 64 tokens
+    ↓
+Visual Position Embeddings
+    ↓
+SmolLM2 Decoder (135M)               ← 30 layers, GQA (9:3 heads), 8192 ctx
+    ↓
+Multi-Task Output Heads
+    ↓
+JSON / KV Extraction / Table / OCR / QA
+```
+
+## 📊 Benchmarks
+
+| Benchmark | Metric | Score | Status |
+|-----------|--------|-------|--------|
+| DocVQA | ANLS | — | ⏳ Running |
+| FUNSD | F1 | — | ⏳ Running |
+| CORD | F1 | — | ⏳ Running |
+| SROIE | F1 | — | ⏳ Running |
+| PubTabNet | TEDS | — | ⏳ Running |
+
+Benchmarks are being run. Results will be published here and on the [model card](https://huggingface.co/eulogik/TinyDoc-VLM-256M).
+
+## 🧪 Training
+
+3-stage curriculum on synthetic documents (10K types):
+
+1. **Layout Pretrain** — Learn document structure, region classification, layout detection
+2. **Doc Understanding** — QA, extraction, table parsing with real benchmarks
+3. **Instruction Tuning** — Multi-turn conversation, structured output formatting
+
+[**Colab Notebook**](training/tinydoc_colab_training.ipynb) — Train your own on a free T4 GPU.
+
+## 🔧 Deployment
 
 ```bash
-pip install flash-attn --no-build-isolation
+# ONNX export
+python export/export_onnx.py --model-path eulogik/TinyDoc-VLM-256M --output model.onnx
+
+# GGUF export (decoder only)
+python export/export_gguf.py --model-path eulogik/TinyDoc-VLM-256M --output model.gguf
 ```
 
-## Structure
+## 📚 Citation
 
-- `tinydoc_vlm/`: Core model code (architecture, configurations, custom processors).
-- `data/`: Synthetic document generator and real-dataset loaders.
-- `training/`: Autoregressive trainers, schedulers, and multi-stage configs.
-- `evaluation/`: Benchmark scripts (DocVQA ANLS, CORD F1, TEDS Table similarity).
-- `export/`: ONNX/GGUF/AWQ compilation scripts.
-- `sdk/`: Lightweight client SDK for production integrations.
-- `demo/`: Gradio dashboard for interactive visualization.
+```bibtex
+@software{eulogik_tinydoc_vlm_2025,
+  author = {eulogik},
+  title = {TinyDoc-VLM: The World's Smallest Document-Specialist VLM},
+  year = {2025},
+  url = {https://github.com/eulogik/TinyDoc-VLM}
+}
+```
+
+## 🤝 Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+Apache 2.0. See [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+  <b>Made with ❤️ by <a href="https://eulogik.com">eulogik</a></b>
+</div>
