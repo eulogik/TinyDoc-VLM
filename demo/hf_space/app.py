@@ -2,16 +2,19 @@ import os, sys, torch, gradio as gr
 from PIL import Image
 from pathlib import Path
 
-# Add local model code to path (included in repo)
 sys.path.insert(0, str(Path(__file__).parent / "tinydoc_vlm"))
 from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 
 MODEL_ID = "eulogik/TinyDoc-VLM-256M"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-print(f"Loading {MODEL_ID} on {device}...")
-model = TinyDocVLMForConditionalGeneration.from_pretrained(MODEL_ID)
-model.to(device).eval()
+print(f"Loading {MODEL_ID} on {device} with float16...")
+model = TinyDocVLMForConditionalGeneration.from_pretrained(
+    MODEL_ID,
+    torch_dtype=torch.float16,
+    low_cpu_mem_usage=True,
+)
+model.to(device).half().eval()
 processor = TinyDocVLMProcessor()
 print("Model loaded!")
 
