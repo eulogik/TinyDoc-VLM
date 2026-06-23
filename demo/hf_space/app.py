@@ -59,4 +59,4 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
     """)
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch()
