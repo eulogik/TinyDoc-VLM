@@ -8,11 +8,13 @@
 [![HF Space](https://img.shields.io/badge/🤗-Space-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Twitter](https://img.shields.io/twitter/follow/eulogik_?style=social)](https://twitter.com/eulogik_)
+[![Twitter](https://img.shields.io/twitter/follow/eulogik?style=social)](https://twitter.com/eulogik)
 
 ---
 
 **Built by [eulogik](https://eulogik.com)** — AI infrastructure for document intelligence.
+
+[🐍 PyPI](https://pypi.org/project/tinydoc/) · [🤗 Model Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · [🤗 Space Demo](https://huggingface.co/spaces/eulogik/TinyDoc-VLM) · [📖 Website](https://eulogik.github.io/TinyDoc-VLM/) · [🐦 @eulogik](https://twitter.com/eulogik)
 </div>
 
 ## 🔥 Highlights

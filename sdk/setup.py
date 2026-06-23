@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinydoc",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     install_requires=[
         "pydantic>=2.8.0",
@@ -23,8 +23,10 @@ setup(
     url="https://github.com/eulogik/TinyDoc-VLM",
     project_urls={
         "HuggingFace Model": "https://huggingface.co/eulogik/TinyDoc-VLM-256M",
+        "HuggingFace Space": "https://huggingface.co/spaces/eulogik/TinyDoc-VLM",
         "Bug Tracker": "https://github.com/eulogik/TinyDoc-VLM/issues",
         "Documentation": "https://github.com/eulogik/TinyDoc-VLM#readme",
+        "Website": "https://eulogik.github.io/TinyDoc-VLM/",
     },
     classifiers=[
         "Development Status :: 4 - Beta",

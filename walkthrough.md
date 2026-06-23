@@ -1,10 +1,11 @@
 # TinyDoc-VLM — Living Walkthrough & Handover Doc
 
-> **Last updated**: 2026-06-22
+> **Last updated**: 2026-06-23
 > **Repo**: https://github.com/eulogik/TinyDoc-VLM  
-> **All 13 unit tests: PASSING**
-
-This is the single source of truth for any human or AI agent picking up TinyDoc-VLM. It is updated continuously as work progresses.
+> **HF Model**: https://huggingface.co/eulogik/TinyDoc-VLM-256M  
+> **HF Space**: https://huggingface.co/spaces/eulogik/TinyDoc-VLM  
+> **PyPI**: https://pypi.org/project/tinydoc/  
+> **Website**: https://eulogik.github.io/TinyDoc-VLM/  
 
 ---
 
@@ -30,17 +31,17 @@ Input Image -> TinyDocImageProcessor -> [tiles: (B, N, 3, 384, 384)]
                                                   |
                                        SigLIPVisionEncoder (93M params)
                                                   |
-                                  PixelShuffleTokenCompressor (3x3, 9x reduction)
-                                  (384/16/3)^2 = 64 tokens per tile
+                                   PixelShuffleTokenCompressor (3x3, 9x reduction)
+                                   (384/16/3)^2 = 64 tokens per tile
                                                   |
-                           merged with text via <image> placeholder replacement
+                            merged with text via <image> placeholder replacement
                                                   |
-                                       TinyDocDecoder (SmolLM2-135M, 30L)
+                                        TinyDocDecoder (SmolLM2-135M, 30L)
                                                   |
-                                  MultiTaskOutputHeads (JSON/KV/Table/OCR/QA)
+                                   MultiTaskOutputHeads (JSON/KV/Table/OCR/QA)
 ```
 
-**Total parameters**: ~235M (SigLIP-B/16 93M + compressor ~3M + SmolLM2-135M)
+**Total parameters**: ~290M (SigLIP-B/16 93M + compressor ~3M + SmolLM2-135M + output heads 59M)
 
 ---
 
@@ -50,7 +51,7 @@ Input Image -> TinyDocImageProcessor -> [tiles: (B, N, 3, 384, 384)]
 TinyDoc-VLM/
 ├── tinydoc_vlm/                  COMPLETE package
 │   ├── __init__.py               Registers AutoConfig + AutoModel
-│   ├── configuration.py          TinyDocVLMConfig (fixed AutoConfig.for_model bug)
+│   ├── configuration.py          TinyDocVLMConfig
 │   ├── vision_encoder.py         SigLIPVisionEncoder wrapper
 │   ├── token_compressor.py       PixelShuffleTokenCompressor + custom RMSNorm
 │   ├── decoder.py                TinyDocDecoder (SmolLM2 wrapper)
@@ -72,14 +73,14 @@ TinyDoc-VLM/
 │   │   ├── sroie.py              SROIE loader wrapper
 │   │   └── pubtabnet.py          PubTabNet loader wrapper
 │   ├── tokenizer/
-│   │   ├── special_tokens.py     30 doc-special tokens added to SmolLM2 tokenizer
+│   │   ├── special_tokens.py     30 doc-special tokens
 │   │   └── extended_tokenizer/   Saved extended tokenizer
 │   └── synthetic/
-│       ├── templates/            10 HTML/Jinja2 templates (invoice, receipt, form, etc.)
-│       ├── pil_renderer.py       PIL-based renderer (no WeasyPrint needed)
+│       ├── templates/            10 HTML/Jinja2 templates
+│       ├── pil_renderer.py       PIL-based renderer
 │       ├── generator.py          Full pipeline: Faker -> render -> augment -> JSONL
 │       └── output/
-│           ├── manifest.jsonl    ~12MB manifest (thousands of samples)
+│           ├── manifest.jsonl    ~12MB manifest
 │           └── images/           Generated document images
 ├── training/
 │   ├── run.py                    CLI training launcher
@@ -94,125 +95,92 @@ TinyDoc-VLM/
 │   ├── export_onnx.py            ONNX export with dynamic axes
 │   └── export_gguf.py            GGUF export (llama.cpp compatible)
 ├── demo/
-│   ├── app.py                    Gradio demo (extract JSON / QA / table / OCR)
-│   └── examples/                 Pre-generated invoice/receipt/table images
-├── sdk/                          COMPLETE package
+│   ├── app.py                    Gradio demo
+│   ├── hf_space/                 HF Space deployment files
+│   │   ├── Dockerfile            Python 3.11 Docker image
+│   │   ├── app.py                Space entry point
+│   │   ├── requirements.txt      Space dependencies
+│   │   ├── README.md             Space metadata
+│   │   └── tinydoc_vlm/          Model source code (local copy for Space)
+│   └── examples/                 Pre-generated document images
+├── sdk/                          COMPLETE package (published to PyPI)
 │   ├── setup.py                  pip install setup script
+│   ├── MANIFEST.in               Manifest for README inclusion
+│   ├── README.md                 PyPI long description
 │   └── tinydoc/
 │       ├── __init__.py           Exposes TinyDocExtractor
 │       ├── extractor.py          High-level extractor APIs (QA, Extract, Table)
 │       └── models.py             Pydantic models for outputs
+├── docs/
+│   └── index.html                GitHub Pages website
 ├── tests/
 │   ├── test_model.py             Model architecture/processor tests
 │   ├── test_datasets.py          Dataset loaders tests
 │   └── test_sdk.py               SDK extractor tests
-└── .github/workflows/ci.yml      GitHub Actions CI (pytest + ruff)
+├── .github/workflows/
+│   ├── ci.yml                    GitHub Actions CI (pytest + ruff)
+│   └── gh-pages.yml              GitHub Pages deploy
+├── LICENSE                       Apache 2.0
+├── README.md                     GitHub root README
+└── walkthrough.md                This file
 ```
 
 ---
 
-## 4. Test Status
+## 4. Deployment Status
+
+| Service | URL | Status |
+|---------|-----|--------|
+| GitHub Repo | https://github.com/eulogik/TinyDoc-VLM | ✅ Active |
+| HF Model Hub | https://huggingface.co/eulogik/TinyDoc-VLM-256M | ✅ Published |
+| HF Space Demo | https://huggingface.co/spaces/eulogik/TinyDoc-VLM | ⚠️ Building |
+| PyPI Package | https://pypi.org/project/tinydoc/ | ✅ v0.1.0 |
+| GitHub Pages | https://eulogik.github.io/TinyDoc-VLM/ | ✅ Deployed |
+| Twitter | https://twitter.com/eulogik | ✅ Listed |
+
+---
+
+## 5. Training (Completed on Colab)
+
+3 stages completed successfully on Colab T4 GPU:
+- **Stage 1**: Layout pretraining
+- **Stage 2**: Document understanding  
+- **Stage 3**: Instruction tuning
+- **Weights**: 290M params, 1.1GB F32, pushed to `eulogik/TinyDoc-VLM-256M`
+
+---
+
+## 6. Test Status
 
 ```bash
 PYTHONPATH=. ./venv/bin/pytest -v
 ```
-All 13 unit tests are passing successfully:
+All 13 unit tests passing:
 ```
-tests/test_datasets.py::test_docvqa_dataset PASSED                       [  7%]
-tests/test_datasets.py::test_funsd_dataset PASSED                        [ 15%]
-tests/test_datasets.py::test_cord_dataset PASSED                         [ 23%]
-tests/test_datasets.py::test_sroie_dataset PASSED                        [ 30%]
-tests/test_datasets.py::test_pubtabnet_dataset PASSED                    [ 38%]
-tests/test_datasets.py::test_synthetic_doc_dataset PASSED                [ 46%]
-tests/test_model.py::test_config PASSED                                  [ 53%]
-tests/test_model.py::test_image_processor PASSED                         [ 61%]
-tests/test_model.py::test_model_forward PASSED                           [ 69%]
-tests/test_model.py::test_processor_integration PASSED                   [ 76%]
-tests/test_sdk.py::test_sdk_extractor_initialisation PASSED              [ 84%]
-tests/test_sdk.py::test_sdk_extractor_methods PASSED                     [ 92%]
-tests/test_sdk.py::test_html_table_to_markdown_converter PASSED          [100%]
-
-================== 13 passed, 2 warnings in 55.45s ===================
+tests/test_datasets.py::test_docvqa_dataset PASSED
+tests/test_datasets.py::test_funsd_dataset PASSED
+tests/test_datasets.py::test_cord_dataset PASSED
+tests/test_datasets.py::test_sroie_dataset PASSED
+tests/test_datasets.py::test_pubtabnet_dataset PASSED
+tests/test_datasets.py::test_synthetic_doc_dataset PASSED
+tests/test_model.py::test_config PASSED
+tests/test_model.py::test_image_processor PASSED
+tests/test_model.py::test_model_forward PASSED
+tests/test_model.py::test_processor_integration PASSED
+tests/test_sdk.py::test_sdk_extractor_initialisation PASSED
+tests/test_sdk.py::test_sdk_extractor_methods PASSED
+tests/test_sdk.py::test_html_table_to_markdown_converter PASSED
 ```
 
 ---
 
-## 5. Bugs Fixed
+## 7. Key Contacts
 
-| Bug | Root Cause | Fix |
-|-----|-----------|-----|
-| `AutoConfig.for_model() multiple values for model_type` | model_type in both positional + kwargs | `.pop()` key from config copy before passing |
-| `torch.nn has no attribute RMSNorm` | nn.RMSNorm added in PyTorch 2.4 | Custom RMSNorm(nn.Module) in token_compressor.py |
-| `transformers has no attribute TinyDocImageProcessor` | ProcessorMixin does global name lookup | Rewrote TinyDocVLMProcessor as standalone class |
-
----
-
-## 6. Synthetic Data
-
-```bash
-# Generate documents (PIL renderer, no WeasyPrint needed)
-python data/synthetic/generator.py --num-docs 1000 --output-dir data/synthetic/output
-```
-
-Manifest (~12MB) already populated. Each JSONL entry:
-```json
-{"image_path": "synthetic/output/images/invoice_000001.png",
- "doc_type": "invoice",
- "metadata": {"vendor_name": "...", "total": "$1,234.56"},
- "text": "Extract document information: <image>",
- "qa_pairs": [{"question": "What is the total?", "answer": "$1,234.56"}]}
-```
+- **Company**: eulogik (https://eulogik.com)
+- **Twitter**: @eulogik
+- **Email**: hello@eulogik.com
+- **Author**: Sunday Shah
 
 ---
 
-## 7. Training
-
-```bash
-# Stage 1: Layout pretraining
-python training/run.py --config training/stage1_layout_pretrain.yaml
-# Stage 2: Document understanding
-python training/run.py --config training/stage2_doc_understanding.yaml
-# Stage 3: Instruction tuning
-python training/run.py --config training/stage3_instruction_tuning.yaml
-```
-
-**Colab**: `training/tinydoc_colab_training.ipynb` — T4 GPU, auto-saves to Drive.
-
----
-
-## 8. Gap Analysis
-
-### Done
-- Full model architecture (all unit tests pass)
-- Synthetic data pipeline (10 templates, Faker, PIL renderer, 12MB manifest)
-- Training infrastructure (3-stage trainer, YAML configs, Colab notebook)
-- Evaluation harness (ANLS, F1, DocVQA, OCRBench)
-- Gradio demo app
-- Export scripts (ONNX, GGUF)
-- GitHub CI (pytest + ruff)
-- **Real dataset loaders** (`data/datasets/` wrappers exposing DocVQA, FUNSD, CORD, SROIE, PubTabNet and Unified loaders)
-- **Python SDK** (`sdk/tinydoc/extractor.py`) with high-level `extract`, `ask` (VQA), and `extract_table` APIs and dynamic PyTorch/ONNX Runtime auto-routing
-
-### Remaining
-1. **Actual training** — No trained checkpoint yet. Use Colab notebook or cloud GPU.
-2. **More synthetic data** — Need 10M+ samples; currently 10,000 samples generated.
-3. **HuggingFace Hub push** — After training, push to `eulogik/TinyDoc-VLM-256M`.
-
----
-
-## 9. Git History
-
-```
-72e7200 Implement Python SDK and modular dataset loader files with comprehensive unit tests
-60f59f7 Add unified dataset loaders for training
-5e25970 Fix: Rewrite TinyDocVLMProcessor as standalone class (all 4 tests pass)
-268d746 Add __init__.py to data/ and data/synthetic/
-be0947d Fix CWD issues in Colab
-8db8ea8 Final Colab notebook with Drive auto-resume
-abaffc6 Add Colab training notebook
-995cb51 Fix ruff lint errors
-95b6a32 Add GitHub Actions CI
-0987e85 Add demo, export, eval scripts
-8a78fb2 Complete training pipeline, synthetic data engine, eval suite
-6004faf Initial commit
-```
+*Built by [eulogik](https://eulogik.com) — AI infrastructure for document intelligence.*

@@ -21,4 +21,4 @@ result = extractor.extract_table(img)
 print(result.markdown)
 ```
 
-[Documentation](https://github.com/eulogik/TinyDoc-VLM#readme) · [HF Model](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · [Issues](https://github.com/eulogik/TinyDoc-VLM/issues)
+[Documentation](https://github.com/eulogik/TinyDoc-VLM#readme) · [HF Model](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · [HF Space](https://huggingface.co/spaces/eulogik/TinyDoc-VLM) · [Issues](https://github.com/eulogik/TinyDoc-VLM/issues)

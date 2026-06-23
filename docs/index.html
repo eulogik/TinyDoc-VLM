@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyDoc-VLM — The World's Smallest Document-Specialist VLM</title>
+  <meta name="description" content="256M parameter document-specialist VLM that runs on Raspberry Pi. Open-source, Apache 2.0.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; color: #1a1a2e; background: #f8f9fc; line-height: 1.6; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    nav { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-weight: 800; font-size: 1.3rem; color: #2563eb; text-decoration: none; }
+    nav .links a { margin-left: 24px; text-decoration: none; color: #64748b; font-weight: 500; font-size: 0.9rem; transition: color .2s; }
+    nav .links a:hover { color: #2563eb; }
+    header { text-align: center; padding: 80px 0 60px; }
+    header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+    header h1 span { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    header .subtitle { font-size: 1.25rem; color: #64748b; margin-top: 16px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    header .badges { margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    header .badges a { text-decoration: none; }
+    .hero-cta { margin-top: 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all .2s; }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-secondary { background: #fff; color: #2563eb; border: 2px solid #e2e8f0; }
+    .btn-secondary:hover { border-color: #2563eb; transform: translateY(-1px); }
+    section { padding: 60px 0; }
+    section h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 24px; }
+    section h2 .emoji { margin-right: 8px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 32px; }
+    .feature { background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .feature h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .feature p { color: #64748b; font-size: 0.95rem; }
+    .feature .icon { font-size: 2rem; margin-bottom: 12px; }
+    .code-block { background: #1e293b; color: #e2e8f0; border-radius: 12px; padding: 24px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5; margin: 16px 0; }
+    .code-block .comment { color: #94a3b8; }
+    .code-block .keyword { color: #818cf8; }
+    .code-block .string { color: #34d399; }
+    .benchmarks table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .benchmarks th, .benchmarks td { padding: 14px 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+    .benchmarks th { background: #f8fafc; font-weight: 600; color: #64748b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .benchmarks td:last-child { font-weight: 600; }
+    .arch-diagram { background: #fff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin: 24px 0; }
+    .arch-diagram pre { font-size: 0.85rem; line-height: 1.8; color: #475569; }
+    footer { text-align: center; padding: 40px 0; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid #e2e8f0; }
+    footer a { color: #2563eb; text-decoration: none; }
+    @media (max-width: 640px) { header h1 { font-size: 2.2rem; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">TinyDoc-VLM</a>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#benchmarks">Benchmarks</a>
+        <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a>
+      </div>
+    </nav>
+
+    <header>
+      <h1><span>TinyDoc-VLM</span></h1>
+      <p class="subtitle">The World's Smallest Document-Specialist VLM — 256M parameters, runs on a Raspberry Pi, open-source.</p>
+      <div class="badges">
+        <a href="https://github.com/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/github/stars/eulogik/TinyDoc-VLM?style=social" alt="GitHub stars"></a>
+        <a href="https://pypi.org/project/tinydoc/"><img src="https://img.shields.io/pypi/v/tinydoc?color=blue" alt="PyPI"></a>
+        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M"><img src="https://img.shields.io/badge/🤗-Model-yellow" alt="HF Model"></a>
+        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/badge/🤗-Space-yellow" alt="HF Space"></a>
+        <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green" alt="License"></a>
+      </div>
+      <div class="hero-cta">
+        <a href="#quickstart" class="btn btn-primary">Get Started</a>
+        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM" class="btn btn-secondary">Try the Demo</a>
+      </div>
+    </header>
+
+    <section id="features">
+      <h2><span class="emoji">🔥</span> Highlights</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">🧠</div>
+          <h3>256M Parameters</h3>
+          <p>SigLIP-B/16 vision encoder + Pixel-Shuffle compressor + SmolLM2-135M decoder. Optimized for edge.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">📱</div>
+          <h3>&lt;1GB VRAM</h3>
+          <p>Runs on Raspberry Pi 5, MacBook Air, or any CPU with ONNX export. Over 100 tok/s on CPU.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">📋</div>
+          <h3>Structured Output</h3>
+          <p>JSON extraction, key-value pairs, table parsing, OCR, and VQA — all from a single unified model.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🎓</div>
+          <h3>3-Stage Training</h3>
+          <p>Layout pretrain → Document understanding → Instruction tuning on 10K+ synthetic documents.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">📦</div>
+          <h3>One pip Install</h3>
+          <p><code>pip install tinydoc</code> — Python SDK with Pydantic-typed results. PyTorch and ONNX backends.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🤗</div>
+          <h3>Open Weights</h3>
+          <p>Pre-trained weights on HuggingFace Hub. Apache 2.0 license — free for commercial use.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart">
+      <h2><span class="emoji">🚀</span> Quick Start</h2>
+      <div class="code-block">
+        <span class="comment"># Install the SDK</span><br>
+        pip install tinydoc<br><br>
+        <span class="comment"># Use it in Python</span><br>
+        <span class="keyword">from</span> PIL <span class="keyword">import</span> Image<br>
+        <span class="keyword">from</span> tinydoc <span class="keyword">import</span> TinyDocExtractor<br><br>
+        extractor = TinyDocExtractor(device=<span class="string">"cpu"</span>)<br>
+        img = Image.open(<span class="string">"invoice.png"</span>)<br><br>
+        <span class="comment"># Ask a question</span><br>
+        result = extractor.ask(img, <span class="string">"What is the total?"</span>)<br>
+        print(result.answer)<br><br>
+        <span class="comment"># Extract JSON fields</span><br>
+        result = extractor.extract(img, output_format=<span class="string">"json"</span>)<br>
+        print(result.fields)<br><br>
+        <span class="comment"># Extract tables</span><br>
+        result = extractor.extract_table(img)<br>
+        print(result.markdown)
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2><span class="emoji">🏗️</span> Architecture</h2>
+      <div class="arch-diagram">
+        <pre>
+Image (384×384)
+    ↓
+SigLIP Vision Encoder (93M)           ← 576 patches × 768 dim
+    ↓
+Pixel-Shuffle Compressor (scale=3)    ← 9× compression → 64 tokens
+    ↓
+Visual Position Embeddings
+    ↓
+SmolLM2 Decoder (135M)                ← 30 layers, GQA (9:3 heads), 8192 ctx
+    ↓
+Multi-Task Output Heads
+    ↓
+JSON / KV Extraction / Table / OCR / QA</pre>
+      </div>
+    </section>
+
+    <section id="benchmarks" class="benchmarks">
+      <h2><span class="emoji">📊</span> Benchmarks</h2>
+      <table>
+        <thead>
+          <tr><th>Benchmark</th><th>Metric</th><th>Score</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DocVQA</td><td>ANLS</td><td>—</td><td>⏳ Running</td></tr>
+          <tr><td>FUNSD</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
+          <tr><td>CORD</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
+          <tr><td>SROIE</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
+          <tr><td>PubTabNet</td><td>TEDS</td><td>—</td><td>⏳ Running</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="links">
+      <h2><span class="emoji">🔗</span> Ecosystem</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>🐍 PyPI</h3>
+          <p><code>pip install tinydoc</code> — <a href="https://pypi.org/project/tinydoc/">pypi.org/project/tinydoc</a></p>
+        </div>
+        <div class="feature">
+          <h3>🤗 Model Hub</h3>
+          <p>Pre-trained weights — <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">eulogik/TinyDoc-VLM-256M</a></p>
+        </div>
+        <div class="feature">
+          <h3>🤗 Space Demo</h3>
+          <p>Try it live — <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">eulogik/TinyDoc-VLM Space</a></p>
+        </div>
+        <div class="feature">
+          <h3>📖 Documentation</h3>
+          <p>Full docs — <a href="https://github.com/eulogik/TinyDoc-VLM#readme">GitHub README</a></p>
+        </div>
+        <div class="feature">
+          <h3>📄 Paper</h3>
+          <p>Technical report — coming soon</p>
+        </div>
+        <div class="feature">
+          <h3>🐦 Twitter</h3>
+          <p>Follow — <a href="https://twitter.com/eulogik">@eulogik</a></p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        Built by <a href="https://eulogik.com">eulogik</a> —
+        <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> ·
+        <a href="https://pypi.org/project/tinydoc/">PyPI</a> ·
+        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">HF Model</a> ·
+        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">HF Space</a>
+      </p>
+      <p style="margin-top: 8px;">Apache 2.0 &mdash; Free for commercial use</p>
+    </footer>
+  </div>
+</body>
+</html>
