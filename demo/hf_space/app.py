@@ -1,23 +1,30 @@
-import gradio as gr
-import torch
+import os, sys, torch, gradio as gr
 from PIL import Image
-from tinydoc import TinyDocExtractor
+from pathlib import Path
 
-extractor = TinyDocExtractor(model_name_or_id="eulogik/TinyDoc-VLM-256M", device="cuda")
+# Add local model code to path (included in repo)
+sys.path.insert(0, str(Path(__file__).parent / "tinydoc_vlm"))
+from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 
-def process(image, question, task):
+MODEL_ID = "eulogik/TinyDoc-VLM-256M"
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+print(f"Loading {MODEL_ID} on {device}...")
+model = TinyDocVLMForConditionalGeneration.from_pretrained(MODEL_ID)
+model.to(device).eval()
+processor = TinyDocVLMProcessor()
+print("Model loaded!")
+
+def run(image, question, task):
     if image is None:
         return "Please upload a document image."
-    if task == "Ask a question":
-        res = extractor.ask(image, question)
-        return f"**Answer:** {res.answer}\n\n*Latency: {res.latency_ms:.0f}ms, Tokens: {res.num_tokens_generated}*"
-    elif task == "Extract JSON":
-        res = extractor.extract(image, output_format="json")
-        return f"**Raw text:**\n{res.raw_text}\n\n**Fields:**\n{res.fields}"
-    elif task == "Extract Table":
-        res = extractor.extract_table(image)
-        return f"**Markdown:**\n{res.markdown}\n\n**Raw:**\n{res.raw_table}"
-    return "Select a task."
+    prompt = f"<image>\n{'Answer: ' + question if task == 'Ask a question' else 'Extract JSON: ' if task == 'Extract JSON' else 'Convert table to Markdown: '}"
+    inputs = processor(prompt, images=image)
+    inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
+    with torch.no_grad():
+        out = model.generate(**inputs, max_new_tokens=512, do_sample=False)
+    text = processor.tokenizer.decode(out[0], skip_special_tokens=True)
+    return text
 
 with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.Soft()) as demo:
     gr.Markdown("""
@@ -38,7 +45,7 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
                 clear = gr.Button("🗑 Clear", scale=1)
         with gr.Column(scale=1):
             output = gr.Markdown(label="Result")
-    submit.click(fn=process, inputs=[image, question, task], outputs=output)
+    submit.click(fn=run, inputs=[image, question, task], outputs=output)
     def clear_all():
         return None, "Ask a question", "What is the total?", ""
     clear.click(fn=clear_all, outputs=[image, task, question, output])
