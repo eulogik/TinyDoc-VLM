@@ -109,3 +109,4 @@ checkpoints/
 *.safetensors
 *.gguf
 *.awq
+tinydoc-vlm-final.zip

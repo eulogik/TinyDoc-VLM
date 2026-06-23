@@ -53,5 +53,10 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
     ---
     **Model**: [eulogik/TinyDoc-VLM-256M](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · 
     **Code**: [github.com/eulogik/TinyDoc-VLM](https://github.com/eulogik/TinyDoc-VLM) · 
-    **By**: [eulogik](https://eulogik.com)
+    **By**: [eulogik](https://eulogik.com) · 
+    [🐍 PyPI](https://pypi.org/project/tinydoc/) · 
+    [🐦 @eulogik](https://twitter.com/eulogik)
     """)
+
+if __name__ == "__main__":
+    demo.launch(server_name="0.0.0.0", server_port=7860)
