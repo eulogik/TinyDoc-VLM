@@ -1,8 +1,8 @@
 import os, sys, torch, gradio as gr
+import traceback
 from PIL import Image
 from pathlib import Path
 
-# Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
 sys.stderr.reconfigure(line_buffering=True)
 
@@ -12,8 +12,7 @@ from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 MODEL_ID = "eulogik/TinyDoc-VLM-256M"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-print(f"[TinyDoc] Starting...", flush=True)
-print(f"[TinyDoc] DEVICE={device} MODEL={MODEL_ID}", flush=True)
+print(f"[TinyDoc] Starting on {device}...", flush=True)
 
 try:
     model = TinyDocVLMForConditionalGeneration.from_pretrained(
@@ -21,24 +20,66 @@ try:
         trust_remote_code=True,
     )
     model.to(device).eval()
-    print(f"[TinyDoc] Model loaded on {device}", flush=True)
+    processor = TinyDocVLMProcessor.from_pretrained(MODEL_ID)
+    # Sync image token ID between processor and model
+    model.image_token_id = processor.image_token_id
+    print(f"[TinyDoc] Model loaded! image_token_id={processor.image_token_id}", flush=True)
 except Exception as e:
-    print(f"[TinyDoc] Model load FAILED: {e}", flush=True)
+    print(f"[TinyDoc] LOAD ERROR: {e}", flush=True)
+    traceback.print_exc()
     raise
 
-processor = TinyDocVLMProcessor()
-print(f"[TinyDoc] Processor ready", flush=True)
-
 def run(image, question, task):
-    if image is None:
-        return "Please upload a document image."
-    prompt = f"<image>\n{'Answer: ' + question if task == 'Ask a question' else 'Extract JSON: ' if task == 'Extract JSON' else 'Convert table to Markdown: '}"
-    inputs = processor(prompt, images=image)
-    inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
-    with torch.no_grad():
-        out = model.generate(**inputs, max_new_tokens=512, do_sample=False)
-    text = processor.tokenizer.decode(out[0], skip_special_tokens=True)
-    return text
+    try:
+        print(f"[TinyDoc] run() called: task={task}, question={question}, image_type={type(image)}", flush=True)
+        
+        if image is None:
+            return "Please upload a document image."
+        
+        # Handle different image types from Gradio
+        if isinstance(image, str):
+            image = Image.open(image).convert("RGB")
+        elif isinstance(image, dict):
+            if "path" in image:
+                image = Image.open(image["path"]).convert("RGB")
+            elif "url" in image:
+                import requests
+                from io import BytesIO
+                resp = requests.get(image["url"], timeout=10)
+                image = Image.open(BytesIO(resp.content)).convert("RGB")
+        elif hasattr(image, "convert"):
+            image = image.convert("RGB")
+        else:
+            print(f"[TinyDoc] Unknown image type: {type(image)}", flush=True)
+            return f"Error: Unknown image type {type(image)}"
+        
+        print(f"[TinyDoc] Image size: {image.size}", flush=True)
+        
+        if task == "Ask a question":
+            prompt = f"<image>\nAnswer: {question}"
+        elif task == "Extract JSON":
+            prompt = "<image>\nExtract JSON: "
+        else:
+            prompt = "<image>\nConvert table to Markdown: "
+        
+        print(f"[TinyDoc] Prompt: {prompt[:80]}...", flush=True)
+        
+        inputs = processor(prompt, images=image)
+        inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
+        
+        print(f"[TinyDoc] Running inference...", flush=True)
+        
+        with torch.no_grad():
+            out = model.generate(**inputs, max_new_tokens=512, do_sample=False)
+        
+        text = processor.tokenizer.decode(out[0], skip_special_tokens=True)
+        print(f"[TinyDoc] Output: {text[:100]}...", flush=True)
+        return text
+        
+    except Exception as e:
+        error_msg = f"Error: {e}\n{traceback.format_exc()}"
+        print(f"[TinyDoc] RUN ERROR: {error_msg}", flush=True)
+        return f"Error: {e}"
 
 with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.Soft()) as demo:
     gr.Markdown("""
@@ -73,5 +114,5 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
     """)
 
 if __name__ == "__main__":
-    print(f"[TinyDoc] Starting Gradio...", flush=True)
+    print("[TinyDoc] Starting Gradio server...", flush=True)
     demo.launch(server_name="0.0.0.0", server_port=7860)
