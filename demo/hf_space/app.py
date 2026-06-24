@@ -65,6 +65,8 @@ def run(image, question, task):
         print(f"[TinyDoc] Prompt: {prompt[:80]}...", flush=True)
         
         inputs = processor(prompt, images=image)
+        # Remove non-model kwargs before generate
+        inputs.pop("image_token_id", None)
         inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
         
         print(f"[TinyDoc] Running inference...", flush=True)
