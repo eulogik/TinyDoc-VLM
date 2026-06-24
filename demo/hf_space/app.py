@@ -20,7 +20,7 @@ try:
         trust_remote_code=True,
     )
     model.to(device).eval()
-    processor = TinyDocVLMProcessor.from_pretrained(MODEL_ID)
+    processor = TinyDocVLMProcessor()
     # Sync image token ID between processor and model
     model.image_token_id = processor.image_token_id
     print(f"[TinyDoc] Model loaded! image_token_id={processor.image_token_id}", flush=True)
@@ -115,4 +115,4 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
 
 if __name__ == "__main__":
     print("[TinyDoc] Starting Gradio server...", flush=True)
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860, show_error=True)
