@@ -2,18 +2,32 @@ import os, sys, torch, gradio as gr
 from PIL import Image
 from pathlib import Path
 
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 sys.path.insert(0, str(Path(__file__).parent / "tinydoc_vlm"))
 from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 
 MODEL_ID = "eulogik/TinyDoc-VLM-256M"
 device = "cuda" if torch.cuda.is_available() else "cpu"
-dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-print(f"Loading {MODEL_ID} on {device}...")
-model = TinyDocVLMForConditionalGeneration.from_pretrained(MODEL_ID)
-model.to(device).eval()
+print(f"[TinyDoc] Starting...", flush=True)
+print(f"[TinyDoc] DEVICE={device} MODEL={MODEL_ID}", flush=True)
+
+try:
+    model = TinyDocVLMForConditionalGeneration.from_pretrained(
+        MODEL_ID,
+        trust_remote_code=True,
+    )
+    model.to(device).eval()
+    print(f"[TinyDoc] Model loaded on {device}", flush=True)
+except Exception as e:
+    print(f"[TinyDoc] Model load FAILED: {e}", flush=True)
+    raise
+
 processor = TinyDocVLMProcessor()
-print("Model loaded!")
+print(f"[TinyDoc] Processor ready", flush=True)
 
 def run(image, question, task):
     if image is None:
@@ -59,4 +73,5 @@ with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.S
     """)
 
 if __name__ == "__main__":
-    demo.launch()
+    print(f"[TinyDoc] Starting Gradio...", flush=True)
+    demo.launch(server_name="0.0.0.0", server_port=7860)
