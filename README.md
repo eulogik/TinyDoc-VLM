@@ -135,7 +135,7 @@ python export/export_onnx.py --model-path eulogik/TinyDoc-VLM-256M --output mode
 @software{eulogik_tinydoc_vlm_2026,
   author = {eulogik},
   title = {TinyDoc-VLM: The World's Smallest Document-Specialist VLM},
-  year = {2025},
+  year = {2026},
   url = {https://github.com/eulogik/TinyDoc-VLM}
 }
 ```
