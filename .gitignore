@@ -104,7 +104,12 @@ wandb/
 
 # Model checkpoints and local data files
 data/synthetic/output/
+data/synthetic/m4_output/
+data/synthetic/train_output/
+data/synthetic/test_output/
 checkpoints/
+training/train_log.txt
+eval_results.json
 *.onnx
 *.safetensors
 *.gguf
