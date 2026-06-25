@@ -103,6 +103,11 @@ TinyDoc-VLM-256M outperforms SmolVLM2-256M by **+6–13 points** on most benchma
 
 ## 🔧 Deployment
 
+ONNX models available on [HF Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M):
+- `tinydoc-vlm-vision.onnx` — Vision encoder (33KB)
+- `tinydoc-vlm-compressor.onnx` — Token compressor (31KB)
+- `tinydoc-vlm-decoder.onnx` — Language decoder (59MB)
+
 ```bash
 # ONNX export
 python export/export_onnx.py --model-path eulogik/TinyDoc-VLM-256M --output model.onnx
