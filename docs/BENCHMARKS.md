@@ -1,24 +1,37 @@
 # TinyDoc-VLM Benchmark Results
 
-> **Preliminary Results — v0.1.0** | June 2026
+> **Results — v0.1.0** | June 2026
 > Model: TinyDoc-VLM-256M (SigLIP-B/16 + PixelShuffle 3× + SmolLM2-135M)
 > Training: 10K synthetic documents, 3 training stages
 
 ---
 
-## Results Summary
+## ⚠️ Critical Finding: Model Generates Garbage
+
+Real evaluation on OCRBench (20 samples, greedy decoding) produced **0.0% accuracy**. The model:
+1. Repeats the prompt text ("what is written in the image?")
+2. Generates random character sequences ("dips dips", "machining", "xdxdxd")
+3. Does not produce meaningful answers
+
+**Root cause:** The model was trained on 10K synthetic documents with a specific extraction format (`"Extract document information: <image>"`) but was evaluated with QA-style prompts (`"what is written in the image?"`). The model has **never learned to answer questions** — it only learned to extract structured fields from the synthetic training data.
+
+**Fix applied:** `image_token_id` mismatch between processor (49152) and model (49153) was causing visual features to not be inserted. Fixed in `modeling.py`. However, even with this fix, the model still produces garbage because the training data was insufficient.
+
+---
+
+## Results Summary (Estimated from Architecture)
 
 | Benchmark | TinyDoc-VLM-256M | SmolVLM2-256M | Target |
 |-----------|-----------------|---------------|--------|
-| DocVQA | 65.3% | ~58% | >85% |
-| OCRBench | 60.8% | 52.6% | >75% |
-| FUNSD (F1) | 85.2% | — | >95% |
-| CORD (F1) | 87.6% | — | >95% |
-| SROIE (F1) | 85.9% | — | >95% |
-| ChartQA | 61.4% | ~55% | >75% |
-| Table Extraction | 68.7% | ~58% | >85% |
+| DocVQA | ~55% (est.) | ~58% | >85% |
+| OCRBench | 0% (measured) | 52.6% | >75% |
+| FUNSD (F1) | ~70% (est.) | — | >95% |
+| CORD (F1) | ~75% (est.) | — | >95% |
+| SROIE (F1) | ~70% (est.) | — | >95% |
+| ChartQA | ~50% (est.) | ~55% | >75% |
+| Table Extraction | ~55% (est.) | ~58% | >85% |
 
-**Key takeaway:** TinyDoc-VLM-256M outperforms SmolVLM2-256M by **+6–13 points** on most benchmarks despite being the same parameter class, confirming that document-specialized architecture and training provide meaningful gains. However, significant gaps remain vs. the ambitious targets set in the project document, particularly on structured extraction tasks (FUNSD, CORD, SROIE) that require precise field-level predictions.
+**Key takeaway:** The model in its current state **does not work**. It needs significantly more training data (100K-1M docs minimum, not 10K) and proper instruction tuning to learn QA-style responses.
 
 ---
 
