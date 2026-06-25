@@ -48,7 +48,7 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
         self.decoder = TinyDocDecoder(config.decoder_config)
         
         # Learnable image pad / placeholder token ID
-        self.image_token_id = getattr(config, "image_token_id", 49153)
+        self.image_token_id = getattr(config, "image_token_id", 49152)
         
         # 2D Positional Embeddings for visual features (added to tokens before projection)
         s = config.pixel_shuffle_scale
