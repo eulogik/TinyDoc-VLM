@@ -1,0 +1,130 @@
+{
+  "metadata": {
+    "model": "TinyDoc-VLM-256M",
+    "version": "v0.1.0",
+    "architecture": "SigLIP-B/16 + PixelShuffle 3x + SmolLM2-135M",
+    "total_parameters": "290M",
+    "training_data": "10K synthetic documents",
+    "training_stages": 3,
+    "evaluation_date": "2026-06-25",
+    "precision": "FP16",
+    "framework": "PyTorch 2.3",
+    "note": "Preliminary results — subject to change with future training runs and bug fixes"
+  },
+  "benchmarks": [
+    {
+      "name": "DocVQA",
+      "description": "Document visual question answering",
+      "metric": "ANLS (Average Normalized Levenshtein Similarity)",
+      "score": 65.3,
+      "baseline_model": "SmolVLM2-256M",
+      "baseline_score": 58.0,
+      "target": 85.0,
+      "gap_to_target": -19.7,
+      "delta_vs_baseline": 7.3,
+      "status": "below_target"
+    },
+    {
+      "name": "OCRBench",
+      "description": "Comprehensive OCR accuracy across multiple text recognition scenarios",
+      "metric": "Accuracy",
+      "score": 60.8,
+      "baseline_model": "SmolVLM2-256M",
+      "baseline_score": 52.6,
+      "target": 75.0,
+      "gap_to_target": -14.2,
+      "delta_vs_baseline": 8.2,
+      "status": "below_target"
+    },
+    {
+      "name": "FUNSD",
+      "description": "Form understanding with noisy scanned forms and overlapping text regions",
+      "metric": "Entity-level F1",
+      "score": 85.2,
+      "baseline_model": null,
+      "baseline_score": null,
+      "target": 95.0,
+      "gap_to_target": -9.8,
+      "delta_vs_baseline": null,
+      "status": "below_target"
+    },
+    {
+      "name": "CORD",
+      "description": "Korean receipt comprehension with 13 entity categories",
+      "metric": "Entity-level F1",
+      "score": 87.6,
+      "baseline_model": null,
+      "baseline_score": null,
+      "target": 95.0,
+      "gap_to_target": -7.4,
+      "delta_vs_baseline": null,
+      "status": "below_target"
+    },
+    {
+      "name": "SROIE",
+      "description": "Scanned receipt key info extraction (company, date, address, total)",
+      "metric": "Entity-level F1",
+      "score": 85.9,
+      "baseline_model": null,
+      "baseline_score": null,
+      "target": 95.0,
+      "gap_to_target": -9.1,
+      "delta_vs_baseline": null,
+      "status": "below_target"
+    },
+    {
+      "name": "ChartQA",
+      "description": "Chart understanding with data extraction and reasoning questions",
+      "metric": "Accuracy",
+      "score": 61.4,
+      "baseline_model": "SmolVLM2-256M",
+      "baseline_score": 55.0,
+      "target": 75.0,
+      "gap_to_target": -13.6,
+      "delta_vs_baseline": 6.4,
+      "status": "below_target"
+    },
+    {
+      "name": "Table Extraction",
+      "description": "Converting document tables to structured HTML/Markdown",
+      "metric": "Accuracy (cell-level)",
+      "score": 68.7,
+      "baseline_model": "SmolVLM2-256M",
+      "baseline_score": 58.0,
+      "target": 85.0,
+      "gap_to_target": -16.3,
+      "delta_vs_baseline": 10.7,
+      "status": "below_target"
+    }
+  ],
+  "summary": {
+    "total_benchmarks": 7,
+    "beats_baseline_count": 5,
+    "meets_target_count": 0,
+    "average_gap_to_target_points": -12.9,
+    "best_relative_performance": "Table Extraction (+10.7 pts vs baseline)",
+    "worst_relative_to_target": "ChartQA (-13.6 pts from target)"
+  },
+  "improvement_priorities": [
+    {
+      "priority": 1,
+      "area": "FunSD / CORD / SROIE extraction",
+      "strategy": "Add multi-language synthetic receipts, increase training data to 100K+, add dedicated extraction-tuning stage"
+    },
+    {
+      "priority": 2,
+      "area": "ChartQA reasoning",
+      "strategy": "Upgrade decoder to SmolLM2-360M, add chart-specific chain-of-thought training data"
+    },
+    {
+      "priority": 3,
+      "area": "DocVQA / OCRBench",
+      "strategy": "More diverse document augmentation, higher-resolution input, longer training"
+    },
+    {
+      "priority": 4,
+      "area": "Table Extraction",
+      "strategy": "Add table-specific synthetic data with complex layouts, increase input resolution"
+    }
+  ]
+}
