@@ -110,3 +110,4 @@ checkpoints/
 *.gguf
 *.awq
 tinydoc-vlm-final.zip
+*.onnx filter
