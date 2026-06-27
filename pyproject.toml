@@ -5,15 +5,40 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tinydoc-vlm"
 version = "0.2.0"
-description = "A tiny vision-language model specialized for document understanding"
+description = "256M-param document AI: OCR, VQA, form extraction, table parsing. Runs on CPU. Apache 2.0."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
+keywords = [
+    "document-understanding",
+    "ocr",
+    "vqa",
+    "vision-language-model",
+    "tinyml",
+    "form-extraction",
+    "table-parsing",
+    "invoice-processing",
+    "receipt-scanning",
+    "document-ai",
+    "siglip",
+    "smollm",
+    "onnx",
+    "cpu-inference",
+    "edge-deployment",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
     "torch>=2.2.0",
