@@ -18,11 +18,19 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 
+DOWNLOAD_TIMEOUT = float(os.environ.get("TINYDOC_DATASET_TIMEOUT", "300"))
+
+
+def _load_dataset(*args, **kwargs):
+    from datasets import load_dataset
+    return load_dataset(*args, **kwargs, download_timeout=DOWNLOAD_TIMEOUT,
+                        download_retries=3)
+
+
 def download_docvqa(data_dir: Path) -> Path:
     """Download DocVQA from HuggingFace datasets."""
-    from datasets import load_dataset
     logger.info("Downloading DocVQA...")
-    ds = load_dataset("lmms-lab/docvqa", "DocVQA")
+    ds = _load_dataset("lmms-lab/docvqa", "DocVQA")
     out_dir = data_dir / "docvqa"
     out_dir.mkdir(parents=True, exist_ok=True)
     images_dir = out_dir / "images"
@@ -57,7 +65,7 @@ def download_funsd(data_dir: Path) -> Path:
     """Download FUNSD from HuggingFace datasets."""
     from datasets import load_dataset
     logger.info("Downloading FUNSD...")
-    ds = load_dataset("nielsr/funsd")
+    ds = _load_dataset("nielsr/funsd")
     out_dir = data_dir / "funsd"
     out_dir.mkdir(parents=True, exist_ok=True)
     images_dir = out_dir / "images"
@@ -93,7 +101,7 @@ def download_cord(data_dir: Path) -> Path:
     """Download CORD from HuggingFace datasets."""
     from datasets import load_dataset
     logger.info("Downloading CORD...")
-    ds = load_dataset("naver-clova-ix/cord-v2")
+    ds = _load_dataset("naver-clova-ix/cord-v2")
     out_dir = data_dir / "cord"
     out_dir.mkdir(parents=True, exist_ok=True)
     images_dir = out_dir / "images"
@@ -127,7 +135,7 @@ def download_sroie(data_dir: Path) -> Path:
     """Download SROIE from HuggingFace datasets."""
     from datasets import load_dataset
     logger.info("Downloading SROIE...")
-    ds = load_dataset("rajistics/sroie")
+    ds = _load_dataset("rajistics/sroie")
     out_dir = data_dir / "sroie"
     out_dir.mkdir(parents=True, exist_ok=True)
     images_dir = out_dir / "images"
@@ -161,7 +169,7 @@ def download_ocrbench(data_dir: Path) -> Path:
     """Download OCRBench from HuggingFace datasets."""
     from datasets import load_dataset
     logger.info("Downloading OCRBench...")
-    ds = load_dataset("echo840/OCRBench", split="test")
+    ds = _load_dataset("echo840/OCRBench", split="test")
     out_dir = data_dir / "ocrbench"
     out_dir.mkdir(parents=True, exist_ok=True)
     images_dir = out_dir / "images"
@@ -205,11 +213,15 @@ BENCHMARK_DOWNLOADS = {
     "ocrbench": download_ocrbench,
 }
 
+# Only the benchmarks used for training (real_benchmarks.load_all).
+# DocVQA (huge) and SROIE (no ground-truth text) are excluded by default.
+TRAINING_BENCHMARKS = ["ocrbench", "funsd", "cord"]
+
 
 def main():
     parser = argparse.ArgumentParser(description="Download benchmark datasets")
     parser.add_argument("--data-dir", type=str, default="evaluation/data", help="Data directory")
-    parser.add_argument("--benchmarks", type=str, nargs="+", default=list(BENCHMARK_DOWNLOADS.keys()),
+    parser.add_argument("--benchmarks", type=str, nargs="+", default=TRAINING_BENCHMARKS,
                         help="Benchmarks to download")
     parser.add_argument("--force", action="store_true", help="Re-download even if exists")
     args = parser.parse_args()
