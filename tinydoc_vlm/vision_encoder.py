@@ -14,18 +14,36 @@ class SigLIPVisionEncoder(nn.Module):
         
         # Load from config or create model
         vision_config = config.vision_config
-        # We can initialize from config. If we are running pretraining, we load weights.
-        # During runtime we might load a pretrained siglip model.
         self.encoder = SiglipVisionModel(vision_config)
         self.hidden_size = vision_config.hidden_size
-        
-        # Add special region classification or auxiliary layers if needed in future
-        # For now, just a wrapper around the SigLIP vision encoder
+        self.patch_size = getattr(vision_config, "patch_size", 16)
+        self.image_size = getattr(vision_config, "image_size", 384)
+
+    def resize_pos_embeddings(self, target_grid_size: int):
+        """
+        Interpolate the learned positional embeddings to a new square grid
+        (target_grid_size x target_grid_size). Call this after loading a
+        pretrained SigLIP checkpoint whose resolution differs from the current
+        config (e.g. loading a 384px-pretrained encoder into a 768px model).
+        """
+        pos_embed = self.encoder.embeddings.position_embedding
+        old_num = pos_embed.weight.shape[0]
+        old_grid = int(old_num ** 0.5)
+        if old_grid * old_grid != old_num or old_grid == target_grid_size:
+            return
+        new_num = target_grid_size * target_grid_size
+        # (1, old_num, dim) -> (1, dim, old_grid, old_grid)
+        weight = pos_embed.weight.unsqueeze(0).permute(0, 2, 1).view(1, -1, old_grid, old_grid)
+        weight = torch.nn.functional.interpolate(
+            weight, size=(target_grid_size, target_grid_size), mode="bicubic", align_corners=False
+        )
+        weight = weight.view(1, -1, new_num).permute(0, 2, 1).squeeze(0)
+        pos_embed.weight.data = weight
 
     def forward(
         self, 
         pixel_values: torch.Tensor, 
-        interpolate_pos_encoding: bool = False
+        interpolate_pos_encoding: bool = True
     ) -> torch.Tensor:
         """
         Args:

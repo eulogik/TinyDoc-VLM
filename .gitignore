@@ -116,3 +116,15 @@ eval_results.json
 *.awq
 tinydoc-vlm-final.zip
 *.onnx filter
+
+# Generated training/eval data (large, not source)
+data/training/
+data/synthetic/output/
+data/synthetic/overnight_output/
+data/synthetic/pil_renderer.pyc
+evaluation/data/
+checkpoints/
+training/overnight_log.txt
+venv/
+*.pt
+*.safetensors

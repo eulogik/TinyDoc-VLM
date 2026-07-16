@@ -8,7 +8,6 @@ from .configuration import TinyDocVLMConfig
 from .vision_encoder import SigLIPVisionEncoder
 from .token_compressor import PixelShuffleTokenCompressor
 from .decoder import TinyDocDecoder
-from .output_heads import MultiTaskOutputHeads
 
 class TinyDocVLMPreTrainedModel(PreTrainedModel):
     config_class = TinyDocVLMConfig
@@ -60,12 +59,6 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
             torch.zeros(1, 1, compressed_patches, config.decoder_config.hidden_size)
         )
         
-        # 4. Structured Output Heads (multi-task)
-        self.output_heads = MultiTaskOutputHeads(
-            hidden_size=config.decoder_config.hidden_size,
-            vocab_size=config.decoder_config.vocab_size,
-        )
-        
         # Initialize weights
         self.post_init()
 
@@ -92,7 +85,6 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
     ) -> Union[Tuple, Dict, CausalLMOutputWithPast]:
         
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        output_hidden_states = True if task else output_hidden_states
         
         # Decoding pass (no new visual input, reuse cached states)
         if pixel_values is None and past_key_values is not None:
@@ -108,10 +100,6 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
                 output_hidden_states=output_hidden_states,
                 return_dict=return_dict,
             )
-            if task:
-                hidden = outputs.hidden_states[-1] if hasattr(outputs, "hidden_states") else outputs[2]
-                head_outputs = self.output_heads(hidden, task=task)
-                return {"lm_outputs": outputs, "head_outputs": head_outputs}
             return outputs
 
         # Prefill pass: merge text and visual tokens into inputs_embeds
@@ -148,12 +136,17 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
             return_dict=return_dict,
         )
         
-        if task:
-            hidden = outputs.hidden_states[-1] if hasattr(outputs, "hidden_states") else outputs[-1]
-            head_outputs = self.output_heads(hidden, task=task)
-            return {"lm_outputs": outputs, "head_outputs": head_outputs}
-        
         return outputs
+
+    def generate(self, *args, **kwargs):
+        """
+        Overrides GenerationMixin.generate to inject anti-repetition defaults
+        (no_repeat_ngram_size + repetition_penalty), matching the long-horizon
+        decoding trick used by SOTA OCR models (e.g. Baidu Unlimited-OCR).
+        """
+        kwargs.setdefault("no_repeat_ngram_size", 20)
+        kwargs.setdefault("repetition_penalty", 1.1)
+        return super().generate(*args, **kwargs)
 
     def prepare_inputs_for_generation(
         self,

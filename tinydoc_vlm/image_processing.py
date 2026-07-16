@@ -12,7 +12,7 @@ class TinyDocImageProcessor(ImageProcessingMixin):
     """
     def __init__(
         self,
-        image_size: int = 384,
+        image_size: int = 768,
         mean: Optional[List[float]] = None,
         std: Optional[List[float]] = None,
         tiling_mode: str = "auto",  # "none", "auto" (split if large)

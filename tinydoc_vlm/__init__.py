@@ -5,7 +5,6 @@ from .decoder import TinyDocDecoder
 from .modeling import TinyDocVLMForConditionalGeneration, TinyDocVLMPreTrainedModel
 from .image_processing import TinyDocImageProcessor
 from .processing import TinyDocVLMProcessor
-from .output_heads import MultiTaskOutputHeads, JSONHead, KVHead, TableHead, OCRHead, QAHead
 from .data import DocumentDataset
 from .losses import CombinedLoss
 from .trainer import TinyDocVLMTrainer, TrainerConfig
@@ -19,12 +18,6 @@ __all__ = [
     "TinyDocVLMPreTrainedModel",
     "TinyDocImageProcessor",
     "TinyDocVLMProcessor",
-    "MultiTaskOutputHeads",
-    "JSONHead",
-    "KVHead",
-    "TableHead",
-    "OCRHead",
-    "QAHead",
     "DocumentDataset",
     "CombinedLoss",
     "TinyDocVLMTrainer",

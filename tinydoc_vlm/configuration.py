@@ -10,7 +10,7 @@ class TinyDocVLMConfig(PretrainedConfig):
         vision_config: Union[Dict[str, Any], PretrainedConfig] = None,
         decoder_config: Union[Dict[str, Any], PretrainedConfig] = None,
         pixel_shuffle_scale: int = 3,
-        image_size: int = 384,
+        image_size: int = 768,
         patch_size: int = 16,
         **kwargs,
     ):
@@ -26,7 +26,7 @@ class TinyDocVLMConfig(PretrainedConfig):
                 "num_hidden_layers": 12,
                 "num_attention_heads": 12,
                 "patch_size": 16,
-                "image_size": 384,
+                "image_size": 768,
                 "num_channels": 3,
                 "layer_norm_eps": 1e-6,
             }

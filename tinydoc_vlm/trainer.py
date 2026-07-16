@@ -151,33 +151,15 @@ class TinyDocVLMTrainer:
         attention_mask = batch["attention_mask"].to(self.device)
         pixel_values = batch["pixel_values"].to(self.device)
         labels = batch["labels"].to(self.device)
-        task = batch.get("task", None)
 
         with autocast(enabled=self.config.use_fp16):
-            if task and self.config.stage == 2:
-                outputs = self.model(
-                    input_ids=input_ids,
-                    pixel_values=pixel_values,
-                    attention_mask=attention_mask,
-                    labels=labels,
-                    task=task,
-                )
-                head_outputs = outputs["head_outputs"]
-                loss_dict = self.loss_fn(
-                    lm_logits=outputs["lm_outputs"].logits,
-                    lm_labels=labels,
-                    head_outputs=head_outputs,
-                    head_labels=batch.get("head_labels", None),
-                )
-                loss = loss_dict["loss"]
-            else:
-                outputs = self.model(
-                    input_ids=input_ids,
-                    pixel_values=pixel_values,
-                    attention_mask=attention_mask,
-                    labels=labels,
-                )
-                loss = outputs.loss if hasattr(outputs, "loss") else outputs[0]
+            outputs = self.model(
+                input_ids=input_ids,
+                pixel_values=pixel_values,
+                attention_mask=attention_mask,
+                labels=labels,
+            )
+            loss = outputs.loss if hasattr(outputs, "loss") else outputs[0]
 
         if self.config.use_fp16:
             self.scaler.scale(loss).backward()
