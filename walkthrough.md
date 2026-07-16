@@ -139,8 +139,9 @@ TinyDoc-VLM/
 | Service | URL | Status |
 |---------|-----|--------|
 | GitHub Repo | https://github.com/eulogik/TinyDoc-VLM | ✅ Active |
-| HF Model Hub | https://huggingface.co/eulogik/TinyDoc-VLM-256M | ✅ Published (base, 384) |
-| HF LoRA Adapter | https://huggingface.co/eulogik/TinyDoc-VLM-LoRA | ✅ Published |
+| HF Model Hub | https://huggingface.co/eulogik/TinyDoc-VLM-256M | ⚠️ Legacy (base, 384, pre-fix) |
+| HF LoRA Adapter | https://huggingface.co/eulogik/TinyDoc-VLM-LoRA | ⚠️ Legacy (on 256M base, pre-fix) |
+| HF 768 model | *(planned)* `eulogik/TinyDoc-VLM-768` | 🚧 In progress (Colab retrain) |
 | HF Space Demo | https://huggingface.co/spaces/eulogik/TinyDoc-VLM | ✅ Live (HTTP 200) |
 | PyPI Package | https://pypi.org/project/tinydoc/ | ✅ v0.2.0 |
 | GitHub Pages | https://eulogik.github.io/TinyDoc-VLM/ | ✅ Deployed |

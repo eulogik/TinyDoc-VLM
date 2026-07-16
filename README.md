@@ -76,22 +76,38 @@ processor = TinyDocVLMProcessor()
 ## Model Architecture
 
 ```
-Image (384×384)
+Image (768×768, default; 384×384 legacy)
     ↓
-SigLIP Vision Encoder (93M)          ← 576 patches × 768 dim
+SigLIP Vision Encoder (93M)          ← 2304 patches × 768 dim
     ↓
-Pixel-Shuffle Compressor (scale=3)   ← 9× compression → 64 tokens
+Pixel-Shuffle Compressor (scale=3)   ← 9× compression → 256 tokens/tile
     ↓
-Visual Position Embeddings
+Visual Position Embeddings (interpolated 384→768)
     ↓
 SmolLM2 Decoder (135M)               ← 30 layers, GQA (9:3 heads), 8192 ctx
     ↓
-Multi-Task Output Heads
-    ↓
-JSON / KV Extraction / Table / OCR / QA
+LM Head (prompt-routed)              ← text / markdown / JSON / VQA
 ```
 
-**Total: 256M parameters** | Vision: 93M | Compressor: 3M | Decoder: 135M | Heads: 25M
+**Total: ~262M parameters** | Vision: 93M | Compressor: 3M | Decoder: 135M
+
+> **Architecture note:** the original multi-task output heads (`output_heads.py`) were
+> removed. The model now produces all outputs (markdown, text, JSON, VQA) through the
+> decoder's LM head, selected by the input prompt. A repetition-penalty / no-repeat-ngram
+> override is built into `generate()` to reduce verbose looping.
+
+## Model Versions & Status
+
+| Repo | Type | Status | Notes |
+|------|------|--------|-------|
+| [`eulogik/TinyDoc-VLM-256M`](https://huggingface.co/eulogik/TinyDoc-VLM-256M) | Base model | ⚠️ Legacy (384, 2026-06-27) | Original architecture with multi-task heads. Still loads with current code (heads are ignored), but **not** retrained at 768 and predates the ngram-penalty `generate()`. |
+| [`eulogik/TinyDoc-VLM-LoRA`](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) | PEFT LoRA (r=16) | ⚠️ Legacy | Trained on top of the legacy 256M base — inherits the same 384 / old-head limitations. Loads via the base model + adapter. |
+| *(planned)* `eulogik/TinyDoc-VLM-768` | Base model | 🚧 In progress | Full-model retrain at 768×768 on 50K synthetic markdown docs + OCRBench/FUNSD/CORD. Produced by `training/colab_full_retrain.ipynb`. Not yet on the Hub. |
+
+**Summary:** both published models are the *pre-improvement* versions (before the
+architecture fixes A/B/C and the full 768 retrain D/E). They work, but lag the current
+repo code. The 768 retrain is the "good margin" jump and will be published as a new repo
+once `training/colab_full_retrain.ipynb` finishes on a Colab T4.
 
 ## LoRA Fine-tuning
 
