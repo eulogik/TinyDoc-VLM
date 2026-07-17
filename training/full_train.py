@@ -21,7 +21,11 @@ import json
 import logging
 import math
 import os
+import sys
 import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from pathlib import Path
 from typing import Dict, List
 
