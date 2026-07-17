@@ -236,6 +236,8 @@ def main():
     ap.add_argument("--device", default="auto")
     ap.add_argument("--bf16", action="store_true", help="bf16 autocast (use on MPS to save memory)")
     ap.add_argument("--grad-checkpoint", action="store_true", help="gradient checkpointing (saves activation memory)")
+    ap.add_argument("--save-every", type=int, default=200, help="Save an intermediate checkpoint every N steps (throttled to avoid filling disk)")
+    ap.add_argument("--log-every", type=int, default=10, help="Log training loss every N steps")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -256,7 +258,8 @@ def main():
           steps=args.steps, batch_size=args.batch_size, learning_rate=args.lr,
           warmup_steps=args.warmup, grad_accum=args.grad_accum,
           output_dir=args.output_dir, device=args.device,
-          bf16=args.bf16, grad_checkpoint=args.grad_checkpoint)
+          bf16=args.bf16, grad_checkpoint=args.grad_checkpoint,
+          save_every=args.save_every, log_every=args.log_every)
 
 
 if __name__ == "__main__":
