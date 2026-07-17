@@ -33,6 +33,8 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
+from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
+
 logger = logging.getLogger(__name__)
 
 
@@ -116,7 +118,7 @@ def train(
     steps=500, batch_size=1, learning_rate=1e-4,
     warmup_steps=50, grad_accum=4, log_every=10, save_every=200,
     output_dir="checkpoints/full", device="auto",
-    bf16=False, grad_checkpoint=False,
+    bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
 ):
     if device == "auto":
         device = "cuda" if torch.cuda.is_available() else (
@@ -132,10 +134,12 @@ def train(
         logger.info("Using bf16 autocast")
     model.train()
 
+    nw = 0 if device == "mps" else 4
     loader = DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True,
-        collate_fn=lambda b: collate_fn(b, processor),
-        num_workers=0 if device == "mps" else 2,
+        collate_fn=lambda b: collate_fn(b, processor, max_seq_length),
+        num_workers=nw,
+        prefetch_factor=4 if nw > 0 else None,
     )
 
     optimizer = torch.optim.AdamW(
@@ -159,6 +163,27 @@ def train(
     start = time.time()
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
+
+    # Resume from the latest saved step_* checkpoint (so a Colab disconnect
+    # does not lose progress). Only resumes if --resume and the step dir exists.
+    if resume:
+        step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
+        if step_dirs:
+            latest = step_dirs[-1]
+            resume_step = int(latest.name.split("_")[1])
+            logger.info(f"Resuming from {latest} (step {resume_step})")
+            model = TinyDocVLMForConditionalGeneration.from_pretrained(
+                str(latest), trust_remote_code=True)
+            # keep model on device
+            model = model.to(device if device != "auto" else (
+                "cuda" if torch.cuda.is_available() else (
+                    "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
+            if grad_checkpoint:
+                model.gradient_checkpointing_enable()
+            step = resume_step
+            start = time.time()  # reset timing so speed reflects resumed run
+            if step >= steps:
+                logger.info(f"Already at step {step} >= target {steps}; skipping training.")
 
     while step < steps:
         for batch in loader:
@@ -230,14 +255,16 @@ def main():
     ap.add_argument("--batch-size", type=int, default=1)
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--warmup", type=int, default=50)
-    ap.add_argument("--grad-accum", type=int, default=4)
+    ap.add_argument("--grad-accum", type=int, default=1, help="Micro-batches per optimizer step. Keep low on Colab to limit wall-clock per step.")
     ap.add_argument("--max-samples", type=int, default=1_000_000)
+    ap.add_argument("--max-seq-length", type=int, default=512, help="Max token length for prompt+target (markdown targets need >256).")
     ap.add_argument("--output-dir", default="checkpoints/full")
     ap.add_argument("--device", default="auto")
     ap.add_argument("--bf16", action="store_true", help="bf16 autocast (use on MPS to save memory)")
     ap.add_argument("--grad-checkpoint", action="store_true", help="gradient checkpointing (saves activation memory)")
     ap.add_argument("--save-every", type=int, default=200, help="Save an intermediate checkpoint every N steps (throttled to avoid filling disk)")
     ap.add_argument("--log-every", type=int, default=10, help="Log training loss every N steps")
+    ap.add_argument("--no-resume", action="store_true", help="Start from scratch instead of resuming latest step_* checkpoint.")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -259,7 +286,8 @@ def main():
           warmup_steps=args.warmup, grad_accum=args.grad_accum,
           output_dir=args.output_dir, device=args.device,
           bf16=args.bf16, grad_checkpoint=args.grad_checkpoint,
-          save_every=args.save_every, log_every=args.log_every)
+          save_every=args.save_every, log_every=args.log_every,
+          max_seq_length=args.max_seq_length, resume=not args.no_resume)
 
 
 if __name__ == "__main__":
