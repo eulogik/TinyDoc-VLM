@@ -128,3 +128,20 @@ training/overnight_log.txt
 venv/
 *.pt
 *.safetensors
+
+# Credentials / secrets — never commit tokens
+*.token
+*.env
+.env
+.env.*
+secrets.json
+credentials.json
+**/*_token*
+ghp_*
+hf_*
+HF_TOKEN
+GH_TOKEN
+# Common token patterns (defensive; do not rely on this alone)
+**/*ghp_[A-Za-z0-9]*
+**/*hf_[A-Za-z0-9]*
+
