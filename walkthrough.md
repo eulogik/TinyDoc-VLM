@@ -193,12 +193,29 @@ tests/test_sdk.py::test_html_table_to_markdown_converter PASSED
 
 ### Next (full 768 retrain — run on Colab T4)
 > **M4 16GB constraint (empirical, 2026-07-16):** Full fine-tune does NOT run reliably on the M4. @768 it OOMs instantly / >7 min per step. @384 (bf16 + grad-checkpoint + `empty_cache` + seq 256) runs at ~0.2 steps/s but OOMs after ~100–110 steps due to MPS memory growth. Only **LoRA** (`training/fast_train.py`) is stable on this Mac (proven 17K steps). The 50K/768 full retrain must run on Colab T4.
-1. Generate the 50K+ set: `python data/build_training_dataset.py --num-docs 50000` (synthetic markdown) + auto-mixed real benchmarks → `data/training/manifest.jsonl`.
-2. Init 768 model: `python training/init_768_model.py --out checkpoints/init_768`.
-3. Retrain full model: `python training/full_train.py --model-id checkpoints/init_768 --manifest data/training/manifest.jsonl --steps 30000 --batch-size 4 --device cuda`.
-4. Eval on OmniDocBench V1.5, olmOCR-bench, OCRBench; push to HF + PyPI.
-5. (Optional) Dynamic multi-crop tiling, learned visual resampler, MTP loss, layout-stage wrapper.
-6. Re-sync `demo/hf_space/tinydoc_vlm/` (still has old heads) on next Space deploy.
+
+**Preferred path — resumable Colab notebook** (`training/colab_full_retrain.ipynb`):
+- Mounts Drive, clones `main` via zip, installs deps, downloads the 3 training benchmarks
+  (OCRBench / FUNSD / CORD — DocVQA & SROIE are skipped; they aren't used for training),
+  generates 50K synthetic markdown docs, initializes the 768 model, then full-trains 30K steps.
+- Every stage is **guarded** (skips if its output exists), so *Runtime → Run all* resumes after a
+  disconnect. Generation streams live progress; benchmark `load_dataset` has a 300s timeout + retries
+  so it can't hang. Intermediate checkpoints are throttled (`--save-every 10000`) to avoid filling disk;
+  only the final checkpoint is synced to Drive.
+- Note: if the training *cell itself* is interrupted before `final` exists, re-running restarts that
+  stage from scratch (no in-training resume yet). For a long T4 run, monitor or background it.
+
+**Manual path (commands):**
+1. Download training benchmarks: `python evaluation/download_benchmarks.py --data-dir evaluation/data --benchmarks ocrbench funsd cord` (~3–5 min; default now scopes to these three).
+2. Generate the 50K+ set: `python data/build_training_dataset.py --num-docs 50000 --output-dir data/training --data-dir evaluation/data` → `data/training/manifest.jsonl`.
+3. Init 768 model: `python training/init_768_model.py --out checkpoints/init_768`.
+4. Retrain full model: `python training/full_train.py --model-id checkpoints/init_768 --manifest data/training/manifest.jsonl --steps 30000 --batch-size 4 --grad-accum 8 --device cuda --bf16 --grad-checkpoint`.
+5. Eval on OmniDocBench V1.5, olmOCR-bench, OCRBench; push to HF (`eulogik/TinyDoc-VLM-768`) + PyPI.
+6. (Optional) Dynamic multi-crop tiling, learned visual resampler, MTP loss, layout-stage wrapper.
+7. Re-sync `demo/hf_space/tinydoc_vlm/` (still has old heads) and republish `eulogik/TinyDoc-VLM-768` on next Space deploy.
+
+> **CI note (2026-07-16):** A/B/C raised the default resolution to 768, so `tests/test_model.py`
+> asserts `image_size == 768` and `test_model_forward` uses 256 visual tokens/tile. All 13 tests pass.
 
 ---
 
