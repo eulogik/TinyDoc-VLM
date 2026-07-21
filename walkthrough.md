@@ -1,6 +1,6 @@
 # TinyDoc-VLM — Living Walkthrough & Handover Doc
 
-> **Last updated**: 2026-07-16
+> **Last updated**: 2026-07-21
 > **Repo**: https://github.com/eulogik/TinyDoc-VLM  
 > **HF Model**: https://huggingface.co/eulogik/TinyDoc-VLM-256M  
 > **HF Space**: https://huggingface.co/spaces/eulogik/TinyDoc-VLM  
@@ -239,6 +239,26 @@ the latest `step_*`, free-tier 12h sessions accumulate progress — just re-run 
 ---
 
 ## 8. Key Contacts
+
+- **Company**: eulogik (https://eulogik.com)
+- **Twitter**: @eulogik
+- **Email**: hello@eulogik.com
+- **Author**: Sunday Shah
+
+---
+
+## 9. Training Run Status
+
+| Item | Detail |
+|------|--------|
+| **Model** | TinyDoc-VLM 768 full retrain |
+| **Started** | 2026-07-21 ~07:45 (Colab T4, "Sunday Eulogik" account) |
+| **Steps** | 30000 target, batch 8, grad-accum 1, max-seq 512 |
+| **Loss** | 10.8 → 1.6 at step ~230, trending down |
+| **Speed** | ~8s/step (~0.12 steps/s) |
+| **ETA** | ~67h total — resumes across Colab sessions via `step_*` checkpoints on Drive |
+| **Next action** | Re-run `GPU=T4 STEPS=30000 ./training/run_colab_cli.sh` or the notebook after each disconnect; training auto-continues from latest saved step. |
+| **Push plan** | After final checkpoint lands: `HF_TOKEN=... python training/push_to_hf.py --repo eulogik/TinyDoc-VLM-768` |
 
 - **Company**: eulogik (https://eulogik.com)
 - **Twitter**: @eulogik
