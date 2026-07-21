@@ -88,17 +88,27 @@ def main():
     ap.add_argument("--num-docs", type=int, default=50000)
     ap.add_argument("--save-every", type=int, default=500)
     ap.add_argument("--base", default="eulogik/TinyDoc-VLM-256M")
-    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--device", default="auto",
+                    help="Device for training. Use 'auto' to auto-detect CUDA/MPS/CPU. "
+                         "Explicit 'cuda' may fail if torch lacks CUDA support.")
     args = ap.parse_args()
 
     work = mount_drive()
     repo = clone_repo(work)
     os.chdir(repo)
 
-    # 1. Install deps (idempotent; pip skips already-installed)
-    run([sys.executable, "-m", "pip", "install", "-q",
-         "torch", "torchvision", "--index-url",
-         "https://download.pytorch.org/whl/cu124"], cwd=str(repo))
+    # 1. Install deps (idempotent; pip skips already-installed).
+    #    Do NOT reinstall torch — Colab ships it WITH CUDA pre-installed, and
+    #    overwriting it via --index-url can break CUDA support. Just install
+    #    the other dependencies.
+    cuda_avail = subprocess.run(
+        [sys.executable, "-c", "import torch; print(torch.cuda.is_available())"],
+        capture_output=True, text=True).stdout.strip() == "True"
+    if not cuda_avail:
+        logger.warning("CUDA not available; installing torch with CUDA support.")
+        run([sys.executable, "-m", "pip", "install", "-q",
+             "torch", "torchvision", "--index-url",
+             "https://download.pytorch.org/whl/cu124"], cwd=str(repo))
     run([sys.executable, "-m", "pip", "install", "-q",
          "transformers", "sentencepiece", "tokenizers", "pillow", "numpy",
          "pandas", "tqdm", "pyyaml", "einops", "faker", "jinja2", "pydantic",

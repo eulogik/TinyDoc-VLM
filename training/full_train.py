@@ -123,6 +123,12 @@ def train(
     if device == "auto":
         device = "cuda" if torch.cuda.is_available() else (
             "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")
+    elif device == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError(
+            "--device cuda was set but PyTorch was not compiled with CUDA support "
+            "(or no GPU is available). Try '--device auto' or "
+            "'pip install torch --index-url https://download.pytorch.org/whl/cu124'."
+        )
 
     logger.info(f"Full fine-tune on {device} for {steps} steps (all params)")
     model = model.to(device)
