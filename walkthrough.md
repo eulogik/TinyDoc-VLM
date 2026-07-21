@@ -227,9 +227,20 @@ the latest `step_*`, free-tier 12h sessions accumulate progress — just re-run 
 3. Init 768 model: `python training/init_768_model.py --out checkpoints/init_768`.
 4. Retrain full model (fast + resumable): `python training/full_train.py --model-id checkpoints/init_768 --manifest data/training/manifest.jsonl --steps 8000 --batch-size 8 --grad-accum 1 --warmup 500 --lr 1e-4 --max-seq-length 512 --save-every 500 --device cuda --bf16 --grad-checkpoint`.
 5. Push to HF (new repo, token via env): `HF_TOKEN=hf_xxx python training/push_to_hf.py --repo eulogik/TinyDoc-VLM-768`.
-6. Eval on OmniDocBench V1.5, olmOCR-bench, OCRBench; then PyPI + Space.
-7. (Optional) Dynamic multi-crop tiling, learned visual resampler, MTP loss, layout-stage wrapper.
-8. Re-sync `demo/hf_space/tinydoc_vlm/` (still has old heads) and republish `eulogik/TinyDoc-VLM-768` on next Space deploy.
+
+### Post-Training (after final checkpoint lands)
+
+These address the major gaps identified in a community assessment (2026-07-21):
+
+1. **Publish benchmarks** (highest priority): Run the 768 model through OCRBench (1000 samples), DocVQA, and FUNSD. Publish scores in `README.md` and the model card. The old model had "pending/in progress" — this kills that criticism.
+2. **Add MLX export**: Convert the 768 checkpoint to Apple MLX format so it runs 2–3× faster on M-series Macs than ONNX. Straightforward with `mlx-lm` convert.
+3. **Reduce synthetic dominance**: Source real document data (olmOCR-mix, LightOnOCR-mix, PDFA) to augment the current 0.5% real-benchmark ratio. The assessor correctly flagged that synthetic renders may fail on real scanned mess.
+4. **Package LoRA workflow**: Polish `training/fast_train.py` into a single `tinydoc train --docs ./my_invoices/` CLI command so users can improve the model on their own docs without writing code.
+5. **Speed up inference**: Add vision prefix caching and optionally speculative decoding. On Mac this gives 2–6× generation speedup.
+6. (Lower priority) Hallucination handling / PAR / user-adapt loop — research-grade, not table-stakes for a 256M model.
+7. Re-sync `demo/hf_space/tinydoc_vlm/` and republish `eulogik/TinyDoc-VLM-768` on next Space deploy.
+
+> **CI note (2026-07-16):** A/B/C raised the default resolution to 768, so `tests/test_model.py`
 
 > **CI note (2026-07-16):** A/B/C raised the default resolution to 768, so `tests/test_model.py`
 > asserts `image_size == 768` and `test_model_forward` uses 256 visual tokens/tile. All 13 tests pass.
