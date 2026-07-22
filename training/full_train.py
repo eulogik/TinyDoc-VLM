@@ -178,7 +178,8 @@ def train(
         for candidate in reversed(step_dirs):
             resume_step = int(candidate.name.split("_")[1])
             ckpt_files = [f for f in candidate.iterdir()
-                          if f.name.endswith((".safetensors", ".bin"))]
+                          if f.name.endswith((".safetensors", ".bin"))
+                          and f.stat().st_size > 0]
             if not ckpt_files:
                 logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
                 continue
