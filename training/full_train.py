@@ -170,26 +170,31 @@ def train(
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    # Resume from the latest saved step_* checkpoint (so a Colab disconnect
+    # Resume from the latest valid step_* checkpoint (so a Colab disconnect
     # does not lose progress). Only resumes if --resume and the step dir exists.
+    # Handles interrupted saves: falls back to the previous valid checkpoint.
     if resume:
         step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
-        if step_dirs:
-            latest = step_dirs[-1]
-            resume_step = int(latest.name.split("_")[1])
-            logger.info(f"Resuming from {latest} (step {resume_step})")
+        for candidate in reversed(step_dirs):
+            resume_step = int(candidate.name.split("_")[1])
+            ckpt_files = [f for f in candidate.iterdir()
+                          if f.name.endswith((".safetensors", ".bin"))]
+            if not ckpt_files:
+                logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
+                continue
+            logger.info(f"Resuming from {candidate} (step {resume_step})")
             model = TinyDocVLMForConditionalGeneration.from_pretrained(
-                str(latest), trust_remote_code=True)
-            # keep model on device
+                str(candidate), trust_remote_code=True)
             model = model.to(device if device != "auto" else (
                 "cuda" if torch.cuda.is_available() else (
                     "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
             if grad_checkpoint:
                 model.gradient_checkpointing_enable()
             step = resume_step
-            start = time.time()  # reset timing so speed reflects resumed run
+            start = time.time()
             if step >= steps:
                 logger.info(f"Already at step {step} >= target {steps}; skipping training.")
+            break
 
     while step < steps:
         for batch in loader:
@@ -238,8 +243,13 @@ def train(
                     running_loss = 0.0
                 if step % save_every == 0 and step < steps:
                     sp = out / f"step_{step}"
-                    sp.mkdir(exist_ok=True)
-                    model.save_pretrained(str(sp))
+                    tmp = out / f".step_{step}_tmp"
+                    tmp.mkdir(parents=True, exist_ok=True)
+                    model.save_pretrained(str(tmp))
+                    if sp.exists():
+                        import shutil
+                        shutil.rmtree(str(sp))
+                    tmp.rename(str(sp))
                     logger.info(f"Saved {sp}")
                 if step >= steps:
                     break
