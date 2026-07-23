@@ -117,6 +117,7 @@ def train(
     model, processor, train_dataset,
     steps=500, batch_size=1, learning_rate=1e-4,
     warmup_steps=50, grad_accum=4, log_every=10, save_every=200,
+    save_latest_every=0,
     output_dir="checkpoints/full", device="auto",
     bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
 ):
@@ -170,32 +171,57 @@ def train(
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    # Resume from the latest valid step_* checkpoint (so a Colab disconnect
-    # does not lose progress). Only resumes if --resume and the step dir exists.
+    # Resume from the latest valid checkpoint. Priority:
+    # 1. latest/ (frequent overwriting checkpoint, minimal loss on disconnect)
+    # 2. step_* dirs (landmark checkpoints)
     # Handles interrupted saves: falls back to the previous valid checkpoint.
     if resume:
-        step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
-        for candidate in reversed(step_dirs):
-            resume_step = int(candidate.name.split("_")[1])
-            ckpt_files = [f for f in candidate.iterdir()
+        latest_dir = out / "latest"
+        if latest_dir.exists():
+            ckpt_files = [f for f in latest_dir.iterdir()
                           if f.name.endswith((".safetensors", ".bin"))
                           and f.stat().st_size > 0]
-            if not ckpt_files:
-                logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
-                continue
-            logger.info(f"Resuming from {candidate} (step {resume_step})")
-            model = TinyDocVLMForConditionalGeneration.from_pretrained(
-                str(candidate), trust_remote_code=True)
-            model = model.to(device if device != "auto" else (
-                "cuda" if torch.cuda.is_available() else (
-                    "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
-            if grad_checkpoint:
-                model.gradient_checkpointing_enable()
-            step = resume_step
-            start = time.time()
-            if step >= steps:
-                logger.info(f"Already at step {step} >= target {steps}; skipping training.")
-            break
+            step_file = latest_dir / "step.txt"
+            if ckpt_files and step_file.exists():
+                resume_step = int(step_file.read_text().strip())
+                if resume_step > 0:
+                    logger.info(f"Resuming from {latest_dir} (step {resume_step})")
+                    model = TinyDocVLMForConditionalGeneration.from_pretrained(
+                        str(latest_dir), trust_remote_code=True)
+                    model = model.to(device if device != "auto" else (
+                        "cuda" if torch.cuda.is_available() else (
+                            "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
+                    if grad_checkpoint:
+                        model.gradient_checkpointing_enable()
+                    step = resume_step
+                    start = time.time()
+                    if step >= steps:
+                        logger.info(f"Already at step {step} >= target {steps}; skipping training.")
+
+        # Fall back to step_* checkpoints if latest/ wasn't valid
+        if step == 0:
+            step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
+            for candidate in reversed(step_dirs):
+                resume_step = int(candidate.name.split("_")[1])
+                ckpt_files = [f for f in candidate.iterdir()
+                              if f.name.endswith((".safetensors", ".bin"))
+                              and f.stat().st_size > 0]
+                if not ckpt_files:
+                    logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
+                    continue
+                logger.info(f"Resuming from {candidate} (step {resume_step})")
+                model = TinyDocVLMForConditionalGeneration.from_pretrained(
+                    str(candidate), trust_remote_code=True)
+                model = model.to(device if device != "auto" else (
+                    "cuda" if torch.cuda.is_available() else (
+                        "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
+                if grad_checkpoint:
+                    model.gradient_checkpointing_enable()
+                step = resume_step
+                start = time.time()
+                if step >= steps:
+                    logger.info(f"Already at step {step} >= target {steps}; skipping training.")
+                break
 
     while step < steps:
         for batch in loader:
@@ -252,6 +278,17 @@ def train(
                         shutil.rmtree(str(sp))
                     tmp.rename(str(sp))
                     logger.info(f"Saved {sp}")
+                if save_latest_every > 0 and step % save_latest_every == 0 and step > 0:
+                    sp = out / "latest"
+                    tmp = out / ".latest_tmp"
+                    tmp.mkdir(parents=True, exist_ok=True)
+                    model.save_pretrained(str(tmp))
+                    (tmp / "step.txt").write_text(str(step))
+                    if sp.exists():
+                        import shutil
+                        shutil.rmtree(str(sp))
+                    tmp.rename(str(sp))
+                    logger.info(f"Saved latest (step {step})")
                 if step >= steps:
                     break
         if step >= steps:
@@ -280,6 +317,7 @@ def main():
     ap.add_argument("--bf16", action="store_true", help="bf16 autocast (use on MPS to save memory)")
     ap.add_argument("--grad-checkpoint", action="store_true", help="gradient checkpointing (saves activation memory)")
     ap.add_argument("--save-every", type=int, default=200, help="Save an intermediate checkpoint every N steps (throttled to avoid filling disk)")
+    ap.add_argument("--save-latest-every", type=int, default=0, help="Overwrite latest/ checkpoint every N steps for fine-grained resume. 0 = disabled.")
     ap.add_argument("--log-every", type=int, default=10, help="Log training loss every N steps")
     ap.add_argument("--no-resume", action="store_true", help="Start from scratch instead of resuming latest step_* checkpoint.")
     args = ap.parse_args()
@@ -304,6 +342,7 @@ def main():
           output_dir=args.output_dir, device=args.device,
           bf16=args.bf16, grad_checkpoint=args.grad_checkpoint,
           save_every=args.save_every, log_every=args.log_every,
+          save_latest_every=args.save_latest_every,
           max_seq_length=args.max_seq_length, resume=not args.no_resume)
 
 
