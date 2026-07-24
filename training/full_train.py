@@ -174,56 +174,30 @@ def train(
     # Resume from the latest valid checkpoint. Priority:
     # 1. latest/ (frequent overwriting checkpoint, minimal loss on disconnect)
     # 2. step_* dirs (landmark checkpoints)
-    # Handles interrupted saves: falls back to the previous valid checkpoint.
-    # IMPORTANT: delete the original model before loading the checkpoint to
-    # avoid OOM from two models + optimizer states in GPU memory.
+    # The model was already loaded from the checkpoint in main() so we only
+    # need to read the step number to resume counting from there.
     if resume:
         latest_dir = out / "latest"
-        if latest_dir.exists():
-            ckpt_files = [f for f in latest_dir.iterdir()
-                          if f.name.endswith((".safetensors", ".bin"))
-                          and f.stat().st_size > 0]
-            step_file = latest_dir / "step.txt"
-            if ckpt_files and step_file.exists():
-                resume_step = int(step_file.read_text().strip())
-                if resume_step > 0:
-                    logger.info(f"Resuming from {latest_dir} (step {resume_step})")
-                    # Free the initial model to avoid OOM on reload
-                    del model
-                    torch.cuda.empty_cache()
-                    model = TinyDocVLMForConditionalGeneration.from_pretrained(
-                        str(latest_dir), trust_remote_code=True)
-                    model = model.to(device if device != "auto" else (
-                        "cuda" if torch.cuda.is_available() else (
-                            "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
-                    if grad_checkpoint:
-                        model.gradient_checkpointing_enable()
-                    step = resume_step
-                    start = time.time()
-                    if step >= steps:
-                        logger.info(f"Already at step {step} >= target {steps}; skipping training.")
+        if latest_dir.exists() and (latest_dir / "step.txt").exists():
+            resume_step = int((latest_dir / "step.txt").read_text().strip())
+            if resume_step > 0:
+                logger.info(f"Resuming from {latest_dir} (step {resume_step})")
+                step = resume_step
+                start = time.time()
+                if step >= steps:
+                    logger.info(f"Already at step {step} >= target {steps}; skipping training.")
 
-        # Fall back to step_* checkpoints if latest/ wasn't valid
         if step == 0:
             step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
             for candidate in reversed(step_dirs):
-                resume_step = int(candidate.name.split("_")[1])
                 ckpt_files = [f for f in candidate.iterdir()
                               if f.name.endswith((".safetensors", ".bin"))
                               and f.stat().st_size > 0]
                 if not ckpt_files:
                     logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
                     continue
+                resume_step = int(candidate.name.split("_")[1])
                 logger.info(f"Resuming from {candidate} (step {resume_step})")
-                del model
-                torch.cuda.empty_cache()
-                model = TinyDocVLMForConditionalGeneration.from_pretrained(
-                    str(candidate), trust_remote_code=True)
-                model = model.to(device if device != "auto" else (
-                    "cuda" if torch.cuda.is_available() else (
-                        "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu")))
-                if grad_checkpoint:
-                    model.gradient_checkpointing_enable()
                 step = resume_step
                 start = time.time()
                 if step >= steps:
@@ -332,8 +306,15 @@ def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
     from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 
-    logger.info(f"Loading model {args.model_id}")
-    model = TinyDocVLMForConditionalGeneration.from_pretrained(args.model_id, trust_remote_code=True)
+    # If resuming, load from checkpoint directly (avoids OOM from loading
+    # the base model AND the checkpoint on a 14.5 GiB T4 simultaneously).
+    resume_ckpt = _find_resume_checkpoint(Path(args.output_dir)) if not args.no_resume else None
+    if resume_ckpt:
+        logger.info(f"Loading model from resume checkpoint {resume_ckpt}")
+        model = TinyDocVLMForConditionalGeneration.from_pretrained(str(resume_ckpt), trust_remote_code=True)
+    else:
+        logger.info(f"Loading model {args.model_id}")
+        model = TinyDocVLMForConditionalGeneration.from_pretrained(args.model_id, trust_remote_code=True)
     processor = TinyDocVLMProcessor()
     # Keep image processor resolution in sync with the loaded model config
     processor.image_processor.image_size = model.config.image_size
@@ -351,6 +332,29 @@ def main():
           save_every=args.save_every, log_every=args.log_every,
           save_latest_every=args.save_latest_every,
           max_seq_length=args.max_seq_length, resume=not args.no_resume)
+
+
+def _find_resume_checkpoint(out: Path) -> Path | None:
+    """Find the most recent valid checkpoint for resume (latest/ > step_*)."""
+    latest = out / "latest"
+    if latest.exists() and (latest / "step.txt").exists():
+        ckpt_files = [f for f in latest.iterdir()
+                      if f.name.endswith((".safetensors", ".bin"))
+                      and f.stat().st_size > 0]
+        if ckpt_files:
+            step = int((latest / "step.txt").read_text().strip())
+            if step > 0:
+                logger.info(f"Found resume checkpoint {latest} (step {step})")
+                return latest
+    step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
+    for candidate in reversed(step_dirs):
+        ckpt_files = [f for f in candidate.iterdir()
+                      if f.name.endswith((".safetensors", ".bin"))
+                      and f.stat().st_size > 0]
+        if ckpt_files:
+            logger.info(f"Found resume checkpoint {candidate} (step {int(candidate.name.split('_')[1])})")
+            return candidate
+    return None
 
 
 if __name__ == "__main__":
