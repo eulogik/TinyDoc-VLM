@@ -1,25 +1,25 @@
 from .configuration import TinyDocVLMConfig
-from .vision_encoder import SigLIPVisionEncoder
-from .token_compressor import PixelShuffleTokenCompressor
-from .decoder import TinyDocDecoder
-from .modeling import TinyDocVLMForConditionalGeneration, TinyDocVLMPreTrainedModel
-from .image_processing import TinyDocImageProcessor
-from .processing import TinyDocVLMProcessor
 from .data import DocumentDataset
+from .decoder import TinyDocDecoder
+from .image_processing import TinyDocImageProcessor
 from .losses import CombinedLoss
+from .modeling import TinyDocVLMForConditionalGeneration, TinyDocVLMPreTrainedModel
+from .processing import TinyDocVLMProcessor
+from .token_compressor import PixelShuffleTokenCompressor
 from .trainer import TinyDocVLMTrainer, TrainerConfig
+from .vision_encoder import SigLIPVisionEncoder
 
 __all__ = [
-    "TinyDocVLMConfig",
-    "SigLIPVisionEncoder",
+    "CombinedLoss",
+    "DocumentDataset",
     "PixelShuffleTokenCompressor",
+    "SigLIPVisionEncoder",
     "TinyDocDecoder",
+    "TinyDocImageProcessor",
+    "TinyDocVLMConfig",
     "TinyDocVLMForConditionalGeneration",
     "TinyDocVLMPreTrainedModel",
-    "TinyDocImageProcessor",
     "TinyDocVLMProcessor",
-    "DocumentDataset",
-    "CombinedLoss",
     "TinyDocVLMTrainer",
     "TrainerConfig",
 ]

@@ -1,9 +1,10 @@
+
 import numpy as np
-from PIL import Image
-from typing import Optional, List
 import torch
 import torchvision.transforms as T
+from PIL import Image
 from transformers.image_processing_base import ImageProcessingMixin
+
 
 class TinyDocImageProcessor(ImageProcessingMixin):
     """
@@ -13,8 +14,8 @@ class TinyDocImageProcessor(ImageProcessingMixin):
     def __init__(
         self,
         image_size: int = 768,
-        mean: Optional[List[float]] = None,
-        std: Optional[List[float]] = None,
+        mean: list[float] | None = None,
+        std: list[float] | None = None,
         tiling_mode: str = "auto",  # "none", "auto" (split if large)
         **kwargs,
     ):

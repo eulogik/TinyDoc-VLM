@@ -1,13 +1,14 @@
+import numpy as np
 import torch
 from PIL import Image
-import numpy as np
 
 from tinydoc_vlm import (
+    TinyDocImageProcessor,
     TinyDocVLMConfig,
     TinyDocVLMForConditionalGeneration,
-    TinyDocImageProcessor,
     TinyDocVLMProcessor,
 )
+
 
 def test_config():
     config = TinyDocVLMConfig()

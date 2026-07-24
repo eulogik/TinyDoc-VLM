@@ -1,10 +1,9 @@
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Union
 
 import torch
-from torch.utils.data import Dataset
 from PIL import Image
+from torch.utils.data import Dataset
 
 from .image_processing import TinyDocImageProcessor
 
@@ -19,12 +18,12 @@ class DocumentDataset(Dataset):
     """
     def __init__(
         self,
-        data_root: Union[str, Path],
-        manifest_path: Optional[Union[str, Path]] = None,
-        image_processor: Optional[TinyDocImageProcessor] = None,
+        data_root: str | Path,
+        manifest_path: str | Path | None = None,
+        image_processor: TinyDocImageProcessor | None = None,
         max_seq_length: int = 2048,
         stage: int = 1,
-        samples: Optional[List[Dict]] = None,
+        samples: list[dict] | None = None,
     ):
         self.data_root = Path(data_root)
         self.image_processor = image_processor or TinyDocImageProcessor()
@@ -42,7 +41,7 @@ class DocumentDataset(Dataset):
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, idx: int) -> Dict:
+    def __getitem__(self, idx: int) -> dict:
         sample = self.samples[idx]
         image_path = self.data_root / sample["image_path"]
         image = Image.open(image_path).convert("RGB")
@@ -59,7 +58,7 @@ class DocumentDataset(Dataset):
         }
 
 
-def collate_fn(batch: List[Dict], tokenizer, image_token_id: int, max_length: int = 2048) -> Dict:
+def collate_fn(batch: list[dict], tokenizer, image_token_id: int, max_length: int = 2048) -> dict:
     """
     Collate function for DocumentDataset.
     Handles variable-length text, variable-number tiles, and label padding.

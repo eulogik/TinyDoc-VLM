@@ -1,5 +1,6 @@
 import torch
 
+
 def get_2d_sincos_pos_embed(embed_dim: int, grid_size: int, cls_token: bool = False) -> torch.Tensor:
     """
     Generate 2D sinusoidal positional embeddings.

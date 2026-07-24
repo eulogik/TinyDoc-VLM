@@ -1,7 +1,9 @@
 import torch
-import torch.nn as nn
+from torch import nn
 from transformers import SiglipVisionModel
+
 from .configuration import TinyDocVLMConfig
+
 
 class SigLIPVisionEncoder(nn.Module):
     """

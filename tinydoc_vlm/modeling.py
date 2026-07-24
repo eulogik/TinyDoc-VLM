@@ -1,13 +1,15 @@
+from typing import Any
+
 import torch
-import torch.nn as nn
-from typing import Dict, Any, Optional, List, Tuple, Union
-from transformers import PreTrainedModel, GenerationMixin
+from torch import nn
+from transformers import GenerationMixin, PreTrainedModel
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from .configuration import TinyDocVLMConfig
-from .vision_encoder import SigLIPVisionEncoder
-from .token_compressor import PixelShuffleTokenCompressor
 from .decoder import TinyDocDecoder
+from .token_compressor import PixelShuffleTokenCompressor
+from .vision_encoder import SigLIPVisionEncoder
+
 
 class TinyDocVLMPreTrainedModel(PreTrainedModel):
     config_class = TinyDocVLMConfig
@@ -70,19 +72,19 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
 
     def forward(
         self,
-        input_ids: Optional[torch.LongTensor] = None,
-        pixel_values: Optional[torch.FloatTensor] = None,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        labels: Optional[torch.LongTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        task: Optional[str] = None,
-    ) -> Union[Tuple, Dict, CausalLMOutputWithPast]:
+        input_ids: torch.LongTensor | None = None,
+        pixel_values: torch.FloatTensor | None = None,
+        attention_mask: torch.Tensor | None = None,
+        position_ids: torch.LongTensor | None = None,
+        past_key_values: list[torch.FloatTensor] | None = None,
+        inputs_embeds: torch.FloatTensor | None = None,
+        labels: torch.LongTensor | None = None,
+        use_cache: bool | None = None,
+        output_attentions: bool | None = None,
+        output_hidden_states: bool | None = None,
+        return_dict: bool | None = None,
+        task: str | None = None,
+    ) -> tuple | dict | CausalLMOutputWithPast:
         
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
         
@@ -156,7 +158,7 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
         inputs_embeds=None,
         pixel_values=None,
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Overridden to support KV caching during auto-regressive generation.
         """

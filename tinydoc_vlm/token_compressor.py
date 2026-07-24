@@ -1,7 +1,10 @@
 import math
+
 import torch
-import torch.nn as nn
+from torch import nn
+
 from .configuration import TinyDocVLMConfig
+
 
 class RMSNorm(nn.Module):
     def __init__(self, dim: int, eps: float = 1e-6):

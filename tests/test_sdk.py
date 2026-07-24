@@ -1,15 +1,17 @@
+import sys
+from pathlib import Path
+from unittest.mock import patch
+
+import numpy as np
 import pytest
 from PIL import Image
-import numpy as np
-from pathlib import Path
-import sys
-from unittest.mock import patch
 
 # Insert sdk directory into path
 sys.path.insert(0, str(Path(__file__).parent.parent / "sdk"))
 
 from tinydoc import TinyDocExtractor
 from tinydoc.models import ExtractionResult, QAResult, TableResult
+
 
 @pytest.fixture
 def dummy_image():

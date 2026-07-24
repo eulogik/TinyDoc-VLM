@@ -1,5 +1,7 @@
-from typing import Dict, Any, Union
-from transformers import PretrainedConfig, AutoConfig
+from typing import Any
+
+from transformers import AutoConfig, PretrainedConfig
+
 
 class TinyDocVLMConfig(PretrainedConfig):
     model_type = "tinydoc_vlm"
@@ -7,8 +9,8 @@ class TinyDocVLMConfig(PretrainedConfig):
 
     def __init__(
         self,
-        vision_config: Union[Dict[str, Any], PretrainedConfig] = None,
-        decoder_config: Union[Dict[str, Any], PretrainedConfig] = None,
+        vision_config: dict[str, Any] | PretrainedConfig = None,
+        decoder_config: dict[str, Any] | PretrainedConfig = None,
         pixel_shuffle_scale: int = 3,
         image_size: int = 768,
         patch_size: int = 16,
@@ -76,7 +78,7 @@ class TinyDocVLMConfig(PretrainedConfig):
                 pass
         raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         output = super().to_dict()
         output["vision_config"] = self.vision_config.to_dict()
         output["decoder_config"] = self.decoder_config.to_dict()

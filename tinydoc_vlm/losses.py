@@ -1,14 +1,14 @@
+
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-from typing import Dict, Optional
+from torch import nn
 
 
 def ce_loss(logits: torch.Tensor, labels: torch.Tensor, ignore_index: int = -100) -> torch.Tensor:
     return F.cross_entropy(logits.view(-1, logits.size(-1)), labels.view(-1), ignore_index=ignore_index)
 
 
-def kv_loss(kv_outputs: Dict[str, torch.Tensor], key_labels: torch.Tensor, confidence_labels: torch.Tensor) -> torch.Tensor:
+def kv_loss(kv_outputs: dict[str, torch.Tensor], key_labels: torch.Tensor, confidence_labels: torch.Tensor) -> torch.Tensor:
     key_ce = F.cross_entropy(kv_outputs["key_logits"].view(-1, kv_outputs["key_logits"].size(-1)), key_labels.view(-1))
     conf_bce = F.binary_cross_entropy(kv_outputs["confidence"].view(-1), confidence_labels.view(-1))
     return key_ce + conf_bce
@@ -29,9 +29,9 @@ class CombinedLoss(nn.Module):
         self,
         lm_logits: torch.Tensor,
         lm_labels: torch.Tensor,
-        head_outputs: Optional[Dict[str, torch.Tensor]] = None,
-        head_labels: Optional[Dict[str, torch.Tensor]] = None,
-    ) -> Dict[str, torch.Tensor]:
+        head_outputs: dict[str, torch.Tensor] | None = None,
+        head_labels: dict[str, torch.Tensor] | None = None,
+    ) -> dict[str, torch.Tensor]:
         losses = {}
         total_loss = torch.tensor(0.0, device=lm_logits.device)
 

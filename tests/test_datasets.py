@@ -1,14 +1,16 @@
 import json
 from pathlib import Path
-from PIL import Image
-import numpy as np
 
+import numpy as np
+from PIL import Image
+
+from data.datasets.cord import CORDDataset
 from data.datasets.docvqa import DocVQADataset
 from data.datasets.funsd import FUNSDDataset
-from data.datasets.cord import CORDDataset
-from data.datasets.sroie import SROIEDataset
 from data.datasets.pubtabnet import PubTabNetDataset
+from data.datasets.sroie import SROIEDataset
 from data.datasets.unified import SyntheticDocDataset
+
 
 def create_dummy_image(path: Path):
     img = Image.fromarray(np.uint8(np.random.rand(100, 100, 3) * 255))

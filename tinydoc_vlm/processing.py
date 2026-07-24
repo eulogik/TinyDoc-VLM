@@ -2,12 +2,12 @@
 TinyDocVLMProcessor — standalone processor (does not inherit ProcessorMixin to avoid
 strict type-checking issues in transformers<4.45). Provides the same public API.
 """
-import os
 import json
-from PIL import Image
-from typing import Dict, Any, Union, Optional, List
+import os
+from typing import Any
 
 import torch
+from PIL import Image
 from transformers import AutoTokenizer
 
 from .image_processing import TinyDocImageProcessor
@@ -30,7 +30,7 @@ class TinyDocVLMProcessor:
 
     def __init__(
         self,
-        image_processor: Optional[TinyDocImageProcessor] = None,
+        image_processor: TinyDocImageProcessor | None = None,
         tokenizer=None,
         config=None,
         **kwargs,
@@ -55,13 +55,13 @@ class TinyDocVLMProcessor:
 
     def __call__(
         self,
-        text: Union[str, List[str]],
-        images: Optional[Union[Image.Image, List[Image.Image]]] = None,
+        text: str | list[str],
+        images: Image.Image | list[Image.Image] | None = None,
         padding: bool = True,
         truncation: bool = True,
-        max_length: Optional[int] = None,
+        max_length: int | None = None,
         return_tensors: str = "pt",
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Preprocesses text and images into tensors for the model.
 
@@ -71,13 +71,13 @@ class TinyDocVLMProcessor:
         """
         # ---- 1. Image processing ------------------------------------------------
         pixel_values = None
-        num_tiles_list: List[int] = []
+        num_tiles_list: list[int] = []
 
         if images is not None:
             if not isinstance(images, list):
                 images = [images]
 
-            processed: List[torch.Tensor] = []
+            processed: list[torch.Tensor] = []
             for img in images:
                 tile_tensor = self.image_processor.preprocess(img)  # (T, 3, H, W)
                 processed.append(tile_tensor)
@@ -85,7 +85,7 @@ class TinyDocVLMProcessor:
 
             # Pad to max tiles so we can stack into a single tensor
             max_tiles = max(num_tiles_list)
-            padded: List[torch.Tensor] = []
+            padded: list[torch.Tensor] = []
             sz = self.image_processor.image_size
             for tile_tensor in processed:
                 T = tile_tensor.shape[0]
@@ -111,7 +111,7 @@ class TinyDocVLMProcessor:
         tokens_per_tile = (sz // patch_size // scale) ** 2
 
         if isinstance(text, list):
-            expanded: List[str] = []
+            expanded: list[str] = []
             for idx, t in enumerate(text):
                 if idx < len(num_tiles_list):
                     total_vis = num_tiles_list[idx] * tokens_per_tile
@@ -132,7 +132,7 @@ class TinyDocVLMProcessor:
             return_tensors=return_tensors,
         )
 
-        inputs: Dict[str, Any] = {
+        inputs: dict[str, Any] = {
             "input_ids": enc["input_ids"],
             "attention_mask": enc["attention_mask"],
         }

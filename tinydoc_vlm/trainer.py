@@ -1,14 +1,14 @@
+import logging
 import os
 import time
-import logging
 from pathlib import Path
-from typing import Dict, Optional
 
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.cuda.amp import autocast
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR, SequentialLR
-from torch.cuda.amp import autocast
+from torch.utils.data import DataLoader, Dataset
+
 try:
     from torch.amp import GradScaler as AmpGradScaler
     _has_new_amp = True
@@ -16,10 +16,10 @@ except ImportError:
     from torch.cuda.amp import GradScaler as AmpGradScaler
     _has_new_amp = False
 
+from .data import collate_fn
+from .losses import CombinedLoss
 from .modeling import TinyDocVLMForConditionalGeneration
 from .processing import TinyDocVLMProcessor
-from .losses import CombinedLoss
-from .data import collate_fn
 
 logger = logging.getLogger(__name__)
 
@@ -63,11 +63,11 @@ class TrainerConfig:
         self.gradient_checkpointing = gradient_checkpointing
         self.num_workers = num_workers
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {k: v for k, v in self.__dict__.items()}
 
     @classmethod
-    def from_dict(cls, d: Dict) -> "TrainerConfig":
+    def from_dict(cls, d: dict) -> "TrainerConfig":
         return cls(**{k: v for k, v in d.items() if k in cls.__init__.__code__.co_varnames})
 
 
@@ -81,9 +81,9 @@ class TinyDocVLMTrainer:
         model: TinyDocVLMForConditionalGeneration,
         processor: TinyDocVLMProcessor,
         train_dataset: Dataset,
-        eval_dataset: Optional[Dataset] = None,
-        config: Optional[TrainerConfig] = None,
-        device: Optional[torch.device] = None,
+        eval_dataset: Dataset | None = None,
+        config: TrainerConfig | None = None,
+        device: torch.device | None = None,
     ):
         self.model = model
         self.processor = processor
@@ -146,7 +146,7 @@ class TinyDocVLMTrainer:
                 pin_memory=True,
             )
 
-    def train_step(self, batch: Dict) -> Dict:
+    def train_step(self, batch: dict) -> dict:
         input_ids = batch["input_ids"].to(self.device)
         attention_mask = batch["attention_mask"].to(self.device)
         pixel_values = batch["pixel_values"].to(self.device)
@@ -168,7 +168,7 @@ class TinyDocVLMTrainer:
 
         return {"loss": loss.item()}
 
-    def train_epoch(self) -> Dict:
+    def train_epoch(self) -> dict:
         self.model.train()
         total_loss = 0.0
         num_batches = 0
@@ -222,7 +222,7 @@ class TinyDocVLMTrainer:
 
         return {"loss": avg_epoch_loss, "epoch": self.epoch + 1, "steps": self.global_step}
 
-    def evaluate(self, benchmark_name: Optional[str] = None) -> float:
+    def evaluate(self, benchmark_name: str | None = None) -> float:
         self.model.eval()
         total_loss = 0.0
         num_batches = 0
