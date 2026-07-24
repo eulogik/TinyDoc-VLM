@@ -175,6 +175,8 @@ def train(
     # 1. latest/ (frequent overwriting checkpoint, minimal loss on disconnect)
     # 2. step_* dirs (landmark checkpoints)
     # Handles interrupted saves: falls back to the previous valid checkpoint.
+    # IMPORTANT: delete the original model before loading the checkpoint to
+    # avoid OOM from two models + optimizer states in GPU memory.
     if resume:
         latest_dir = out / "latest"
         if latest_dir.exists():
@@ -186,6 +188,9 @@ def train(
                 resume_step = int(step_file.read_text().strip())
                 if resume_step > 0:
                     logger.info(f"Resuming from {latest_dir} (step {resume_step})")
+                    # Free the initial model to avoid OOM on reload
+                    del model
+                    torch.cuda.empty_cache()
                     model = TinyDocVLMForConditionalGeneration.from_pretrained(
                         str(latest_dir), trust_remote_code=True)
                     model = model.to(device if device != "auto" else (
@@ -210,6 +215,8 @@ def train(
                     logger.warning(f"Incomplete checkpoint {candidate} (no weight files), skipping")
                     continue
                 logger.info(f"Resuming from {candidate} (step {resume_step})")
+                del model
+                torch.cuda.empty_cache()
                 model = TinyDocVLMForConditionalGeneration.from_pretrained(
                     str(candidate), trust_remote_code=True)
                 model = model.to(device if device != "auto" else (
