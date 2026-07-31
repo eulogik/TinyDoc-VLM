@@ -1,0 +1,20 @@
+{
+  "id": "eulogik/tinydoc-vlm-768-retrain",
+  "title": "TinyDoc-VLM 768 Retrain",
+  "code_file": "kaggle_notebook.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "competition_sources": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "model_sources": [],
+  "secrets": [
+    {
+      "name": "HF_TOKEN",
+      "source": "Secrets"
+    }
+  ]
+}

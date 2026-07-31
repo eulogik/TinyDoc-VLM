@@ -43,15 +43,32 @@ class MarkdownTrainDataset(Dataset):
 
     def __init__(self, manifest_path: str, max_samples: int = 1_000_000):
         self.data = []
+        # Manifest may store absolute paths from another machine; fall back to
+        # resolving relative to the manifest's own directory.
+        manifest_dir = os.path.dirname(os.path.abspath(manifest_path))
         with open(manifest_path) as f:
             for i, line in enumerate(f):
                 if i >= max_samples:
                     break
                 item = json.loads(line)
-                if not item.get("image_path") or not os.path.exists(item["image_path"]):
+                if not item.get("image_path") or not item.get("prompt") or not item.get("target"):
                     continue
-                if not item.get("prompt") or not item.get("target"):
-                    continue
+                img_path = item["image_path"]
+                if not os.path.exists(img_path):
+                    # Strip machine-specific prefix: take everything from the
+                    # last 'data/training/' marker, resolve against manifest dir.
+                    marker = "data/training/"
+                    idx = img_path.rfind(marker)
+                    rel = img_path[idx + len(marker):] if idx >= 0 else os.path.basename(img_path)
+                    alt = os.path.join(manifest_dir, rel)
+                    alt2 = os.path.join(manifest_dir, "synthetic", "images", os.path.basename(img_path))
+                    if os.path.exists(alt):
+                        img_path = alt
+                    elif os.path.exists(alt2):
+                        img_path = alt2
+                    else:
+                        continue
+                item["image_path"] = img_path
                 self.data.append(item)
         logger.info(f"Loaded {len(self.data)} training pairs from {manifest_path}")
 
