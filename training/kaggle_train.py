@@ -132,6 +132,8 @@ def main():
         sys.exit(1)
 
     # 1. Clone repo
+    WORK.mkdir(parents=True, exist_ok=True)
+    os.chdir(WORK)  # never sit inside the dir we are about to delete
     if REPO.exists():
         run(["rm", "-rf", str(REPO)])
     run(["git", "clone", "--depth", "1", "-b", BRANCH, REPO_URL, str(REPO)])
