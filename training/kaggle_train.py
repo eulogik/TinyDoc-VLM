@@ -162,6 +162,8 @@ def main():
             sys.exit(1)
 
     # 4. Initialize the 768 model (skips if already present)
+    ckpt_root = REPO / "checkpoints"
+    ckpt_root.mkdir(parents=True, exist_ok=True)
     init_dir = ckpt_root / "init_768"
     if (init_dir / "config.json").exists():
         logger.info("init_768 exists; skipping.")
@@ -174,7 +176,6 @@ def main():
             sys.exit(rc)
 
     # 5. Download latest checkpoint from HF model repo (resume)
-    ckpt_root.mkdir(parents=True, exist_ok=True)
     latest = ckpt_root / "full768" / "latest"
     if (ckpt_root / "full768" / "final").exists():
         logger.info("final checkpoint already present; nothing to do.")
