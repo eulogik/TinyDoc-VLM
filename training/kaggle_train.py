@@ -256,21 +256,29 @@ def main():
     if rc != 0:
         logger.error("torch import failed (rc=%s); aborting.", rc)
         sys.exit(rc)
-    # bf16 needs sm_80+; on P100/T4 save init weights as fp32 so the fp16
-    # AMP path in full_train.py works with a bf16-saved init checkpoint.
-    try:
-        torch2 = sys.modules.get("torch")
-        if torch2 is not None:
-            cap = torch2.cuda.get_device_capability(0)
-    except Exception:
-        cap = None
-    convert_dtype = "float32" if (cap and cap[0] < 8) else None
+    # The init checkpoint is saved in bf16 (built on a dev box). Under the
+    # fp16 AMP path in full_train.py, bf16 weights + fp32 vision features
+    # crash in the visual-token index-put (modeling.py:126). Convert init
+    # to fp32 unconditionally; convert_init_dtype.py skips if already fp32.
+    convert_dtype = "float32"
     if convert_dtype:
-        logger.info("GPU lacks bf16 HW (cap %s); init will be converted to %s.",
-                    cap, convert_dtype)
-    pip_install(["transformers", "sentencepiece", "tokenizers", "pillow", "numpy",
+        logger.info("init checkpoint will be converted to %s before training.", convert_dtype)
+    pip_install(["transformers==5.12.1", "sentencepiece", "tokenizers", "pillow", "numpy",
                  "pandas", "tqdm", "pyyaml", "einops", "faker", "jinja2", "pydantic",
                  "datasets", "accelerate", "huggingface_hub"])
+    # transformers version must match the version the init checkpoint was
+    # saved with (5.12.1): newer versions restructured SiglipVisionModel
+    # (extra vision_model nesting) and silently random-init the vision tower.
+    from huggingface_hub import hf_hub_download
+    try:
+        import transformers as _tf
+        _tf_ver = _tf.__version__.split("+")[0]
+        if _tf_ver != "5.12.1":
+            logger.error("transformers %s installed but 5.12.1 required; reinstall failed?", _tf_ver)
+            sys.exit(1)
+    except Exception as e:
+        logger.error("transformers check failed: %s", e)
+        sys.exit(1)
 
     # 3. Download training data from HF dataset repo
     data_dir = REPO / "data/training"
