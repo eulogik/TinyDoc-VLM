@@ -29,15 +29,79 @@ import threading
 import time
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
-logger = logging.getLogger("kaggle_train")
-
 REPO_URL = "https://github.com/eulogik/TinyDoc-VLM"
 BRANCH = "main"
 WORK = Path("/kaggle/working")
 REPO = WORK / "tinydoc-vlm"
 OUT_DIR = "checkpoints/full768"
 SYNC_THROTTLE_SEC = 12 * 60
+LOG_REPO = "eulogik/TinyDoc-VLM-runtime"
+LOG_DIR = WORK / "logs"
+
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stderr),
+        logging.FileHandler(str(LOG_DIR / "kaggle_train.log")),
+    ],
+)
+logger = logging.getLogger("kaggle_train")
+
+
+class LogUploader:
+    """Ships logs/* to the HF runtime repo so run progress and failures are
+    inspectable from anywhere (papermill's log stream can swallow output)."""
+
+    def __init__(self, repo_id, logs_dir, token, interval=45):
+        self.repo_id = repo_id
+        self.logs_dir = Path(logs_dir)
+        self.token = token
+        self.interval = interval
+        self.stop = threading.Event()
+        self._mtime = {}
+
+    def files(self):
+        return [f for f in sorted(self.logs_dir.iterdir())
+                if f.suffix in (".log", ".txt")]
+
+    def upload_changed(self):
+        from huggingface_hub import upload_file
+        for f in self.files():
+            mtime = f.stat().st_mtime
+            if self._mtime.get(f.name) == mtime:
+                continue
+            try:
+                upload_file(path_or_fileobj=str(f),
+                            path_in_repo=f"logs/{f.name}",
+                            repo_id=self.repo_id, token=self.token)
+                self._mtime[f.name] = mtime
+            except Exception as e:
+                logger.warning("log upload failed (%s): %s", f.name, e)
+
+    def upload_file(self, path_in_repo, local_path):
+        from huggingface_hub import upload_file
+        try:
+            upload_file(path_or_fileobj=str(local_path),
+                        path_in_repo=path_in_repo,
+                        repo_id=self.repo_id, token=self.token)
+        except Exception as e:
+            logger.warning("log upload failed (%s): %s", path_in_repo, e)
+
+    def loop(self):
+        while not self.stop.is_set():
+            try:
+                self.upload_changed()
+            except Exception:
+                pass
+            self.stop.wait(self.interval)
+
+    def final(self):
+        self.stop.set()
+        try:
+            self.upload_changed()
+        except Exception:
+            pass
 
 
 def run(cmd, cwd=None, logfile=None):
@@ -176,12 +240,34 @@ def main():
         need_cu118 = cap[0] < 7
     except Exception:
         need_cu118 = False
+        cap = None
     if need_cu118:
         logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
         pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118"],
                     extra_index="https://download.pytorch.org/whl/cu118", force=True)
-        run([sys.executable, "-c",
-             "import torch; print('torch', torch.__version__, 'cap', torch.cuda.get_device_capability(0))"])
+    env_script = ("import sys, torch; "
+                  "print('python', sys.version.split()[0]); "
+                  "print('torch', torch.__version__); "
+                  "print('cuda_available', torch.cuda.is_available()); "
+                  "print('device', torch.cuda.get_device_name(0)); "
+                  "print('cap', torch.cuda.get_device_capability(0))")
+    rc = run([sys.executable, "-c", env_script],
+             logfile=str(LOG_DIR / "env.txt"))
+    if rc != 0:
+        logger.error("torch import failed (rc=%s); aborting.", rc)
+        sys.exit(rc)
+    # bf16 needs sm_80+; on P100/T4 save init weights as fp32 so the fp16
+    # AMP path in full_train.py works with a bf16-saved init checkpoint.
+    try:
+        torch2 = sys.modules.get("torch")
+        if torch2 is not None:
+            cap = torch2.cuda.get_device_capability(0)
+    except Exception:
+        cap = None
+    convert_dtype = "float32" if (cap and cap[0] < 8) else None
+    if convert_dtype:
+        logger.info("GPU lacks bf16 HW (cap %s); init will be converted to %s.",
+                    cap, convert_dtype)
     pip_install(["transformers", "sentencepiece", "tokenizers", "pillow", "numpy",
                  "pandas", "tqdm", "pyyaml", "einops", "faker", "jinja2", "pydantic",
                  "datasets", "accelerate", "huggingface_hub"])
@@ -229,6 +315,13 @@ def main():
         if not (init_dir / "config.json").exists():
             logger.error("init_768 missing; aborting.")
             sys.exit(1)
+        if convert_dtype:
+            rc = run([sys.executable, "training/convert_init_dtype.py",
+                      "--model", str(init_dir), "--dtype", convert_dtype],
+                     logfile=str(LOG_DIR / "convert.log"))
+            if rc != 0:
+                logger.error("init_768 dtype conversion failed; aborting.")
+                sys.exit(rc)
 
     # 5. Download latest checkpoint from HF model repo (resume)
     latest = ckpt_root / "full768" / "latest"
@@ -249,12 +342,14 @@ def main():
         logger.warning("No checkpoint found in %s (fresh start): %s", args.ckpt_repo, e)
 
     # 6. Train with live sync
+    log_up = LogUploader(LOG_REPO, LOG_DIR, hf_token)
+    threading.Thread(target=log_up.loop, daemon=True).start()
     syncer = CkptSyncer(args.ckpt_repo, latest) if not args.no_sync else None
     if syncer:
         t = threading.Thread(target=syncer.loop, daemon=True)
         t.start()
 
-    train_log = WORK / "full_train.log"
+    train_log = LOG_DIR / "full_train.log"
     rc = run([sys.executable, "training/full_train.py",
               "--model-id", "checkpoints/init_768",
               "--manifest", "data/training/manifest.jsonl",
@@ -273,6 +368,7 @@ def main():
 
     if syncer:
         syncer.final()
+    log_up.final()
     if rc != 0:
         logger.error("Training exited %s; latest/ checkpoint synced for next run.", rc)
         # Dump the tail of the captured log: papermill's stream sometimes
@@ -288,5 +384,31 @@ def main():
     logger.info("DONE. Final checkpoint is in %s and in %s", OUT_DIR, args.ckpt_repo)
 
 
+def record_failure(hf_token):
+    """Write + upload a consolidated failure report (runs on any non-zero exit)."""
+    report = ["=== run failed ===\n"]
+    for name in ("kaggle_train.log", "env.txt", "convert.log", "full_train.log"):
+        f = LOG_DIR / name
+        if f.exists():
+            lines = f.read_text(errors="replace").splitlines()
+            report.append(f"--- {name} (last {40 if name != 'full_train.log' else 120} of {len(lines)}) ---")
+            report.extend(lines[-40 if name != "full_train.log" else 120:])
+            report.append("")
+    err = LOG_DIR / "last_error.txt"
+    err.write_text("\n".join(report))
+    try:
+        LogUploader(LOG_REPO, LOG_DIR, hf_token).upload_file("logs/last_error.txt", err)
+    except Exception as e:
+        logger.error("could not upload failure report: %s", e)
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit as e:
+        if e.code not in (None, 0):
+            record_failure(os.environ.get("HF_TOKEN", ""))
+        raise
+    except Exception:
+        record_failure(os.environ.get("HF_TOKEN", ""))
+        raise

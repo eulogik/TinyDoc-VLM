@@ -22,6 +22,12 @@ KERNEL="eulogikdevelopers/tinydoc-vlm-768-retrain"
 
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 
+# HF_TOKEN env var wins; otherwise fall back to the gitignored token file
+# written by kaggle_log.py's setup, so `./training/run_kaggle.sh` just works.
+if [ -z "${HF_TOKEN:-}" ] && [ -f "$HERE/training/.hf_token" ]; then
+    HF_TOKEN="$(cat "$HERE/training/.hf_token")"
+fi
+
 if ! command -v kaggle >/dev/null 2>&1; then
     echo "Install the Kaggle CLI first:  pip install kaggle" >&2
     echo "Then put your API credentials at ~/.kaggle/kaggle.json" >&2
