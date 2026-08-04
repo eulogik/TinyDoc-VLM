@@ -243,18 +243,23 @@ def main():
         cap = None
     if need_cu118:
         logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
-        # torchaudio must match torch exactly: the preinstalled torchaudio is
-        # built for the cu12x torch and crashes at import with a missing
-        # aoti_torch_abi_version symbol after the torch downgrade.
-        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118",
-                     "torchaudio==2.6.0+cu118"],
+        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118"],
                     extra_index="https://download.pytorch.org/whl/cu118", force=True)
+        # torchaudio is only a soft dependency of transformers
+        # (is_torchaudio_available-guarded) and its cu12x-built .so crashes
+        # after the torch downgrade with a missing aoti_torch_abi_version
+        # symbol. Removing it lets transformers import cleanly.
+        run([sys.executable, "-m", "pip", "uninstall", "-y", "torchaudio"])
     env_script = ("import sys, torch; "
                   "print('python', sys.version.split()[0]); "
                   "print('torch', torch.__version__); "
                   "print('cuda_available', torch.cuda.is_available()); "
                   "print('device', torch.cuda.get_device_name(0)); "
-                  "print('cap', torch.cuda.get_device_capability(0))")
+                  "print('cap', torch.cuda.get_device_capability(0)); "
+                  "import importlib.metadata as md; "
+                  "print('torchvision', md.version('torchvision')); "
+                  "try: print('torchaudio', md.version('torchaudio')) "
+                  "except Exception: print('torchaudio', 'NOT INSTALLED')")
     rc = run([sys.executable, "-c", env_script],
              logfile=str(LOG_DIR / "env.txt"))
     if rc != 0:
