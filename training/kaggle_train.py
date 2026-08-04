@@ -40,21 +40,33 @@ OUT_DIR = "checkpoints/full768"
 SYNC_THROTTLE_SEC = 12 * 60
 
 
-def run(cmd, cwd=None):
+def run(cmd, cwd=None, logfile=None):
+    """Run a subprocess, tee output to the papermill log AND a file.
+
+    Chunked read: tqdm progress bars write \r (no newline), which would
+    deadlock a line-oriented reader once the pipe buffer fills.
+    The logfile makes failures visible even when papermill's log stream
+    swallows the child's output (as observed with long-running steps).
+    """
     logger.info("$ %s", " ".join(str(c) for c in cmd))
+    if logfile is not None:
+        Path(logfile).parent.mkdir(parents=True, exist_ok=True)
     p = subprocess.Popen(
         cmd, cwd=cwd, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, text=True, bufsize=1,
     )
-    # Chunked read: tqdm progress bars write \r (no newline), which would
-    # deadlock a line-oriented reader once the pipe buffer fills.
-    import errno
+    out_f = open(logfile, "w") if logfile else None
     while True:
         chunk = p.stdout.read(4096)
         if not chunk:
             break
         sys.stdout.write(chunk)
         sys.stdout.flush()
+        if out_f:
+            out_f.write(chunk)
+            out_f.flush()
+    if out_f:
+        out_f.close()
     p.wait()
     return p.returncode
 
@@ -242,6 +254,7 @@ def main():
         t = threading.Thread(target=syncer.loop, daemon=True)
         t.start()
 
+    train_log = WORK / "full_train.log"
     rc = run([sys.executable, "training/full_train.py",
               "--model-id", "checkpoints/init_768",
               "--manifest", "data/training/manifest.jsonl",
@@ -255,12 +268,22 @@ def main():
               "--save-latest-every", str(args.save_latest_every),
               "--device", "cuda", "--bf16", "--grad-checkpoint",
               "--output-dir", OUT_DIR,
-              "--max-samples", "2000000"])
+              "--max-samples", "2000000"],
+             logfile=str(train_log))
 
     if syncer:
         syncer.final()
     if rc != 0:
         logger.error("Training exited %s; latest/ checkpoint synced for next run.", rc)
+        # Dump the tail of the captured log: papermill's stream sometimes
+        # swallows the child's output, so this is the only reliable view.
+        try:
+            lines = train_log.read_text().splitlines()
+            logger.error("--- full_train.log tail (%d lines) ---", len(lines))
+            for l in lines[-60:]:
+                logger.error("%s", l)
+        except Exception as e:
+            logger.error("Could not read %s: %s", train_log, e)
         sys.exit(rc)
     logger.info("DONE. Final checkpoint is in %s and in %s", OUT_DIR, args.ckpt_repo)
 
