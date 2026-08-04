@@ -14,7 +14,10 @@ Skips (exit 0) if the checkpoint is already the target dtype.
 import argparse
 import json
 import logging
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import torch
 from tinydoc_vlm import TinyDocVLMForConditionalGeneration
