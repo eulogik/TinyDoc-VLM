@@ -149,7 +149,19 @@ def main():
     run(["git", "clone", "--depth", "1", "-b", BRANCH, REPO_URL, str(REPO)])
     os.chdir(REPO)
 
-    # 2. Deps (Kaggle ships torch with CUDA preinstalled; don't touch it)
+    # 2. Deps + torch fix for old GPUs. Kaggle may provision a P100 (sm_60),
+    #    whose kernels are missing from the preinstalled cu12x torch (sm_70+).
+    #    cu118 wheels cover both P100 (sm_60) and T4 (sm_75).
+    try:
+        import torch
+        cap = torch.cuda.get_device_capability(0)
+        logger.info("GPU capability: %s", cap)
+        need_cu118 = cap[0] < 7
+    except Exception:
+        need_cu118 = False
+    if need_cu118:
+        logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
+        pip_install(["torch", "torchvision"], extra_index="https://download.pytorch.org/whl/cu118")
     pip_install(["transformers", "sentencepiece", "tokenizers", "pillow", "numpy",
                  "pandas", "tqdm", "pyyaml", "einops", "faker", "jinja2", "pydantic",
                  "datasets", "accelerate", "huggingface_hub"])
