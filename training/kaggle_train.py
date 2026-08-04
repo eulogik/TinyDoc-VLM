@@ -161,19 +161,32 @@ def main():
             logger.error("No manifest.jsonl in dataset repo %s", args.data_repo)
             sys.exit(1)
 
-    # 4. Initialize the 768 model (skips if already present)
+    # 4. Get the pre-built 768 model (built on a dev box; building it on the
+    #    Kaggle VM OOMs). Falls back to building locally if download fails.
     ckpt_root = REPO / "checkpoints"
     ckpt_root.mkdir(parents=True, exist_ok=True)
     init_dir = ckpt_root / "init_768"
     if (init_dir / "config.json").exists():
         logger.info("init_768 exists; skipping.")
     else:
-        rc = run([sys.executable, "training/init_768_model.py",
-                  "--base", "eulogik/TinyDoc-VLM-256M",
-                  "--out", "checkpoints/init_768"])
-        if rc != 0:
-            logger.error("init_768 failed; aborting.")
-            sys.exit(rc)
+        from huggingface_hub import snapshot_download
+        try:
+            logger.info("Downloading pre-built 768 model ...")
+            snapshot_download(
+                repo_id="eulogik/TinyDoc-VLM-768-init", repo_type="model",
+                local_dir=str(init_dir), token=hf_token,
+            )
+        except Exception as e:
+            logger.warning("init_768 download failed (%s); building instead.", e)
+            rc = run([sys.executable, "training/init_768_model.py",
+                      "--base", "eulogik/TinyDoc-VLM-256M",
+                      "--out", "checkpoints/init_768"])
+            if rc != 0:
+                logger.error("init_768 build failed; aborting.")
+                sys.exit(rc)
+        if not (init_dir / "config.json").exists():
+            logger.error("init_768 missing; aborting.")
+            sys.exit(1)
 
     # 5. Download latest checkpoint from HF model repo (resume)
     latest = ckpt_root / "full768" / "latest"
