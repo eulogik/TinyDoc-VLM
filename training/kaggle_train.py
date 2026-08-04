@@ -46,8 +46,15 @@ def run(cmd, cwd=None):
         cmd, cwd=cwd, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, text=True, bufsize=1,
     )
-    for line in p.stdout:
-        print(line, end="")
+    # Chunked read: tqdm progress bars write \r (no newline), which would
+    # deadlock a line-oriented reader once the pipe buffer fills.
+    import errno
+    while True:
+        chunk = p.stdout.read(4096)
+        if not chunk:
+            break
+        sys.stdout.write(chunk)
+        sys.stdout.flush()
     p.wait()
     return p.returncode
 
@@ -130,6 +137,9 @@ def main():
     if not hf_token:
         logger.error("HF_TOKEN env var required (set as a Kaggle secret).")
         sys.exit(1)
+    # tqdm writes \r-only lines that bloat the log and can stall subprocess
+    # pipes; suppress it everywhere downstream.
+    os.environ["TQDM_DISABLE"] = "1"
 
     # 1. Clone repo
     WORK.mkdir(parents=True, exist_ok=True)
