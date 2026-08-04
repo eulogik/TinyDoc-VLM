@@ -59,11 +59,16 @@ def run(cmd, cwd=None):
     return p.returncode
 
 
-def pip_install(pkgs, extra_index=None):
+def pip_install(pkgs, extra_index=None, force=False):
     cmd = [sys.executable, "-m", "pip", "install", "-q"] + pkgs
+    if force:
+        cmd.append("--force-reinstall")
     if extra_index:
         cmd += ["--index-url", extra_index]
-    run(cmd)
+    rc = run(cmd)
+    if rc != 0:
+        logger.error("pip install FAILED (%s): %s", rc, " ".join(cmd))
+        sys.exit(rc)
 
 
 class CkptSyncer:
@@ -161,7 +166,10 @@ def main():
         need_cu118 = False
     if need_cu118:
         logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
-        pip_install(["torch", "torchvision"], extra_index="https://download.pytorch.org/whl/cu118")
+        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118"],
+                    extra_index="https://download.pytorch.org/whl/cu118", force=True)
+        run([sys.executable, "-c",
+             "import torch; print('torch', torch.__version__, 'cap', torch.cuda.get_device_capability(0))"])
     pip_install(["transformers", "sentencepiece", "tokenizers", "pillow", "numpy",
                  "pandas", "tqdm", "pyyaml", "einops", "faker", "jinja2", "pydantic",
                  "datasets", "accelerate", "huggingface_hub"])
