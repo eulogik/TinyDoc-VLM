@@ -23,6 +23,7 @@ Usage (inside the Kaggle notebook, or any box with a GPU):
 import argparse
 import logging
 import os
+import select
 import subprocess
 import sys
 import threading
@@ -109,6 +110,9 @@ def run(cmd, cwd=None, logfile=None):
 
     Chunked read: tqdm progress bars write \r (no newline), which would
     deadlock a line-oriented reader once the pipe buffer fills.
+    select() with a timeout: if the child exits but its stdout pipe is
+    still held open by a lingering grandchild, a blocking read() would
+    hang the whole run (and the Kaggle session) forever.
     The logfile makes failures visible even when papermill's log stream
     swallows the child's output (as observed with long-running steps).
     """
@@ -120,19 +124,30 @@ def run(cmd, cwd=None, logfile=None):
         stderr=subprocess.STDOUT, text=True, bufsize=1,
     )
     out_f = open(logfile, "w") if logfile else None
+    idle = 0
     while True:
-        chunk = p.stdout.read(4096)
-        if not chunk:
-            break
-        sys.stdout.write(chunk)
-        sys.stdout.flush()
-        if out_f:
-            out_f.write(chunk)
-            out_f.flush()
+        if select.select([p.stdout], [], [], 30)[0]:
+            chunk = p.stdout.read(4096)
+            if not chunk:
+                break
+            idle = 0
+            sys.stdout.write(chunk)
+            sys.stdout.flush()
+            if out_f:
+                out_f.write(chunk)
+                out_f.flush()
+        elif p.poll() is not None:
+            idle += 1
+            if idle >= 2:
+                break
+        else:
+            idle = 0
+    if p.poll() is None:
+        logger.warning("child alive after stdout EOF; terminating")
+        p.terminate()
     if out_f:
         out_f.close()
-    p.wait()
-    return p.returncode
+    return p.wait()
 
 
 def pip_install(pkgs, extra_index=None, force=False):
