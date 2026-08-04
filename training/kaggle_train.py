@@ -243,7 +243,11 @@ def main():
         cap = None
     if need_cu118:
         logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
-        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118"],
+        # torchaudio must match torch exactly: the preinstalled torchaudio is
+        # built for the cu12x torch and crashes at import with a missing
+        # aoti_torch_abi_version symbol after the torch downgrade.
+        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118",
+                     "torchaudio==2.6.0+cu118"],
                     extra_index="https://download.pytorch.org/whl/cu118", force=True)
     env_script = ("import sys, torch; "
                   "print('python', sys.version.split()[0]); "
