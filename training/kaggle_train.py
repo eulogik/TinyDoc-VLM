@@ -125,12 +125,14 @@ def run(cmd, cwd=None, logfile=None):
     )
     out_f = open(logfile, "w") if logfile else None
     idle = 0
+    last_output = time.time()
     while True:
         if select.select([p.stdout], [], [], 30)[0]:
             chunk = p.stdout.read(4096)
             if not chunk:
                 break
             idle = 0
+            last_output = time.time()
             sys.stdout.write(chunk)
             sys.stdout.flush()
             if out_f:
@@ -142,6 +144,14 @@ def run(cmd, cwd=None, logfile=None):
                 break
         else:
             idle = 0
+            # Stall watchdog: model loading legitimately takes a few minutes,
+            # but hours of silence means the child is hung (e.g. a network
+            # call without timeout). Kill it instead of burning the session.
+            # faulthandler in full_train.py dumps the stack to this log first.
+            if time.time() - last_output > 600:
+                logger.error("STALLED: no output for 10 min; killing child (see faulthandler stack above)")
+                p.kill()
+                break
     if p.poll() is None:
         logger.warning("child alive after stdout EOF; terminating")
         p.terminate()
