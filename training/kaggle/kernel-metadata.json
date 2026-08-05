@@ -7,6 +7,7 @@
   "is_private": true,
   "enable_gpu": true,
   "enable_internet": true,
+  "accelerator": "GPU_T4_X2",
   "competition_sources": [],
   "dataset_sources": [],
   "kernel_sources": [],
