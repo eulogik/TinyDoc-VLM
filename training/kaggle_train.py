@@ -24,6 +24,7 @@ import argparse
 import logging
 import os
 import select
+import shutil
 import subprocess
 import sys
 import threading
