@@ -138,45 +138,59 @@ def drive(args, token):
     HERE = Path(__file__).resolve().parent
     kaggle = shutil.which("kaggle") or str(Path.home() / ".kaggle-venv" / "bin" / "kaggle")
     env = dict(os.environ, PATH=f"{Path(kaggle).parent}:{os.environ.get('PATH', '')}")
+    # The runtime repo still holds the previous run's logs. Only evaluate
+    # failure/progress once a NEW run overwrites kaggle_train.log.
+    stale = b""
+    sp = fetch(LOG_REPO, "kaggle_train.log", token)
+    if sp:
+        stale = Path(sp).read_bytes()
+    fresh = False
     seen = {}
     last_progress = time.time()
-    pushes = 0
     print(f"[drive] watching {KERNEL}; auto-repush enabled")
     while True:
-        for name in FILES:
-            p = fetch(LOG_REPO, name, token)
-            if not p:
-                continue
-            data = Path(p).read_bytes()
-            offset = seen.get(name, 0)
-            if len(data) < offset:
-                offset = 0
-            if len(data) > offset:
-                tail = data[offset:].decode(errors="replace")
-                if tail.strip():
-                    print(f"\n[{name}]")
-                    sys.stdout.write(tail)
-                    sys.stdout.flush()
-                seen[name] = len(data)
-                if name in ("full_train.log", "kaggle_train.log"):
-                    last_progress = time.time()
-        p = fetch(LOG_REPO, "kaggle_train.log", token)
-        if p:
-            text = Path(p).read_text(errors="replace")
-            for m in FAIL_MARKERS:
-                if m in text:
-                    print(f"\n*** FAILURE DETECTED: {m} ***", file=sys.stderr)
-                    tail_file("last_error.txt", 120, token, force=True)
-                    return 1
-            for m in DONE_MARKERS:
-                if m in text:
-                    print(f"\n*** SUCCESS: {m} ***")
-                    return 0
-        pf = fetch(LOG_REPO, "full_train.log", token)
-        if pf:
-            steps = STEP_RE.findall(Path(pf).read_text(errors="replace"))
-            if steps:
-                print(f"[step {steps[-1][0]}/{steps[-1][1]} loss={steps[-1][2]}]")
+        if not fresh:
+            sp = fetch(LOG_REPO, "kaggle_train.log", token)
+            if sp and Path(sp).read_bytes() != stale:
+                fresh = True
+                seen = {}
+                last_progress = time.time()
+                print("[drive] new run detected")
+        if fresh:
+            for name in FILES:
+                p = fetch(LOG_REPO, name, token)
+                if not p:
+                    continue
+                data = Path(p).read_bytes()
+                offset = seen.get(name, 0)
+                if len(data) < offset:
+                    offset = 0
+                if len(data) > offset:
+                    tail = data[offset:].decode(errors="replace")
+                    if tail.strip():
+                        print(f"\n[{name}]")
+                        sys.stdout.write(tail)
+                        sys.stdout.flush()
+                    seen[name] = len(data)
+                    if name in ("full_train.log", "kaggle_train.log"):
+                        last_progress = time.time()
+            p = fetch(LOG_REPO, "kaggle_train.log", token)
+            if p:
+                text = Path(p).read_text(errors="replace")
+                for m in FAIL_MARKERS:
+                    if m in text:
+                        print(f"\n*** FAILURE DETECTED: {m} ***", file=sys.stderr)
+                        tail_file("last_error.txt", 120, token, force=True)
+                        return 1
+                for m in DONE_MARKERS:
+                    if m in text:
+                        print(f"\n*** SUCCESS: {m} ***")
+                        return 0
+            pf = fetch(LOG_REPO, "full_train.log", token)
+            if pf:
+                steps = STEP_RE.findall(Path(pf).read_text(errors="replace"))
+                if steps:
+                    print(f"[step {steps[-1][0]}/{steps[-1][1]} loss={steps[-1][2]}]")
         status = kernels_status()
         print(f"[status {status}, {time.time() - last_progress:.0f}s since last log]")
         if status in ("ERROR", "CANCELED", "COMPLETE", "unknown"):
@@ -188,7 +202,8 @@ def drive(args, token):
                 if r.returncode != 0:
                     print(f"[drive] run_kaggle.sh failed rc={r.returncode}; "
                           "waiting for a free slot...", file=sys.stderr)
-                pushes += 1
+                fresh = False
+                stale = b""
                 last_progress = time.time()
                 time.sleep(60)
         time.sleep(args.interval)
