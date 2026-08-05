@@ -188,6 +188,7 @@ class CkptSyncer:
             repo_id=self.repo_id,
             folder_path=str(self.watch_dir),
             repo_type="model",
+            path_in_repo="latest",  # keep the repo structured: latest/step.txt etc.
             commit_message="latest/ checkpoint sync",
         )
         self.last_upload = time.time()
@@ -371,6 +372,16 @@ def main():
             repo_id=args.ckpt_repo, repo_type="model",
             local_dir=str(ckpt_root / "full768"), token=hf_token,
         )
+        # Legacy layout: older syncs uploaded the folder CONTENTS flat
+        # (step.txt at full768 root). Normalize into latest/ so full_train's
+        # resume lookup works.
+        flat_step = ckpt_root / "full768" / "step.txt"
+        if flat_step.exists() and not (latest / "step.txt").exists():
+            logger.info("Legacy flat checkpoint layout detected; moving into latest/")
+            latest.mkdir(parents=True, exist_ok=True)
+            for f in (ckpt_root / "full768").iterdir():
+                if f.is_file() and f.suffix in (".safetensors", ".bin", ".json", ".txt"):
+                    shutil.move(str(f), str(latest / f.name))
         if latest.exists() and (latest / "step.txt").exists():
             step = (latest / "step.txt").read_text().strip()
             logger.info("Resuming from step %s", step)
