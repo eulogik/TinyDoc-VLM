@@ -265,16 +265,20 @@ def main():
         # after the torch downgrade with a missing aoti_torch_abi_version
         # symbol. Removing it lets transformers import cleanly.
         run([sys.executable, "-m", "pip", "uninstall", "-y", "torchaudio"])
-    env_script = ("import sys, torch; "
-                  "print('python', sys.version.split()[0]); "
-                  "print('torch', torch.__version__); "
-                  "print('cuda_available', torch.cuda.is_available()); "
-                  "print('device', torch.cuda.get_device_name(0)); "
-                  "print('cap', torch.cuda.get_device_capability(0)); "
-                  "import importlib.metadata as md; "
-                  "print('torchvision', md.version('torchvision')); "
-                  "try: print('torchaudio', md.version('torchaudio')) "
-                  "except Exception: print('torchaudio', 'NOT INSTALLED')")
+    env_script = (
+        "import sys, torch\n"
+        "import importlib.metadata as md\n"
+        "print('python', sys.version.split()[0])\n"
+        "print('torch', torch.__version__)\n"
+        "print('cuda_available', torch.cuda.is_available())\n"
+        "print('device', torch.cuda.get_device_name(0))\n"
+        "print('cap', torch.cuda.get_device_capability(0))\n"
+        "print('torchvision', md.version('torchvision'))\n"
+        "try:\n"
+        "    print('torchaudio', md.version('torchaudio'))\n"
+        "except Exception:\n"
+        "    print('torchaudio', 'NOT INSTALLED')\n"
+    )
     rc = run([sys.executable, "-c", env_script],
              logfile=str(LOG_DIR / "env.txt"))
     if rc != 0:
