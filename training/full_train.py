@@ -137,6 +137,7 @@ def train(
     save_latest_every=0,
     output_dir="checkpoints/full", device="auto",
     bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
+    resume_step=None,
 ):
     if device == "auto":
         device = "cuda" if torch.cuda.is_available() else (
@@ -192,13 +193,20 @@ def train(
     # 1. latest/ (frequent overwriting checkpoint, minimal loss on disconnect)
     # 2. step_* dirs (landmark checkpoints)
     # The model was already loaded from the checkpoint in main() so we only
-    # need to read the step number to resume counting from there.
+    # need to read the step number to resume counting from there. The step
+    # comes from main()'s _find_resume_checkpoint resolution (single source
+    # of truth): a stale latest/step.txt must not drift the counter away
+    # from the checkpoint that was actually loaded.
     if resume:
-        latest_dir = out / "latest"
-        if latest_dir.exists() and (latest_dir / "step.txt").exists():
-            resume_step = int((latest_dir / "step.txt").read_text().strip())
+        if resume_step and resume_step > 0:
+            step = resume_step
+            start = time.time()
+            if step >= steps:
+                logger.info(f"Already at step {step} >= target {steps}; skipping training.")
+        elif (out / "latest").exists() and ((out / "latest") / "step.txt").exists():
+            resume_step = int(((out / "latest") / "step.txt").read_text().strip())
             if resume_step > 0:
-                logger.info(f"Resuming from {latest_dir} (step {resume_step})")
+                logger.info(f"Resuming from {(out / 'latest')} (step {resume_step})")
                 step = resume_step
                 start = time.time()
                 if step >= steps:
@@ -335,10 +343,18 @@ def main():
 
     # If resuming, load from checkpoint directly (avoids OOM from loading
     # the base model AND the checkpoint on a 14.5 GiB T4 simultaneously).
+    # Resolve the authoritative resume step from the checkpoint that main()
+    # actually loaded (if any): max(latest, step_*), validated.
+    resume_step = None
     resume_ckpt = _find_resume_checkpoint(Path(args.output_dir)) if not args.no_resume else None
     if resume_ckpt:
         logger.info(f"Loading model from resume checkpoint {resume_ckpt}")
         model = TinyDocVLMForConditionalGeneration.from_pretrained(str(resume_ckpt), trust_remote_code=True)
+        try:
+            resume_step = int((resume_ckpt / "step.txt").read_text().strip())
+        except Exception:
+            if resume_ckpt.name.startswith("step_"):
+                resume_step = int(resume_ckpt.name.split("_")[1])
     else:
         logger.info(f"Loading model {args.model_id}")
         model = TinyDocVLMForConditionalGeneration.from_pretrained(args.model_id, trust_remote_code=True)
@@ -358,30 +374,46 @@ def main():
           bf16=args.bf16, grad_checkpoint=args.grad_checkpoint,
           save_every=args.save_every, log_every=args.log_every,
           save_latest_every=args.save_latest_every,
-          max_seq_length=args.max_seq_length, resume=not args.no_resume)
+          max_seq_length=args.max_seq_length, resume=not args.no_resume,
+          resume_step=resume_step)
 
 
 def _find_resume_checkpoint(out: Path) -> Path | None:
-    """Find the most recent valid checkpoint for resume (latest/ > step_*)."""
-    latest = out / "latest"
-    if latest.exists() and (latest / "step.txt").exists():
-        ckpt_files = [f for f in latest.iterdir()
+    """Find the most valid, HIGHEST-step checkpoint for resume.
+
+    Latest/ is the frequent save but can be stale (a crash mid-atomic-rename
+    leaves it at an older step, or step.txt written without weights).
+    step_* dirs are atomic (saved via tmp+rename) so always valid. Pick
+    whichever has the highest step, validating weights in both.
+    """
+    def _valid_step(p: Path) -> int | None:
+        if not p.exists():
+            return None
+        ckpt_files = [f for f in p.iterdir()
                       if f.name.endswith((".safetensors", ".bin"))
                       and f.stat().st_size > 0]
-        if ckpt_files:
-            step = int((latest / "step.txt").read_text().strip())
-            if step > 0:
-                logger.info(f"Found resume checkpoint {latest} (step {step})")
-                return latest
-    step_dirs = sorted(out.glob("step_*"), key=lambda p: int(p.name.split("_")[1]))
-    for candidate in reversed(step_dirs):
-        ckpt_files = [f for f in candidate.iterdir()
-                      if f.name.endswith((".safetensors", ".bin"))
-                      and f.stat().st_size > 0]
-        if ckpt_files:
-            logger.info(f"Found resume checkpoint {candidate} (step {int(candidate.name.split('_')[1])})")
-            return candidate
-    return None
+        if not ckpt_files:
+            return None
+        if (p / "step.txt").exists():
+            try:
+                s = int((p / "step.txt").read_text().strip())
+            except ValueError:
+                return None
+            if s > 0:
+                return s
+        if p.name.startswith("step_"):
+            return int(p.name.split("_")[1])
+        return None
+
+    best, best_step = None, -1
+    for p in [out / "latest"] + sorted(out.glob("step_*"),
+                                       key=lambda x: int(x.name.split("_")[1])):
+        s = _valid_step(p)
+        if s is not None and s > best_step:
+            best, best_step = p, s
+    if best is not None:
+        logger.info(f"Found resume checkpoint {best} (step {best_step})")
+    return best
 
 
 if __name__ == "__main__":
