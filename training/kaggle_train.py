@@ -21,6 +21,7 @@ Usage (inside the Kaggle notebook, or any box with a GPU):
 """
 
 import argparse
+import json
 import logging
 import os
 import select
@@ -297,10 +298,11 @@ def main():
         logger.error("torch import failed (rc=%s); aborting.", rc)
         sys.exit(rc)
     # The init checkpoint is saved in bf16 (built on a dev box). Under the
-    # fp16 AMP path in full_train.py, bf16 weights + fp32 vision features
-    # crash in the visual-token index-put (modeling.py:126). Convert init
-    # to fp32 unconditionally; convert_init_dtype.py skips if already fp32.
-    convert_dtype = "float32"
+    # fp16 AMP path in full_train.py, mixed dtypes crash in the visual-token
+    # index-put (modeling.py:126, now cast-safe). Convert init to fp16: half
+    # the memory traffic of fp32 on the P100 and natively supported (the
+    # P100 has no bf16 kernels). convert_init_dtype.py skips if already fp16.
+    convert_dtype = "float16"
     if convert_dtype:
         logger.info("init checkpoint will be converted to %s before training.", convert_dtype)
     pip_install(["transformers==5.12.1", "sentencepiece", "tokenizers", "pillow", "numpy",
@@ -396,6 +398,30 @@ def main():
         if latest.exists() and (latest / "step.txt").exists():
             step = (latest / "step.txt").read_text().strip()
             logger.info("Resuming from step %s", step)
+        # Dtype transition guard: when training fp16 but the repo checkpoint
+        # was saved in fp32 (pre-transition runs), resuming it would silently
+        # keep the slow fp32 weights. Detect via the safetensors header and
+        # discard (the loss of <1 session of progress is cheaper than 2x
+        # slower training for the rest of the run).
+        if convert_dtype == "float16":
+            sf = latest / "model.safetensors"
+            if sf.exists():
+                try:
+                    with open(sf, "rb") as f:
+                        n = int.from_bytes(f.read(8), "little")
+                        hdr = json.loads(f.read(n))
+                    w_dtype = next(iter(hdr["__metadata__"]["format"].split()),
+                                    hdr.get("__metadata__", {}).get("format", "?"))
+                    first_key = [k for k in hdr if not k.startswith("__")]
+                    ckpt_dtype = hdr[first_key[0]]["dtype"] if first_key else "?"
+                    if ckpt_dtype != "F16":
+                        logger.warning("repo checkpoint is %s (expected F16); "
+                                       "discarding for fp16 transition", ckpt_dtype)
+                        shutil.rmtree(str(latest))
+                        for d in (ckpt_root / "full768").glob("step_*"):
+                            shutil.rmtree(str(d))
+                except Exception as e:
+                    logger.warning("could not inspect checkpoint dtype: %s", e)
     except Exception as e:
         logger.warning("No checkpoint found in %s (fresh start): %s", args.ckpt_repo, e)
 

@@ -122,7 +122,12 @@ class TinyDocVLMForConditionalGeneration(TinyDocVLMPreTrainedModel, GenerationMi
             for b in range(batch_size):
                 num_places = image_mask[b].sum().item()
                 if num_places > 0:
-                    features_to_insert = flat_visual_features[b][:num_places]
+                    # Vision features can come out fp32 (e.g. SigLIP LayerNorm
+                    # stays fp32 under autocast); align with the embedding
+                    # dtype before the index-put or this crashes on fp16/bf16
+                    # weight checkpoints.
+                    features_to_insert = flat_visual_features[b][:num_places].to(
+                        inputs_embeds.dtype)
                     inputs_embeds[b, image_mask[b]] = features_to_insert
 
         outputs = self.decoder(
