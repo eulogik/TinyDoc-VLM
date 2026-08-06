@@ -17,7 +17,7 @@ from tinydoc.models import ExtractionResult, QAResult, TableResult
 def dummy_image():
     return Image.fromarray(np.uint8(np.random.rand(100, 100, 3) * 255))
 
-def test_sdk_extractor_initialisation():
+def test_sdk_extractor_initialisation(hf_hub_ok):
     extractor = TinyDocExtractor(device="cpu")
     assert extractor.model is not None
     assert extractor.processor is not None
@@ -29,7 +29,7 @@ def mock_generate():
     yield
     patcher.stop()
 
-def test_sdk_extractor_methods(dummy_image, mock_generate):
+def test_sdk_extractor_methods(dummy_image, mock_generate, hf_hub_ok):
     extractor = TinyDocExtractor(device="cpu")
     
     qa_res = extractor.ask(dummy_image, "What is the total?")
@@ -49,7 +49,7 @@ def test_sdk_extractor_methods(dummy_image, mock_generate):
     assert isinstance(table_res.raw_table, str)
     assert isinstance(table_res.markdown, str)
 
-def test_html_table_to_markdown_converter():
+def test_html_table_to_markdown_converter(hf_hub_ok):
     extractor = TinyDocExtractor(device="cpu")
     html = (
         "<table>"

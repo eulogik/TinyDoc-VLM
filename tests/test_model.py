@@ -72,7 +72,7 @@ def test_model_forward():
     
     assert outputs.logits.shape == (B, seq_len, 1000)
 
-def test_processor_integration():
+def test_processor_integration(hf_hub_ok):
     config = TinyDocVLMConfig()
     # Reduce size for speed
     config.vision_config.num_hidden_layers = 1
