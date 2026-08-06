@@ -321,12 +321,16 @@ def main():
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    # Dump the Python stack to stderr every 60s so a silent hang (e.g. a
-    # network call without timeout) is visible in the captured log instead of
-    # looking like an idle model load. kaggle_train.py's stall watchdog kills
-    # us after 10 min of silence, so these dumps are the diagnosis.
+    # Dump the Python stack to a SEPARATE file every 60s so a silent hang
+    # (e.g. a CUDA kernel that never returns) is diagnosable in logs/
+    # faulthandler.log WITHOUT polluting the captured stdout/stderr that
+    # kaggle_train.py's stall watchdog measures silence by. A hung GPU shows
+    # up as "File ... in train" in this file; the watchdog then kills and
+    # the drive loop resumes from the last checkpoint.
     import faulthandler
-    faulthandler.dump_traceback_later(60, repeat=True)
+    fa_path = Path("logs") / "faulthandler.log"
+    fa_path.parent.mkdir(parents=True, exist_ok=True)
+    faulthandler.dump_traceback_later(60, repeat=True, file=open(fa_path, "w"))
     from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
 
     # If resuming, load from checkpoint directly (avoids OOM from loading
