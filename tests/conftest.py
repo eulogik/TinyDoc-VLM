@@ -11,6 +11,6 @@ def hf_hub_ok():
     """
     try:
         hf_hub_download("HuggingFaceTB/SmolLM2-135M-Instruct", "config.json")
-    except Exception:
+    except Exception:  # noqa: BLE001 - network/auth/rate-limit errors all mean skip
         pytest.skip("HF hub unreachable / rate-limited")
     return True
