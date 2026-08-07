@@ -179,7 +179,10 @@ def train(
         return 0.5 * (1 + math.cos(math.pi * prog))
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
-    use_amp = device == "cuda"
+    # GradScaler is only for fp16 autocast (e.g. P100). bf16 has the same
+    # exponent range as fp32 so it needs no loss scaling -- and
+    # GradScaler.unscale_() is not implemented for bf16 grads.
+    use_amp = device == "cuda" and not use_bf16
     scaler = torch.amp.GradScaler("cuda") if use_amp else None
 
     step = 0
