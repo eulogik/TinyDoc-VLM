@@ -334,6 +334,8 @@ def main():
                          "by the Colab notebook to resume from a hub-downloaded checkpoint.")
     args = ap.parse_args()
 
+    import os as _os
+    _os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
     # Dump the Python stack to a SEPARATE file every 60s so a silent hang
     # (e.g. a CUDA kernel that never returns) is diagnosable in logs/
