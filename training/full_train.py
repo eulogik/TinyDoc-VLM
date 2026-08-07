@@ -326,6 +326,9 @@ def main():
     ap.add_argument("--save-latest-every", type=int, default=0, help="Overwrite latest/ checkpoint every N steps for fine-grained resume. 0 = disabled.")
     ap.add_argument("--log-every", type=int, default=10, help="Log training loss every N steps")
     ap.add_argument("--no-resume", action="store_true", help="Start from scratch instead of resuming latest step_* checkpoint.")
+    ap.add_argument("--resume-from", default=None,
+                    help="Explicit checkpoint dir to resume from (overrides --output-dir scan). Used "
+                         "by the Colab notebook to resume from a hub-downloaded checkpoint.")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -346,7 +349,11 @@ def main():
     # Resolve the authoritative resume step from the checkpoint that main()
     # actually loaded (if any): max(latest, step_*), validated.
     resume_step = None
-    resume_ckpt = _find_resume_checkpoint(Path(args.output_dir)) if not args.no_resume else None
+    if args.resume_from and Path(args.resume_from).exists():
+        resume_ckpt = Path(args.resume_from)
+        logger.info(f"Using explicit resume checkpoint {resume_ckpt}")
+    else:
+        resume_ckpt = _find_resume_checkpoint(Path(args.output_dir)) if not args.no_resume else None
     if resume_ckpt:
         logger.info(f"Loading model from resume checkpoint {resume_ckpt}")
         model = TinyDocVLMForConditionalGeneration.from_pretrained(str(resume_ckpt), trust_remote_code=True)
