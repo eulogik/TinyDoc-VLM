@@ -107,6 +107,19 @@ class LogUploader:
             pass
 
 
+def _extract_bundle(bundle: Path, data_dir: Path, manifest: Path):
+    """Extract training.tar.gz (repo-root layout: synthetic/, manifest.jsonl)
+    into data_dir, then sanity-check the manifest appears."""
+    import tarfile
+    import sys as _sys
+    start = time.time()
+    with tarfile.open(bundle, "r:gz") as tf:
+        kwargs = {"filter": "data"} if _sys.version_info >= (3, 12) else {}
+        tf.extractall(str(data_dir), **kwargs)
+    logger.info("Extracted %s in %.0fs (%s)", bundle.name,
+                time.time() - start, "OK" if manifest.exists() else "MISSING manifest")
+
+
 def run(cmd, cwd=None, logfile=None):
     """Run a subprocess, tee output to the papermill log AND a file.
 
@@ -269,6 +282,12 @@ def main():
     # pipes; suppress it everywhere downstream.
     os.environ["TQDM_DISABLE"] = "1"
 
+    # 0. Ship logs from the very start (clone/pip/downloads included), so
+    #    progress is visible in the HF runtime repo even if papermill stalls.
+    log_up = LogUploader(LOG_REPO, LOG_DIR, hf_token)
+    threading.Thread(target=log_up.loop, daemon=True).start()
+    logger.info("LogUploader started (repo=%s)", LOG_REPO)
+
     # 1. Clone repo
     WORK.mkdir(parents=True, exist_ok=True)
     os.chdir(WORK)  # never sit inside the dir we are about to delete
@@ -341,19 +360,32 @@ def main():
         logger.error("transformers check failed: %s", e)
         sys.exit(1)
 
-    # 3. Download training data from HF dataset repo
+    # 3. Download training data from HF dataset repo. Fetch a single tar.gz
+    #    bundle (51k+ small PNGs through snapshot_download take hours due to
+    #    per-file request overhead; one tarball downloads in ~a minute).
     data_dir = REPO / "data/training"
     data_dir.mkdir(parents=True, exist_ok=True)
     manifest = data_dir / "manifest.jsonl"
+    bundle = data_dir / "training.tar.gz"
     if manifest.exists():
         logger.info("Manifest already present; skipping data download.")
+    elif bundle.exists():
+        logger.info("training.tar.gz present; extracting ...")
+        _extract_bundle(bundle, data_dir, manifest)
     else:
-        from huggingface_hub import snapshot_download
-        logger.info("Downloading data from %s ...", args.data_repo)
-        snapshot_download(
+        from huggingface_hub import hf_hub_download
+        logger.info("Downloading training.tar.gz from %s ...", args.data_repo)
+        start = time.time()
+        hf_hub_download(
             repo_id=args.data_repo, repo_type="dataset",
-            local_dir=str(data_dir), token=hf_token,
+            filename="training.tar.gz", local_dir=str(data_dir),
+            token=hf_token,
         )
+        bundle = data_dir / "training.tar.gz"
+        logger.info("tar.gz downloaded in %.0fs (%.1f MiB); extracting ...",
+                    time.time() - start, bundle.stat().st_size / 1e6)
+        _extract_bundle(bundle, data_dir, manifest)
+        bundle.unlink(missing_ok=True)
         if not manifest.exists():
             logger.error("No manifest.jsonl in dataset repo %s", args.data_repo)
             sys.exit(1)
@@ -445,8 +477,6 @@ def main():
         logger.warning("No checkpoint found in %s (fresh start): %s", args.ckpt_repo, e)
 
     # 6. Train with live sync
-    log_up = LogUploader(LOG_REPO, LOG_DIR, hf_token)
-    threading.Thread(target=log_up.loop, daemon=True).start()
     syncer = CkptSyncer(args.ckpt_repo, latest, token=hf_token) if not args.no_sync else None
     if syncer:
         t = threading.Thread(target=syncer.loop, daemon=True)
