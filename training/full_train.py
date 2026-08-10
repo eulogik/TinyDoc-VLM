@@ -159,7 +159,7 @@ def train(
         logger.info("Using bf16 autocast")
     model.train()
 
-    nw = 0 if device == "mps" else 4
+    nw = 0 if device == "mps" else 2
     loader = DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True,
         collate_fn=lambda b: collate_fn(b, processor, max_seq_length),
