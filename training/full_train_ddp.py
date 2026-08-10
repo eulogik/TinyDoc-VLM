@@ -175,7 +175,7 @@ def train(
         model.gradient_checkpointing_enable()
         _log("Gradient checkpointing enabled")
     if ddp:
-        model = DDP(model, device_ids=[local_rank], find_unused_parameters=False)
+        model = DDP(model, device_ids=[local_rank], find_unused_parameters=True)
         _log("Model wrapped with DistributedDataParallel (rank %d)", rank)
     _device_is_cuda = device.startswith("cuda")
     _device_is_mps = device == "mps"
