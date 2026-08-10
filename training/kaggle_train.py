@@ -452,19 +452,44 @@ def main():
         t = threading.Thread(target=syncer.loop, daemon=True)
         t.start()
 
+    # ---- Multi-GPU (T4 x2): DDP on torchrun, else single-GPU ----
+    gpu_count = torch.cuda.device_count()
+    use_ddp = gpu_count >= 2 and os.environ.get("KAGGLE_DDP", "1") != "0"
+    if use_ddp:
+        script = "training/full_train_ddp.py"
+        launcher = [sys.executable, "-m", "torch.distributed.run",
+                    "--nproc_per_node", str(gpu_count)]
+        # Split grad-accum across ranks so the effective batch is preserved:
+        #   effective = per_gpu_batch * world_size * per_rank_accum
+        # The notebook's single-GPU default is BATCH=2, grad-accum=4 (eff 8).
+        # With 2 ranks: 2 * 2 * per_rank_accum = 8 -> per_rank_accum = 2.
+        per_rank_accum = max(1, args.grad_accum // gpu_count)
+        ddp_flag = ["--ddp"]
+        logger.info("Multi-GPU (%d GPUs) detected -> launching DDP via torchrun", gpu_count)
+    else:
+        script = "training/full_train.py"
+        launcher = [sys.executable]
+        per_rank_accum = args.grad_accum
+        ddp_flag = []
+        if gpu_count < 2 and os.environ.get("KAGGLE_DDP", "1") == "0":
+            logger.info("DDP disabled via KAGGLE_DDP=0; single-GPU mode")
+        else:
+            logger.info("Single-GPU mode (%d GPU(s))", max(gpu_count, 1))
+
     train_log = LOG_DIR / "full_train.log"
-    rc = run([sys.executable, "training/full_train.py",
+    rc = run(launcher + [script,
               "--model-id", "checkpoints/init_768",
               "--manifest", "data/training/manifest.jsonl",
               "--steps", str(args.steps),
               "--batch-size", str(args.batch_size),
-              "--grad-accum", str(args.grad_accum),
+              "--grad-accum", str(per_rank_accum),
               "--warmup", str(args.warmup),
               "--lr", str(args.lr),
               "--max-seq-length", str(args.max_seq_length),
               "--save-every", str(args.save_every),
               "--save-latest-every", str(args.save_latest_every),
               "--device", "cuda", "--bf16", "--grad-checkpoint",
+              *ddp_flag,
               "--output-dir", OUT_DIR,
               "--max-samples", "2000000"],
              logfile=str(train_log))
