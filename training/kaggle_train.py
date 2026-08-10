@@ -175,11 +175,17 @@ def pip_install(pkgs, extra_index=None, force=False):
 
 
 class CkptSyncer:
-    """Watches checkpoints/full768/latest/ and uploads to the HF model repo."""
+    """Watches checkpoints/full768/latest/ and uploads to the HF model repo.
 
-    def __init__(self, repo_id, watch_dir: Path):
+    Never overwrites a step already on the hub that is >= the local step, so
+    Colab and Kaggle can train the same repo in parallel without regressing
+    each other's progress (each worker just advances the hub).
+    """
+
+    def __init__(self, repo_id, watch_dir: Path, token: str = ""):
         self.repo_id = repo_id
         self.watch_dir = watch_dir
+        self.token = token or None
         self.last_mtime = 0.0
         self.last_upload = 0.0
         self.stop = threading.Event()
@@ -190,12 +196,25 @@ class CkptSyncer:
             return False
         return step_file.stat().st_mtime != self.last_mtime
 
+    def _remote_step(self):
+        try:
+            from huggingface_hub import hf_hub_download
+            p = hf_hub_download(self.repo_id, "latest/step.txt", token=self.token)
+            return int(Path(p).read_text().strip())
+        except Exception:
+            return -1
+
     def upload_once(self):
         from huggingface_hub import upload_folder
         if not (self.watch_dir / "step.txt").exists():
             logger.info("No latest/ checkpoint yet; skipping upload.")
             return
-        logger.info("Uploading latest/ checkpoint to %s ...", self.repo_id)
+        local_step = int((self.watch_dir / "step.txt").read_text().strip())
+        remote_step = self._remote_step()
+        if local_step <= remote_step:
+            logger.info("Hub already at step %s; local %s skipped.", remote_step, local_step)
+            return
+        logger.info("Uploading latest/ checkpoint (step %s) to %s ...", local_step, self.repo_id)
         upload_folder(
             repo_id=self.repo_id,
             folder_path=str(self.watch_dir),
@@ -428,7 +447,7 @@ def main():
     # 6. Train with live sync
     log_up = LogUploader(LOG_REPO, LOG_DIR, hf_token)
     threading.Thread(target=log_up.loop, daemon=True).start()
-    syncer = CkptSyncer(args.ckpt_repo, latest) if not args.no_sync else None
+    syncer = CkptSyncer(args.ckpt_repo, latest, token=hf_token) if not args.no_sync else None
     if syncer:
         t = threading.Thread(target=syncer.loop, daemon=True)
         t.start()
