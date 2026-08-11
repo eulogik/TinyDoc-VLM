@@ -160,7 +160,7 @@ def train(
         logger.info("Using bf16 autocast")
     model.train()
 
-    nw = args.num_workers if args.num_workers is not None else (0 if device == "mps" else 2)
+    nw = num_workers if num_workers is not None else (0 if device == "mps" else 2)
     loader = DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True,
         collate_fn=lambda b: collate_fn(b, processor, max_seq_length),

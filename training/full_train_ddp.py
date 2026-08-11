@@ -185,7 +185,7 @@ def train(
         _log("Using bf16 autocast")
     model.train()
 
-    nw = args.num_workers if args.num_workers is not None else (0 if _device_is_mps else 2)
+    nw = num_workers if num_workers is not None else (0 if _device_is_mps else 2)
     if ddp:
         sampler = DistributedSampler(train_dataset, num_replicas=world_size, rank=rank, shuffle=True)
         loader = DataLoader(
