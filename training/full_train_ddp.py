@@ -212,10 +212,14 @@ def train(
         return 0.5 * (1 + math.cos(math.pi * prog))
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
-    # GradScaler is only for fp16 autocast (e.g. P100). bf16 has the same
-    # exponent range as fp32 so it needs no loss scaling -- and
-    # GradScaler.unscale_() is not implemented for bf16 grads.
-    use_amp = _device_is_cuda and not use_bf16
+    # GradScaler is only for fp32-param fp16-autocast (e.g. P100). bf16 has
+    # the same exponent range as fp32 so it needs no loss scaling -- and
+    # GradScaler.unscale_() is not implemented for bf16 grads. fp16 params
+    # (fp16 init/hub checkpoints) also produce fp16 grads which the scaler
+    # refuses to unscale; skip scaling there too.
+    first_dtype = next(model.parameters()).dtype
+    use_amp = (_device_is_cuda and not use_bf16
+               and first_dtype == torch.float32)
     scaler = torch.amp.GradScaler("cuda") if use_amp else None
 
     step = 0
