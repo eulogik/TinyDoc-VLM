@@ -518,7 +518,10 @@ def main():
               "--max-seq-length", str(args.max_seq_length),
               "--save-every", str(args.save_every),
               "--save-latest-every", str(args.save_latest_every),
-              "--device", "cuda", "--bf16", "--grad-checkpoint",
+              # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
+              # silently produces NaN losses. Default fp16+grad-scaler path
+              # is correct on both (init is converted to fp16 upstream).
+              "--device", "cuda", "--grad-checkpoint",
               *ddp_flag,
               "--output-dir", OUT_DIR,
               "--max-samples", "2000000"],
