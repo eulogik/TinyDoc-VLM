@@ -138,6 +138,7 @@ def train(
     output_dir="checkpoints/full", device="auto",
     bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
     resume_step=None,
+    num_workers=None,
 ):
     if device == "auto":
         device = "cuda" if torch.cuda.is_available() else (
@@ -159,7 +160,7 @@ def train(
         logger.info("Using bf16 autocast")
     model.train()
 
-    nw = 0 if device == "mps" else 2
+    nw = args.num_workers if args.num_workers is not None else (0 if device == "mps" else 2)
     loader = DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True,
         collate_fn=lambda b: collate_fn(b, processor, max_seq_length),
@@ -335,6 +336,7 @@ def main():
     ap.add_argument("--resume-from", default=None,
                     help="Explicit checkpoint dir to resume from (overrides --output-dir scan). Used "
                          "by the Colab notebook to resume from a hub-downloaded checkpoint.")
+    ap.add_argument("--num-workers", type=int, default=None, help="DataLoader workers (default: 0 for MPS, 2 for CUDA)")
     args = ap.parse_args()
 
     import os as _os
@@ -390,7 +392,7 @@ def main():
           save_every=args.save_every, log_every=args.log_every,
           save_latest_every=args.save_latest_every,
           max_seq_length=args.max_seq_length, resume=not args.no_resume,
-          resume_step=resume_step)
+          resume_step=resume_step, num_workers=args.num_workers)
 
 
 def _find_resume_checkpoint(out: Path) -> Path | None:

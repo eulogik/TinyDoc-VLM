@@ -152,6 +152,7 @@ def train(
     output_dir="checkpoints/full", device="auto",
     bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
     resume_step=None,
+    num_workers=None,
     ddp=False, rank=0, world_size=1, local_rank=0,
 ):
     _rank, _world, _local_rank = rank, world_size, local_rank
@@ -184,7 +185,7 @@ def train(
         _log("Using bf16 autocast")
     model.train()
 
-    nw = 0 if _device_is_mps else 2
+    nw = args.num_workers if args.num_workers is not None else (0 if _device_is_mps else 2)
     if ddp:
         sampler = DistributedSampler(train_dataset, num_replicas=world_size, rank=rank, shuffle=True)
         loader = DataLoader(
@@ -380,6 +381,7 @@ def main():
     ap.add_argument("--resume-from", default=None,
                     help="Explicit checkpoint dir to resume from (overrides --output-dir scan). Used "
                          "by the Colab notebook to resume from a hub-downloaded checkpoint.")
+    ap.add_argument("--num-workers", type=int, default=None, help="DataLoader workers (default: 0 for MPS, 2 for CUDA)")
     ap.add_argument("--ddp", action="store_true",
                     help="Enable DistributedDataParallel (run via torchrun, not directly).")
     args = ap.parse_args()
@@ -460,7 +462,7 @@ def main():
           save_every=args.save_every, log_every=args.log_every,
           save_latest_every=args.save_latest_every,
           max_seq_length=args.max_seq_length, resume=not args.no_resume,
-          resume_step=resume_step,
+          resume_step=resume_step, num_workers=args.num_workers,
           ddp=ddp, rank=_rank, world_size=_world, local_rank=_local_rank)
 
 
