@@ -521,7 +521,7 @@ def main():
               # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
               # silently produces NaN losses. Default fp16+grad-scaler path
               # is correct on both (init is converted to fp16 upstream).
-              "--device", "cuda", "--grad-checkpoint",
+              "--device", "cuda", "--num-workers", "0",
               *ddp_flag,
               "--output-dir", OUT_DIR,
               "--max-samples", "2000000"],
