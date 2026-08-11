@@ -179,15 +179,13 @@ def train(
         return 0.5 * (1 + math.cos(math.pi * prog))
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
-    # GradScaler is only for fp32-param fp16-autocast (e.g. P100). bf16 has
-    # the same exponent range as fp32 so it needs no loss scaling -- and
-    # GradScaler.unscale_() is not implemented for bf16 grads. fp16 params
-    # (fp16 init/hub checkpoints) also produce fp16 grads which the scaler
-    # refuses to unscale; skip scaling there too.
+    # Autocast keeps softmax/layernorm in fp32 for numerical stability
+    # even when params are fp16. GradScaler requires fp32 grads (from fp32
+    # params) to unscale; skip it for fp16/bf16 params where it crashes.
     first_dtype = next(model.parameters()).dtype
-    use_amp = (device == "cuda" and not use_bf16
-               and first_dtype == torch.float32)
-    scaler = torch.amp.GradScaler("cuda") if use_amp else None
+    use_autocast = device == "cuda" and not use_bf16
+    use_scaler = use_autocast and first_dtype == torch.float32
+    scaler = torch.amp.GradScaler("cuda") if use_scaler else None
 
     step = 0
     micro = 0
@@ -243,26 +241,27 @@ def train(
             labels = batch["labels"].to(device)
             pixel_values = batch["pixel_values"].to(device)
 
-            if use_amp:
+            if use_autocast:
                 with torch.amp.autocast("cuda"):
                     loss = model(input_ids=input_ids, attention_mask=attention_mask,
                                  pixel_values=pixel_values, labels=labels).loss / grad_accum
-                scaler.scale(loss).backward()
             elif use_bf16:
                 with torch.amp.autocast(device, dtype=torch.bfloat16):
                     loss = model(input_ids=input_ids, attention_mask=attention_mask,
                                  pixel_values=pixel_values, labels=labels).loss / grad_accum
-                loss.backward()
             else:
                 loss = model(input_ids=input_ids, attention_mask=attention_mask,
                              pixel_values=pixel_values, labels=labels).loss / grad_accum
+            if use_scaler:
+                scaler.scale(loss).backward()
+            else:
                 loss.backward()
 
             running_loss += loss.item() * grad_accum
             micro += 1
 
             if micro % grad_accum == 0:
-                if use_amp:
+                if use_scaler:
                     scaler.unscale_(optimizer)
                     torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                     scaler.step(optimizer)
