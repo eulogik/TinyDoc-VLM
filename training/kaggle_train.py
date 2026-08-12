@@ -463,25 +463,30 @@ def main():
         t.start()
 
     # ---- Multi-GPU (T4 x2): DDP on torchrun, else single-GPU ----
+    # NOTE: DDP/NCCL has SIGSEGV'd on Kaggle T4 x2 three times today (always
+    # rank 1, 20-30 min in, regardless of grad-ckpt), while single-GPU has
+    # never crashed. So single-GPU is now the default and DDP is opt-in via
+    # KAGGLE_DDP=1 (still selectable for experiments).
     gpu_count = torch.cuda.device_count()
-    use_ddp = gpu_count >= 2 and os.environ.get("KAGGLE_DDP", "1") != "0"
+    use_ddp = gpu_count >= 2 and os.environ.get("KAGGLE_DDP", "0") == "1"
     if use_ddp:
         logger.info("Multi-GPU (%d GPUs) detected -> DDP via torchrun "
                     "(single-GPU kept as last-resort fallback)", gpu_count)
-    elif gpu_count < 2 and os.environ.get("KAGGLE_DDP", "1") == "0":
-        logger.info("DDP disabled via KAGGLE_DDP=0; single-GPU mode")
     else:
-        logger.info("Single-GPU mode (%d GPU(s))", max(gpu_count, 1))
+        logger.info("Single-GPU mode (%d GPU(s)); DDP opt-in via KAGGLE_DDP=1",
+                    max(gpu_count, 1))
 
     train_log = LOG_DIR / "full_train.log"
     # Memory plan: fp32 master weights (NaN fix) + fp16 autocast needs
     # grad-checkpointing to fit the 14.5 GiB T4 with 5-tile 768px pages
     # (Colab's proven recipe). If that fails (OOM/SIGSEGV), fall back to
-    # batch-1 without grad-checkpointing, then single-GPU, so the kernel
+    # batch-2 without grad-checkpointing, then batch-1, so the kernel
     # always keeps training (every failure returns nonzero -> retry here).
     attempts = [
         {"grad_ckpt": True, "batch": args.batch_size, "ddp": use_ddp},
-        {"grad_ckpt": False, "batch": max(1, args.batch_size // 2), "ddp": use_ddp},
+        {"grad_ckpt": False,
+         "batch": (args.batch_size if not use_ddp else max(1, args.batch_size // 2)),
+         "ddp": use_ddp},
         {"grad_ckpt": False, "batch": 1, "ddp": False},
     ]
     rc = None
