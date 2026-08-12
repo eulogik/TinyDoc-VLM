@@ -521,6 +521,10 @@ def main():
               # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
               # silently produces NaN losses. Default fp16+grad-scaler path
               # is correct on both (init is converted to fp16 upstream).
+              # fp32 master weights (NaN fix) need grad-checkpointing to fit
+              # the 14.5 GiB T4 with 5-tile 768px pages (Colab's proven
+              # memory recipe).
+              "--grad-checkpoint",
               "--device", "cuda", "--num-workers", "0",
               *ddp_flag,
               "--output-dir", OUT_DIR,
