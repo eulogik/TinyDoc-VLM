@@ -449,30 +449,10 @@ def main():
         if latest.exists() and (latest / "step.txt").exists():
             step = (latest / "step.txt").read_text().strip()
             logger.info("Resuming from step %s", step)
-        # Dtype transition guard: when training fp16 but the repo checkpoint
-        # was saved in fp32 (pre-transition runs), resuming it would silently
-        # keep the slow fp32 weights. Detect via the safetensors header and
-        # discard (the loss of <1 session of progress is cheaper than 2x
-        # slower training for the rest of the run).
-        if convert_dtype == "float16":
-            sf = latest / "model.safetensors"
-            if sf.exists():
-                try:
-                    with open(sf, "rb") as f:
-                        n = int.from_bytes(f.read(8), "little")
-                        hdr = json.loads(f.read(n))
-                    w_dtype = next(iter(hdr["__metadata__"]["format"].split()),
-                                    hdr.get("__metadata__", {}).get("format", "?"))
-                    first_key = [k for k in hdr if not k.startswith("__")]
-                    ckpt_dtype = hdr[first_key[0]]["dtype"] if first_key else "?"
-                    if ckpt_dtype != "F16":
-                        logger.warning("repo checkpoint is %s (expected F16); "
-                                       "discarding for fp16 transition", ckpt_dtype)
-                        shutil.rmtree(str(latest))
-                        for d in (ckpt_root / "full768").glob("step_*"):
-                            shutil.rmtree(str(d))
-                except Exception as e:
-                    logger.warning("could not inspect checkpoint dtype: %s", e)
+        # NOTE: no dtype-transition guard here anymore. Training always runs
+        # from fp32 master weights (AdamW-state NaN fix), so fp16/fp32/bf16
+        # checkpoints all resume identically (params are promoted to fp32 at
+        # load). Checkpoints are now saved fp32; never discard them.
     except Exception as e:
         logger.warning("No checkpoint found in %s (fresh start): %s", args.ckpt_repo, e)
 
