@@ -466,41 +466,45 @@ def main():
     gpu_count = torch.cuda.device_count()
     use_ddp = gpu_count >= 2 and os.environ.get("KAGGLE_DDP", "1") != "0"
     if use_ddp:
-        script = "training/full_train_ddp.py"
-        launcher = [sys.executable, "-m", "torch.distributed.run",
-                    "--nproc_per_node", str(gpu_count)]
-        # Split grad-accum across ranks so the effective batch is preserved:
-        #   effective = per_gpu_batch * world_size * per_rank_accum
-        # The notebook's single-GPU default is BATCH=2, grad-accum=4 (eff 8).
-        # With 2 ranks: 2 * 2 * per_rank_accum = 8 -> per_rank_accum = 2.
-        per_rank_accum = max(1, args.grad_accum // gpu_count)
-        ddp_flag = ["--ddp"]
-        logger.info("Multi-GPU (%d GPUs) detected -> launching DDP via torchrun", gpu_count)
+        logger.info("Multi-GPU (%d GPUs) detected -> DDP via torchrun "
+                    "(single-GPU kept as last-resort fallback)", gpu_count)
+    elif gpu_count < 2 and os.environ.get("KAGGLE_DDP", "1") == "0":
+        logger.info("DDP disabled via KAGGLE_DDP=0; single-GPU mode")
     else:
-        script = "training/full_train.py"
-        launcher = [sys.executable]
-        per_rank_accum = args.grad_accum
-        ddp_flag = []
-        if gpu_count < 2 and os.environ.get("KAGGLE_DDP", "1") == "0":
-            logger.info("DDP disabled via KAGGLE_DDP=0; single-GPU mode")
-        else:
-            logger.info("Single-GPU mode (%d GPU(s))", max(gpu_count, 1))
+        logger.info("Single-GPU mode (%d GPU(s))", max(gpu_count, 1))
 
     train_log = LOG_DIR / "full_train.log"
     # Memory plan: fp32 master weights (NaN fix) + fp16 autocast needs
     # grad-checkpointing to fit the 14.5 GiB T4 with 5-tile 768px pages
     # (Colab's proven recipe). If that fails (OOM/SIGSEGV), fall back to
-    # batch-1 without grad-checkpointing so the run self-heals.
+    # batch-1 without grad-checkpointing, then single-GPU, so the kernel
+    # always keeps training (every failure returns nonzero -> retry here).
     attempts = [
-        {"grad_ckpt": True, "batch": args.batch_size},
-        {"grad_ckpt": False, "batch": max(1, args.batch_size // 2)},
+        {"grad_ckpt": True, "batch": args.batch_size, "ddp": use_ddp},
+        {"grad_ckpt": False, "batch": max(1, args.batch_size // 2), "ddp": use_ddp},
+        {"grad_ckpt": False, "batch": 1, "ddp": False},
     ]
     rc = None
     for i, attempt in enumerate(attempts):
         if i > 0:
             logger.warning("Training attempt %d failed (rc=%s); retrying with "
-                           "grad-ckpt=%s batch-size=%s", i, rc,
-                           attempt["grad_ckpt"], attempt["batch"])
+                           "grad-ckpt=%s batch-size=%s ddp=%s", i, rc,
+                           attempt["grad_ckpt"], attempt["batch"], attempt["ddp"])
+        if attempt["ddp"]:
+            script = "training/full_train_ddp.py"
+            launcher = [sys.executable, "-m", "torch.distributed.run",
+                        "--nproc_per_node", str(gpu_count)]
+            # Split grad-accum across ranks so the effective batch is
+            # preserved: effective = per_gpu_batch * world_size * per_rank_accum
+            # The notebook's single-GPU default is BATCH=2, accum=4 (eff 8).
+            # With 2 ranks: 2 * 2 * per_rank_accum = 8 -> per_rank_accum = 2.
+            per_rank_accum = max(1, args.grad_accum // gpu_count)
+            ddp_flag = ["--ddp"]
+        else:
+            script = "training/full_train.py"
+            launcher = [sys.executable]
+            per_rank_accum = args.grad_accum
+            ddp_flag = []
         rc = run(launcher + [script,
                   "--model-id", "checkpoints/init_768",
                   "--manifest", "data/training/manifest.jsonl",
