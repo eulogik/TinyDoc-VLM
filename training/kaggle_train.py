@@ -505,9 +505,16 @@ def main():
         {"grad_ckpt": False, "batch": 1, "ddp": False},
     ]
     rc = None
+    # The VM kills the trainer with a silent native SIGSEGV every ~10-40 min
+    # (5x today; config-independent). The parent launcher always survives and
+    # resume-from-checkpoint is cheap, so on signal deaths we relaunch the SAME
+    # config instead of letting the kernel die: each relaunch adds another
+    # ~30-40 min of training before the next kill. Python-level errors (rc>0)
+    # still advance to the next config.
+    max_retries = int(os.environ.get("KAGGLE_TRAIN_RETRIES", "3"))
     for i, attempt in enumerate(attempts):
         if i > 0:
-            logger.warning("Training attempt %d failed (rc=%s); retrying with "
+            logger.warning("Training attempt %d failed (rc=%s); trying next config "
                            "grad-ckpt=%s batch-size=%s ddp=%s", i, rc,
                            attempt["grad_ckpt"], attempt["batch"], attempt["ddp"])
         if attempt["ddp"]:
@@ -525,26 +532,36 @@ def main():
             launcher = [sys.executable]
             per_rank_accum = args.grad_accum
             ddp_flag = []
-        rc = run(launcher + [script,
-                  "--model-id", "checkpoints/init_768",
-                  "--manifest", "data/training/manifest.jsonl",
-                  "--steps", str(args.steps),
-                  "--batch-size", str(attempt["batch"]),
-                  "--grad-accum", str(per_rank_accum),
-                  "--warmup", str(args.warmup),
-                  "--lr", str(args.lr),
-                  "--max-seq-length", str(args.max_seq_length),
-                  "--save-every", str(args.save_every),
-                  "--save-latest-every", str(args.save_latest_every),
-                  # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
-                  # silently produces NaN losses. Default fp16+grad-scaler path
-                  # is correct on both (init is converted to fp16 upstream).
-                  *(["--grad-checkpoint"] if attempt["grad_ckpt"] else []),
-                  "--device", "cuda", "--num-workers", "0",
-                  *ddp_flag,
-                  "--output-dir", OUT_DIR,
-                  "--max-samples", "2000000"],
-                 logfile=str(train_log))
+        for try_num in range(max_retries):
+            rc = run(launcher + [script,
+                      "--model-id", "checkpoints/init_768",
+                      "--manifest", "data/training/manifest.jsonl",
+                      "--steps", str(args.steps),
+                      "--batch-size", str(attempt["batch"]),
+                      "--grad-accum", str(per_rank_accum),
+                      "--warmup", str(args.warmup),
+                      "--lr", str(args.lr),
+                      "--max-seq-length", str(args.max_seq_length),
+                      "--save-every", str(args.save_every),
+                      "--save-latest-every", str(args.save_latest_every),
+                      # T4 (sm_75)/P100 have no bf16 tensor cores: bf16
+                      # autocast silently produces NaN losses. Default
+                      # fp16+grad-scaler path is correct on both.
+                      *(["--grad-checkpoint"] if attempt["grad_ckpt"] else []),
+                      "--device", "cuda", "--num-workers", "0",
+                      *ddp_flag,
+                      "--output-dir", OUT_DIR,
+                      "--max-samples", "2000000"],
+                     logfile=str(train_log))
+            if rc == 0:
+                break
+            if rc < 0 and try_num < max_retries - 1:
+                logger.warning("Config %d try %d killed by signal %d; waiting "
+                               "90s then relaunching (resume continues from "
+                               "last checkpoint)", i, try_num + 1, -rc)
+                time.sleep(90)
+                continue
+            break
         if rc == 0:
             break
 
