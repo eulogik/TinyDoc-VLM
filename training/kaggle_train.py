@@ -296,21 +296,36 @@ def main():
     run(["git", "clone", "--depth", "1", "-b", BRANCH, REPO_URL, str(REPO)])
     os.chdir(REPO)
 
-    # 2. Deps + torch fix for old GPUs. Kaggle may provision a P100 (sm_60),
-    #    whose kernels are missing from the preinstalled cu12x torch (sm_70+).
-    #    cu118 wheels cover both P100 (sm_60) and T4 (sm_75).
+    # 2. Deps + torch pin. Kaggle may provision a P100 (sm_60), whose kernels
+    #    are missing from the preinstalled cu12x torch (sm_70+). cu118 wheels
+    #    cover both P100 (sm_60) and T4 (sm_75). Separately, torch 2.10.0+cu128
+    #    (the image default) native-SIGSEGV'd FOUR times on T4 today across
+    #    every config (DDP, grad-ckpt, single-GPU), while Colab's proven stack
+    #    (2.6.0+cu124) and every P100 run (2.6.0+cu118) never crashed. Pin the
+    #    proven stack unless KAGGLE_NO_TORCH_PIN=1.
     try:
         import torch
         cap = torch.cuda.get_device_capability(0)
         logger.info("GPU capability: %s", cap)
-        need_cu118 = cap[0] < 7
+        torch_ver = torch.__version__.split("+")[0]
+        need_reinstall = False
+        reason = ""
+        if cap[0] < 7:
+            need_reinstall = True
+            reason = "P100/old GPU: preinstalled cu12x torch lacks sm_50+ kernels"
+        elif torch_ver != "2.6.0" and os.environ.get("KAGGLE_NO_TORCH_PIN", "0") != "1":
+            need_reinstall = True
+            reason = (f"T4: torch {torch_ver} native-SIGSEGV'd 4x today; "
+                      "pinning Colab-proven 2.6.0")
     except Exception:
-        need_cu118 = False
+        need_reinstall = False
         cap = None
-    if need_cu118:
-        logger.warning("P100/old GPU detected; installing torch cu118 (sm_50+).")
-        pip_install(["torch==2.6.0+cu118", "torchvision==0.21.0+cu118"],
-                    extra_index="https://download.pytorch.org/whl/cu118", force=True)
+    if need_reinstall:
+        extra = "cu118" if (cap or (0,))[0] < 7 else "cu124"
+        logger.warning("%s; installing torch==2.6.0+%s ...", reason, extra)
+        pip_install(["torch==2.6.0+" + extra, "torchvision==0.21.0+" + extra],
+                    extra_index=f"https://download.pytorch.org/whl/{extra}",
+                    force=True)
         # torchaudio is only a soft dependency of transformers
         # (is_torchaudio_available-guarded) and its cu12x-built .so crashes
         # after the torch downgrade with a missing aoti_torch_abi_version

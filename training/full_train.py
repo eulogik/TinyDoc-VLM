@@ -365,6 +365,11 @@ def main():
 
     import os as _os
     _os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+    import torch as _torch
+    # cuDNN autotune races are a known silent-SIGSEGV source on T4 under
+    # memory pressure (heuristic runs spawn mid-training for every new tile
+    # shape). The benchmark gain is negligible here; disable it.
+    _torch.backends.cudnn.benchmark = False
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
     # Dump the Python stack to a SEPARATE file every 60s so a silent hang
     # (e.g. a CUDA kernel that never returns) is diagnosable in logs/
