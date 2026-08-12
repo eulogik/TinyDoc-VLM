@@ -152,6 +152,17 @@ def train(
 
     logger.info(f"Full fine-tune on {device} for {steps} steps (all params)")
     model = model.to(device)
+    # CRITICAL: fp16/bf16 params make torch.optim.AdamW keep its state
+    # (exp_avg/exp_avg_sq) in the SAME half dtype. There, exp_avg_sq
+    # ~= (1-beta2)*grad^2 underflows to 0 for typical grads, and eps=1e-8
+    # also rounds to 0, so denom = sqrt(v)+eps = 0 and the very first
+    # optimizer step writes +/-inf into the weights (NaN cascade within a
+    # few steps - killed every resumed run). Always train from fp32 master
+    # weights (Colab's proven recipe: fp32 params + autocast + GradScaler).
+    if next(model.parameters()).dtype != torch.float32:
+        logger.info("Promoting checkpoint params to fp32 master weights "
+                    "(half-precision params corrupt AdamW state)")
+        model = model.float()
     if grad_checkpoint:
         model.gradient_checkpointing_enable()
         logger.info("Gradient checkpointing enabled")
@@ -187,6 +198,9 @@ def train(
     use_autocast = device == "cuda" and not use_bf16
     use_scaler = use_autocast and first_dtype == torch.float32
     scaler = torch.amp.GradScaler("cuda") if use_scaler else None
+    if not use_scaler and use_autocast:
+        logger.warning("fp16 autocast without GradScaler on non-fp32 params - "
+                       "see fp32-promotion note above")
 
     step = 0
     micro = 0
@@ -262,6 +276,16 @@ def train(
             micro += 1
 
             if micro % grad_accum == 0:
+                if not torch.isfinite(loss).all():
+                    logger.error(f"Step {step}: non-finite loss ({loss.item():.3e}); "
+                                 "skipping optimizer step to avoid NaN-poisoning weights")
+                    running_loss = 0.0
+                    opt.zero_grad()
+                    scheduler.step()
+                    step += 1
+                    if step >= steps:
+                        break
+                    continue
                 if use_scaler:
                     scaler.unscale_(optimizer)
                     torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)

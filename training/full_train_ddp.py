@@ -172,6 +172,17 @@ def train(
 
     _log("Full fine-tune on %s for %s steps (all params)", device, steps)
     model = model.to(device)
+    # CRITICAL: fp16/bf16 params make torch.optim.AdamW keep its state
+    # (exp_avg/exp_avg_sq) in the SAME half dtype. There, exp_avg_sq
+    # ~= (1-beta2)*grad^2 underflows to 0 for typical grads, and eps=1e-8
+    # also rounds to 0, so denom = sqrt(v)+eps = 0 and the very first
+    # optimizer step writes +/-inf into the weights (NaN cascade within a
+    # few steps - killed every resumed run). Always train from fp32 master
+    # weights (Colab's proven recipe: fp32 params + autocast + GradScaler).
+    if next(model.parameters()).dtype != torch.float32:
+        _log("Promoting checkpoint params to fp32 master weights "
+             "(half-precision params corrupt AdamW state)")
+        model = model.float()
     if grad_checkpoint:
         model.gradient_checkpointing_enable()
         _log("Gradient checkpointing enabled")
@@ -297,6 +308,18 @@ def train(
                 model.require_backward_grad_sync = (micro % grad_accum == 0)
 
             if micro % grad_accum == 0:
+                if not torch.isfinite(loss).all():
+                    _log("Step %d: non-finite loss (%s); skipping optimizer step to "
+                         "avoid NaN-poisoning weights", step, f"{loss.item():.3e}")
+                    running_loss = 0.0
+                    optimizer.zero_grad()
+                    scheduler.step()
+                    if _device_is_mps:
+                        torch.mps.empty_cache()
+                    step += 1
+                    if step >= steps:
+                        break
+                    continue
                 if use_scaler:
                     scaler.unscale_(optimizer)
                     torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
