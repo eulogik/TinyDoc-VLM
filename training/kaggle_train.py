@@ -507,29 +507,42 @@ def main():
             logger.info("Single-GPU mode (%d GPU(s))", max(gpu_count, 1))
 
     train_log = LOG_DIR / "full_train.log"
-    rc = run(launcher + [script,
-              "--model-id", "checkpoints/init_768",
-              "--manifest", "data/training/manifest.jsonl",
-              "--steps", str(args.steps),
-              "--batch-size", str(args.batch_size),
-              "--grad-accum", str(per_rank_accum),
-              "--warmup", str(args.warmup),
-              "--lr", str(args.lr),
-              "--max-seq-length", str(args.max_seq_length),
-              "--save-every", str(args.save_every),
-              "--save-latest-every", str(args.save_latest_every),
-              # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
-              # silently produces NaN losses. Default fp16+grad-scaler path
-              # is correct on both (init is converted to fp16 upstream).
-              # fp32 master weights (NaN fix) need grad-checkpointing to fit
-              # the 14.5 GiB T4 with 5-tile 768px pages (Colab's proven
-              # memory recipe).
-              "--grad-checkpoint",
-              "--device", "cuda", "--num-workers", "0",
-              *ddp_flag,
-              "--output-dir", OUT_DIR,
-              "--max-samples", "2000000"],
-             logfile=str(train_log))
+    # Memory plan: fp32 master weights (NaN fix) + fp16 autocast needs
+    # grad-checkpointing to fit the 14.5 GiB T4 with 5-tile 768px pages
+    # (Colab's proven recipe). If that fails (OOM/SIGSEGV), fall back to
+    # batch-1 without grad-checkpointing so the run self-heals.
+    attempts = [
+        {"grad_ckpt": True, "batch": args.batch_size},
+        {"grad_ckpt": False, "batch": max(1, args.batch_size // 2)},
+    ]
+    rc = None
+    for i, attempt in enumerate(attempts):
+        if i > 0:
+            logger.warning("Training attempt %d failed (rc=%s); retrying with "
+                           "grad-ckpt=%s batch-size=%s", i, rc,
+                           attempt["grad_ckpt"], attempt["batch"])
+        rc = run(launcher + [script,
+                  "--model-id", "checkpoints/init_768",
+                  "--manifest", "data/training/manifest.jsonl",
+                  "--steps", str(args.steps),
+                  "--batch-size", str(attempt["batch"]),
+                  "--grad-accum", str(per_rank_accum),
+                  "--warmup", str(args.warmup),
+                  "--lr", str(args.lr),
+                  "--max-seq-length", str(args.max_seq_length),
+                  "--save-every", str(args.save_every),
+                  "--save-latest-every", str(args.save_latest_every),
+                  # T4 (sm_75)/P100 have no bf16 tensor cores: bf16 autocast
+                  # silently produces NaN losses. Default fp16+grad-scaler path
+                  # is correct on both (init is converted to fp16 upstream).
+                  *(["--grad-checkpoint"] if attempt["grad_ckpt"] else []),
+                  "--device", "cuda", "--num-workers", "0",
+                  *ddp_flag,
+                  "--output-dir", OUT_DIR,
+                  "--max-samples", "2000000"],
+                 logfile=str(train_log))
+        if rc == 0:
+            break
 
     if syncer:
         syncer.final()
