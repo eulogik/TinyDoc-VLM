@@ -56,7 +56,7 @@ class LogUploader:
     """Ships logs/* to the HF runtime repo so run progress and failures are
     inspectable from anywhere (papermill's log stream can swallow output)."""
 
-    def __init__(self, repo_id, logs_dir, token, interval=45):
+    def __init__(self, repo_id, logs_dir, token, interval=120):
         self.repo_id = repo_id
         self.logs_dir = Path(logs_dir)
         self.token = token
@@ -308,7 +308,10 @@ def main():
     os.chdir(WORK)  # never sit inside the dir we are about to delete
     if REPO.exists():
         run(["rm", "-rf", str(REPO)])
-    run(["git", "clone", "--depth", "1", "-b", BRANCH, REPO_URL, str(REPO)])
+    rc = run(["git", "clone", "--depth", "1", "-b", BRANCH, REPO_URL, str(REPO)])
+    if rc != 0:
+        logger.error("git clone failed (rc=%s); aborting.", rc)
+        sys.exit(rc)
     os.chdir(REPO)
 
     # 2. Deps + torch pin. Kaggle may provision a P100 (sm_60), whose kernels
@@ -588,9 +591,9 @@ def main():
                 break
             if rc < 0 and try_num < max_retries - 1:
                 logger.warning("Config %d try %d killed by signal %d; waiting "
-                               "90s then relaunching (resume continues from "
+                               "60s then relaunching (resume continues from "
                                "last checkpoint)", i, try_num + 1, -rc)
-                time.sleep(90)
+                time.sleep(60)
                 continue
             break
         if rc == 0:

@@ -434,7 +434,10 @@ def main():
          rank, world_size, local_rank, torch.cuda.get_device_name(local_rank))
     if args.device == "cuda":
         args.device = f"cuda:{local_rank}"
-
+    # Suppress httpx/httpcore HTTP request logs (huggingface_hub floods them
+    # on every model load; only the training step lines matter).
+    for _noisy in ("httpx", "httpcore", "urllib3"):
+        logging.getLogger(_noisy).setLevel(logging.WARNING)
     # Dump the Python stack to a SEPARATE file every 60s so a silent hang
     # (e.g. a CUDA kernel that never returns) is diagnosable in logs/
     # faulthandler.log WITHOUT polluting the captured stdout/stderr that

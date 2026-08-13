@@ -280,7 +280,7 @@ def train(
                     logger.error(f"Step {step}: non-finite loss ({loss.item():.3e}); "
                                  "skipping optimizer step to avoid NaN-poisoning weights")
                     running_loss = 0.0
-                    opt.zero_grad()
+                    optimizer.zero_grad()
                     scheduler.step()
                     step += 1
                     if step >= steps:
@@ -371,6 +371,10 @@ def main():
     # shape). The benchmark gain is negligible here; disable it.
     _torch.backends.cudnn.benchmark = False
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    # Suppress httpx/httpcore HTTP request logs (huggingface_hub floods them
+    # on every model load; only the training step lines matter).
+    for _noisy in ("httpx", "httpcore", "urllib3"):
+        logging.getLogger(_noisy).setLevel(logging.WARNING)
     # Dump the Python stack to a SEPARATE file every 60s so a silent hang
     # (e.g. a CUDA kernel that never returns) is diagnosable in logs/
     # faulthandler.log WITHOUT polluting the captured stdout/stderr that
