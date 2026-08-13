@@ -187,6 +187,21 @@ def pip_install(pkgs, extra_index=None, force=False):
         sys.exit(rc)
 
 
+def pip_install_ok(pkgs, extra_index=None, fallback_index=None):
+    """Like pip_install but returns success bool instead of exiting, and can
+    add a second index (the pytorch cu124 index dropped torch 2.6.0's exact
+    nvidia-cudnn-cu12 wheel, so resolution needs PyPI as a fallback)."""
+    cmd = [sys.executable, "-m", "pip", "install", "-q"] + pkgs
+    if extra_index:
+        cmd += ["--index-url", extra_index]
+    if fallback_index:
+        cmd += ["--extra-index-url", fallback_index]
+    rc = run(cmd)
+    if rc != 0:
+        logger.error("pip install FAILED (%s): %s", rc, " ".join(cmd))
+    return rc == 0
+
+
 class CkptSyncer:
     """Watches checkpoints/full768/latest/ and uploads to the HF model repo.
 
@@ -322,15 +337,31 @@ def main():
         cap = None
     if need_reinstall:
         extra = "cu118" if (cap or (0,))[0] < 7 else "cu124"
+        # The pytorch index removed torch 2.6.0's exact nvidia-cudnn-cu12
+        # wheel (9.1.0.70), so --index-url alone fails resolution. Search
+        # PyPI as a second index; torch's nvidia-* deps are ==-pinned, so the
+        # resolver honors them (cudnn 9.1.0.70 lives on PyPI).
         logger.warning("%s; installing torch==2.6.0+%s ...", reason, extra)
-        pip_install(["torch==2.6.0+" + extra, "torchvision==0.21.0+" + extra],
-                    extra_index=f"https://download.pytorch.org/whl/{extra}",
-                    force=True)
-        # torchaudio is only a soft dependency of transformers
-        # (is_torchaudio_available-guarded) and its cu12x-built .so crashes
-        # after the torch downgrade with a missing aoti_torch_abi_version
-        # symbol. Removing it lets transformers import cleanly.
-        run([sys.executable, "-m", "pip", "uninstall", "-y", "torchaudio"])
+        pin_ok = (
+            pip_install_ok(
+                ["torch==2.6.0+" + extra, "torchvision==0.21.0+" + extra],
+                extra_index=f"https://download.pytorch.org/whl/{extra}")
+            or pip_install_ok(
+                ["torch==2.6.0+" + extra, "torchvision==0.21.0+" + extra],
+                extra_index=f"https://download.pytorch.org/whl/{extra}",
+                fallback_index="https://pypi.org/simple")
+        )
+        if pin_ok:
+            # torchaudio is only a soft dependency of transformers
+            # (is_torchaudio_available-guarded) and its cu12x-built .so crashes
+            # after the torch downgrade with a missing aoti_torch_abi_version
+            # symbol. Removing it lets transformers import cleanly.
+            run([sys.executable, "-m", "pip", "uninstall", "-y", "torchaudio"])
+        else:
+            # Never let the torch pin kill the boot: run degraded on the
+            # image torch rather than exiting (every crash still resumes).
+            logger.warning("torch pin FAILED; continuing on image torch "
+                           "(degraded: may SIGSEGV like today's earlier runs)")
     env_script = (
         "import sys, torch\n"
         "import importlib.metadata as md\n"
