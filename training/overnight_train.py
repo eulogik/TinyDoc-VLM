@@ -71,50 +71,54 @@ class SyntheticDocDataset(Dataset):
 def collate_fn(batch, processor, max_seq_length=512):
     """Collate batch into model inputs."""
     prompts = [item["prompt"] for item in batch]
-    answers = [item["answer"] for item in batch]
+    answers = [item.get("answer", "") for item in batch]
     images = [item["image"] for item in batch]
-    
-    full_texts = [f"{p}\n{a}" for p, a in zip(prompts, answers)]
-    
-    encodings = processor.tokenizer(
-        full_texts,
-        padding=True,
-        truncation=True,
-        max_length=max_seq_length,
-        return_tensors="pt",
-    )
-    
-    pixel_values_list = []
-    for img in images:
-        tile_tensor = processor.image_processor.preprocess(img)
-        pixel_values_list.append(tile_tensor)
-    
-    max_tiles = max(tv.shape[0] for tv in pixel_values_list)
+
+    sz = processor.image_processor.image_size
+    scale = getattr(processor.config, "pixel_shuffle_scale", 3) if processor.config else 3
+    patch_size = getattr(processor.config, "patch_size", 16) if processor.config else 16
+    tokens_per_tile = (sz // patch_size // scale) ** 2
+
+    pv = []
+    expanded_prompts = []
+    expanded_full = []
+    for img, prompt, answer in zip(images, prompts, answers):
+        t = processor.image_processor.preprocess(img)
+        pv.append(t)
+        num_tiles = t.shape[0]
+        total_vis = num_tiles * tokens_per_tile
+        expanded = prompt.replace("<image>", "<image>" * total_vis)
+        expanded_prompts.append(expanded)
+        expanded_full.append(f"{expanded}\n{answer}")
+
+    max_tiles = max(tv.shape[0] for tv in pv)
     padded = []
-    for tv in pixel_values_list:
+    for tv in pv:
         T = tv.shape[0]
         if T < max_tiles:
-            pad = torch.zeros((max_tiles - T, 3, 384, 384), dtype=tv.dtype)
+            pad = torch.zeros((max_tiles - T, 3, sz, sz), dtype=tv.dtype)
             tv = torch.cat([tv, pad], dim=0)
         padded.append(tv)
     pixel_values = torch.stack(padded, dim=0)
-    
+
+    encodings = processor.tokenizer(
+        expanded_full, padding=True, truncation=True,
+        max_length=max_seq_length, return_tensors="pt",
+    )
+
     input_ids = encodings["input_ids"]
     labels = input_ids.clone()
-    
+
     prompt_only = processor.tokenizer(
-        prompts,
-        padding=True,
-        truncation=True,
-        max_length=max_seq_length,
-        return_tensors="pt",
+        expanded_prompts, padding=True, truncation=True,
+        max_length=max_seq_length, return_tensors="pt",
     )
     prompt_lengths = prompt_only["attention_mask"].sum(dim=1)
-    
+
     for i in range(len(batch)):
         prompt_len = prompt_lengths[i].item()
         labels[i, :prompt_len] = -100
-    
+
     return {
         "input_ids": input_ids,
         "attention_mask": encodings["attention_mask"],

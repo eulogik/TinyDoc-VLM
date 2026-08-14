@@ -106,21 +106,24 @@ def collate_fn(batch, processor, max_seq_length=256):
     images = [item["image"] for item in batch]
 
     sz = processor.image_processor.image_size  # now 768
-    full_texts = [f"{p}\n{a}" for p, a in zip(prompts, answers)]
+    scale = getattr(processor.config, "pixel_shuffle_scale", 3) if processor.config else 3
+    patch_size = getattr(processor.config, "patch_size", 16) if processor.config else 16
+    tokens_per_tile = (sz // patch_size // scale) ** 2
 
-    enc = processor.tokenizer(
-        full_texts, padding=True, truncation=True,
-        max_length=max_seq_length, return_tensors="pt",
-    )
-    prompt_enc = processor.tokenizer(
-        prompts, padding=True, truncation=True,
-        max_length=max_seq_length, return_tensors="pt",
-    )
-
+    # Preprocess images to get tile counts, then expand <image> tokens
+    # to match the actual number of visual tokens the encoder will produce.
     pv = []
-    for img in images:
+    expanded_prompts = []
+    expanded_full = []
+    for img, prompt, answer in zip(images, prompts, answers):
         t = processor.image_processor.preprocess(img)
         pv.append(t)
+        num_tiles = t.shape[0]
+        total_vis = num_tiles * tokens_per_tile
+        expanded = prompt.replace("<image>", "<image>" * total_vis)
+        expanded_prompts.append(expanded)
+        expanded_full.append(f"{expanded}\n{answer}")
+
     max_tiles = max(t.shape[0] for t in pv)
     padded = []
     for t in pv:
@@ -129,6 +132,15 @@ def collate_fn(batch, processor, max_seq_length=256):
             t = torch.cat([t, torch.zeros((max_tiles - T, 3, sz, sz), dtype=t.dtype)], dim=0)
         padded.append(t)
     pixel_values = torch.stack(padded, dim=0)
+
+    enc = processor.tokenizer(
+        expanded_full, padding=True, truncation=True,
+        max_length=max_seq_length, return_tensors="pt",
+    )
+    prompt_enc = processor.tokenizer(
+        expanded_prompts, padding=True, truncation=True,
+        max_length=max_seq_length, return_tensors="pt",
+    )
 
     input_ids = enc["input_ids"]
     labels = input_ids.clone()
@@ -392,7 +404,7 @@ def main():
     ap.add_argument("--warmup", type=int, default=50)
     ap.add_argument("--grad-accum", type=int, default=1, help="Micro-batches per optimizer step. Keep low on Colab to limit wall-clock per step.")
     ap.add_argument("--max-samples", type=int, default=1_000_000)
-    ap.add_argument("--max-seq-length", type=int, default=512, help="Max token length for prompt+target (markdown targets need >256).")
+    ap.add_argument("--max-seq-length", type=int, default=1536, help="Max token length for prompt+target. Must be >= 1280 + text for 5-tile 768px images.")
     ap.add_argument("--output-dir", default="checkpoints/full")
     ap.add_argument("--device", default="auto")
     ap.add_argument("--bf16", action="store_true", help="bf16 autocast (use on MPS to save memory)")

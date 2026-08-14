@@ -39,13 +39,21 @@ def load_lora_model(checkpoint_path: str, base_model_id: str = "eulogik/TinyDoc-
 def evaluate_sample(model, processor, image_path: str, question: str, device: str = "cpu") -> str:
     """Generate answer for a single sample."""
     img = Image.open(image_path).convert("RGB")
-    
+
     prompt = f"<image>\n{question}"
-    
+
     tile_tensor = processor.image_processor.preprocess(img)
+    num_tiles = tile_tensor.shape[0]
+    sz = processor.image_processor.image_size
+    scale = getattr(processor.config, "pixel_shuffle_scale", 3) if processor.config else 3
+    patch_size = getattr(processor.config, "patch_size", 16) if processor.config else 16
+    tokens_per_tile = (sz // patch_size // scale) ** 2
+    total_vis = num_tiles * tokens_per_tile
+
+    expanded_prompt = prompt.replace("<image>", "<image>" * total_vis)
     pixel_values = torch.stack([tile_tensor], dim=0).to(device)
-    
-    encoding = processor.tokenizer(prompt, return_tensors="pt")
+
+    encoding = processor.tokenizer(expanded_prompt, return_tensors="pt")
     input_ids = encoding["input_ids"].to(device)
     attention_mask = encoding["attention_mask"].to(device)
     
