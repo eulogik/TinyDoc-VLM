@@ -43,16 +43,15 @@ sed "s/STEPS = os.environ.get('STEPS', '8000')/STEPS = '$STEPS'/; \
     "$HERE/training/kaggle/kaggle_notebook.ipynb" > "$STAGE/kaggle_notebook.ipynb"
 if [ -n "${HF_TOKEN:-}" ]; then
     # Inject a fallback so the run works without the UI secret.
-    sed -i '' "s|^    pass$|    os.environ['HF_TOKEN'] = os.environ.get('HF_TOKEN_INJECT', '')|" \
-        "$STAGE/kaggle_notebook.ipynb" 2>/dev/null || true
     python3 - "$STAGE/kaggle_notebook.ipynb" "$HF_TOKEN" <<'PYEOF'
 import json, sys
-nb = json.load(open(sys.argv[1]))
+path, token = sys.argv[1], sys.argv[2]
+nb = json.load(open(path))
 src = "".join(nb["cells"][1]["source"])
-src = src.replace("os.environ['HF_TOKEN'] = os.environ.get('HF_TOKEN_INJECT', '')",
-                  f"os.environ['HF_TOKEN'] = '{sys.argv[2]}'")
+src = src.replace("import subprocess, sys, os, time\n",
+                  f"import subprocess, sys, os, time\nos.environ['HF_TOKEN'] = '{token}'\n", 1)
 nb["cells"][1]["source"] = src.splitlines(keepends=True)
-json.dump(nb, open(sys.argv[1], "w"))
+json.dump(nb, open(path, "w"))
 print("HF_TOKEN injected into staged notebook (not committed).")
 PYEOF
 fi
