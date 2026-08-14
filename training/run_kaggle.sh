@@ -17,7 +17,7 @@
 set -euo pipefail
 
 STEPS="${STEPS:-8000}"
-BATCH="${BATCH:-8}"
+BATCH="${BATCH:-2}"
 KERNEL="eulogikdevelopers/tinydoc-vlm-768-retrain"
 
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
@@ -39,7 +39,7 @@ fi
 STAGE="$(mktemp -d)"
 cp "$HERE/training/kaggle/kernel-metadata.json" "$STAGE/"
 sed "s/STEPS = os.environ.get('STEPS', '8000')/STEPS = '$STEPS'/; \
-     s/BATCH = os.environ.get('BATCH', '8')/BATCH = '$BATCH'/" \
+     s/BATCH = os.environ.get('BATCH', '2')/BATCH = '$BATCH'/" \
     "$HERE/training/kaggle/kaggle_notebook.ipynb" > "$STAGE/kaggle_notebook.ipynb"
 if [ -n "${HF_TOKEN:-}" ]; then
     # Inject a fallback so the run works without the UI secret.
