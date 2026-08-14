@@ -278,7 +278,7 @@ def main():
     ap.add_argument("--grad-accum", type=int, default=1)
     ap.add_argument("--warmup", type=int, default=500)
     ap.add_argument("--lr", type=float, default=1e-4)
-    ap.add_argument("--max-seq-length", type=int, default=512)
+    ap.add_argument("--max-seq-length", type=int, default=1536)
     ap.add_argument("--save-every", type=int, default=500)
     ap.add_argument("--save-latest-every", type=int, default=50)
     ap.add_argument("--data-repo", default=os.environ.get("DATA_REPO",
@@ -287,6 +287,8 @@ def main():
                      "eulogik/TinyDoc-VLM-768-checkpoints"))
     ap.add_argument("--no-sync", action="store_true",
                     help="Disable live checkpoint upload (still pushes final).")
+    ap.add_argument("--fresh", action="store_true",
+                    help="Skip checkpoint download; train from init_768 (ignore hub checkpoint).")
     args = ap.parse_args()
 
     hf_token = os.environ.get("HF_TOKEN")
@@ -475,7 +477,9 @@ def main():
 
     # 5. Download latest checkpoint from HF model repo (resume)
     latest = ckpt_root / "full768" / "latest"
-    if (ckpt_root / "full768" / "final").exists():
+    if args.fresh:
+        logger.info("--fresh: skipping hub checkpoint download; training from init_768")
+    elif (ckpt_root / "full768" / "final").exists():
         logger.info("final checkpoint already present; nothing to do.")
         return
     from huggingface_hub import snapshot_download
@@ -583,6 +587,7 @@ def main():
                       # fp16+grad-scaler path is correct on both.
                       *(["--grad-checkpoint"] if attempt["grad_ckpt"] else []),
                       "--device", "cuda", "--num-workers", "0",
+                      *(["--no-resume"] if args.fresh else []),
                       *ddp_flag,
                       "--output-dir", OUT_DIR,
                       "--max-samples", "2000000"],
