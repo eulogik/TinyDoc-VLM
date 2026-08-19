@@ -23,6 +23,10 @@ import sys
 import time
 from pathlib import Path
 
+# Allow running as `python training/eval_768.py` from a fresh repo clone
+# (no pip install): make the repo root importable for tinydoc_vlm.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import torch
 
 logger = logging.getLogger(__name__)

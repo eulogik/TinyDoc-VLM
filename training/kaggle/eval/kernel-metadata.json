@@ -1,0 +1,21 @@
+{
+  "id": "eulogikdevelopers/tinydoc-vlm-768-eval",
+  "title": "TinyDoc-VLM 768 Eval",
+  "code_file": "kaggle_eval_notebook.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "accelerator": "GPU",
+  "competition_sources": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "model_sources": [],
+  "secrets": [
+    {
+      "name": "HF_TOKEN",
+      "source": "Secrets"
+    }
+  ]
+}
