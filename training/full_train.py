@@ -214,9 +214,32 @@ def train(
     use_autocast = device == "cuda" and not use_bf16
     use_scaler = use_autocast and first_dtype == torch.float32
     scaler = torch.amp.GradScaler("cuda") if use_scaler else None
-    if not use_scaler and use_autocast:
-        logger.warning("fp16 autocast without GradScaler on non-fp32 params - "
-                       "see fp32-promotion note above")
+
+    # Restore optimizer/scheduler/scaler state from checkpoint if available.
+    # Without this, every resume restarts the LR schedule from step 0 and
+    # discards AdamW momentum — causing the loss spike at step 12850+.
+    if resume and resume_ckpt is not None and resume_step and resume_step > 0:
+        opt_path = resume_ckpt / "optimizer.pt"
+        sched_path = resume_ckpt / "scheduler.pt"
+        sc_path = resume_ckpt / "scaler.pt"
+        if opt_path.exists():
+            try:
+                optimizer.load_state_dict(torch.load(opt_path, map_location=device, weights_only=True))
+                logger.info(f"Restored optimizer state from {opt_path.name}")
+            except Exception as e:
+                logger.warning(f"Could not load optimizer state: {e} — starting fresh")
+        if sched_path.exists():
+            try:
+                scheduler.load_state_dict(torch.load(sched_path, map_location=device, weights_only=True))
+                logger.info(f"Restored scheduler state from {sched_path.name}")
+            except Exception as e:
+                logger.warning(f"Could not load scheduler state: {e} — starting fresh")
+        if sc_path.exists() and scaler is not None:
+            try:
+                scaler.load_state_dict(torch.load(sc_path, map_location=device, weights_only=True))
+                logger.info(f"Restored scaler state from {sc_path.name}")
+            except Exception as e:
+                logger.warning(f"Could not load scaler state: {e} — starting fresh")
 
     step = 0
     micro = 0
@@ -326,6 +349,12 @@ def train(
                     tmp = out / f".step_{step}_tmp"
                     tmp.mkdir(parents=True, exist_ok=True)
                     model.save_pretrained(str(tmp))
+                    # Save optimizer/scheduler/scaler state for clean resume
+                    torch.save(optimizer.state_dict(), tmp / "optimizer.pt")
+                    torch.save(scheduler.state_dict(), tmp / "scheduler.pt")
+                    if scaler is not None:
+                        torch.save(scaler.state_dict(), tmp / "scaler.pt")
+                    (tmp / "step.txt").write_text(str(step))
                     if sp.exists():
                         import shutil
                         shutil.rmtree(str(sp))
@@ -336,6 +365,11 @@ def train(
                     tmp = out / ".latest_tmp"
                     tmp.mkdir(parents=True, exist_ok=True)
                     model.save_pretrained(str(tmp))
+                    # Save optimizer/scheduler/scaler state for clean resume
+                    torch.save(optimizer.state_dict(), tmp / "optimizer.pt")
+                    torch.save(scheduler.state_dict(), tmp / "scheduler.pt")
+                    if scaler is not None:
+                        torch.save(scaler.state_dict(), tmp / "scaler.pt")
                     (tmp / "step.txt").write_text(str(step))
                     if sp.exists():
                         import shutil

@@ -478,7 +478,12 @@ def main():
     # 5. Download latest checkpoint from HF model repo (resume)
     latest = ckpt_root / "full768" / "latest"
     if args.fresh:
-        logger.info("--fresh: skipping hub checkpoint download; training from init_768")
+        # --fresh: wipe any stale checkpoint so full_train.py loads from
+        # model-id (init_768) instead of loading corrupted hub weights.
+        if latest.exists():
+            import shutil as _sh
+            _sh.rmtree(str(latest))
+            logger.info("--fresh: removed stale latest/ checkpoint")
     elif (ckpt_root / "full768" / "final").exists():
         logger.info("final checkpoint already present; nothing to do.")
         return
@@ -559,10 +564,6 @@ def main():
             script = "training/full_train_ddp.py"
             launcher = [sys.executable, "-m", "torch.distributed.run",
                         "--nproc_per_node", str(gpu_count)]
-            # Split grad-accum across ranks so the effective batch is
-            # preserved: effective = per_gpu_batch * world_size * per_rank_accum
-            # The notebook's single-GPU default is BATCH=2, accum=4 (eff 8).
-            # With 2 ranks: 2 * 2 * per_rank_accum = 8 -> per_rank_accum = 2.
             per_rank_accum = max(1, args.grad_accum // gpu_count)
             ddp_flag = ["--ddp"]
         else:
@@ -582,9 +583,6 @@ def main():
                       "--max-seq-length", str(args.max_seq_length),
                       "--save-every", str(args.save_every),
                       "--save-latest-every", str(args.save_latest_every),
-                      # T4 (sm_75)/P100 have no bf16 tensor cores: bf16
-                      # autocast silently produces NaN losses. Default
-                      # fp16+grad-scaler path is correct on both.
                       *(["--grad-checkpoint"] if attempt["grad_ckpt"] else []),
                       "--device", "cuda", "--num-workers", "0",
                       *(["--no-resume"] if args.fresh else []),
@@ -594,6 +592,9 @@ def main():
                      logfile=str(train_log))
             if rc == 0:
                 break
+            # After a fresh start, only the first run should use --fresh.
+            # Subsequent retries resume from the checkpoint saved during
+            # this session (optimizer state included after our fix).
             if rc < 0 and try_num < max_retries - 1:
                 logger.warning("Config %d try %d killed by signal %d; waiting "
                                "60s then relaunching (resume continues from "
