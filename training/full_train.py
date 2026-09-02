@@ -218,10 +218,11 @@ def train(
     # Restore optimizer/scheduler/scaler state from checkpoint if available.
     # Without this, every resume restarts the LR schedule from step 0 and
     # discards AdamW momentum — causing the loss spike at step 12850+.
-    if resume and resume_ckpt is not None and resume_step and resume_step > 0:
-        opt_path = resume_ckpt / "optimizer.pt"
-        sched_path = resume_ckpt / "scheduler.pt"
-        sc_path = resume_ckpt / "scaler.pt"
+    _resume_dir = out / "latest" if (out / "latest").exists() else out
+    if resume and resume_step and resume_step > 0:
+        opt_path = _resume_dir / "optimizer.pt"
+        sched_path = _resume_dir / "scheduler.pt"
+        sc_path = _resume_dir / "scaler.pt"
         if opt_path.exists():
             try:
                 optimizer.load_state_dict(torch.load(opt_path, map_location=device, weights_only=True))
