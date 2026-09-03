@@ -227,6 +227,11 @@ def train(
             except Exception as e:
                 logger.warning(f"Could not load optimizer state: {e} — starting fresh")
 
+    # LambdaLR requires initial_lr when resuming with last_epoch >= 0, even
+    # if no optimizer state was available to restore.
+    for group in optimizer.param_groups:
+        group.setdefault("initial_lr", learning_rate)
+
     def lr_lambda(step):
         if step < warmup_steps:
             return step / max(warmup_steps, 1)
