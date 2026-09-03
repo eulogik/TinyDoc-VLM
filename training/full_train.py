@@ -153,7 +153,7 @@ def train(
     save_latest_every=0,
     output_dir="checkpoints/full", device="auto",
     bf16=False, grad_checkpoint=False, max_seq_length=512, resume=True,
-    resume_step=None,
+    resume_step=None, resume_ckpt=None, schedule_steps=None,
     num_workers=None,
 ):
     if device == "auto":
@@ -200,13 +200,51 @@ def train(
         lr=learning_rate, weight_decay=0.01, betas=(0.9, 0.999),
     )
 
+    # The LR horizon can be longer than a single resumable Kaggle session.
+    # A short stop target must not compress the cosine schedule into that
+    # short interval.
+    schedule_horizon = schedule_steps or steps
+    _out = Path(output_dir)
+    if resume and resume_ckpt is not None:
+        _resume_dir = Path(resume_ckpt)
+    else:
+        _resume_dir = _out / "latest" if (_out / "latest").exists() else _out
+    resume_global_step = resume_step if (resume and resume_step and resume_step > 0) else None
+
+    # Restore AdamW momentum when available. Explicitly reset the parameter
+    # LR afterwards: an optimizer state dict carries the LR from the run that
+    # saved it, while the scheduler below is aligned to the requested LR and
+    # global resume step.
+    if resume_global_step is not None:
+        opt_path = _resume_dir / "optimizer.pt"
+        if opt_path.exists():
+            try:
+                optimizer.load_state_dict(torch.load(opt_path, map_location=device, weights_only=True))
+                for group in optimizer.param_groups:
+                    group["lr"] = learning_rate
+                    group["initial_lr"] = learning_rate
+                logger.info(f"Restored optimizer momentum from {opt_path.name}")
+            except Exception as e:
+                logger.warning(f"Could not load optimizer state: {e} — starting fresh")
+
     def lr_lambda(step):
         if step < warmup_steps:
             return step / max(warmup_steps, 1)
-        prog = (step - warmup_steps) / max(steps - warmup_steps, 1)
+        prog = (step - warmup_steps) / max(schedule_horizon - warmup_steps, 1)
         return 0.5 * (1 + math.cos(math.pi * prog))
 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
+    # LambdaLR performs one scheduler step during construction. Therefore a
+    # resumed run must start from resume_step - 1 so the first training update
+    # uses lr_lambda(resume_step), not lr_lambda(0) or lr_lambda(resume_step + 1).
+    scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lr_lambda,
+        last_epoch=(resume_global_step - 1 if resume_global_step is not None else -1),
+    )
+    logger.info(
+        "Scheduler: global_step=%s, stop_target=%s, schedule_horizon=%s, lr=%.3e",
+        resume_global_step or 0, steps, schedule_horizon, scheduler.get_last_lr()[0],
+    )
     # Autocast keeps softmax/layernorm in fp32 for numerical stability
     # even when params are fp16. GradScaler requires fp32 grads (from fp32
     # params) to unscale; skip it for fp16/bf16 params where it crashes.
@@ -215,27 +253,8 @@ def train(
     use_scaler = use_autocast and first_dtype == torch.float32
     scaler = torch.amp.GradScaler("cuda") if use_scaler else None
 
-    # Restore optimizer/scheduler/scaler state from checkpoint if available.
-    # Without this, every resume restarts the LR schedule from step 0 and
-    # discards AdamW momentum — causing the loss spike at step 12850+.
-    _out = Path(output_dir)
-    _resume_dir = _out / "latest" if (_out / "latest").exists() else _out
-    if resume and resume_step and resume_step > 0:
-        opt_path = _resume_dir / "optimizer.pt"
-        sched_path = _resume_dir / "scheduler.pt"
+    if resume_global_step is not None:
         sc_path = _resume_dir / "scaler.pt"
-        if opt_path.exists():
-            try:
-                optimizer.load_state_dict(torch.load(opt_path, map_location=device, weights_only=True))
-                logger.info(f"Restored optimizer state from {opt_path.name}")
-            except Exception as e:
-                logger.warning(f"Could not load optimizer state: {e} — starting fresh")
-        if sched_path.exists():
-            try:
-                scheduler.load_state_dict(torch.load(sched_path, map_location=device, weights_only=True))
-                logger.info(f"Restored scheduler state from {sched_path.name}")
-            except Exception as e:
-                logger.warning(f"Could not load scheduler state: {e} — starting fresh")
         if sc_path.exists() and scaler is not None:
             try:
                 scaler.load_state_dict(torch.load(sc_path, map_location=device, weights_only=True))
@@ -398,6 +417,7 @@ def main():
     ap.add_argument("--batch-size", type=int, default=1)
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--warmup", type=int, default=50)
+    ap.add_argument("--schedule-steps", type=int, default=None, help="Cosine-schedule horizon. Defaults to --steps. For resumable runs, set this to the final planned step so short sessions do not compress or distort the schedule.")
     ap.add_argument("--grad-accum", type=int, default=1, help="Micro-batches per optimizer step. Keep low on Colab to limit wall-clock per step.")
     ap.add_argument("--max-samples", type=int, default=1_000_000)
     ap.add_argument("--max-seq-length", type=int, default=1536, help="Max token length for prompt+target. Must be >= 1280 + text for 5-tile 768px images.")
@@ -477,7 +497,8 @@ def main():
           save_every=args.save_every, log_every=args.log_every,
           save_latest_every=args.save_latest_every,
           max_seq_length=args.max_seq_length, resume=not args.no_resume,
-          resume_step=resume_step, num_workers=args.num_workers)
+          resume_step=resume_step, resume_ckpt=resume_ckpt,
+          schedule_steps=args.schedule_steps, num_workers=args.num_workers)
 
 
 def _find_resume_checkpoint(out: Path) -> Path | None:

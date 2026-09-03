@@ -278,6 +278,7 @@ def main():
     ap.add_argument("--grad-accum", type=int, default=1)
     ap.add_argument("--warmup", type=int, default=500)
     ap.add_argument("--lr", type=float, default=1e-4)
+    ap.add_argument("--schedule-steps", type=int, default=None, help="Cosine-schedule horizon passed to full_train.py. Defaults to --steps when omitted.")
     ap.add_argument("--max-seq-length", type=int, default=1536)
     ap.add_argument("--save-every", type=int, default=500)
     ap.add_argument("--save-latest-every", type=int, default=50)
@@ -580,6 +581,7 @@ def main():
                       "--grad-accum", str(per_rank_accum),
                       "--warmup", str(args.warmup),
                       "--lr", str(args.lr),
+                      *(["--schedule-steps", str(args.schedule_steps)] if args.schedule_steps else []),
                       "--max-seq-length", str(args.max_seq_length),
                       "--save-every", str(args.save_every),
                       "--save-latest-every", str(args.save_latest_every),
