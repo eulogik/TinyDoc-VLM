@@ -538,14 +538,14 @@ def main():
     train_log = LOG_DIR / "full_train.log"
     # Memory plan: fp32 master weights (NaN fix) + fp16 autocast needs
     # grad-checkpointing to fit the 14.5 GiB T4 with 5-tile 768px pages
-    # (Colab's proven recipe). If that fails (OOM/SIGSEGV), fall back to
-    # batch-2 without grad-checkpointing, then batch-1, so the kernel
-    # always keeps training (every failure returns nonzero -> retry here).
+    # (Colab's proven recipe). If that fails (OOM/SIGSEGV), shrink the batch
+    # FIRST while keeping grad-checkpointing: batch-1 without grad-ckpt uses
+    # MORE activation memory than batch-2 with it (proven by the step-8500
+    # OOM: the no-grad-ckpt fallback died instantly where grad-ckpt ran 500
+    # steps). Only drop grad-ckpt as a last resort.
     attempts = [
         {"grad_ckpt": True, "batch": args.batch_size, "ddp": use_ddp},
-        {"grad_ckpt": False,
-         "batch": (args.batch_size if not use_ddp else max(1, args.batch_size // 2)),
-         "ddp": use_ddp},
+        {"grad_ckpt": True, "batch": 1, "ddp": False},
         {"grad_ckpt": False, "batch": 1, "ddp": False},
     ]
     rc = None
