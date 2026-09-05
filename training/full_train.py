@@ -366,7 +366,13 @@ def train(
                 step += 1
 
                 if step % log_every == 0:
-                    avg = running_loss / log_every
+                    # running_loss sums one raw microbatch loss per microbatch;
+                    # each optimizer step contains grad_accum microbatches, so
+                    # divide by both to report the true mean microbatch loss.
+                    # (Without the grad_accum term the logged loss falsely
+                    # scales with grad_accum and is not comparable across
+                    # configs — this misread caused the step-12850 false alarm.)
+                    avg = running_loss / (log_every * grad_accum)
                     logger.info(f"Step {step}/{steps} | loss={avg:.4f} | "
                                 f"{step / (time.time() - start):.1f} steps/s")
                     running_loss = 0.0
