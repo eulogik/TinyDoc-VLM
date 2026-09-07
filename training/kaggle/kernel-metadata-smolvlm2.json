@@ -1,0 +1,21 @@
+{
+  "id": "eulogikdevelopers/smolvlm2-tinydoc-qlora",
+  "title": "SmolVLM2 TinyDoc QLoRA",
+  "code_file": "kaggle_smolvlm2.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "enable_internet": true,
+  "competition_sources": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "model_sources": [],
+  "secrets": [
+    {
+      "name": "HF_TOKEN",
+      "source": "Secrets"
+    }
+  ]
+}
