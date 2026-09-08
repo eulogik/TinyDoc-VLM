@@ -181,6 +181,8 @@ def main():
         save_total_limit=3,
         bf16=True,
         optim="adamw_torch_fused",
+        loss_type="nll",  # TRL>=0.15 defaults to chunked_nll, whose forward-patch
+                          # crashes on SmolVLM2 (lm_head.forward is a partial)
         dataset_text_field="messages",  # TRL applies chat template + masks user turns
         max_length=2560,  # SmolVLM2 tiles docs to ~17 crops; rows run 1600-2400 toks
         push_to_hub=False,
