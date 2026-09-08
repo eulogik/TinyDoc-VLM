@@ -14,7 +14,7 @@ Data bundle (built on Mac, uploaded to HF dataset repo):
 Dataset format for TRL: {messages: [{role, content:[{type:image},{type:text}]}], images: [PIL]}
 
 Usage (Kaggle T4 16GB):
-    pip install -U transformers trl peft bitsandbytes pillow
+    pip install -U transformers trl peft bitsandbytes pillow num2words
     HF_TOKEN=... DATA_REPO=eulogik/TinyDoc-VLM-real-data \
       python training/smolvlm2_qlora.py --max-steps 3000 --output hub
 
