@@ -153,17 +153,16 @@ def main():
     except Exception as e:
         logger.warning("grad-ckpt not enabled: %s", e)
 
-    from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-    model = prepare_model_for_kbit_training(model)
+    from peft import LoraConfig
+    # NOTE: do NOT call get_peft_model here — SFTTrainer applies peft_config
+    # itself and raises if handed an already-wrapped PeftModel.
     peft_cfg = LoraConfig(
         r=args.lora_r, lora_alpha=args.lora_r * 2, lora_dropout=0.05,
         target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                         "gate_proj", "up_proj", "down_proj"],
         task_type="CAUSAL_LM",
     )
-    model = get_peft_model(model, peft_cfg)
-    model.print_trainable_parameters()
-
+    logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
     from trl import SFTConfig, SFTTrainer
     sft_args = SFTConfig(
         output_dir=args.output_dir,
@@ -173,7 +172,7 @@ def main():
         gradient_checkpointing=True,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.03,
+        warmup_steps=90,
         logging_steps=25,
         eval_strategy="steps",
         eval_steps=args.eval_every,
@@ -183,19 +182,20 @@ def main():
         bf16=True,
         optim="adamw_torch_fused",
         dataset_text_field="messages",  # TRL applies chat template + masks user turns
-        max_length=2048,
+        max_length=2560,  # SmolVLM2 tiles docs to ~17 crops; rows run 1600-2400 toks
         push_to_hub=False,
         report_to="none",
         seed=SEED,
     )
     trainer = SFTTrainer(
-        model=model,
+        model=model,  # base (quantized) model; TRL applies peft_config itself
         args=sft_args,
         train_dataset=train_ds,
         eval_dataset=eval_ds,
         processing_class=processor,
         peft_config=peft_cfg,
     )
+    trainer.model.print_trainable_parameters()
     logger.info("Starting SFT: max_steps=%d eff_batch=%d", args.max_steps,
                 args.batch * args.accum)
     t0 = time.time()
