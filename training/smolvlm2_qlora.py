@@ -156,10 +156,14 @@ def main():
     from peft import LoraConfig
     # NOTE: do NOT call get_peft_model here — SFTTrainer applies peft_config
     # itself and raises if handed an already-wrapped PeftModel.
+    #
+    # IMPORTANT: LoRA must target only the text decoder, NOT the vision encoder.
+    # Wrapping the vision encoder causes a dtype mismatch (float32 vs bfloat16)
+    # in SmolVLM2's inputs_merger.  The regex below matches decoder layers
+    # only (text_model.*, not vision_model.*).
     peft_cfg = LoraConfig(
         r=args.lora_r, lora_alpha=args.lora_r * 2, lora_dropout=0.05,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                        "gate_proj", "up_proj", "down_proj"],
+        target_modules=r"(?!.*vision_model).*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)$",
         task_type="CAUSAL_LM",
     )
     logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
