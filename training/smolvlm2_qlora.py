@@ -138,15 +138,18 @@ def main():
     train_ds = Dataset.from_generator(lambda: gen(train_rows))
     eval_ds = Dataset.from_generator(lambda: gen(eval_rows))
 
-    from transformers import AutoProcessor, AutoModelForImageTextToText, BitsAndBytesConfig
+    from transformers import AutoProcessor, AutoModelForImageTextToText
 
     processor = AutoProcessor.from_pretrained(MODEL_ID, trust_remote_code=True)
-    bnb = BitsAndBytesConfig(load_in_4bit=True,
-                             bnb_4bit_quant_type="nf4",
-                             bnb_4bit_compute_dtype=torch.bfloat16)
+
+    # Load model in bfloat16 directly (no 4-bit quantization).
+    # SmolVLM2-2.2B is 4.4 GB in bf16, fits on T4 15 GB with LoRA + grad-ckpt.
+    # BitsAndBytes + device_map="auto" causes a dtype mismatch in the vision
+    # encoder (float32 vs bfloat16 in inputs_merger) because accelerate's hooks
+    # convert the encoder to fp32.  The official HuggingFace tutorial loads
+    # SmolVLM2 without quantization for LoRA fine-tuning.
     model = AutoModelForImageTextToText.from_pretrained(
-        MODEL_ID, quantization_config=bnb, torch_dtype=torch.bfloat16,
-        device_map="auto", trust_remote_code=True)
+        MODEL_ID, torch_dtype=torch.bfloat16, trust_remote_code=True)
     model.config.use_cache = False
     try:
         model.gradient_checkpointing_enable()
@@ -154,16 +157,10 @@ def main():
         logger.warning("grad-ckpt not enabled: %s", e)
 
     from peft import LoraConfig
-    # NOTE: do NOT call get_peft_model here — SFTTrainer applies peft_config
-    # itself and raises if handed an already-wrapped PeftModel.
-    #
-    # IMPORTANT: LoRA must target only the text decoder, NOT the vision encoder.
-    # Wrapping the vision encoder causes a dtype mismatch (float32 vs bfloat16)
-    # in SmolVLM2's inputs_merger.  The regex below matches decoder layers
-    # only (text_model.*, not vision_model.*).
     peft_cfg = LoraConfig(
         r=args.lora_r, lora_alpha=args.lora_r * 2, lora_dropout=0.05,
-        target_modules=r"(?!.*vision_model).*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)$",
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
+                        "gate_proj", "up_proj", "down_proj"],
         task_type="CAUSAL_LM",
     )
     logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
