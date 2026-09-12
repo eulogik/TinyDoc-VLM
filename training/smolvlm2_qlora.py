@@ -35,7 +35,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-MODEL_ID = "HuggingFaceTB/SmolVLM2-2.2B-Instruct"
+MODEL_ID = "HuggingFaceTB/SmolVLM2-2.2B-Instruct"  # fallback only
 MAX_TARGET_CHARS = 1500  # drop pathological long targets (table-JSON dumps)
 EVAL_SPLIT = 500
 SEED = 42
@@ -105,7 +105,11 @@ def main():
     ap.add_argument("--eval-every", type=int, default=250)
     ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
+    ap.add_argument("--model-path", default=None,
+                    help="Local path to SmolVLM2 model (Kaggle dataset). "
+                         "If None, downloads from HuggingFace Hub.")
     args = ap.parse_args()
+    model_path = args.model_path or MODEL_ID
 
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
@@ -140,7 +144,8 @@ def main():
 
     from transformers import AutoProcessor, AutoModelForImageTextToText
 
-    processor = AutoProcessor.from_pretrained(MODEL_ID, trust_remote_code=True)
+    logger.info("Loading model from: %s", model_path)
+    processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
 
     # Load model in bfloat16 directly (no 4-bit quantization).
     # SmolVLM2-2.2B is 4.4 GB in bf16, fits on T4 15 GB with LoRA + grad-ckpt.
@@ -149,7 +154,7 @@ def main():
     # convert the encoder to fp32.  The official HuggingFace tutorial loads
     # SmolVLM2 without quantization for LoRA fine-tuning.
     model = AutoModelForImageTextToText.from_pretrained(
-        MODEL_ID, torch_dtype=torch.bfloat16, trust_remote_code=True)
+        model_path, torch_dtype=torch.bfloat16, trust_remote_code=True)
     model.config.use_cache = False
     try:
         model.gradient_checkpointing_enable()
