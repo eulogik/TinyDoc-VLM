@@ -143,9 +143,12 @@ def main():
     eval_ds = Dataset.from_generator(lambda: gen(eval_rows))
 
     from transformers import AutoProcessor, AutoModelForImageTextToText
+    import os as _os
 
     logger.info("Loading model from: %s", model_path)
-    processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+    _local = _os.path.isdir(model_path)
+    _hf_kwargs = dict(local_files_only=_local, trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained(model_path, **_hf_kwargs)
 
     # Load model in bfloat16 directly (no 4-bit quantization).
     # SmolVLM2-2.2B is 4.4 GB in bf16, fits on T4 15 GB with LoRA + grad-ckpt.
@@ -154,7 +157,7 @@ def main():
     # convert the encoder to fp32.  The official HuggingFace tutorial loads
     # SmolVLM2 without quantization for LoRA fine-tuning.
     model = AutoModelForImageTextToText.from_pretrained(
-        model_path, torch_dtype=torch.bfloat16, trust_remote_code=True)
+        model_path, torch_dtype=torch.bfloat16, **_hf_kwargs)
     model.config.use_cache = False
     try:
         model.gradient_checkpointing_enable()
