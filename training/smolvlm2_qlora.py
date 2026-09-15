@@ -18,7 +18,7 @@ Usage (Kaggle T4 16GB):
     HF_TOKEN=... DATA_REPO=eulogik/TinyDoc-VLM-real-data \
       python training/smolvlm2_qlora.py --max-steps 3000 --output hub
 
-Memory: 4-bit NF4 base (~1.4GB) + LoRA r16 + grad-ckpt + batch2/accum8 fits T4.
+Memory: fp16 base (~4.4GB) on ONE T4 + LoRA r16 + grad-ckpt + batch2/accum8 fits 15GB.
 Time: ~2.9k steps/epoch, ~4-7s/step -> 4-6h for 1 epoch. Fits one Kaggle session.
 """
 
@@ -150,14 +150,18 @@ def main():
     _hf_kwargs = dict(local_files_only=_local, trust_remote_code=True)
     processor = AutoProcessor.from_pretrained(model_path, **_hf_kwargs)
 
-    # Load model in bfloat16 directly (no 4-bit quantization).
-    # SmolVLM2-2.2B is 4.4 GB in bf16, fits on T4 15 GB with LoRA + grad-ckpt.
+    # Load model in float16 directly (no 4-bit quantization).
+    # SmolVLM2-2.2B is 4.4 GB in fp16, fits on one T4 15 GB with LoRA + grad-ckpt.
+    # fp16 (not bf16): T4 is Turing (sm_75) with no bfloat16 support.
     # BitsAndBytes + device_map="auto" causes a dtype mismatch in the vision
     # encoder (float32 vs bfloat16 in inputs_merger) because accelerate's hooks
     # convert the encoder to fp32.  The official HuggingFace tutorial loads
     # SmolVLM2 without quantization for LoRA fine-tuning.
+    # Single GPU only: Trainer wraps multi-GPU models in DataParallel, which is
+    # broken with PEFT (replica has no fp params -> StopIteration in self.dtype).
+    # The notebook forces CUDA_VISIBLE_DEVICES=0.
     model = AutoModelForImageTextToText.from_pretrained(
-        model_path, torch_dtype=torch.bfloat16, **_hf_kwargs)
+        model_path, torch_dtype=torch.float16, **_hf_kwargs)
     model.config.use_cache = False
     try:
         model.gradient_checkpointing_enable()
@@ -188,7 +192,7 @@ def main():
         save_strategy="steps",
         save_steps=args.eval_every,
         save_total_limit=3,
-        bf16=True,
+        fp16=True,  # T4 (Turing) has no bfloat16 support; use fp16, not bf16
         optim="adamw_torch_fused",
         loss_type="nll",  # TRL>=0.15 defaults to chunked_nll, whose forward-patch
                           # crashes on SmolVLM2 (lm_head.forward is a partial)
