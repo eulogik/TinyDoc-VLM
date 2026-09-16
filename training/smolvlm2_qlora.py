@@ -181,6 +181,7 @@ def main():
         output_dir=args.output_dir,
         max_steps=args.max_steps,
         per_device_train_batch_size=args.batch,
+        per_device_eval_batch_size=1,  # eval OOM'd at batch 2; logits need 2.5 GiB
         gradient_accumulation_steps=args.accum,
         gradient_checkpointing=True,
         learning_rate=args.lr,
