@@ -102,12 +102,16 @@ def main():
     ap.add_argument("--accum", type=int, default=8)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--lora-r", type=int, default=16)
-    ap.add_argument("--eval-every", type=int, default=250)
+    ap.add_argument("--eval-every", type=int, default=100)
     ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
     ap.add_argument("--model-path", default=None,
                     help="Local path to SmolVLM2 model (Kaggle dataset). "
                          "If None, downloads from HuggingFace Hub.")
+    ap.add_argument("--resume", action="store_true", default=True,
+                    help="Auto-resume from latest checkpoint in output_dir")
+    ap.add_argument("--no-resume", dest="resume", action="store_false",
+                    help="Start fresh, ignore existing checkpoints")
     args = ap.parse_args()
     model_path = args.model_path or MODEL_ID
 
@@ -177,6 +181,32 @@ def main():
     )
     logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
     from trl import SFTConfig, SFTTrainer
+
+    # --- Hub push callback: push adapter to hub after each save ---
+    class HubPushCallback:
+        """Push adapter to hub after each checkpoint save."""
+        def __init__(self, hub_id, token, processor):
+            self.hub_id = hub_id
+            self.token = token
+            self.processor = processor
+            self.api = None
+
+        def on_save(self, args, state, control, **kwargs):
+            if self.api is None:
+                from huggingface_hub import HfApi
+                self.api = HfApi(token=self.token)
+            checkpoint_dir = Path(args.output_dir) / f"checkpoint-{state.global_step}"
+            if checkpoint_dir.exists():
+                # Push adapter only (not full model) to keep repo small
+                self.api.create_repo(self.hub_id, exist_ok=True)
+                # Upload the checkpoint folder
+                self.api.upload_folder(
+                    repo_id=self.hub_id,
+                    folder_path=str(checkpoint_dir),
+                    path_in_repo=f"checkpoint-{state.global_step}",
+                )
+                logger.info("Checkpoint-%d pushed to %s", state.global_step, self.hub_id)
+
     sft_args = SFTConfig(
         output_dir=args.output_dir,
         max_steps=args.max_steps,
@@ -210,12 +240,24 @@ def main():
         eval_dataset=eval_ds,
         processing_class=processor,
         peft_config=peft_cfg,
+        callbacks=[HubPushCallback(args.hub_id, token, processor)],
     )
     trainer.model.print_trainable_parameters()
+
+    # --- Resume from latest checkpoint ---
+    resume_checkpoint = None
+    if args.resume:
+        output_dir = Path(args.output_dir)
+        checkpoints = sorted(output_dir.glob("checkpoint-*"),
+                             key=lambda p: int(p.name.split("-")[-1]))
+        if checkpoints:
+            resume_checkpoint = str(checkpoints[-1])
+            logger.info("Resuming from %s", resume_checkpoint)
+
     logger.info("Starting SFT: max_steps=%d eff_batch=%d", args.max_steps,
                 args.batch * args.accum)
     t0 = time.time()
-    trainer.train()
+    trainer.train(resume_from_checkpoint=resume_checkpoint)
     logger.info("Train done in %.1fh", (time.time() - t0) / 3600)
 
     adapter_dir = Path(args.output_dir) / "adapter_final"
