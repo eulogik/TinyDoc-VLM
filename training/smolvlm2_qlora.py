@@ -181,9 +181,10 @@ def main():
     )
     logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
     from trl import SFTConfig, SFTTrainer
+    from transformers.trainer_callback import TrainerCallback
 
     # --- Hub push callback: push adapter to hub after each save ---
-    class HubPushCallback:
+    class HubPushCallback(TrainerCallback):
         """Push adapter to hub after each checkpoint save."""
         def __init__(self, hub_id, token, processor):
             self.hub_id = hub_id
