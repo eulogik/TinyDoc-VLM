@@ -193,20 +193,21 @@ def main():
             self.api = None
 
         def on_save(self, args, state, control, **kwargs):
-            if self.api is None:
-                from huggingface_hub import HfApi
-                self.api = HfApi(token=self.token)
-            checkpoint_dir = Path(args.output_dir) / f"checkpoint-{state.global_step}"
-            if checkpoint_dir.exists():
-                # Push adapter only (not full model) to keep repo small
-                self.api.create_repo(self.hub_id, exist_ok=True)
-                # Upload the checkpoint folder
-                self.api.upload_folder(
-                    repo_id=self.hub_id,
-                    folder_path=str(checkpoint_dir),
-                    path_in_repo=f"checkpoint-{state.global_step}",
-                )
-                logger.info("Checkpoint-%d pushed to %s", state.global_step, self.hub_id)
+            try:
+                if self.api is None:
+                    from huggingface_hub import HfApi
+                    self.api = HfApi(token=self.token)
+                checkpoint_dir = Path(args.output_dir) / f"checkpoint-{state.global_step}"
+                if checkpoint_dir.exists():
+                    self.api.create_repo(self.hub_id, exist_ok=True)
+                    self.api.upload_folder(
+                        repo_id=self.hub_id,
+                        folder_path=str(checkpoint_dir),
+                        path_in_repo=f"checkpoint-{state.global_step}",
+                    )
+                    logger.info("Checkpoint-%d pushed to %s", state.global_step, self.hub_id)
+            except Exception as e:
+                logger.warning("Hub push for checkpoint-%d failed (non-fatal): %s", state.global_step, e)
 
     sft_args = SFTConfig(
         output_dir=args.output_dir,
