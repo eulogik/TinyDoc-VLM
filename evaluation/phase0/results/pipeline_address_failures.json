@@ -1,0 +1,254 @@
+[
+  {
+    "id": "img_000423",
+    "image_path": "data/training/datasets/sroie/images/img_000423.jpg",
+    "pred": "12, JALAN TAMPOI 7, JALAN PERINDUSTRIAN TAMPOI 81200 TAMPOI BAHI,JOHOR",
+    "gold": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
+    "anls": 0.8082191780821918,
+    "pred_len": 70,
+    "gold_len": 73
+  },
+  {
+    "id": "img_000508",
+    "image_path": "data/training/datasets/sroie/images/img_000508.jpg",
+    "pred": "NO. 17-B, JALAN SETIA INDAH (X) U13/X, SETIA ALAM, SEKSYEN U13, 40170 SHAH ALAM,",
+    "gold": "NO. 17-G, JALAN SETIA INDAH (X) U13/X, SETIA ALAM, SEKSYEN U13, 40170 SHAH ALAM,",
+    "anls": 0.9875,
+    "pred_len": 80,
+    "gold_len": 80
+  },
+  {
+    "id": "img_000244",
+    "image_path": "data/training/datasets/sroie/images/img_000244.jpg",
+    "pred": "LOT NO. 623, LOT PT244, PUSAT BANDAR KELANA JAYA, TEL NO: 03 - 7803 0974",
+    "gold": "LOT NO. G23, GIANT KELANA JAYA LOT PT244, JLN PERBANDARAN SS6/4 PUSAT BANDAR KELANA JAYA, PETALING",
+    "anls": 0.0,
+    "pred_len": 72,
+    "gold_len": 98
+  },
+  {
+    "id": "img_000239",
+    "image_path": "data/training/datasets/sroie/images/img_000239.jpg",
+    "pred": "No.49, Jalan Binar G U3/9, Subang Perdana, 40150 Shah Alam, Selangor D.E.",
+    "gold": "NO.49, JALAN DINAR G U3/G, SUBANG PERDANA, 40150 SHAH ALAM, SELANGOR D.E.",
+    "anls": 0.9726027397260274,
+    "pred_len": 73,
+    "gold_len": 73
+  },
+  {
+    "id": "img_000234",
+    "image_path": "data/training/datasets/sroie/images/img_000234.jpg",
+    "pred": "AN SS4C/5,PETALING JAYA ANGOR DARUL EHSAN",
+    "gold": "NO.12, JALAN SS4C/5,PETALING JAYA SELANGOR DARUL EHSAN",
+    "anls": 0.7592592592592593,
+    "pred_len": 41,
+    "gold_len": 54
+  },
+  {
+    "id": "img_000308",
+    "image_path": "data/training/datasets/sroie/images/img_000308.jpg",
+    "pred": "DOMINO'S PIZZA PERMAS JAYA No.12, Jalan Permas Jays 10, Bandar Baru Permas Jaya, 4750 Massi Johor",
+    "gold": "DOMINO'S PIZZA PERMAS JAYA NO.12, JALAN PERMAS JAYA 10, BANDAR BARU PERMAS JAYA, 81750 MASAI JOHOR",
+    "anls": 0.9591836734693877,
+    "pred_len": 97,
+    "gold_len": 98
+  },
+  {
+    "id": "img_000131",
+    "image_path": "data/training/datasets/sroie/images/img_000131.jpg",
+    "pred": "NO 31G, JALAN SEPADU C 25/C, SECTION 25, TAMAN INDUSTRIES, AXIS 40400 SHAH ALAM, SELANGOR.",
+    "gold": "NO 31G, JALAN SEPADU C 25/C, SECTION 25, TAMAN INDUSTRIES, AXIS 40400 SHAH ALAM, SELANGIR.",
+    "anls": 0.9888888888888889,
+    "pred_len": 90,
+    "gold_len": 90
+  },
+  {
+    "id": "img_000580",
+    "image_path": "data/training/datasets/sroie/images/img_000580.jpg",
+    "pred": "Henara Dion #02-03, Level 2, 27, Jalan Sultan Ismail, 50250 Kuala Lumpur.",
+    "gold": "MENARA DION #02-03, LEVEL 2, 27, JALAN SULTAN ISMAIL, 50250 KUALA LUMPUR.",
+    "anls": 0.9863013698630136,
+    "pred_len": 73,
+    "gold_len": 73
+  },
+  {
+    "id": "img_000087",
+    "image_path": "data/training/datasets/sroie/images/img_000087.jpg",
+    "pred": "NO. 42, JALAN PBS 19/11, TAMAN PERINDUSTRIAN BUKIT SERDANG, 43300 SERI KEMBANGAN, SELANGOR",
+    "gold": "NO. 42, JALAN PBS 14/11, TAMAN PERINDUSTRIAN BUKIT SERDANG, 43300 SERI KEMBANGAN, SELANGOR",
+    "anls": 0.9888888888888889,
+    "pred_len": 90,
+    "gold_len": 90
+  },
+  {
+    "id": "img_000768",
+    "image_path": "data/training/datasets/sroie/images/img_000768.jpg",
+    "pred": "NO 2. JALAN BULAN BM U5/BM, SLAYSYEN U5, 40150 SHAH ALAM, SELANGOR",
+    "gold": "NO 2, JALAN BULAN BM U5/BM, SEKSYEN U5, 40150 SHAH ALAM, SELANGOR",
+    "anls": 0.9393939393939394,
+    "pred_len": 66,
+    "gold_len": 65
+  },
+  {
+    "id": "img_000657",
+    "image_path": "data/training/datasets/sroie/images/img_000657.jpg",
+    "pred": "13, JLN IASIK UTAMA 8 MEDAN NIAGA DAMAI SG BESI 57000 KL",
+    "gold": "13, JLN TASIK UTAMA 8 MEDAN NIAGA DAMAI SG BESI",
+    "anls": 0.8214285714285714,
+    "pred_len": 56,
+    "gold_len": 47
+  },
+  {
+    "id": "img_000807",
+    "image_path": "data/training/datasets/sroie/images/img_000807.jpg",
+    "pred": "No 148,16 Jalan Permas 4/3 Bandar Baru Permas Jaya",
+    "gold": "NO 14& 16 JALAN PERMAS 4/3 BANDAR BARU PERMAS JAY",
+    "anls": 0.94,
+    "pred_len": 50,
+    "gold_len": 49
+  },
+  {
+    "id": "img_000805",
+    "image_path": "data/training/datasets/sroie/images/img_000805.jpg",
+    "pred": "380 FLR, AEON TAMAN MALLURI SC JLN JEJUAN, TAMAN MALLURI CHERAS, 55100 KUALA LUMPUR",
+    "gold": "3RD FLR, AEON TAMAN MALURI SC JLN JEJAKA, TAMAN MALURI CHERAS, 55100 KUALA LUMPUR",
+    "anls": 0.9156626506024097,
+    "pred_len": 83,
+    "gold_len": 81
+  },
+  {
+    "id": "img_000402",
+    "image_path": "data/training/datasets/sroie/images/img_000402.jpg",
+    "pred": "LOT NO2, JALAN UTARID U5/13, SEKSYEN U5, 40150 SHAH ALAM, SELANGOR DARUL EHSAN, MALAYSIA",
+    "gold": "LOT NO2, JALAN UTARID U5/13, SEKSYEN U5, 40150 SNAH ALAM, SELANGOR DARUL EHSAN, MALAYSIA",
+    "anls": 0.9886363636363636,
+    "pred_len": 88,
+    "gold_len": 88
+  },
+  {
+    "id": "img_000796",
+    "image_path": "data/training/datasets/sroie/images/img_000796.jpg",
+    "pred": "44 JALAN SS21/58 DAMAI ISARA UTAMA 47400 PETALING JAYA",
+    "gold": "44 JALAN SS21/58 DAMANSARA UTAMA 47400 PETALING JAYA",
+    "anls": 0.9444444444444444,
+    "pred_len": 54,
+    "gold_len": 52
+  },
+  {
+    "id": "img_000270",
+    "image_path": "data/training/datasets/sroie/images/img_000270.jpg",
+    "pred": "No. 9-9, Jalan Dinar D U3/D Taman Subang Perdana, Sek.U3, 40150 Shah Alam, Selangor D.E.",
+    "gold": "NO. 9-G, JALAN DINAR D U3/D TAMAN SUBANG PERDANA, SEK,U3, 40150 SHAH ALAM,SELANGOR D.E.",
+    "anls": 0.9659090909090909,
+    "pred_len": 88,
+    "gold_len": 87
+  },
+  {
+    "id": "img_000432",
+    "image_path": "data/training/datasets/sroie/images/img_000432.jpg",
+    "pred": "NO. 89&91, JALAN UTAMA, TAMAN MUTIA RINI, 81300 SKUDAL, JOHOR.",
+    "gold": "NO. 89&91, JALAN UTAMA, TAMAN MUTIA RINI, 81300 SKUDAI, JOHOR.",
+    "anls": 0.9838709677419355,
+    "pred_len": 62,
+    "gold_len": 62
+  },
+  {
+    "id": "img_000421",
+    "image_path": "data/training/datasets/sroie/images/img_000421.jpg",
+    "pred": "Bik 2, Unit G1 & G2, Bestari Terrace, Lot PTD 182305 & PTD 143218, Jalan Danga, Taman Nusa Bestari, 81300",
+    "gold": "BLK 2, UNIT G1 & G2, BESTARI TERRACE, LOT PTD 182908 & PTD 143216, JALAN DANGA, TAMAN NUSA BESTARI, 81300",
+    "anls": 0.9619047619047619,
+    "pred_len": 105,
+    "gold_len": 105
+  },
+  {
+    "id": "img_000666",
+    "image_path": "data/training/datasets/sroie/images/img_000666.jpg",
+    "pred": "NO.7-1, JALAN PUTERI 7/11, BANDAR PUTERI, 47100 PUCHONG, SELANGOR",
+    "gold": "NO.7-1, JALAN PUTERI 7/11, BANDAR PUTERI, 47100 PUCHONG, BELANGOR",
+    "anls": 0.9846153846153847,
+    "pred_len": 65,
+    "gold_len": 65
+  },
+  {
+    "id": "img_000247",
+    "image_path": "data/training/datasets/sroie/images/img_000247.jpg",
+    "pred": "19, JALAN IANCIL, OFF JALAN PUDU, 55100 KUALA LUMPUR MALAYSIA",
+    "gold": "19, JALAN KANCIL, OFF JALAN PUDU, 55100 KUALA LUMPUR MALAYSIA",
+    "anls": 0.9836065573770492,
+    "pred_len": 61,
+    "gold_len": 61
+  },
+  {
+    "id": "img_000288",
+    "image_path": "data/training/datasets/sroie/images/img_000288.jpg",
+    "pred": "LOT G29 & G30, AEON MALL TERRAU CITY, NO. 1, JALAN DESA TERRAU, TAMAN DESA TERRAU, 81100 JOHOR BAHRU.",
+    "gold": "LOT G29 & G30, AEON MALL TEBRAU CITY, NO. 1, JALAN DESA TEBRAU, TAMAN DESA TEBRAU, 81100 JOHOR BAHRU.",
+    "anls": 0.9702970297029703,
+    "pred_len": 101,
+    "gold_len": 101
+  },
+  {
+    "id": "img_000814",
+    "image_path": "data/training/datasets/sroie/images/img_000814.jpg",
+    "pred": "No 16A, Jalan Astaka U8/83, Bukit Jelutong, 40150 Shah Alam, Selangor, DE.",
+    "gold": "NO 16A, JALAN ASTAKA U8/83, BUKIT JELUTONG, 40150 SHAH ALAM, SELANGOR, D.E.",
+    "anls": 0.9866666666666667,
+    "pred_len": 74,
+    "gold_len": 75
+  },
+  {
+    "id": "img_000621",
+    "image_path": "data/training/datasets/sroie/images/img_000621.jpg",
+    "pred": "NO 2 & 4, JALAN BAYU 4, BANDAR SERI ALAM, 81750 MASAI, JOHOR",
+    "gold": "NO 2 & 4, JALAN BAYU 4, BANDAR SERI ALAM, B1750 MASAI, JOHOR",
+    "anls": 0.9833333333333333,
+    "pred_len": 60,
+    "gold_len": 60
+  },
+  {
+    "id": "img_000735",
+    "image_path": "data/training/datasets/sroie/images/img_000735.jpg",
+    "pred": "NO.10-G, GROUND FLOOR. JALAN DINAR D. U3/D, TAMAN SUBANG PERDANA. SEK U3. 40150 SHAH ALAM, SELANGOR.",
+    "gold": "NO. 10-G, GROUND FLOOR. JALAN DINAR D, U3/D. TAMAN SUBANG PEADANA. SEK U3. 40150 SHAH ALAM, SELANGOR.",
+    "anls": 0.9603960396039604,
+    "pred_len": 100,
+    "gold_len": 101
+  },
+  {
+    "id": "img_000181",
+    "image_path": "data/training/datasets/sroie/images/img_000181.jpg",
+    "pred": "NO. 15 JLN TSJ2,TMN SUBANG JASA. OFF JLN BT 3 SUBANG, 46000 SHAH ALAM, SEL.",
+    "gold": "NO. 15. JLN TSJ2,TMN SUBANG JASA, OFF JLN BT 3 SUBANG. 40000 SHAH ALAM. SEL.",
+    "anls": 0.9342105263157895,
+    "pred_len": 75,
+    "gold_len": 76
+  },
+  {
+    "id": "img_000325",
+    "image_path": "data/training/datasets/sroie/images/img_000325.jpg",
+    "pred": "B-8, JALAN SG15/4D, 47500 SUBANG JAYA, SELANGOR",
+    "gold": "B-8, JALAN SS15/4D, 47500 SUBANG JAYA, SELANGOR",
+    "anls": 0.9787234042553191,
+    "pred_len": 47,
+    "gold_len": 47
+  },
+  {
+    "id": "img_000784",
+    "image_path": "data/training/datasets/sroie/images/img_000784.jpg",
+    "pred": "LOT F15, GIANT BANDAR PUTERI JALAN PUTERI 1/1, BDR PUTERI 47160 PUCHONG, SELANGOR",
+    "gold": "LOT F15, GIANT BANDAR PUTERI JALAN PUTERI 1/1, BDR PUTERI 47100 PUCHONG, SELANGOR",
+    "anls": 0.9876543209876543,
+    "pred_len": 81,
+    "gold_len": 81
+  },
+  {
+    "id": "img_000635",
+    "image_path": "data/training/datasets/sroie/images/img_000635.jpg",
+    "pred": "NO. 83, JALAN BEKAS, 52000 KUALA LUMPUR, SELANGOR DARUL MA'ARIF",
+    "gold": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+    "anls": 0.609375,
+    "pred_len": 63,
+    "gold_len": 64
+  }
+]

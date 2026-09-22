@@ -1,119 +1,78 @@
-# 📄 TinyDoc — AI Document Understanding in 3 Lines of Code
+# TinyDoc — local-first grounded document extraction
 
-> **Extract answers, tables, and structured data from any document image.**
+**Status (2026-09-22):** Phase 1 product spine. Free `ollama:qwen2.5vl:3b` engine · field F1 **0.870** (n=100 SROIE holdout, full `ReceiptPipeline` e2e + engine-only, prompt-v1, punctuation-insensitive company/address metrics) · schema-valid **1.000** · unseen-layout F1 **0.955** (n=11, address 11/11). With `--with-evidence`: same F1, mean confidence **0.694**, evidence coverage **0.668**. No API key. Training skipped for Phase 1 (free engine already beats OCR floor).
 
-[![PyPI](https://img.shields.io/pypi/v/tinydoc?color=blue&label=pip%20install)](https://pypi.org/project/tinydoc/)
-[![GitHub](https://img.shields.io/badge/source-eulogik%2FTinyDoc--VLM-blue)](https://github.com/eulogik/TinyDoc-VLM)
-[![HF Space](https://img.shields.io/badge/demo-🤗-live-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![License](https://img.shields.io/pypi/l/tinydoc-green)](https://opensource.org/licenses/Apache-2.0)
-
----
-
-## What is this?
-
-**TinyDoc** is a Python SDK powered by [TinyDoc-VLM](https://huggingface.co/eulogik/TinyDoc-VLM-256M) — a 256M parameter vision-language model trained specifically for document understanding. It runs on **CPU** with no GPU required.
-
-Drop in a document image. Ask a question. Get the answer.
-
----
+> Extract receipt/invoice fields as **schema-validated JSON** with per-field **evidence** (quote + bbox) and **confidence**. Runs on a laptop.
 
 ## Install
 
 ```bash
-pip install tinydoc
+pip install ./sdk          # from repo root
+# or editable for development:
+pip install -e ./sdk
 ```
 
-That's it. One package. ~1.1GB model weights auto-download from HuggingFace on first use.
+Core deps: `pydantic`, `pillow`, `jsonschema`. Optional:
 
----
+```bash
+pip install './sdk[ocr]'        # pytesseract for evidence + ocr_regex engine
+pip install './sdk[smolvlm2]'   # local HF SmolVLM2 weights (optional engine)
+pip install './sdk[all]'
+```
 
-## Quick Start
+Also needs a local [Ollama](https://ollama.com) with `qwen2.5vl:3b` for the default engine (`ollama pull qwen2.5vl:3b`). System `tesseract` for OCR evidence.
+
+## Quick start
 
 ```python
-from PIL import Image
-from tinydoc import TinyDocExtractor
+from tinydoc import ReceiptPipeline
 
-extractor = TinyDocExtractor()  # auto-detects device, loads from HF Hub
-img = Image.open("invoice.png")
-
-# 💬 Ask a question
-result = extractor.ask(img, "What is the total amount?")
-print(result.answer)  # "$1,234.56"
-
-# 📋 Extract all fields as JSON
-result = extractor.extract(img, output_format="json")
-print(result.fields)  # {"vendor": "Acme Corp", "total": "$1,234.56", "date": "2024-01-15", ...}
-
-# 📊 Extract tables to Markdown
-result = extractor.extract_table(img)
-print(result.markdown)
-# | Item       | Qty | Price  |
-# |------------|-----|--------|
-# | Widget A   | 10  | $25.00 |
-# | Widget B   | 5   | $50.00 |
+pipe = ReceiptPipeline("auto")   # ollama if up; OCR fills empty fields only if schema fails
+r = pipe.extract("receipt.jpg")
+print(r.fields)          # {"company": ..., "date": ..., "address": ..., "total": ...}
+print(r.schema_valid)    # True/False (JSON Schema)
+print(r.confidence)      # 0..1 aggregate
+for fr in r.field_results:
+    print(fr.name, fr.value, fr.confidence, fr.evidence
 ```
 
----
+CLI:
 
-## What can it do?
-
-| Task | How | Example |
-|------|-----|---------|
-| **VQA** | `extractor.ask(img, "question")` | "What is the invoice date?" |
-| **JSON Extraction** | `extractor.extract(img)` | Pulls all key-value pairs |
-| **Table Parsing** | `extractor.extract_table(img)` | Converts tables to Markdown |
-| **OCR** | `extractor.ask(img, "Transcribe the text")` | Plain text output |
-| **Key-Value Pairs** | `extractor.extract(img, output_format="kv")` | Dict of field→value |
-
----
-
-## Why TinyDoc?
-
-| | GPT-4V | Tesseract | TinyDoc |
-|--|--------|-----------|---------|
-| **Size** | ~2T params | N/A | **256M** |
-| **Cost** | $0.01+/query | Free | **Free** |
-| **Runs on** | API only | CPU | **CPU or GPU** |
-| **Structured output** | Prompt-dependent | None | **Native** |
-| **Latency** | ~2-5s (API) | <100ms | **<500ms** |
-| **License** | Proprietary | Apache 2.0 | **Apache 2.0** |
-
----
-
-## Advanced
-
-```python
-extractor = TinyDocExtractor(
-    device="cuda",           # or "cpu", "mps"
-    model_name_or_id="eulogik/TinyDoc-VLM-256M",  # or local path
-)
-
-result = extractor.ask(
-    img,
-    "What are the line items?",
-    max_new_tokens=256,      # override default 512
-)
+```bash
+tinydoc extract ./receipts/ --engine ollama --out results.jsonl --overlay overlays/
 ```
 
----
+Overlay PNGs draw OCR-span evidence boxes + field labels (`tinydoc.draw_overlay`).
 
-## Links
+## Engines (measured — `evaluation/phase0/results/baseline_table.md`)
 
-| Platform | Link |
-|----------|------|
-| 🐍 **PyPI** | [pypi.org/project/tinydoc](https://pypi.org/project/tinydoc/) |
-| 🤗 **Model Hub** | [eulogik/TinyDoc-VLM-256M](https://huggingface.co/eulogik/TinyDoc-VLM-256M) |
-| 🤗 **Live Demo** | [Space: eulogik/TinyDoc-VLM](https://huggingface.co/spaces/eulogik/TinyDoc-VLM) |
-| 📖 **GitHub** | [github.com/eulogik/TinyDoc-VLM](https://github.com/eulogik/TinyDoc-VLM) |
-| 🌐 **Website** | [eulogik.github.io/TinyDoc-VLM](https://eulogik.github.io/TinyDoc-VLM/) |
-| 🐦 **Twitter** | [@eulogik](https://twitter.com/eulogik) |
+| Engine | Field F1 | Schema | Notes |
+|--------|----------|--------|-------|
+| **ollama:qwen2.5vl:3b** | **0.870** | 1.000 | default; free, local (unconstrained + salvage + prompt-v1) |
+| ReceiptPipeline e2e | 0.870 | 1.000 | sanitize + jsonschema path (`run_pipeline_eval.py`) |
+| auto (`RoutedEngine`) | — | — | ollama if up; OCR fills **empty** fields only when schema fails |
+| ocr_regex | 0.227 | 0.600 | floor / offline fallback |
+| smolvlm2 (base 2.2B) | 0.330 | 0.960 | optional local weights |
 
----
+**Do not** set Ollama `format: "json"` — constrained decoding truncates long addresses and can drop `total`. The SDK uses unconstrained prompts + JSON salvage + prompt-v1 (char-by-character address rules, `num_predict=512`).
+
+## Evidence & honesty
+
+- Evidence kind is always `ocr_span` (Tesseract word boxes) — **not** VLM-predicted boxes.
+- Schema is packaged (`tinydoc/schemas/sroie_receipt.schema.json`); validation via `jsonschema`.
+- Contaminated training rows for the eval holdout were removed (`data/training/manifest_train_clean.jsonl`). Free-engine numbers were never trained on this data.
+
+## Layout
+
+```
+sdk/tinydoc/
+  pipeline.py   # engines, schema, sanitize, confidence, ReceiptPipeline
+  evidence.py   # OCR-span evidence
+  overlay.py    # draw bboxes + labels
+  cli.py        # tinydoc extract
+  schemas/      # JSON Schema per doc type
+```
 
 ## License
 
-Apache 2.0 — free for commercial use.
-
----
-
-**Built by [eulogik](https://eulogik.com)** — AI infrastructure for document intelligence.
+Apache 2.0

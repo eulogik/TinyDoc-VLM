@@ -1,0 +1,145 @@
+[
+  {
+    "id": "img_000104",
+    "image_path": "data/training/datasets/sroie/images/img_000104.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "BEYOND BROTHERS HARDWARE",
+      "date": "14/03/2018",
+      "address": "LOT 1-0-2, JLN 1/50, DIAMOND SQUARE, OFF JLN GOMBAK 53000 KUALA LUMPUR",
+      "total": "599.45"
+    },
+    "company": "BEYOND BROTHERS HARDWARE"
+  },
+  {
+    "id": "img_000213",
+    "image_path": "data/training/datasets/sroie/images/img_000213.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "SINNATHAMBY HOLDINGS SDN. BHD.",
+      "date": "06/02/2018",
+      "address": "NO.17,18 & 41,JALAN BESAR,39100 BRINCHANG, CAMERON HIGHLANDS, PAHANG",
+      "total": "109.70"
+    },
+    "company": "SINNATHAMBY HOLDINGS SDN. BHD."
+  },
+  {
+    "id": "img_000221",
+    "image_path": "data/training/datasets/sroie/images/img_000221.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "POPULAR BOOK CO. (M) SDN BHD",
+      "date": "05/03/18",
+      "address": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA",
+      "total": "9.90"
+    },
+    "company": "POPULAR BOOK CO. (M) SDN BHD"
+  },
+  {
+    "id": "img_000381",
+    "image_path": "data/training/datasets/sroie/images/img_000381.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "GREEN LANE PHARMACY SDN BHD",
+      "date": "12/13/2016",
+      "address": "33 JLN BANGAU 1,KEPONG BARU, 52100 KEPONG,KL",
+      "total": "180.10"
+    },
+    "company": "GREEN LANE PHARMACY SDN BHD"
+  },
+  {
+    "id": "img_000393",
+    "image_path": "data/training/datasets/sroie/images/img_000393.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "YAM FRESH",
+      "date": "2016-07-31",
+      "address": "NO.145G, JALAN RIMBUNAN RAYA 1, LAMAN RIMBUNAN KEPONG, 52100 KUALA LUMPUR",
+      "total": "RM8.35"
+    },
+    "company": "YAM FRESH"
+  },
+  {
+    "id": "img_000411",
+    "image_path": "data/training/datasets/sroie/images/img_000411.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "ANN GIAP TRADING SDN BHD",
+      "date": "30-09-2017",
+      "address": "NO. 135, JALAN BANGI, 43500 SEMENYIH, SELANGOR",
+      "total": "66.00"
+    },
+    "company": "ANN GIAP TRADING SDN BHD"
+  },
+  {
+    "id": "img_000564",
+    "image_path": "data/training/datasets/sroie/images/img_000564.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "26-06-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "4.60"
+    },
+    "company": "RESTORAN WAN SHENG"
+  },
+  {
+    "id": "img_000643",
+    "image_path": "data/training/datasets/sroie/images/img_000643.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "YHM AEON TEBRAU CITY",
+      "date": "11/03/2018",
+      "address": "S117, SECOND FLOOR, AEON TEBRAU CITY, 1, JALAN DESA TEBRAU, TAMAN DESA TEBRAU, 81100 JOHOR BAHRU, JOHOR.",
+      "total": "49.70"
+    },
+    "company": "YHM AEON TEBRAU CITY"
+  },
+  {
+    "id": "img_000722",
+    "image_path": "data/training/datasets/sroie/images/img_000722.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "KEDAI PAPAN YEW CHUAN",
+      "date": "07/03/2018",
+      "address": "LOT 276 JALAN BANTING 43800 DENGKIL, SELANGOR.",
+      "total": "91.16"
+    },
+    "company": "KEDAI PAPAN YEW CHUAN"
+  },
+  {
+    "id": "img_000851",
+    "image_path": "data/training/datasets/sroie/images/img_000851.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "YIN MA (M) SDN.BHD.",
+      "date": "31 JAN 2016",
+      "address": "NO.2, JALAN UDANG SIAR 2, TAMAN SRI SEGAMBUT, 52000 KUALA LUMPUR.",
+      "total": "5.40"
+    },
+    "company": "YIN MA (M) SDN.BHD."
+  },
+  {
+    "id": "img_000970",
+    "image_path": "data/training/datasets/sroie/images/img_000970.jpg",
+    "source": "sroie",
+    "prompt": "Extract the document as JSON:",
+    "gold": {
+      "company": "PAPPARICH BMC",
+      "date": "29 JUN 18",
+      "address": "NO.19 & 21 JALAN TEMENGGUNG 23/9 BANDAR MAHKOTA CHERAS 43200 SELANGOR DARUL EHSAN, MALAYSIA",
+      "total": "46.90"
+    },
+    "company": "PAPPARICH BMC"
+  }
+]

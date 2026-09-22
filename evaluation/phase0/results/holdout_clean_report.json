@@ -1,0 +1,51 @@
+{
+  "holdout_images": 100,
+  "rows_in": 265802,
+  "rows_out": 265598,
+  "rows_dropped": 204,
+  "dropped_full_path": 204,
+  "dropped_sroie_name_only": 0,
+  "sources_before": {
+    "synthetic": 219616,
+    "ocrbench": 1000,
+    "funsd": 199,
+    "docvqa": 5349,
+    "sroie": 1963,
+    "docmatix": 37675
+  },
+  "sources_after": {
+    "synthetic": 219616,
+    "ocrbench": 1000,
+    "funsd": 199,
+    "docvqa": 5349,
+    "sroie": 1759,
+    "docmatix": 37675
+  },
+  "sroie_before": 1963,
+  "sroie_after": 1759,
+  "clean_manifest": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/data/training/manifest_train_clean.jsonl",
+  "holdout_file": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/evaluation/phase0/results/sroie_holdout.txt",
+  "dropped_sample": [
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000008.jpg",
+      "source": "sroie"
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000008.jpg",
+      "source": "sroie"
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000019.jpg",
+      "source": "sroie"
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000019.jpg",
+      "source": "sroie"
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000039.jpg",
+      "source": "sroie"
+    }
+  ],
+  "note": "Free-engine Phase-0 numbers unaffected. Future adapter training must use manifest_train_clean.jsonl; holdout images are excluded from it."
+}

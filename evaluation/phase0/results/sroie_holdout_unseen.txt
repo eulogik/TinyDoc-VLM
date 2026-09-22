@@ -1,0 +1,11 @@
+data/training/datasets/sroie/images/img_000104.jpg
+data/training/datasets/sroie/images/img_000213.jpg
+data/training/datasets/sroie/images/img_000221.jpg
+data/training/datasets/sroie/images/img_000381.jpg
+data/training/datasets/sroie/images/img_000393.jpg
+data/training/datasets/sroie/images/img_000411.jpg
+data/training/datasets/sroie/images/img_000564.jpg
+data/training/datasets/sroie/images/img_000643.jpg
+data/training/datasets/sroie/images/img_000722.jpg
+data/training/datasets/sroie/images/img_000851.jpg
+data/training/datasets/sroie/images/img_000970.jpg

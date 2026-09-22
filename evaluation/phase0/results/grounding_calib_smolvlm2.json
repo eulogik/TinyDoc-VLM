@@ -1,0 +1,25 @@
+{
+  "engine": "smolvlm2",
+  "n_pages": 12,
+  "image_dependence": 1.0,
+  "mean_entropy": 0.9202818522850672,
+  "entropy_backend": "torch",
+  "qa_acc": 0.34782608695652173,
+  "n_qa": 23,
+  "provisional_absolute_gates": {
+    "PASS_DEP": 0.7,
+    "PASS_ENT": 1.0,
+    "PASS_QA": 0.15,
+    "warning": "absolute gates NOT calibrated; use base-relative rules once adapter exists"
+  },
+  "recommended_relative_rules_vs_base": {
+    "entropy": "adapter_mean_ent >= 0.5 * base_mean_ent (if base measured)",
+    "dependence": "adapter_dep >= base_dep - 0.10",
+    "qa_acc": "adapter_qa >= max(base_qa, 0.15)"
+  },
+  "absolute_gate_pass_flags": {
+    "pass_dep": true,
+    "pass_ent": false,
+    "pass_qa": true
+  }
+}

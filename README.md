@@ -96,18 +96,17 @@ LM Head (prompt-routed)              ← text / markdown / JSON / VQA
 > decoder's LM head, selected by the input prompt. A repetition-penalty / no-repeat-ngram
 > override is built into `generate()` to reduce verbose looping.
 
-## Model Versions & Status
+## Model Versions & Status (2026-09-22)
 
-| Repo | Type | Status | Notes |
-|------|------|--------|-------|
-| [`eulogik/TinyDoc-VLM-256M`](https://huggingface.co/eulogik/TinyDoc-VLM-256M) | Base model | ⚠️ Legacy (384, 2026-06-27) | Original architecture with multi-task heads. Still loads with current code (heads are ignored), but **not** retrained at 768 and predates the ngram-penalty `generate()`. |
-| [`eulogik/TinyDoc-VLM-LoRA`](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) | PEFT LoRA (r=16) | ⚠️ Legacy | Trained on top of the legacy 256M base — inherits the same 384 / old-head limitations. Loads via the base model + adapter. |
-| *(planned)* `eulogik/TinyDoc-VLM-768` | Base model | 🚧 In progress | Full-model retrain at 768×768 on 50K synthetic markdown docs + OCRBench/FUNSD/CORD. Produced by `training/colab_full_retrain.ipynb`. Not yet on the Hub. |
+| Artifact | Type | Status | Notes |
+|----------|------|--------|-------|
+| [`eulogik/TinyDoc-VLM-256M`](https://huggingface.co/eulogik/TinyDoc-VLM-256M) | Base model | ⚠️ **Fails eval** | Measured **OCRBench 0.0%** (`docs/BENCHMARKS.md`). Legacy 384 architecture. |
+| [`eulogik/TinyDoc-VLM-LoRA`](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) | PEFT LoRA | ⚠️ Legacy | Same base limitations. |
+| TinyDoc-768 retrain | Full retrain | ❌ **Abandoned** | Vision tower dead at init (constant features for any input); decoder memorized text. |
+| SmolVLM2-2.2B + 46k real pairs (Kaggle QLoRA) | Adapter experiment | 🧪 **In progress / under review** | Infra works (~step 493 max before 12h timeout). Signals so far look like **memorization** (loss→0.06, eval entropy ≈0.065 vs grounding gate ≥1.0). **No completed adapter on the Hub.** See `docs/pivot_plan.md`. |
+| Phase-0 baselines | Eval harness | 🛠 **Active** | `evaluation/phase0/` — measured field F1 / ANLS / schema-valid on 100 held-out SROIE receipts. |
 
-**Summary:** both published models are the *pre-improvement* versions (before the
-architecture fixes A/B/C and the full 768 retrain D/E). They work, but lag the current
-repo code. The 768 retrain is the "good margin" jump and will be published as a new repo
-once `training/colab_full_retrain.ipynb` finishes on a Colab T4.
+**Honest summary:** no model in this repo currently demonstrates production-grade document extraction. Marketing/paper numbers that are not from `evaluation/` or `docs/BENCHMARKS.md` are **draft placeholders**. Product direction (grounded local extraction SDK) is specified in [`docs/pivot_plan.md`](docs/pivot_plan.md).
 
 ## LoRA Fine-tuning
 
@@ -159,16 +158,15 @@ ONNX models on [HF Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M):
 
 Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 
-## Benchmarks
+## Benchmarks (measured only)
 
-| Benchmark | Status | Target |
+| Benchmark | Result | Source |
 |-----------|--------|--------|
-| OCRBench | In progress | >75% |
-| DocVQA | Pending | >85% |
-| FUNSD | Pending | >95% |
-| CORD | Pending | >95% |
+| OCRBench (v0.1 TinyDoc-256M) | **0.0%** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
+| DocVQA / FUNSD / CORD | **Not measured** for a working checkpoint | — |
+| SROIE field F1 (Phase 0) | See [`evaluation/phase0/results/`](evaluation/phase0/results/) once run | phase0 harness |
 
-Full analysis in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+Targets and estimated tables in older docs are **not** results. Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
 
 ## Package Structure
 

@@ -1,0 +1,13 @@
+{
+  "n_examples": 100,
+  "field_precision": 0.24705882352941178,
+  "field_recall": 0.21,
+  "field_f1": 0.22702702702702704,
+  "anls_mean": 0.3030323916601693,
+  "schema_valid_rate": 0.6,
+  "exact_json_all_fields": 0.0,
+  "engine": "ocr_regex",
+  "limit": 100,
+  "avg_latency_ms": 1622.91015625,
+  "rescored": true
+}

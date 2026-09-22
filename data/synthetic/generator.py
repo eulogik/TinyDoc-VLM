@@ -28,8 +28,7 @@ from data.synthetic.pil_renderer import render_document, augment_image as pil_au
 
 logger = logging.getLogger(__name__)
 
-fake = Faker()
-fake.add_provider("en_US")
+fake = Faker("en_US")
 
 DOCUMENT_TYPES = ["invoice", "receipt", "form", "table", "id_card", "chart", "contract", "letter", "medical", "mixed"]
 
@@ -100,6 +99,8 @@ class ContentGenerator:
         tax_amount = round(subtotal * tax_rate / 100, 2)
         discount = round(random.uniform(0, 5), 2) if random.random() > 0.7 else 0.0
         total = round(subtotal + tax_amount - discount, 2)
+        amount_tendered = round(total + random.uniform(0, 50), 2)
+        change_due = round(amount_tendered - total, 2)
         return {
             "store_name": fake.company(),
             "store_address": fake.address().replace("\n", ", "),
@@ -117,8 +118,8 @@ class ContentGenerator:
             "discount_amount": f"${discount:.2f}",
             "total": f"${total:.2f}",
             "payment_type": random.choice(["VISA", "MASTERCARD", "AMEX", "CASH", "DEBIT"]),
-            "amount_tendered": f"${total + random.uniform(0, 50):.2f}",
-            "change_due": f"${random.uniform(0, 50):.2f}",
+            "amount_tendered": f"${amount_tendered:.2f}",
+            "change_due": f"${change_due:.2f}",
             "footer_message": random.choice([
                 "Refunds accepted within 30 days with receipt.",
                 "All sales final. No returns after 14 days.",
@@ -191,21 +192,6 @@ class ContentGenerator:
             "expiry_date": fake.date_between(start_date="today", end_date="+10y").strftime("%m/%d/%Y"),
             "card_type": random.choice(["EMPLOYEE", "STUDENT", "MEMBERSHIP", "GOVERNMENT"]),
             "department": random.choice(["Engineering", "Marketing", "Finance", "HR", "Operations", "Sales"]),
-        }
-
-    @staticmethod
-    def id_card() -> Dict:
-        gender = random.choice(["M", "F"])
-        first_name = fake.first_name_male() if gender == "M" else fake.first_name_female()
-        last_name = fake.last_name()
-        return {
-            "first_name": first_name,
-            "last_name": last_name,
-            "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80).strftime("%m/%d/%Y"),
-            "id_number": str(fake.random_number(digits=9)),
-            "card_type": random.choice(["EMPLOYEE", "STUDENT", "MEMBERSHIP", "GOVERNMENT"]),
-            "department": random.choice(["Engineering", "Marketing", "Finance", "HR", "Operations", "Sales"]),
-            "expiry_date": fake.date_between(start_date="today", end_date="+10y").strftime("%m/%d/%Y"),
         }
 
     @staticmethod

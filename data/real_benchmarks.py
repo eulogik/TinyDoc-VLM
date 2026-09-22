@@ -95,11 +95,37 @@ def load_cord(data_dir: Path) -> List[Dict]:
     return out
 
 
+def _load_json_pairs(dataset_name: str) -> List[Dict]:
+    """Load pairs written by data/download_public_datasets.py (repo-relative
+    image_path, prompt, target, source)."""
+    path = Path("data/datasets") / dataset_name / f"{dataset_name}.json"
+    if not path.exists():
+        logger.warning(f"Public dataset not found: {path}")
+        return []
+    with open(path) as f:
+        return [json.loads(l) for l in f if l.strip()]
+
+
+def load_docvqa() -> List[Dict]:
+    return _load_json_pairs("docvqa")
+
+
+def load_sroie() -> List[Dict]:
+    return _load_json_pairs("sroie")
+
+
+def load_docmatix() -> List[Dict]:
+    return _load_json_pairs("docmatix")
+
+
 def load_all(data_dir: Path) -> List[Dict]:
     pairs = []
     pairs += load_ocrbench(data_dir)
     pairs += load_funsd(data_dir)
     pairs += load_cord(data_dir)
+    pairs += load_docvqa()
+    pairs += load_sroie()
+    pairs += load_docmatix()
     logger.info(f"Loaded {len(pairs)} real-benchmark training pairs")
     return pairs
 

@@ -1,0 +1,13 @@
+{
+  "n_examples": 100,
+  "field_precision": 0.33164556962025316,
+  "field_recall": 0.3275,
+  "field_f1": 0.32955974842767294,
+  "anls_mean": 0.5436332116478992,
+  "schema_valid_rate": 0.96,
+  "exact_json_all_fields": 0.01,
+  "engine": "smolvlm2",
+  "limit": 100,
+  "avg_latency_ms": 9133.051583766937,
+  "rescored": true
+}

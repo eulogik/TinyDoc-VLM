@@ -1,5 +1,5 @@
 {
-  "id": "eulogikdevelopers/tinydoc-vlm-768-eval",
+  "id": "sundayeulogik/tinydoc-vlm-768-eval",
   "title": "TinyDoc-VLM 768 Eval",
   "code_file": "kaggle_eval_notebook.ipynb",
   "language": "python",

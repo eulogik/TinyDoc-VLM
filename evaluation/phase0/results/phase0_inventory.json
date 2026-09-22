@@ -1,0 +1,51 @@
+{
+  "stats_file": {
+    "total_pairs": 265802,
+    "synthetic_pairs": 219616,
+    "real_pairs": 46186,
+    "by_source": {
+      "synthetic": 219616,
+      "ocrbench": 1000,
+      "funsd": 199,
+      "docvqa": 5349,
+      "sroie": 1963,
+      "docmatix": 37675
+    }
+  },
+  "real_pairs": 46186,
+  "real_by_source": {
+    "ocrbench": 1000,
+    "funsd": 199,
+    "docvqa": 5349,
+    "sroie": 1963,
+    "docmatix": 37675
+  },
+  "real_by_prompt": {
+    "qa": 44024,
+    "ocr": 1186,
+    "kie_json": 976
+  },
+  "real_by_doc_type": {
+    "(none)": 46186
+  },
+  "layout_leakage_risks": [
+    "Random 500-eval split in smolvlm2_qlora.py mixes sources; no layout-family holdout.",
+    "SROIE/FUNSD share template-like receipts/forms across train/eval if split by pair not image.",
+    "docmatix (37,675) dominates real mix (~81%) \u2014 answers may share document templates.",
+    "No company/template fingerprint split for KIE verticals."
+  ],
+  "vertical_choice": {
+    "name": "sroie_receipt_kie",
+    "fields": [
+      "company",
+      "date",
+      "address",
+      "total"
+    ],
+    "rationale": "Standard KIE field F1; 971 images with structured JSON GT on disk; clear business mapping to invoice/receipt extraction pricing."
+  },
+  "sroie_json_pairs": 976,
+  "sroie_unique_images": 971,
+  "eval_n": 100,
+  "eval_unique_companies": 100
+}

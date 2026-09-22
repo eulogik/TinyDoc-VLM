@@ -7,17 +7,19 @@
 #   3. Data uploaded once: python training/upload_data_to_hf.py
 #
 # Usage:
-#   ./training/run_kaggle.sh            # default: 8000 steps, batch 8
+#   ./training/run_kaggle.sh            # default: 8000 steps, batch 2, resume
+#   FRESH=1 ./training/run_kaggle.sh    # fresh start from init_768 (clean data run)
 #   STEPS=12000 ./training/run_kaggle.sh
 #   BATCH=4 STEPS=30000 ./training/run_kaggle.sh
 #
 # Sessions are resumable: checkpoints sync to the HF model repo during
 # training, so re-running after a 9-12h session kill continues from the
-# last saved step.
+# last saved step. FRESH=1 skips the hub checkpoint entirely.
 set -euo pipefail
 
 STEPS="${STEPS:-8000}"
 BATCH="${BATCH:-2}"
+FRESH="${FRESH:-0}"
 KERNEL="eulogikdevelopers/tinydoc-vlm-768-retrain"
 
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
@@ -41,6 +43,19 @@ cp "$HERE/training/kaggle/kernel-metadata.json" "$STAGE/"
 sed "s/STEPS = os.environ.get('STEPS', '8000')/STEPS = '$STEPS'/; \
      s/BATCH = os.environ.get('BATCH', '2')/BATCH = '$BATCH'/" \
     "$HERE/training/kaggle/kaggle_notebook.ipynb" > "$STAGE/kaggle_notebook.ipynb"
+if [ "$FRESH" = "1" ]; then
+    # Start from the clean init_768 (ignore hub latest/). Injected at push
+    # time so a later resume push (FRESH=0) is one command away.
+    python3 - "$STAGE/kaggle_notebook.ipynb" <<'PYEOF'
+import json, sys
+nb = json.load(open(sys.argv[1]))
+cells = nb["cells"][1]["source"]
+cells = [c.replace("'--grad-accum', '4'],", "'--grad-accum', '4', '--fresh'],") for c in cells]
+nb["cells"][1]["source"] = cells
+json.dump(nb, open(sys.argv[1], "w"))
+print("--fresh injected into staged notebook (not committed).")
+PYEOF
+fi
 if [ -n "${HF_TOKEN:-}" ]; then
     # Inject a fallback so the run works without the UI secret.
     python3 - "$STAGE/kaggle_notebook.ipynb" "$HF_TOKEN" <<'PYEOF'

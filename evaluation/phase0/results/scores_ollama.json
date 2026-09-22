@@ -1,0 +1,13 @@
+{
+  "n_examples": 100,
+  "field_precision": 0.87,
+  "field_recall": 0.87,
+  "field_f1": 0.87,
+  "anls_mean": 0.954741676328874,
+  "schema_valid_rate": 1.0,
+  "exact_json_all_fields": 0.61,
+  "engine": "ollama",
+  "eval_path": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/evaluation/phase0/results/sroie_eval.json",
+  "limit": 100,
+  "avg_latency_ms": 2572.8578066825867
+}

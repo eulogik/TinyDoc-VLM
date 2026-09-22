@@ -1,0 +1,46 @@
+{
+  "n_total": 265802,
+  "sources": {
+    "synthetic": 219616,
+    "ocrbench": 1000,
+    "funsd": 199,
+    "docvqa": 5349,
+    "sroie": 1963,
+    "docmatix": 37675
+  },
+  "doc_types": {
+    "receipt": 24710,
+    "table": 24590,
+    "chart": 20208,
+    "id_card": 20280,
+    "medical": 20180,
+    "contract": 24960,
+    "letter": 20400,
+    "mixed": 14946,
+    "invoice": 29238,
+    "form": 20104,
+    "?": 46186
+  },
+  "prompt_kinds": {
+    "markdown": 50000,
+    "ocr": 51186,
+    "qa": 143939,
+    "json": 20677
+  },
+  "real_approx": 46186,
+  "real_by_source": {
+    "ocrbench": 1000,
+    "funsd": 199,
+    "docvqa": 5349,
+    "sroie": 1963,
+    "docmatix": 37675
+  },
+  "real_by_doc": {
+    "?": 46186
+  },
+  "unique_real_images": 22707,
+  "real_images_multi_row": 20379,
+  "holdout_path_hits": 204,
+  "holdout_real_hits": 204,
+  "holdout_name_match_real": 300
+}

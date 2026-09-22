@@ -1,0 +1,780 @@
+{
+  "n_images": 100,
+  "n_families": 54,
+  "family_sizes": {
+    "0": 15,
+    "1": 9,
+    "2": 1,
+    "3": 9,
+    "4": 1,
+    "5": 2,
+    "6": 2,
+    "7": 1,
+    "8": 1,
+    "9": 1,
+    "10": 2,
+    "11": 6,
+    "12": 1,
+    "13": 1,
+    "14": 1,
+    "15": 1,
+    "16": 1,
+    "17": 1,
+    "18": 1,
+    "19": 2,
+    "20": 1,
+    "21": 1,
+    "22": 2,
+    "23": 3,
+    "24": 1,
+    "25": 1,
+    "26": 1,
+    "27": 2,
+    "28": 1,
+    "29": 1,
+    "30": 1,
+    "31": 1,
+    "32": 1,
+    "33": 1,
+    "34": 1,
+    "35": 1,
+    "36": 1,
+    "37": 2,
+    "38": 1,
+    "39": 2,
+    "40": 1,
+    "41": 1,
+    "42": 1,
+    "43": 1,
+    "44": 1,
+    "45": 1,
+    "46": 2,
+    "47": 1,
+    "48": 1,
+    "49": 1,
+    "50": 1,
+    "51": 1,
+    "52": 1,
+    "53": 1
+  },
+  "max_link_dist": 16,
+  "hash_size": 8,
+  "hash": "dhash",
+  "holdout_family_frac": 0.18,
+  "unseen_family_ids": [
+    7,
+    12,
+    14,
+    22,
+    24,
+    26,
+    28,
+    36,
+    43,
+    48
+  ],
+  "n_unseen_images": 11,
+  "n_seen_images": 89,
+  "images": [
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000008.jpg",
+      "family_id": 0,
+      "dhash": "040c0e0e0e0e0c00",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000019.jpg",
+      "family_id": 1,
+      "dhash": "0f0f4d757145550f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000039.jpg",
+      "family_id": 2,
+      "dhash": "0c1c3e3b73736365",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000044.jpg",
+      "family_id": 0,
+      "dhash": "040c1c1c1c0e0800",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000073.jpg",
+      "family_id": 3,
+      "dhash": "0e0f0f3b190b2b0f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000081.jpg",
+      "family_id": 4,
+      "dhash": "f2f09ee8f8fafbf3",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000082.jpg",
+      "family_id": 5,
+      "dhash": "10060eaef1eb0e0e",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000087.jpg",
+      "family_id": 1,
+      "dhash": "0f0f7565254d0f09",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000088.jpg",
+      "family_id": 3,
+      "dhash": "060f1c39591f0706",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000091.jpg",
+      "family_id": 6,
+      "dhash": "270f196d6d170f01",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000100.jpg",
+      "family_id": 3,
+      "dhash": "1f8f0f333b7b3337",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000104.jpg",
+      "family_id": 7,
+      "dhash": "411fd1ccfddd6d35",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000107.jpg",
+      "family_id": 8,
+      "dhash": "300f0edd77362b0e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000131.jpg",
+      "family_id": 9,
+      "dhash": "9e8ff7e7efe7effe",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000148.jpg",
+      "family_id": 10,
+      "dhash": "0f0ef0f4c4140f07",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000170.jpg",
+      "family_id": 10,
+      "dhash": "8e0ef8f4ece8ef26",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000180.jpg",
+      "family_id": 11,
+      "dhash": "01070f5d3d0d0d2f",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000181.jpg",
+      "family_id": 3,
+      "dhash": "8f0d1fd37909096b",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000210.jpg",
+      "family_id": 1,
+      "dhash": "1f0f0f3739715b4b",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000213.jpg",
+      "family_id": 12,
+      "dhash": "7c7c4f3d2f2dad6f",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000218.jpg",
+      "family_id": 13,
+      "dhash": "ab0f477585353537",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000221.jpg",
+      "family_id": 14,
+      "dhash": "172767797965239e",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000226.jpg",
+      "family_id": 15,
+      "dhash": "dc9ccce4f0e0e8cc",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000227.jpg",
+      "family_id": 16,
+      "dhash": "eeeedefedefefefc",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000230.jpg",
+      "family_id": 3,
+      "dhash": "4c0f1f3d4d0f1706",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000234.jpg",
+      "family_id": 1,
+      "dhash": "1b0f4f3c6c60670f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000239.jpg",
+      "family_id": 17,
+      "dhash": "7e1e173571757753",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000244.jpg",
+      "family_id": 11,
+      "dhash": "1b1f1f772d0d4f17",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000247.jpg",
+      "family_id": 3,
+      "dhash": "0f0f0f4f33332d0e",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000253.jpg",
+      "family_id": 18,
+      "dhash": "0d7f7f676f5f5373",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000270.jpg",
+      "family_id": 11,
+      "dhash": "b01f0f75392d65a5",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000275.jpg",
+      "family_id": 19,
+      "dhash": "8f0f072bc9454545",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000288.jpg",
+      "family_id": 0,
+      "dhash": "040c0c0e0c0c0c00",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000300.jpg",
+      "family_id": 0,
+      "dhash": "040c0c1c1e0e0e00",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000308.jpg",
+      "family_id": 0,
+      "dhash": "0c0c1c1c1c1c1c00",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000314.jpg",
+      "family_id": 20,
+      "dhash": "251313495931330f",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000325.jpg",
+      "family_id": 21,
+      "dhash": "c87e6161242d6944",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000348.jpg",
+      "family_id": 1,
+      "dhash": "0f0f0f550d053554",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000363.jpg",
+      "family_id": 3,
+      "dhash": "06074e5b090f4f1e",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000381.jpg",
+      "family_id": 22,
+      "dhash": "3c3e7e6a72727e7e",
+      "split": "unseen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000391.jpg",
+      "family_id": 23,
+      "dhash": "0e0f0e787979f9fa",
+      "split": "seen_layout",
+      "family_size": 3
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000393.jpg",
+      "family_id": 24,
+      "dhash": "8e8e98d885819496",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000402.jpg",
+      "family_id": 25,
+      "dhash": "868eb0f0c4c6683e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000411.jpg",
+      "family_id": 26,
+      "dhash": "5a3e2e79594d6f1f",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000421.jpg",
+      "family_id": 0,
+      "dhash": "0c1c1e1408000000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000423.jpg",
+      "family_id": 0,
+      "dhash": "000c1c0c1c180000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000432.jpg",
+      "family_id": 0,
+      "dhash": "0c1c0c1c00000000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000453.jpg",
+      "family_id": 6,
+      "dhash": "17075d7d4d0d0faf",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000508.jpg",
+      "family_id": 27,
+      "dhash": "260e0765694d2ee8",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000514.jpg",
+      "family_id": 23,
+      "dhash": "0c4d5a586169596c",
+      "split": "seen_layout",
+      "family_size": 3
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000528.jpg",
+      "family_id": 0,
+      "dhash": "0c0c0c0c1c1c1000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000564.jpg",
+      "family_id": 28,
+      "dhash": "161e0e8ecafaeaea",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000568.jpg",
+      "family_id": 29,
+      "dhash": "962ef6eabaf3ea8e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000576.jpg",
+      "family_id": 5,
+      "dhash": "ec2e0eeef1e9efae",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000580.jpg",
+      "family_id": 3,
+      "dhash": "0b1f1e2f3b1b0d05",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000587.jpg",
+      "family_id": 30,
+      "dhash": "e08e0e0e3739698e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000591.jpg",
+      "family_id": 31,
+      "dhash": "ce8686062d25248e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000617.jpg",
+      "family_id": 32,
+      "dhash": "020f1713333971dd",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000621.jpg",
+      "family_id": 3,
+      "dhash": "0e0e1f5f4b0b1b13",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000628.jpg",
+      "family_id": 33,
+      "dhash": "ba1f0f3c0e86a6c7",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000630.jpg",
+      "family_id": 34,
+      "dhash": "96175e7579637e6a",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000635.jpg",
+      "family_id": 35,
+      "dhash": "030307070d030302",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000643.jpg",
+      "family_id": 36,
+      "dhash": "081c1c3828181800",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000652.jpg",
+      "family_id": 1,
+      "dhash": "0b0b1f357756560f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000656.jpg",
+      "family_id": 37,
+      "dhash": "040f8e1e347c6522",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000657.jpg",
+      "family_id": 38,
+      "dhash": "0e0eee6d15747135",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000664.jpg",
+      "family_id": 1,
+      "dhash": "d0170f757971554f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000666.jpg",
+      "family_id": 39,
+      "dhash": "988e467179797ef4",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000679.jpg",
+      "family_id": 40,
+      "dhash": "fc86f1e1f0e9848a",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000693.jpg",
+      "family_id": 41,
+      "dhash": "490f87d7cbcd2515",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000699.jpg",
+      "family_id": 42,
+      "dhash": "3e9ef2666ea4e496",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000707.jpg",
+      "family_id": 23,
+      "dhash": "060e1f7b59795123",
+      "split": "seen_layout",
+      "family_size": 3
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000722.jpg",
+      "family_id": 43,
+      "dhash": "8b171ed3e52d2575",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000735.jpg",
+      "family_id": 11,
+      "dhash": "070717553d71448e",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000736.jpg",
+      "family_id": 44,
+      "dhash": "7e3b1b737b7b6b6f",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000737.jpg",
+      "family_id": 1,
+      "dhash": "075f7d7979354567",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000756.jpg",
+      "family_id": 45,
+      "dhash": "0707d3510d0d6505",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000768.jpg",
+      "family_id": 37,
+      "dhash": "1e0f1e1c7c746222",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000773.jpg",
+      "family_id": 46,
+      "dhash": "5e0f0f6f2f29697b",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000779.jpg",
+      "family_id": 1,
+      "dhash": "1f0e5f7d2505630f",
+      "split": "seen_layout",
+      "family_size": 9
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000783.jpg",
+      "family_id": 11,
+      "dhash": "03074f5f4d096186",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000784.jpg",
+      "family_id": 27,
+      "dhash": "331f076579794fc1",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000786.jpg",
+      "family_id": 46,
+      "dhash": "8e0f4f67cfd9e94b",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000788.jpg",
+      "family_id": 47,
+      "dhash": "d54f0f7979790e0f",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000796.jpg",
+      "family_id": 11,
+      "dhash": "c80f4f712d0d0d15",
+      "split": "seen_layout",
+      "family_size": 6
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000801.jpg",
+      "family_id": 0,
+      "dhash": "040c0e0e0c000000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000805.jpg",
+      "family_id": 0,
+      "dhash": "040c1c1c1c0c0c00",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000807.jpg",
+      "family_id": 0,
+      "dhash": "040c0c1c1c140000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000814.jpg",
+      "family_id": 19,
+      "dhash": "170f0fe9c9696f27",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000851.jpg",
+      "family_id": 48,
+      "dhash": "fede8e0c846f9e9c",
+      "split": "unseen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000855.jpg",
+      "family_id": 49,
+      "dhash": "941e0e5e5c4d4c6e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000862.jpg",
+      "family_id": 39,
+      "dhash": "800f0f7571794f86",
+      "split": "seen_layout",
+      "family_size": 2
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000876.jpg",
+      "family_id": 50,
+      "dhash": "a07eb8f038f494de",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000887.jpg",
+      "family_id": 51,
+      "dhash": "0b0e32322a0e0e5e",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000888.jpg",
+      "family_id": 52,
+      "dhash": "823e5c5d795a0e2f",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000901.jpg",
+      "family_id": 0,
+      "dhash": "070c0e0f1f650507",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000927.jpg",
+      "family_id": 53,
+      "dhash": "2f7b69494d5b070f",
+      "split": "seen_layout",
+      "family_size": 1
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000944.jpg",
+      "family_id": 0,
+      "dhash": "000e1c16061c0000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000958.jpg",
+      "family_id": 0,
+      "dhash": "000c0c1c1c0c0000",
+      "split": "seen_layout",
+      "family_size": 15
+    },
+    {
+      "image_path": "data/training/datasets/sroie/images/img_000970.jpg",
+      "family_id": 22,
+      "dhash": "9e9efb7b737376fe",
+      "split": "unseen_layout",
+      "family_size": 2
+    }
+  ]
+}

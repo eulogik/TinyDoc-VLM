@@ -1,0 +1,14 @@
+{
+  "n_examples": 11,
+  "field_precision": 0.9545454545454546,
+  "field_recall": 0.9545454545454546,
+  "field_f1": 0.9545454545454546,
+  "anls_mean": 0.9628438233536213,
+  "schema_valid_rate": 1.0,
+  "exact_json_all_fields": 0.9090909090909091,
+  "engine": "ollama",
+  "eval_path": "evaluation/phase0/results/sroie_eval_unseen.json",
+  "limit": 11,
+  "avg_latency_ms": 2116.8790513818913,
+  "split": "unseen"
+}

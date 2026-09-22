@@ -12,6 +12,35 @@ import math
 
 FONT_CACHE = {}
 
+# Grounding annotation capture: when a renderer labels its text draws via
+# _draw_text(..., label=...), the pixel bbox + semantic label are recorded
+# here so render_document_with_annotations() can return exact element
+# positions alongside the image (free KIE/grounding supervision).
+_ANNOTATIONS: List[Dict] = []
+
+
+def reset_annotations() -> List[Dict]:
+    """Clear the annotation buffer and return the previous contents."""
+    global _ANNOTATIONS
+    prev = _ANNOTATIONS
+    _ANNOTATIONS = []
+    return prev
+
+
+def get_annotations() -> List[Dict]:
+    return list(_ANNOTATIONS)
+
+
+def normalize_box(bbox, width: int, height: int) -> List[int]:
+    """Pixel bbox -> integers in [0, 1000] (LocateAnything/Qwen convention)."""
+    x1, y1, x2, y2 = bbox
+    return [
+        max(0, min(1000, round(x1 / width * 1000))),
+        max(0, min(1000, round(y1 / height * 1000))),
+        max(0, min(1000, round(x2 / width * 1000))),
+        max(0, min(1000, round(y2 / height * 1000))),
+    ]
+
 
 def _get_font(size: int = 12) -> ImageFont.FreeTypeFont:
     cache_key = f"default_{size}"
@@ -27,7 +56,7 @@ def _get_font(size: int = 12) -> ImageFont.FreeTypeFont:
     return FONT_CACHE[cache_key]
 
 
-def _draw_text(draw: ImageDraw.Draw, xy, text, font_size=12, fill=(0, 0, 0), bold=False, align="left"):
+def _draw_text(draw: ImageDraw.Draw, xy, text, font_size=12, fill=(0, 0, 0), bold=False, align="left", label=None):
     if not text:
         return
     try:
@@ -38,6 +67,15 @@ def _draw_text(draw: ImageDraw.Draw, xy, text, font_size=12, fill=(0, 0, 0), bol
             except (IOError, OSError):
                 pass
         draw.text(xy, str(text), font=font, fill=fill, align=align)
+        if label is not None and _ANNOTATIONS is not None:
+            img_w, img_h = draw._image.size
+            bbox = draw.textbbox(xy, str(text), font=font, align=align)
+            _ANNOTATIONS.append({
+                "label": label,
+                "text": str(text),
+                "bbox_px": [int(v) for v in bbox],
+                "bbox": normalize_box(bbox, img_w, img_h),
+            })
     except Exception:
         pass
 
@@ -54,24 +92,24 @@ def render_invoice(content: Dict) -> Image.Image:
     img = Image.new("RGB", (800, 1050), (255, 255, 255))
     draw = ImageDraw.Draw(img)
 
-    _draw_text(draw, (30, 20), content.get("vendor_name", "Company"), font_size=22, fill=(30, 58, 138))
+    _draw_text(draw, (30, 20), content.get("vendor_name", "Company"), font_size=22, fill=(30, 58, 138), label="vendor")
     _draw_text(draw, (30, 50), content.get("vendor_address", ""), font_size=9, fill=(100, 100, 100))
     _draw_text(draw, (30, 65), f"Phone: {content.get('vendor_phone', '')}", font_size=9, fill=(100, 100, 100))
 
     _draw_text(draw, (600, 20), "INVOICE", font_size=26, fill=(59, 130, 246))
-    _draw_text(draw, (560, 55), f"Invoice #: {content.get('invoice_number', '')}", font_size=10, fill=(80, 80, 80))
-    _draw_text(draw, (560, 70), f"Date: {content.get('invoice_date', '')}", font_size=10, fill=(80, 80, 80))
-    _draw_text(draw, (560, 85), f"Due: {content.get('due_date', '')}", font_size=10, fill=(80, 80, 80))
+    _draw_text(draw, (560, 55), f"Invoice #: {content.get('invoice_number', '')}", font_size=10, fill=(80, 80, 80), label="invoice_number")
+    _draw_text(draw, (560, 70), f"Date: {content.get('invoice_date', '')}", font_size=10, fill=(80, 80, 80), label="invoice_date")
+    _draw_text(draw, (560, 85), f"Due: {content.get('due_date', '')}", font_size=10, fill=(80, 80, 80), label="due_date")
 
     _draw_line(draw, [(30, 95), (770, 95)], fill=(59, 130, 246), width=2)
 
     _draw_text(draw, (30, 110), "BILL TO", font_size=11, fill=(30, 58, 138))
-    _draw_text(draw, (30, 128), content.get("customer_name", ""), font_size=11)
+    _draw_text(draw, (30, 128), content.get("customer_name", ""), font_size=11, label="customer")
     _draw_text(draw, (30, 145), content.get("customer_address", ""), font_size=9, fill=(80, 80, 80))
 
     _draw_text(draw, (450, 110), "PAYMENT INFO", font_size=11, fill=(30, 58, 138))
     _draw_text(draw, (450, 128), f"Bank: {content.get('bank_name', '')}", font_size=9, fill=(80, 80, 80))
-    _draw_text(draw, (450, 143), f"Account: {content.get('account_number', '')}", font_size=9, fill=(80, 80, 80))
+    _draw_text(draw, (450, 143), f"Account: {content.get('account_number', '')}", font_size=9, fill=(80, 80, 80), label="account_number")
 
     y = 180
     _draw_rect(draw, [(30, y), (770, y + 25)], fill=(243, 244, 246))
@@ -82,7 +120,15 @@ def render_invoice(content: Dict) -> Image.Image:
     _draw_line(draw, [(30, y + 25), (770, y + 25)], fill=(59, 130, 246), width=2)
 
     y += 30
-    for item in content.get("items", []):
+    for idx, item in enumerate(content.get("items", [])):
+        row_box = [30, y - 3, 770, y + 17]
+        _ANNOTATIONS.append({
+            "label": f"line_item_{idx}",
+            "text": f"{item.get('description', '')} | {item.get('quantity', '')} x {item.get('unit_price', '')} = {item.get('amount', '')}",
+            "bbox_px": list(row_box),
+            "bbox": normalize_box(row_box, *img.size),
+            "item": item,
+        })
         _draw_text(draw, (35, y), item.get("description", ""), font_size=10)
         _draw_text(draw, (510, y), item.get("quantity", ""), font_size=10)
         _draw_text(draw, (580, y), item.get("unit_price", ""), font_size=10)
@@ -92,15 +138,22 @@ def render_invoice(content: Dict) -> Image.Image:
     y = max(y + 10, 750)
     _draw_line(draw, [(530, y), (770, y)])
     _draw_text(draw, (535, y + 5), "Subtotal:", font_size=10, fill=(80, 80, 80))
-    _draw_text(draw, (700, y + 5), content.get("subtotal", ""), font_size=10)
+    _draw_text(draw, (700, y + 5), content.get("subtotal", ""), font_size=10, label="subtotal")
     _draw_text(draw, (535, y + 22), f"Tax ({content.get('tax_rate', '')}%):", font_size=10, fill=(80, 80, 80))
-    _draw_text(draw, (700, y + 22), content.get("tax_amount", ""), font_size=10)
+    _draw_text(draw, (700, y + 22), content.get("tax_amount", ""), font_size=10, label="tax")
 
     y += 50
     _draw_rect(draw, [(530, y - 10), (770, y + 20)], fill=(239, 246, 255))
     _draw_line(draw, [(530, y - 10), (770, y - 10)], fill=(59, 130, 246), width=2)
     _draw_line(draw, [(530, y + 20), (770, y + 20)], fill=(59, 130, 246), width=2)
     _draw_text(draw, (535, y), "TOTAL DUE:", font_size=12, fill=(30, 58, 138))
+    total_bbox = draw.textbbox((700, y), str(content.get("total", "")), font=_get_font(12))
+    _ANNOTATIONS.append({
+        "label": "total",
+        "text": str(content.get("total", "")),
+        "bbox_px": [int(v) for v in total_bbox],
+        "bbox": normalize_box(total_bbox, *img.size),
+    })
     _draw_text(draw, (700, y), content.get("total", ""), font_size=12, fill=(30, 58, 138))
 
     _draw_text(draw, (200, y + 50), "Thank you for your business!", font_size=9, fill=(160, 160, 160))
@@ -111,14 +164,14 @@ def render_receipt(content: Dict) -> Image.Image:
     img = Image.new("RGB", (450, 700), (255, 255, 255))
     draw = ImageDraw.Draw(img)
 
-    _draw_text(draw, (225, 20), content.get("store_name", "Store"), font_size=16, fill=(0, 0, 0), align="center")
+    _draw_text(draw, (225, 20), content.get("store_name", "Store"), font_size=16, fill=(0, 0, 0), align="center", label="store")
     _draw_text(draw, (225, 42), content.get("store_address", ""), font_size=8, fill=(80, 80, 80), align="center")
 
     _draw_line(draw, [(20, 60), (430, 60)], fill=(0, 0, 0), width=1)
 
-    _draw_text(draw, (30, 70), f"Date: {content.get('txn_date', '')}", font_size=9)
+    _draw_text(draw, (30, 70), f"Date: {content.get('txn_date', '')}", font_size=9, label="date")
     _draw_text(draw, (250, 70), f"Time: {content.get('txn_time', '')}", font_size=9)
-    _draw_text(draw, (30, 85), f"Txn #: {content.get('txn_id', '')}", font_size=9)
+    _draw_text(draw, (30, 85), f"Txn #: {content.get('txn_id', '')}", font_size=9, label="transaction_id")
     _draw_text(draw, (250, 85), f"Cashier: {content.get('cashier_name', '')}", font_size=9)
 
     _draw_line(draw, [(20, 100), (430, 100)], fill=(0, 0, 0), width=1)
@@ -130,7 +183,15 @@ def render_receipt(content: Dict) -> Image.Image:
     _draw_line(draw, [(20, y + 15), (430, y + 15)], fill=(0, 0, 0), width=1)
 
     y += 20
-    for item in content.get("items", []):
+    for idx, item in enumerate(content.get("items", [])):
+        row_box = [25, y - 2, 435, y + 14]
+        _ANNOTATIONS.append({
+            "label": f"line_item_{idx}",
+            "text": f"{item.get('name', '')} | x{item.get('quantity', '')} | {item.get('amount', '')}",
+            "bbox_px": list(row_box),
+            "bbox": normalize_box(row_box, *img.size),
+            "item": item,
+        })
         _draw_text(draw, (30, y), item.get("name", ""), font_size=9)
         _draw_text(draw, (290, y), item.get("quantity", ""), font_size=9)
         _draw_text(draw, (350, y), item.get("amount", ""), font_size=9)
@@ -140,18 +201,25 @@ def render_receipt(content: Dict) -> Image.Image:
     y += 8
 
     _draw_text(draw, (300, y), "Subtotal:", font_size=9)
-    _draw_text(draw, (370, y), content.get("subtotal", ""), font_size=9)
+    _draw_text(draw, (370, y), content.get("subtotal", ""), font_size=9, label="subtotal")
     y += 15
     _draw_text(draw, (300, y), f"Tax:", font_size=9)
-    _draw_text(draw, (370, y), content.get("tax_amount", ""), font_size=9)
+    _draw_text(draw, (370, y), content.get("tax_amount", ""), font_size=9, label="tax")
 
     if content.get("discount_amount", "$0.00") != "$0.00":
         y += 15
         _draw_text(draw, (300, y), "Discount:", font_size=9)
-        _draw_text(draw, (370, y), f"-{content.get('discount_amount', '')}", font_size=9)
+        _draw_text(draw, (370, y), f"-{content.get('discount_amount', '')}", font_size=9, label="discount")
 
     y += 20
     _draw_line(draw, [(280, y - 5), (430, y - 5)], fill=(0, 0, 0), width=2)
+    total_bbox = draw.textbbox((370, y), str(content.get("total", "")), font=_get_font(12))
+    _ANNOTATIONS.append({
+        "label": "total",
+        "text": str(content.get("total", "")),
+        "bbox_px": [int(v) for v in total_bbox],
+        "bbox": normalize_box(total_bbox, *img.size),
+    })
     _draw_text(draw, (300, y), "TOTAL:", font_size=12, bold=True)
     _draw_text(draw, (370, y), content.get("total", ""), font_size=12, bold=True)
     _draw_line(draw, [(280, y + 15), (430, y + 15)], fill=(0, 0, 0), width=2)
@@ -174,12 +242,20 @@ def render_form(content: Dict) -> Image.Image:
     _draw_text(draw, (40, 66), content.get("instructions", ""), font_size=9, fill=(80, 80, 80))
 
     y = 100
-    for field in content.get("fields", []):
+    for idx, field in enumerate(content.get("fields", [])):
         _draw_rect(draw, [(30, y), (770, y + 50)], fill=(255, 255, 255), outline=(220, 220, 220))
         label = field.get("label", "")
         if field.get("required"):
             label += " *"
         _draw_text(draw, (40, y + 5), label, font_size=10, fill=(30, 58, 138))
+        value_bbox = draw.textbbox((40, y + 25), str(field.get("value", "")), font=_get_font(10))
+        _ANNOTATIONS.append({
+            "label": f"field_{idx}",
+            "text": str(field.get("value", "")),
+            "bbox_px": [int(v) for v in value_bbox],
+            "bbox": normalize_box(value_bbox, *img.size),
+            "field_label": label,
+        })
         _draw_text(draw, (40, y + 25), field.get("value", ""), font_size=10, fill=(60, 60, 60))
         y += 55
 
@@ -237,15 +313,15 @@ def render_id_card(content: Dict) -> Image.Image:
     _draw_text(draw, (155, 40), f"{content.get('first_name', '')} {content.get('last_name', '')}", font_size=14, fill=(30, 58, 138))
 
     fields = [
-        ("DOB", content.get("date_of_birth", "")),
-        ("ID #", content.get("id_number", "")),
-        ("Dept", content.get("department", "")),
-        ("Exp", content.get("expiry_date", "")),
+        ("DOB", content.get("date_of_birth", ""), "date_of_birth"),
+        ("ID #", content.get("id_number", ""), "id_number"),
+        ("Dept", content.get("department", ""), "department"),
+        ("Exp", content.get("expiry_date", ""), "expiry_date"),
     ]
     y = 75
-    for label, value in fields:
-        _draw_text(draw, (155, y), label, font_size=7, fill=(100, 100, 100))
-        _draw_text(draw, (155, y + 12), value, font_size=10)
+    for label_text, value, label_key in fields:
+        _draw_text(draw, (155, y), label_text, font_size=7, fill=(100, 100, 100))
+        _draw_text(draw, (155, y + 12), value, font_size=10, label=label_key)
         y += 35
 
     return img
@@ -417,6 +493,7 @@ RENDERERS = {
 
 
 def render_document(doc_type: str, content: Dict) -> Image.Image:
+    reset_annotations()
     renderer = RENDERERS.get(doc_type)
     if renderer is None:
         img = Image.new("RGB", (800, 400), (255, 255, 255))
@@ -429,6 +506,21 @@ def render_document(doc_type: str, content: Dict) -> Image.Image:
                 y += 18
         return img
     return renderer(content)
+
+
+def render_document_with_annotations(doc_type: str, content: Dict):
+    """Render a document and return (image, annotations).
+
+    Annotations are [{label, text, bbox_px, bbox, ...}] where bbox is
+    normalized to [0, 1000] and bbox_px is raw pixels. Only elements the
+    renderer explicitly labels (KIE fields, line items, totals) appear.
+    """
+    reset_annotations()
+    try:
+        img = render_document(doc_type, content)
+    finally:
+        annotations = get_annotations()
+    return img, annotations
 
 
 def augment_image(img: Image.Image) -> Image.Image:

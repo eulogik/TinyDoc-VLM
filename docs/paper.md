@@ -1,5 +1,12 @@
 # TinyDoc-VLM: A 256M Parameter Vision-Language Model for Edge Document Understanding
 
+> **⚠️ DRAFT — NUMBERS BELOW ARE NOT MEASURED.**  
+> The results in §5 (Table 4), ablations (Table 5), and deployment tables were  
+> **not** produced by a completed training run. The only public measurement to date  
+> is **OCRBench 0.0%** on the v0.1 checkpoint (`docs/BENCHMARKS.md`).  
+> Do **not** cite, pitch, or publish these figures. Replace with harness output  
+> from `evaluation/phase0/` (or a future full eval) before any external use.
+
 ---
 
 ## Abstract
@@ -196,6 +203,8 @@ We compare against:
 - **Qwen2-VL-2B** — Qwen2 vision encoder + Qwen2-1.5B decoder, strongest generalist at 2B
 
 ### 5.2 Main Results
+
+> **UNVERIFIED PLACEHOLDER — NOT MEASURED.** See banner at top of file.
 
 | Benchmark | TinyDoc-VLM | SmolVLM2-256M | SmolVLM2-500M | Qwen2-VL-2B |
 |-----------|-------------|---------------|---------------|-------------|
