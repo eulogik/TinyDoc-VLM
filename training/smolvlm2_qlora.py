@@ -102,7 +102,7 @@ def main():
     ap.add_argument("--accum", type=int, default=8)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--lora-r", type=int, default=16)
-    ap.add_argument("--eval-every", type=int, default=100)
+    ap.add_argument("--eval-every", type=int, default=250)
     ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
     ap.add_argument("--model-path", default=None,
@@ -246,15 +246,46 @@ def main():
     )
     trainer.model.print_trainable_parameters()
 
-    # --- Resume from latest checkpoint ---
+    # --- Resume from latest checkpoint (local, else hub) ---
     resume_checkpoint = None
     if args.resume:
         output_dir = Path(args.output_dir)
         checkpoints = sorted(output_dir.glob("checkpoint-*"),
-                             key=lambda p: int(p.name.split("-")[-1]))
+                             key=lambda p: int(p.name.split("-")[-1]) if p.name.split("-")[-1].isdigit() else -1)
         if checkpoints:
             resume_checkpoint = str(checkpoints[-1])
-            logger.info("Resuming from %s", resume_checkpoint)
+            logger.info("Resuming from local %s", resume_checkpoint)
+        else:
+            # Try hub: pull latest checkpoint-* from hub repo
+            try:
+                from huggingface_hub import HfApi, snapshot_download
+                api = HfApi(token=token)
+                files = api.list_repo_files(repo_id=args.hub_id, repo_type="model")
+                ckpts = [f for f in files if f.startswith("checkpoint-")]
+                steps = []
+                for f in ckpts:
+                    try:
+                        s = int(f.split("/")[0].split("-")[1])
+                        steps.append((s, f.split("/")[0]))
+                    except Exception:
+                        pass
+                if steps:
+                    latest = max(steps, key=lambda x: x[0])[1]
+                    logger.info("Downloading hub checkpoint %s ...", latest)
+                    snap = snapshot_download(repo_id=args.hub_id, repo_type="model",
+                                             token=token, allow_patterns=[f"{latest}/*"])
+                    hub_ckpt = Path(snap) / latest
+                    # copy to output_dir for Trainer
+                    import shutil
+                    output_dir.mkdir(parents=True, exist_ok=True)
+                    dest = output_dir / latest
+                    if dest.exists():
+                        shutil.rmtree(dest)
+                    shutil.copytree(hub_ckpt, dest)
+                    resume_checkpoint = str(dest)
+                    logger.info("Resuming from hub %s -> %s", latest, resume_checkpoint)
+            except Exception as e:
+                logger.warning("Hub resume failed (starting fresh): %s", e)
 
     logger.info("Starting SFT: max_steps=%d eff_batch=%d", args.max_steps,
                 args.batch * args.accum)
@@ -267,10 +298,13 @@ def main():
     processor.save_pretrained(str(adapter_dir))
 
     from huggingface_hub import HfApi
-    api = HfApi(token=token)
-    api.create_repo(args.hub_id, exist_ok=True)
-    api.upload_folder(repo_id=args.hub_id, folder_path=str(adapter_dir))
-    logger.info("Adapter pushed -> %s", args.hub_id)
+    try:
+        api = HfApi(token=token)
+        api.create_repo(args.hub_id, exist_ok=True)
+        api.upload_folder(repo_id=args.hub_id, folder_path=str(adapter_dir))
+        logger.info("Adapter pushed -> %s", args.hub_id)
+    except Exception as e:
+        logger.warning("Final adapter push failed (non-fatal, saved locally at %s): %s", adapter_dir, e)
 
 
 if __name__ == "__main__":
