@@ -163,10 +163,11 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 | Benchmark | Result | Source |
 |-----------|--------|--------|
 | OCRBench (v0.1 TinyDoc-256M) | **0.0%** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
-| DocVQA / FUNSD / CORD | **Not measured** for a working checkpoint | — |
-| SROIE field F1 (Phase 0) | See [`evaluation/phase0/results/`](evaluation/phase0/results/) once run | phase0 harness |
+| SROIE field F1 (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address residual **0.72**) | [`evaluation/phase0/results/`](evaluation/phase0/results/) |
+| FUNSD field F1 (free engine, n=50 form→receipt-shaped keys) | **0.352** (schema 0.880) | [`evaluation/phase0/results/scores_funsd_ollama.json`](evaluation/phase0/results/scores_funsd_ollama.json) |
+| DocVQA / CORD | **Not measured** for a working checkpoint | — |
 
-Targets and estimated tables in older docs are **not** results. Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
+Ship status (2026-09-23): SDK unit tests **30 passed** · local Gradio demo `demo/app.py --share` · training skipped for Phase 1. Targets and estimated tables in older docs are **not** results. Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
 
 ## Package Structure
 

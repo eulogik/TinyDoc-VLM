@@ -83,11 +83,16 @@ def download_funsd(data_dir: Path) -> Path:
             img_path = images_dir / img_name
             if not img_path.exists():
                 img.save(str(img_path))
+            # HF nielsr/funsd uses ClassLabel `ner_tags` (names: O/B-HEADER/...);
+            # `labels` is absent and would write empty arrays.
+            ner = item.get("ner_tags")
+            if ner is None:
+                ner = item.get("labels", [])
             formatted.append({
                 "image": f"funsd/images/{img_name}",
                 "words": item.get("words", []),
                 "bboxes": item.get("bboxes", []),
-                "labels": item.get("labels", []),
+                "labels": ner,
             })
 
     out_path = out_dir / "funsd.json"

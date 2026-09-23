@@ -1,186 +1,158 @@
 #!/usr/bin/env python3
-"""
-Gradio demo for TinyDoc-VLM.
-Interactive document understanding with structured output extraction.
+"""Local Gradio demo — ReceiptPipeline (free Ollama engine), evidence + overlay.
 
 Usage:
-    python demo/app.py --model-path checkpoints/best
+  export PATH="/opt/homebrew/bin:$PATH"
+  PYTHONPATH=sdk python demo/app.py --share --port 7860
+  # or after pip install ./sdk:
+  python demo/app.py --share
+
+Requires local Ollama with qwen2.5vl:3b (`ollama pull qwen2.5vl:3b`).
+No API key. Evidence boxes are OCR-span (Tesseract), not VLM boxes.
 """
+
+from __future__ import annotations
 
 import argparse
 import json
+import sys
 import tempfile
+import traceback
 from pathlib import Path
-from typing import Optional
 
-import gradio as gr
-import torch
-from PIL import Image
-
-from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
+ROOT = Path(__file__).absolute().parent.parent
+SDK = ROOT / "sdk"
+if str(SDK) not in sys.path:
+    sys.path.insert(0, str(SDK))
 
 EXAMPLE_DIR = Path(__file__).parent / "examples"
-EXAMPLE_DIR.mkdir(exist_ok=True)
 
 
-def load_model(model_path: str, device: Optional[str] = None):
-    device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-    model = TinyDocVLMForConditionalGeneration.from_pretrained(model_path)
-    model.to(device)
-    model.eval()
-    processor = TinyDocVLMProcessor()
-    return model, processor, device
+def build_demo():
+    import gradio as gr
 
+    from tinydoc import ReceiptPipeline, draw_overlay
 
-def extract_document(image, question: str, model, processor, device) -> str:
-    if image is None:
-        return "Please upload a document image."
+    pipe = ReceiptPipeline("auto")
 
-    text = f"{question} <image>"
-    inputs = processor(text=text, images=image)
+    def extract(image, with_evidence: bool, overlay: bool):
+        if image is None:
+            return (
+                "Upload a receipt image.",
+                "{}",
+                None,
+                "—",
+                "—",
+            )
+        # gradio may give PIL or path
+        if hasattr(image, "save"):
+            tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+            image.save(tmp.name)
+            path = tmp.name
+        else:
+            path = str(image)
 
-    with torch.no_grad():
-        inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=256,
-            do_sample=False,
-            num_beams=1,
+        try:
+            doc = pipe.extract(path, with_evidence=with_evidence)
+        except Exception as e:
+            traceback.print_exc()
+            return (f"Error: {e}", "{}", None, "—", "—")
+
+        fields_json = json.dumps(doc.fields, indent=2, ensure_ascii=False)
+        summary = (
+            f"engine=`{doc.engine}` · schema_valid=`{doc.schema_valid}` · "
+            f"confidence=`{doc.confidence:.3f}` · evidence_coverage=`{doc.evidence_coverage:.3f}` · "
+            f"latency=`{doc.latency_ms:.0f} ms`"
         )
+        detail_rows = [
+            [
+                fr.name,
+                fr.value,
+                f"{fr.confidence:.3f}",
+                (fr.evidence or {}).get("kind", ""),
+                ((fr.evidence or {}).get("quote") or "")[:120],
+            ]
+            for fr in doc.field_results
+        ]
+        overlay_path = None
+        if overlay:
+            try:
+                out = Path(tempfile.mkstemp(suffix="_overlay.png")[1])
+                draw_overlay(path, doc.field_results, out)
+                overlay_path = str(out)
+            except Exception as e:
+                traceback.print_exc()
+                overlay_path = None
+        return summary, fields_json, overlay_path, detail_rows, doc.raw[:2000]
 
-    result = processor.tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return result
+    examples = []
+    if EXAMPLE_DIR.exists():
+        for p in sorted(EXAMPLE_DIR.glob("*.png")):
+            examples.append([str(p), True, True])
 
-
-def extract_json(image, model, processor, device) -> str:
-    return extract_document(
-        image,
-        "Extract all structured information from this document as JSON:",
-        model, processor, device,
-    )
-
-
-def extract_kv(image, model, processor, device) -> str:
-    return extract_document(
-        image,
-        "Extract all key-value pairs from this document:",
-        model, processor, device,
-    )
-
-
-def extract_table(image, model, processor, device) -> str:
-    return extract_document(
-        image,
-        "Extract any tables in this document as Markdown:",
-        model, processor, device,
-    )
-
-
-def build_interface(model, processor, device):
-    with gr.Blocks(title="TinyDoc-VLM Document Understanding", theme=gr.themes.Soft()) as demo:
+    with gr.Blocks(title="TinyDoc — local grounded extraction") as demo:
         gr.Markdown(
             """
-            # 📄 TinyDoc-VLM
-            ### The World's Smallest Document Understanding Model
-            Upload a document image to extract structured information.
+# TinyDoc — local grounded receipt extraction
+Schema-validated JSON · per-field OCR-span evidence · confidence · **no API key**.
+Engine: free `ollama:qwen2.5vl:3b` (or OCR floor if Ollama is down).
             """
         )
-
         with gr.Row():
             with gr.Column(scale=1):
-                image_input = gr.Image(type="pil", label="Document Image", height=400)
-                question_input = gr.Textbox(
-                    label="Question / Prompt",
-                    value="Extract all structured information from this document as JSON:",
-                    lines=2,
+                image_in = gr.Image(type="pil", label="Receipt image", height=420)
+                with_evidence = gr.Checkbox(value=True, label="Attach evidence (Tesseract)")
+                do_overlay = gr.Checkbox(value=True, label="Draw overlay PNG")
+                btn = gr.Button("Extract", variant="primary")
+                ex = gr.Examples(
+                    examples=examples,
+                    inputs=[image_in, with_evidence, do_overlay],
+                    label="Examples",
                 )
-                with gr.Row():
-                    submit_btn = gr.Button("🔍 Extract", variant="primary", scale=2)
-                    clear_btn = gr.Button("🗑️ Clear", scale=1)
-
             with gr.Column(scale=1):
-                output = gr.Textbox(label="Extracted Result", lines=20, max_lines=40)
+                summary = gr.Textbox(label="Summary", lines=2)
+                fields_json = gr.Code(label="Fields (JSON)", language="json")
+                overlay_out = gr.Image(label="Overlay", type="pil")
+                detail = gr.Dataframe(
+                    headers=["field", "value", "confidence", "evidence", "quote"],
+                    label="Field detail",
+                    wrap=True,
+                )
+                raw = gr.Textbox(label="Raw", lines=4)
 
-        gr.Examples(
-            examples=[
-                [str(EXAMPLE_DIR / "invoice.png"), "Extract invoice details as JSON:"],
-                [str(EXAMPLE_DIR / "receipt.png"), "What is the total amount?"],
-                [str(EXAMPLE_DIR / "table.png"), "Convert this table to Markdown:"],
-            ] if any(EXAMPLE_DIR.iterdir()) else [],
-            inputs=[image_input, question_input],
+        btn.click(
+            fn=extract,
+            inputs=[image_in, with_evidence, do_overlay],
+            outputs=[summary, fields_json, overlay_out, detail, raw],
         )
-
-        with gr.Accordion("⚡ Quick Actions", open=False):
-            with gr.Row():
-                json_btn = gr.Button("📋 Extract as JSON")
-                kv_btn = gr.Button("🔑 Extract Key-Value")
-                table_btn = gr.Button("📊 Extract Table")
-                ocr_btn = gr.Button("📝 OCR Text")
-
-        def process(image, question):
-            return extract_document(image, question, model, processor, device)
-
-        def process_json(image):
-            return extract_json(image, model, processor, device)
-
-        def process_kv(image):
-            return extract_kv(image, model, processor, device)
-
-        def process_table(image):
-            return extract_table(image, model, processor, device)
-
-        submit_btn.click(fn=process, inputs=[image_input, question_input], outputs=output)
-        json_btn.click(fn=process_json, inputs=[image_input], outputs=output)
-        kv_btn.click(fn=process_kv, inputs=[image_input], outputs=output)
-        table_btn.click(fn=process_table, inputs=[image_input], outputs=output)
-
-        def clear():
-            return None, "", ""
-
-        clear_btn.click(fn=clear, outputs=[image_input, question_input, output])
-
         gr.Markdown(
             """
-            ---
-            ### 💡 Tips
-            - Upload scanned documents, photos of documents, or screenshots
-            - For best results, ensure the document is well-lit and in focus
-            - Use specific questions for better extraction accuracy
-            - The model runs locally — no data leaves your device
+---
+**Honesty notes**
+- Evidence kind is always `ocr_span` (Tesseract word boxes), not VLM-predicted boxes.
+- Schema-valid rate and field F1 are measured on a 100-doc SROIE holdout — see `evaluation/phase0/README.md`.
+- Address field is the hardest (lookalike OCR confusions); confidence + evidence coverage surface HITL cases.
             """
         )
-
     return demo
 
 
-def main():
-    parser = argparse.ArgumentParser(description="TinyDoc-VLM Demo")
-    parser.add_argument("--model-path", type=str, default=None,
-                        help="Path to model checkpoint (default: creates a new model)")
-    parser.add_argument("--device", type=str, default=None, help="Device to use")
-    parser.add_argument("--share", action="store_true", help="Create public Gradio link")
-    parser.add_argument("--port", type=int, default=7860, help="Port to run on")
-    args = parser.parse_args()
+def main() -> None:
+    import gradio as gr
 
-    if args.model_path:
-        logger.info(f"Loading model from {args.model_path}")
-        model, processor, device = load_model(args.model_path)
-    else:
-        logger.info("No model path provided. Creating fresh model (weights will be untrained).")
-        device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
-        from tinydoc_vlm import TinyDocVLMConfig
-        config = TinyDocVLMConfig()
-        model = TinyDocVLMForConditionalGeneration(config)
-        model.to(device)
-        processor = TinyDocVLMProcessor()
-
-    logger.info(f"Running on {device}")
-    demo = build_interface(model, processor, device)
-    demo.launch(share=args.share, server_port=args.port)
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--share", action="store_true", help="Create public Gradio link")
+    ap.add_argument("--port", type=int, default=7860)
+    ap.add_argument("--host", default="127.0.0.1")
+    args = ap.parse_args()
+    demo = build_demo()
+    demo.launch(
+        share=args.share,
+        server_port=args.port,
+        server_name=args.host,
+        theme=gr.themes.Soft(),
+    )
 
 
 if __name__ == "__main__":
-    import logging
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    logger = logging.getLogger(__name__)
     main()

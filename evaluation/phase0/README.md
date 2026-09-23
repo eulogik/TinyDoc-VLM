@@ -1,7 +1,7 @@
 # Phase 0 — SROIE field extraction baselines (measured)
 
-**Status:** complete (2026-09-22) · n=100 full runs for 3 engines · grounding base-calibrated · **layout-family split + cleaned holdout landed**  
-**Vertical:** SROIE receipts → `{company, date, address, total}`  
+**Status:** complete (2026-09-22) · n=100 full runs for 3 engines · grounding base-calibrated · **layout-family split + cleaned holdout landed** · ship-bar FUNSD n=50 + address postprocess negatives + unit tests + local demo (2026-09-23)  
+**Vertical:** SROIE receipts → `{company, date, address, total}` (primary); FUNSD forms second vertical (see below)  
 **Holdout:** `results/sroie_holdout.txt` — **exclude from any future training**; use `data/training/manifest_train_clean.jsonl` for any adapter training.
 
 ## Measured results (`results/baseline_table.md`)
@@ -119,6 +119,46 @@ python evaluation/phase0/run_pipeline_eval.py --engine ollama --with-evidence
 | Address misses | 28 | 28 |
 
 Evidence does **not** change extracted fields (ocr_span attach only). Coverage 0 means Tesseract found no matching span — honest HITL signal, not a field error. Script writes `*_evidence` suffix so evidence-on never overwrites the evidence-off baseline.
+
+### Second vertical — FUNSD forms (n=50, 2026-09-23)
+
+```bash
+python evaluation/phase0/run_funsd_eval.py --engine ollama --limit 50
+# → results/scores_funsd_ollama.json
+# → results/preds_funsd_ollama.jsonl
+```
+
+| Metric | Value |
+|--------|-------|
+| Field F1 | **0.352** |
+| Schema-valid | 0.880 |
+| Per-field hit | company(header) 0.50 · date 0.20 · address(questions) 0.26 · total(answers) 0.40 |
+| Avg latency | 9907 ms |
+
+**Honest read:** FUNSD is a *different* task (form KIE with word-level NER tags mapped onto the receipt-shaped 4 keys). F1 **0.352 ≫ OCR-floor expectations for this mapping** but far below SROIE receipts (0.870) — the free engine is **receipt-specialized via prompt/schema**, not a general form parser. This is the measured second vertical; no fine-tuning was done (Phase-2 “no gap → skip training” still holds for the primary vertical).
+
+### Address postprocess attempts (negative results, 2026-09-23)
+
+Ship-bar target was address F1 ≥ **0.80** (need +8 hits from 28 misses). Measured postprocess paths (all on the 28 existing misses; **no metric change**):
+
+| Attempt | Hits fixed | Notes |
+|---------|------------|-------|
+| Multi-PSM OCR window search **with gold as key** | 27/28 | **Invalid** — gold leakage; cannot ship |
+| OCR line fusion (sim/token/postcode/structure, no gold) | **0/28** | Selection without gold cannot find the gold-matching OCR line |
+| OCR-hinted VLM second pass (28 images) | **0/28** | Model re-emits same lookalike errors |
+| Address-band crop re-extract (28) | **1/28** | `img_000814` only |
+| Multi-sample majority vote (3× temp 0.4 + original) | **2/28** | → address would be 0.74, **still < 0.80** |
+
+**Conclusion:** address stays at measured **0.72** for the shippable product. Reaching 0.80 needs either (a) metric acceptance of lookalike near-misses (rejected as gaming), or (b) training/better base (Phase-2 trigger (b) still false for overall F1; address alone is documented as the residual gap). Do not claim address ≥0.80.
+
+### Ship-bar checklist (2026-09-23)
+
+| # | Item | Status |
+|---|------|--------|
+| 1 | Address F1 ≥0.80 via postprocess | **Not met** (0.72; see negative results above) |
+| 2 | Second vertical measured | **Done** — FUNSD n=50 F1 0.352 (`scores_funsd_ollama.json`) |
+| 3 | Local Gradio demo `share=True` | **Done** — `demo/app.py` on `ReceiptPipeline`; smoke HTTP 200 |
+| 4 | SDK unit tests (schema/router/evidence) | **Done** — `tests/test_pipeline.py` **30 passed** |
 
 Install + run:
 

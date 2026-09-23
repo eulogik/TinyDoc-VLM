@@ -1,6 +1,6 @@
 # TinyDoc — local-first grounded document extraction
 
-**Status (2026-09-22):** Phase 1 product spine. Free `ollama:qwen2.5vl:3b` engine · field F1 **0.870** (n=100 SROIE holdout, full `ReceiptPipeline` e2e + engine-only, prompt-v1, punctuation-insensitive company/address metrics) · schema-valid **1.000** · unseen-layout F1 **0.955** (n=11, address 11/11). With `--with-evidence`: same F1, mean confidence **0.694**, evidence coverage **0.668**. No API key. Training skipped for Phase 1 (free engine already beats OCR floor).
+**Status (2026-09-23):** Phase 1 product spine. Free `ollama:qwen2.5vl:3b` · SROIE field F1 **0.870** (n=100 holdout, `ReceiptPipeline` e2e + engine-only, prompt-v1) · schema-valid **1.000** · unseen-layout F1 **0.955** (n=11). Evidence-on: same F1, mean conf **0.694**, coverage **0.668**. Second vertical FUNSD n=50: F1 **0.352**, schema **0.880** (different task; measured, not tuned). Address residual **0.72** (postprocess tried; 0.80 **not** claimed). Unit tests: `tests/test_pipeline.py` 30 passed. Local demo: `demo/app.py --share`. No API key. Training skipped for Phase 1.
 
 > Extract receipt/invoice fields as **schema-validated JSON** with per-field **evidence** (quote + bbox) and **confidence**. Runs on a laptop.
 
@@ -50,6 +50,7 @@ Overlay PNGs draw OCR-span evidence boxes + field labels (`tinydoc.draw_overlay`
 |--------|----------|--------|-------|
 | **ollama:qwen2.5vl:3b** | **0.870** | 1.000 | default; free, local (unconstrained + salvage + prompt-v1) |
 | ReceiptPipeline e2e | 0.870 | 1.000 | sanitize + jsonschema path (`run_pipeline_eval.py`) |
+| FUNSD forms (n=50) | 0.352 | 0.880 | second vertical; form NER → receipt-shaped keys (`run_funsd_eval.py`) |
 | auto (`RoutedEngine`) | — | — | ollama if up; OCR fills **empty** fields only when schema fails |
 | ocr_regex | 0.227 | 0.600 | floor / offline fallback |
 | smolvlm2 (base 2.2B) | 0.330 | 0.960 | optional local weights |

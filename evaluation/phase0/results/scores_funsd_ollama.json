@@ -1,0 +1,32 @@
+{
+  "n_examples": 50,
+  "field_precision": 0.3617021276595745,
+  "field_recall": 0.3434343434343434,
+  "field_f1": 0.3523316062176166,
+  "anls_mean": 0.07100013000790306,
+  "schema_valid_rate": 0.88,
+  "exact_json_all_fields": 0.0,
+  "engine": "funsd_pipeline:ollama:qwen2.5vl:3b",
+  "vertical": "funsd_forms",
+  "avg_latency_ms": 9907.30679988861,
+  "with_evidence": false,
+  "mean_confidence": 0.362934,
+  "per_field": {
+    "company": {
+      "hit_rate": 0.5,
+      "anls_mean": 0.26135582165265925
+    },
+    "date": {
+      "hit_rate": 0.2,
+      "anls_mean": 0.0
+    },
+    "address": {
+      "hit_rate": 0.26,
+      "anls_mean": 0.022644698378952964
+    },
+    "total": {
+      "hit_rate": 0.4,
+      "anls_mean": 0.0
+    }
+  }
+}

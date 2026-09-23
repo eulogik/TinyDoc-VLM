@@ -317,7 +317,11 @@ Implication: the provisional `PASS_ENT ≥ 1.0` gate is **above base** — any a
   - Future adapter training must use `manifest_train_clean.jsonl` (not raw `manifest.jsonl`).
   - `run_baseline.py` `merge_table()` **excludes** `scores_*_unseen.json` so the main n=100 table stays clean.
 - [x] **pip install packaging** (`sdk/setup.py` 0.1.3): core deps pydantic/pillow/jsonschema; extras `ocr`/`smolvlm2`/`all`; `tinydoc` console script; packaged schema at `tinydoc/schemas/sroie_receipt.schema.json`. Verified: `pip install ./sdk` → schema in dist + `tinydoc extract --help`; editable reinstall for dev.
-- [ ] SDK matches `sdk/tinydoc` signatures already in repo. — *mostly done; legacy `TinyDocExtractor` still lazy-import for 256M path.*
+- [x] SDK matches `sdk/tinydoc` signatures already in repo. — *legacy `TinyDocExtractor` remains lazy-import for 256M path; pipeline surface is the product API.*
+- [x] **Address postprocess attempts (2026-09-23, negative):** multi-PSM OCR fusion / OCR-hinted re-extract / crop re-extract / 4-way majority vote fixed **0–2 of 28** misses (oracle-with-gold 27/28 is invalid). Address stays **0.72**; ship-bar 0.80 **not met** — do not claim otherwise. Full table: `evaluation/phase0/README.md`.
+- [x] **Second vertical FUNSD n=50** (2026-09-23): field F1 **0.352**, schema **0.880**, company/header 0.50 · answers 0.40. Receipt-shaped key mapping over form NER tags — different task than SROIE; no FT. Artifacts: `results/scores_funsd_ollama.json`, `preds_funsd_ollama.jsonl`, runner `run_funsd_eval.py`. CORD images still 0 on disk (HF download in progress / previously missing).
+- [x] **Local Gradio demo** (`demo/app.py` rewrite): `ReceiptPipeline("auto")` + evidence + overlay + field table; smoke `HTTP 200` on `:7861`. Launch: `PYTHONPATH=sdk python demo/app.py --share --port 7860`.
+- [x] **SDK unit tests** `tests/test_pipeline.py` — **30 passed** (schema, sanitize/collapse, `_extract_json` salvage, RoutedEngine fill-only-on-schema-fail, confidence, ReceiptPipeline.extract with stub engine, folder limit).
 
 **Exit:** `pip install` → cited JSON on a folder of receipts, laptop-only. This is the **launchable artifact**.
 
@@ -331,15 +335,16 @@ Implication: the provisional `PASS_ENT ≥ 1.0` gate is **above base** — any a
 ### Phase 2 — Close the measured gap (days 10–25) — conditional
 
 - [ ] If Phase 0/1 show gap: B1 model choice → B2 recipe → short Kaggle/paid run → B4 gates → merge into A1 as `engine="tinydoc-ft"`.
-- [ ] If no gap: **skip training entirely**; invest in schemas, doc types, and grounding quality.
+- [x] If no gap: **skip training entirely**; invest in schemas, doc types, and grounding quality. — **Decision 2026-09-22/23:** overall field F1 0.870 + unseen 0.955 + FUNSD second vertical measured at 0.352 (documented residual). Address-only 0.72 does **not** by itself trigger FT (postprocess tried and failed; revisit only with a stronger base per B1, not more SmolVLM2 QLoRA).
 
-**Exit:** adapter passes B4 **or** explicit decision that base engines suffice.
+**Exit:** adapter passes B4 **or** explicit decision that base engines suffice. — **Decision: base engines suffice for Phase 1 ship bar** (address 0.80 sub-target open; other three ship items done).
 
 ### Phase 3 — Launch (days 25–40)
 
 - [ ] Honest benchmark blog: methodology + numbers from A5 (including failures).
 - [ ] Demo video: local extraction with evidence boxes vs API cost calculator (using **verified** Textract/Doc AI prices in §2.5).
 - [ ] Show HN / r/LocalLLaMA / HF Space — **lead with product**, not with loss curves.
+- [x] Local Gradio demo with `share=True` — `demo/app.py` (ReceiptPipeline; HF Space still separate/pending).
 - [ ] Optional: distill/publish adapter only if it wins B4.
 
 ### Phase 4 — Business wedge (post-launch)
