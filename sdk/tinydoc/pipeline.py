@@ -11,6 +11,7 @@ Large model weights live on the KIOXIA external disk (never the system volume).
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 from dataclasses import dataclass
@@ -348,6 +349,9 @@ class OllamaEngine(BaseEngine):
             "Never omit total. JSON only, no markdown."
         )
         b64 = base64.b64encode(Path(image_path).read_bytes()).decode()
+        # Client disconnects mid-generation leave the single-slot server wedged;
+        # keep this generous (env-overridable) for slow local GPUs.
+        timeout = float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "180"))
 
         def _call(p: str) -> Dict[str, str]:
             # NOTE: do NOT set format="json" — Ollama constrained decoding
@@ -364,7 +368,7 @@ class OllamaEngine(BaseEngine):
                 headers={"Content-Type": "application/json"},
                 method="POST",
             )
-            with urllib.request.urlopen(req, timeout=180) as resp:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
                 body = json.loads(resp.read().decode())
             raw = (body.get("message") or {}).get("content", "") or ""
             obj = _extract_json(raw) or {}

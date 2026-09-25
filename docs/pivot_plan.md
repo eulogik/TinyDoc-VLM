@@ -441,3 +441,25 @@ Implication: the provisional `PASS_ENT ≥ 1.0` gate is **above base** — any a
 ---
 
 *If only one sentence survives review: **stop optimizing a checkpoint that cannot beat a free download; ship grounded local extraction with honest field-level numbers, and train only where those numbers show a gap.***
+
+---
+
+## 11. Execution log — product-ship round (2026-09-24)
+
+Ledger: `.unlazy/product-ship-2026-09-24/GATES.md` · gate checker: `node scripts/verify-product.mjs <gate>`.
+7/8 gates green at time of writing (engine ladder pending 7B eval).
+
+| # | Decision | Outcome |
+|---|----------|---------|
+| D1 | 256M retired from all performance claims | OCRBench **0.0% (n=1000)** artifacts committed (`ocrbench_256m_full.*`); checkpoints stay on HF as research artifacts |
+| D2 | Competitive claim = beat free local competition, measured | **PP-OCR+heuristics baseline = 0.376 F1** vs pipeline **0.870** (same 100 docs, same scorer) — `scores_ppocr_heuristics.json` |
+| D3 | Engine ladder decided by number | **keep 3B** — paired n=10 pilot: F1 identical (0.975 vs 0.975), 7B 4.5× slower (15.0s vs 3.4s), full n=100 attempt crashed the 16GB host → `engine_ladder.json` records decision + hardware evidence |
+| D4 | Evidence OCR engine decided by A/B | RapidOCR wins (coverage .668→.798, gold-in-quote .415→.535) → **adopted** as `evidence.py` default; `evidence_ab.json` |
+| D5 | Address ships at 0.72 with HITL | fusion exhausted (all strategies 0–2/28 misses); confidence + evidence carry the story |
+| D6 | FUNSD relabeled | "transfer probe, nonstandard gold mapping (date=answers[0])" in README + BENCHMARKS |
+| D7 | Public-claims cleanup | `index.html` rewritten to measured results (live on Pages), `benchmark_results.json` split measured/legacy_unverified, do-not-publish banners on paper/pitch/reddit/twitter/launch, `BENCHMARKS.md` rewritten |
+| D8 | evidence/overlay/cli tests | 26 new tests (`test_evidence/overlay/cli.py`); suite **69 passed** |
+| D9 | gitignore symlink footguns | slashless exact-name block + `.unlazy/`; `git add -An` clean (gate) |
+| D10 | Claim audit tooling | `evaluation/phase0/recompute_scores.py` — 9/9 published score pairs recompute; run in CI-style gate `verify-product.mjs audit` |
+
+Also this round: OCR ceiling experiment killed the LayoutLM/token-classifier path (Tesseract verbatim gold-in-OCR: company 37.5%, address **10.0%**; PP-OCR head-to-head n=40: date +37.5→87.5%, total +35→95%, address 7.5% — no OCR engine rescues token classifiers); `sdk/setup.py` gained `ocr-pp` extra; demo temp leak fixed.

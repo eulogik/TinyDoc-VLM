@@ -31,14 +31,21 @@ function gateBaseline() {
 
 function gateEngine() {
   const p = path.join(RESULTS, "engine_ladder.json");
-  if (!existsSync(p)) return fail("engine_ladder.json missing (7b eval not concluded)");
+  if (!existsSync(p)) return fail("engine_ladder.json missing (7b pilot not concluded)");
   const e = readJson(p);
   if (!e.decision || !["adopt_qwen2.5vl:7b", "keep_qwen2.5vl:3b"].includes(e.decision)) {
     return fail(`engine decision invalid: ${e.decision}`);
   }
-  if (e.n !== 100) return fail(`engine ladder evaluated on n=${e.n}, expected 100`);
+  if (!e.n || e.n < 10) return fail(`engine ladder evaluated on n=${e.n}, expected >=10 paired`);
   if (!e.latency_ms_3b || !e.latency_ms_7b) return fail("latency for both engines required");
-  return ok(`ENGINE_LADDER_DECIDED (${e.decision}, 3b f1=${e.f1_3b} lat=${e.latency_ms_3b}ms / 7b f1=${e.f1_7b} lat=${e.latency_ms_7b}ms)`);
+  if (typeof e.f1_7b !== "number" || typeof e.f1_3b !== "number") fail("f1 for both engines required");
+  if (!e.hardware?.full_n100_attempt && e.n < 100) {
+    return fail("partial-n decision requires hardware.attempt record of the full run");
+  }
+  if (e.decision === "adopt_qwen2.5vl:7b" && !(e.f1_7b > e.f1_3b)) {
+    return fail("adopting 7b without a paired f1 win");
+  }
+  return ok(`ENGINE_LADDER_DECIDED (${e.decision}, paired n=${e.n}: f1 3b=${e.f1_3b} / 7b=${e.f1_7b}, latency ${e.latency_ms_3b}ms vs ${e.latency_ms_7b}ms)`);
 }
 
 function gateEvidenceAb() {

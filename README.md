@@ -177,7 +177,7 @@ Every number above recomputes from committed artifacts:
 python3 evaluation/phase0/recompute_scores.py   # claim audit — must exit 0
 ```
 
-Ship status (2026-09-24): SDK unit tests **69 passed** (incl. evidence, overlay, CLI) · evidence engine = PP-OCR (measured A/B win over Tesseract: coverage 0.67→0.80, gold-in-quote 0.42→0.54) · competitive claim **measured**: 0.870 vs 0.376 for the free PP-OCR+heuristics competitor · local Gradio demo `demo/app.py --share` · training skipped. Estimated/target tables in older docs are **not** results (withdrawn: `docs/benchmark_results.json` `legacy_unverified`). Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
+Ship status (2026-09-25): SDK unit tests **69 passed** (incl. evidence, overlay, CLI) · engine ladder decided: **keep qwen2.5vl:3b** (7B paired pilot: identical F1, 4.5× slower, unstable on 16GB) · evidence engine = PP-OCR (measured A/B win over Tesseract: coverage 0.67→0.80, gold-in-quote 0.42→0.54) · competitive claim **measured**: 0.870 vs 0.376 for the free PP-OCR+heuristics competitor · local Gradio demo `demo/app.py --share` · training skipped. Estimated/target tables in older docs are **not** results (withdrawn: `docs/benchmark_results.json` `legacy_unverified`). Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
 
 ## Package Structure
 

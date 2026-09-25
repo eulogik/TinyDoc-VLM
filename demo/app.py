@@ -45,10 +45,12 @@ def build_demo():
                 "—",
             )
         # gradio may give PIL or path
+        tmp_input = None
         if hasattr(image, "save"):
             tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
             image.save(tmp.name)
             path = tmp.name
+            tmp_input = path
         else:
             path = str(image)
 
@@ -56,6 +58,8 @@ def build_demo():
             doc = pipe.extract(path, with_evidence=with_evidence)
         except Exception as e:
             traceback.print_exc()
+            if tmp_input:
+                Path(tmp_input).unlink(missing_ok=True)
             return (f"Error: {e}", "{}", None, "—", "—")
 
         fields_json = json.dumps(doc.fields, indent=2, ensure_ascii=False)
@@ -77,12 +81,15 @@ def build_demo():
         overlay_path = None
         if overlay:
             try:
-                out = Path(tempfile.mkstemp(suffix="_overlay.png")[1])
+                with tempfile.NamedTemporaryFile(suffix="_overlay.png", delete=False) as tf:
+                    out = Path(tf.name)
                 draw_overlay(path, doc.field_results, out)
                 overlay_path = str(out)
             except Exception as e:
                 traceback.print_exc()
                 overlay_path = None
+        if tmp_input:
+            Path(tmp_input).unlink(missing_ok=True)
         return summary, fields_json, overlay_path, detail_rows, doc.raw[:2000]
 
     examples = []

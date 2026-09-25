@@ -1,0 +1,33 @@
+{
+  "decision": "keep_qwen2.5vl:3b",
+  "date": "2026-09-25",
+  "design": "guarded n=10 pilot on the same first-10 SROIE eval docs (paired 3B control), memory watchdog armed; full n=100 attempt abandoned after crashing the 16GB host (documented below)",
+  "n": 10,
+  "f1_7b": 0.975,
+  "f1_3b": 0.975,
+  "f1_3b_full_100": 0.87,
+  "anls_7b": 0.998,
+  "anls_3b": 0.9804,
+  "schema_7b": 1.0,
+  "schema_3b": 1.0,
+  "latency_ms_7b": 15030,
+  "latency_ms_3b": 3379,
+  "per_field_hit": {
+    "company": {"7b": 1.0, "3b": 1.0},
+    "date": {"7b": 1.0, "3b": 1.0},
+    "address": {"7b": 0.9, "3b": 0.9},
+    "total": {"7b": 1.0, "3b": 1.0}
+  },
+  "hardware": {
+    "host": "16GB Apple M4",
+    "model_size_7b": "6.9GB resident",
+    "full_n100_attempt": "crashed the host (reboot) on 2026-09-25; 6 client timeouts at 180s preceded the crash (server wedge)",
+    "pilot_safeguards": "TINYDOC_OLLAMA_TIMEOUT=600, memory watchdog (watch_mem.sh), machine otherwise idle"
+  },
+  "rationale": "No measurable quality gap on the paired subset (F1 identical 0.975; ANLS +0.018 for 7B is within n=10 noise and both are at ceiling), 7B is 4.5x slower per doc (15.0s vs 3.4s) and destabilized a 16GB host on the full run. 3B stays the default; 7B not adopted as a quality tier on this hardware class.",
+  "artifacts": [
+    "evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_7b_7b.json",
+    "evaluation/phase0/results/preds_pipeline_ollama_qwen2.5vl_7b_7b.jsonl",
+    "evaluation/phase0/results/preds_pipeline_ollama_qwen2.5vl_3b.jsonl (first-10 control)"
+  ]
+}

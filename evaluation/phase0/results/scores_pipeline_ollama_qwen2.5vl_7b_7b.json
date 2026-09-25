@@ -1,0 +1,36 @@
+{
+  "n_examples": 10,
+  "field_precision": 0.975,
+  "field_recall": 0.975,
+  "field_f1": 0.975,
+  "anls_mean": 0.998032774462442,
+  "schema_valid_rate": 1.0,
+  "exact_json_all_fields": 0.9,
+  "engine": "receipt_pipeline:ollama:qwen2.5vl:7b",
+  "eval_path": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/evaluation/phase0/results/sroie_eval.json",
+  "limit": 10,
+  "avg_latency_ms": 15030.254316329956,
+  "with_evidence": false,
+  "pipeline_schema_valid_rate": 1.0,
+  "mean_confidence": 0.4025,
+  "mean_evidence_coverage": 0.0,
+  "split": "7b",
+  "per_field": {
+    "company": {
+      "hit_rate": 1.0,
+      "anls_mean": 1.0
+    },
+    "date": {
+      "hit_rate": 1.0,
+      "anls_mean": 1.0
+    },
+    "address": {
+      "hit_rate": 0.9,
+      "anls_mean": 0.9921310978497679
+    },
+    "total": {
+      "hit_rate": 1.0,
+      "anls_mean": 1.0
+    }
+  }
+}
