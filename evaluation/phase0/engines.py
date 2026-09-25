@@ -29,8 +29,11 @@ KIOXIA_HF_SMOL = (
 )
 PPDOC_PATH = "/Volumes/KIOXIA 1TB/models/PP-DocBee-2B"
 
+# Identical text to sdk/tinydoc/pipeline.py EXTRACT_PROMPT, which is the single
+# source of truth. tests/test_prompt_parity.py fails if these ever drift, so the
+# phase-0 harness and the product path always score under the same instructions.
 EXTRACT_PROMPT = (
-    'Extract receipt fields. Reply with JSON only, exactly four keys, no extra text:\n'
+    'Extract receipt fields. Reply with JSON only, exactly four keys:\n'
     '{"company":"...","date":"...","address":"...","total":"..."}\n'
     "Rules:\n"
     "- company: merchant name exactly as printed (header/logo line).\n"
@@ -38,7 +41,8 @@ EXTRACT_PROMPT = (
     "- address: full postal address as printed (street, city, postcode). "
     "Transcribe character-by-character; do not guess. "
     "Watch lookalikes: O/0, I/1/l, G/6, B/8, S/5, Z/2. "
-    "Copy postcode digits exactly. Include every address line; do not invent a second street.\n"
+    "Copy postcode digits exactly. Include every address line; "
+    "do not invent a second street.\n"
     "- total: grand total / amount due.\n"
     "Never omit total. JSON only, no markdown."
 )

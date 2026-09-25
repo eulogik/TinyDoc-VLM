@@ -21,6 +21,21 @@ from typing import Any, Dict, List, Optional, Union
 from .evidence import Evidence, attach_evidence
 
 FIELDS = ("company", "date", "address", "total")
+
+EXTRACT_PROMPT = (
+    'Extract receipt fields. Reply with JSON only, exactly four keys:\n'
+    '{"company":"...","date":"...","address":"...","total":"..."}\n'
+    "Rules:\n"
+    "- company: merchant name exactly as printed (header/logo line).\n"
+    "- date: transaction date exactly as printed.\n"
+    "- address: full postal address as printed (street, city, postcode). "
+    "Transcribe character-by-character; do not guess. "
+    "Watch lookalikes: O/0, I/1/l, G/6, B/8, S/5, Z/2. "
+    "Copy postcode digits exactly. Include every address line; "
+    "do not invent a second street.\n"
+    "- total: grand total / amount due.\n"
+    "Never omit total. JSON only, no markdown."
+)
 # Prefer packaged schema (pip install); fall back to repo evaluation path.
 _SCHEMA_NAME = "sroie_receipt.schema.json"
 SCHEMA_PATH = Path(__file__).absolute().parent / "schemas" / _SCHEMA_NAME
@@ -332,22 +347,9 @@ class OllamaEngine(BaseEngine):
         import urllib.error
         import urllib.request
 
-        # Keep in sync with evaluation/phase0/engines.py EXTRACT_PROMPT
-        # (Phase-0 and product path must score under the same instructions).
-        prompt = (
-            'Extract receipt fields. Reply with JSON only, exactly four keys:\n'
-            '{"company":"...","date":"...","address":"...","total":"..."}\n'
-            "Rules:\n"
-            "- company: merchant name exactly as printed (header/logo line).\n"
-            "- date: transaction date exactly as printed.\n"
-            "- address: full postal address as printed (street, city, postcode). "
-            "Transcribe character-by-character; do not guess. "
-            "Watch lookalikes: O/0, I/1/l, G/6, B/8, S/5, Z/2. "
-            "Copy postcode digits exactly. Include every address line; "
-            "do not invent a second street.\n"
-            "- total: grand total / amount due.\n"
-            "Never omit total. JSON only, no markdown."
-        )
+        # Single source of truth (tests/test_prompt_parity.py enforces that the
+        # phase-0 harness and this product path score under identical text).
+        prompt = EXTRACT_PROMPT
         b64 = base64.b64encode(Path(image_path).read_bytes()).decode()
         # Client disconnects mid-generation leave the single-slot server wedged;
         # keep this generous (env-overridable) for slow local GPUs.
