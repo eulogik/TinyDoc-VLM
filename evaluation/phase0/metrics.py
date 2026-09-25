@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -69,6 +70,31 @@ def normalize_text(s: Any) -> str:
     s = re.sub(r"[\$£€]", "", s)
     s = re.sub(r"[^a-z0-9]+", " ", s)
     return re.sub(r"\s+", " ", s).strip()
+
+
+def address_metrics(prediction: Any, ground_truth: Any) -> Dict[str, float]:
+    pred = str(prediction or "").strip()
+    gold = str(ground_truth or "").strip()
+    if not pred and not gold:
+        raw_cer = 0.0
+    elif not pred or not gold:
+        raw_cer = 1.0
+    else:
+        raw_cer = levenshtein(pred, gold) / max(len(pred), len(gold))
+    pred_tokens = normalize_text(pred).split()
+    gold_tokens = normalize_text(gold).split()
+    if not pred_tokens and not gold_tokens:
+        normalized_f1 = 1.0
+    elif not pred_tokens or not gold_tokens:
+        normalized_f1 = 0.0
+    else:
+        overlap = sum((Counter(pred_tokens) & Counter(gold_tokens)).values())
+        normalized_f1 = 2.0 * overlap / (len(pred_tokens) + len(gold_tokens))
+    return {
+        "raw_cer": raw_cer,
+        "normalized_f1": normalized_f1,
+        "raw_exact": float(pred == gold),
+    }
 
 
 def field_match(pred: str, gold: str, kind: str) -> bool:

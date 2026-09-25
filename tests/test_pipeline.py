@@ -17,6 +17,11 @@ SDK = ROOT / "sdk"
 if str(SDK) not in sys.path:
     sys.path.insert(0, str(SDK))
 
+EVAL = ROOT / "evaluation" / "phase0"
+if str(EVAL) not in sys.path:
+    sys.path.insert(0, str(EVAL))
+
+from metrics import address_metrics
 from tinydoc.pipeline import (
     FIELDS,
     BaseEngine,
@@ -270,3 +275,33 @@ class TestReceiptPipeline:
         pipe = ReceiptPipeline(stub)
         rs = pipe.extract_folder(tmp_path, limit=2, with_evidence=False)
         assert len(rs) == 2
+
+
+class TestAddressMetrics:
+    def test_exact_address(self):
+        out = address_metrics("12 Main St", "12 Main St")
+        assert out == {"raw_cer": 0.0, "normalized_f1": 1.0, "raw_exact": 1.0}
+
+    def test_single_character_error(self):
+        out = address_metrics("12 Main St", "13 Main St")
+        assert out["raw_cer"] == pytest.approx(0.1)
+        assert out["normalized_f1"] == pytest.approx(2 / 3)
+        assert out["raw_exact"] == 0.0
+
+    def test_punctuation_only_difference(self):
+        out = address_metrics("12 Main St", "12 Main St.")
+        assert out["raw_cer"] > 0
+        assert out["normalized_f1"] == 1.0
+        assert out["raw_exact"] == 0.0
+
+    def test_empty_addresses(self):
+        assert address_metrics("", "") == {
+            "raw_cer": 0.0,
+            "normalized_f1": 1.0,
+            "raw_exact": 1.0,
+        }
+        assert address_metrics("12 Main St", "") == {
+            "raw_cer": 1.0,
+            "normalized_f1": 0.0,
+            "raw_exact": 0.0,
+        }

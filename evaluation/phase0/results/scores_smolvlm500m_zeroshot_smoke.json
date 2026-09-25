@@ -1,0 +1,19 @@
+{
+  "engine": "smolvlm500m_zeroshot",
+  "model_dir": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/models/smolvlm500m",
+  "n_examples": 3,
+  "scored_rows": 3,
+  "field_f1": 0.2727272727272727,
+  "schema_valid_rate": 0.6666666666666666,
+  "anls_mean": 0.36944444444444446,
+  "avg_latency_ms": 8278.906663258871,
+  "peak_mps_alloc_mb": 968.0,
+  "longest_edge": 1024,
+  "per_field_hit_rate": {
+    "company": 0.3333333333333333,
+    "date": 0.6666666666666666,
+    "address": 0.0,
+    "total": 0.0
+  },
+  "errors": 0
+}
