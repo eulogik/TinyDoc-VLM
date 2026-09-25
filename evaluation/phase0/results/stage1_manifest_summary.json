@@ -1,0 +1,20 @@
+{
+  "source": "rajistics/sroie (official 626-row train split, images+labels)",
+  "n_total_public": 626,
+  "n_holdout_hashes": 100,
+  "n_leaked_excluded": 59,
+  "leakage_filter": "perceptual 64x64 correlation >= 0.9 against all holdout images (exact sha256 hashing misses re-encoded duplicates)",
+  "n_dropped_insufficient_fields": 0,
+  "n_train": 427,
+  "n_val": 40,
+  "n_clean_eval": 100,
+  "clean_eval_artifact": "evaluation/phase0/results/sroie_eval_clean.json",
+  "min_fields_required": 3,
+  "field_nonempty_counts": {
+    "company": 567,
+    "date": 567,
+    "address": 566,
+    "total": 566
+  },
+  "question": "sdk.tinydoc.pipeline.EXTRACT_PROMPT (identical to eval prompt)"
+}

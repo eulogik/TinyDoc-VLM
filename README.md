@@ -162,7 +162,7 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 
 | Benchmark | Result | Source |
 |-----------|--------|--------|
-| SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
+| SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) ⚠️ **not a clean held-out set — see caveat** | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
 | SROIE field F1 — PP-OCR + heuristics baseline (same 100 docs, same scorer) | 0.376 | [`scores_ppocr_heuristics.json`](evaluation/phase0/results/scores_ppocr_heuristics.json) |
 | SROIE field F1 — Tesseract + regex baseline | 0.227 | [`scores_ocr_regex.json`](evaluation/phase0/results/scores_ocr_regex.json) |
 | SROIE field F1 — SmolVLM2-500M local baseline | 0.330 | [`scores_smolvlm2.json`](evaluation/phase0/results/scores_smolvlm2.json) |
@@ -170,6 +170,16 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 | FUNSD transfer probe (n=50, form→receipt-shaped keys, **nonstandard gold mapping**) | 0.352 | [`scores_funsd_ollama.json`](evaluation/phase0/results/scores_funsd_ollama.json) |
 | OCRBench — TinyDoc-VLM-256M research checkpoint (n=1000) | **0.0%** — retired from claims | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
 | DocVQA / CORD | **Not measured** | — |
+
+> ⚠️ **SROIE caveat (measured 2026-09-25, [`eval_leakage_audit.json`](evaluation/phase0/results/eval_leakage_audit.json)).**
+> Our 100-doc SROIE set was drawn from the image pool without respecting the official
+> train/test boundary: **58% of those receipts also appear in the public SROIE train split**
+> (verified by 64×64 perceptual correlation; exact file hashing misses the re-encoded copies
+> and reported 0). Any model trained on public SROIE — possibly including the evaluated 3B —
+> has therefore seen more than half this set, so the **absolute 0.870 is optimistically
+> biased**. Paired same-document comparisons (pipeline vs the 0.376/0.227 baselines) remain
+> internally valid; the absolute number is not a clean held-out score. A verified-clean
+> 100-doc set (`sroie_eval_clean.json`) is now the ship-bar for first-party models.
 
 Every number above recomputes from committed artifacts:
 

@@ -46,6 +46,13 @@ not from `evaluate.py`.*
 All rows: same 100 held-out SROIE receipt images, same scorer
 (`evaluation/phase0/metrics.py`, field-level P/R/F1 over company/date/address/total).
 
+> ⚠️ **The 100-doc SROIE set is NOT a clean held-out set** (`eval_leakage_audit.json`):
+> 58% of its receipts also appear in the public SROIE *train* split (perceptual match; exact
+> hashing missed the re-encoded duplicates). Absolute scores are optimistically biased for any
+> model trained on public SROIE, possibly including the evaluated 3B. The **paired** pipeline-vs-baseline
+> comparison is still apples-to-apples because every engine saw the identical documents.
+> A verified-clean 100-doc set (`sroie_eval_clean.json`) is the bar for first-party models.
+
 | System | Field F1 | Notes / artifact |
 |---|---|---|
 | **TinyDoc pipeline (`ollama:qwen2.5vl:3b`, free & local)** | **0.870** | `results/scores_ollama.json` — schema 1.000, address 0.72 |

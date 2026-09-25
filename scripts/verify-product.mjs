@@ -98,6 +98,14 @@ function gateClaims() {
     if (readme.includes(fabricated)) bad.push(`README cites withdrawn number ${fabricated}`);
   }
 
+  // measured SROIE contamination must stay disclosed in public docs
+  if (!/58%|0\.58/.test(readme) || !/leak|caveat/i.test(readme)) {
+    bad.push("README missing the SROIE train-overlap caveat (58% of eval receipts are public-train)");
+  }
+  if (!/not a clean held-out|not a clean/i.test(bench)) {
+    bad.push("BENCHMARKS.md missing the SROIE leakage caveat");
+  }
+
   if (bad.length) return fail(`PUBLIC_CLAIMS_CLEAN: ${bad.join("; ")}`);
   return ok("PUBLIC_CLAIMS_CLEAN");
 }
