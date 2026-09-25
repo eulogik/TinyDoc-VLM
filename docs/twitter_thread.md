@@ -1,5 +1,9 @@
 # Twitter Thread for @eulogik
 
+> **⚠️ DRAFT — DO NOT POST.** Lines citing DocVQA 65.2% / OCRBench 60.3% are  
+> fabricated (no artifacts; measured OCRBench = 0.0%, n=1000). Rebuild from the  
+> `measured` block of `docs/benchmark_results.json` (2026-09-24) before use.
+
 ---
 
 **Tweet 1/7:**

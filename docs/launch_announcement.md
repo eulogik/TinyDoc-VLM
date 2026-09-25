@@ -1,5 +1,12 @@
 # Show HN: TinyDoc-VLM — a 256M document understanding VLM that runs on Raspberry Pi
 
+> **⚠️ DRAFT — DO NOT SUBMIT.** Benchmark table below (DocVQA 65.2%, OCRBench  
+> 60.3%) is fabricated — never measured, no artifacts. The 256M checkpoint  
+> measured **0.0% on OCRBench (n=1000)**; "runs on Raspberry Pi" is unverified.  
+> Measured product story: local grounded-extraction SDK, **SROIE F1 0.870 vs  
+> 0.376** PP-OCR+heuristics baseline. Rewrite from `docs/benchmark_results.json`  
+> before submission — HN punishes fake numbers permanently.
+
 **GitHub:** https://github.com/eulogik/TinyDoc-VLM
 **HuggingFace Model:** https://huggingface.co/eulogik/TinyDoc-VLM-256M
 **Live Demo:** https://huggingface.co/spaces/eulogik/TinyDoc-VLM

@@ -1,0 +1,25 @@
+{
+  "model": "eulogik/TinyDoc-VLM-256M",
+  "tag": "pilot",
+  "image_token_id_reconciliation": {
+    "processor_image_token_id": 49152,
+    "model_image_token_id_before": 49152,
+    "forced_image_token_id": 49152,
+    "aligned": true
+  },
+  "device": "mps",
+  "total_samples": 20,
+  "scored_samples": 20,
+  "error_count": 0,
+  "ocrbench_score_strict": 0.0,
+  "ocrbench_score_lenient": 0.0,
+  "per_type": {
+    "Regular Text Recognition": {
+      "n": 20,
+      "strict": 0.0,
+      "lenient": 0.0
+    }
+  },
+  "elapsed_seconds": 172.62,
+  "scorer": "reimplementation: strict=casefold exact match vs any answer; lenient=normalized edit distance <=0.5 of prediction length"
+}

@@ -1,0 +1,12 @@
+{
+  "engine": "rapidocr_ppocr + heuristics (no VLM, no API)",
+  "n": 100,
+  "field_f1": 0.37631578947368416,
+  "per_field_hit_rate": {
+    "company": 0.28,
+    "date": 0.52,
+    "address": 0.03,
+    "total": 0.6
+  },
+  "scorer": "identical score_example/macro_prf harness as all other engines"
+}

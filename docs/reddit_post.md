@@ -1,5 +1,12 @@
 # [P] TinyDoc-VLM: 256M document-specialist VLM, Apache 2.0, runs on CPU
 
+> **⚠️ DRAFT — DO NOT POST.** Scores below (DocVQA ~65%, OCRBench ~60%) are  
+> **fabricated** — no eval artifacts exist, and the model measured **0.0% on  
+> OCRBench (n=1000)**. The "Raspberry Pi" claim is also unverified. The shipped,  
+> measured product is the local extraction SDK: **SROIE field F1 0.870 vs 0.376**  
+> for PP-OCR+heuristics (`docs/benchmark_results.json`). Rebuild this post from  
+> measured numbers before submitting.
+
 **Links:**
 - **GitHub:** https://github.com/eulogik/TinyDoc-VLM
 - **HuggingFace Model:** https://huggingface.co/eulogik/TinyDoc-VLM-256M

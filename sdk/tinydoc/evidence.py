@@ -31,7 +31,56 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
-def _ocr_words(image_path: str) -> List[Dict[str, Any]]:
+_RAPIDOCR_CACHE: Dict[str, Any] = {"engine": None, "failed": False}
+
+
+def _rapidocr_engine():
+    """Cached RapidOCR singleton; None if unavailable (loaded once per process)."""
+    if _RAPIDOCR_CACHE["failed"]:
+        return None
+    if _RAPIDOCR_CACHE["engine"] is None:
+        try:
+            from rapidocr_onnxruntime import RapidOCR
+
+            _RAPIDOCR_CACHE["engine"] = RapidOCR()
+        except Exception:
+            _RAPIDOCR_CACHE["failed"] = True
+            return None
+    return _RAPIDOCR_CACHE["engine"]
+
+
+def _rapidocr_words(image_path: str) -> List[Dict[str, Any]]:
+    """RapidOCR/PP-OCR word boxes; [] if unavailable or no text."""
+    engine = _rapidocr_engine()
+    if engine is None:
+        return []
+    try:
+        result, _ = engine(image_path)
+    except Exception:
+        return []
+    if not result:
+        return []
+    words: List[Dict[str, Any]] = []
+    for box, text, _score in result:
+        txt = (text or "").strip()
+        if not txt:
+            continue
+        xs = [float(p[0]) for p in box]
+        ys = [float(p[1]) for p in box]
+        left, top = min(xs), min(ys)
+        words.append(
+            {
+                "text": txt,
+                "left": left,
+                "top": top,
+                "width": max(xs) - left,
+                "height": max(ys) - top,
+            }
+        )
+    return words
+
+
+def _tesseract_words(image_path: str) -> List[Dict[str, Any]]:
     """Tesseract TSV word boxes; empty list if OCR unavailable."""
     try:
         import pytesseract
@@ -67,6 +116,24 @@ def _ocr_words(image_path: str) -> List[Dict[str, Any]]:
     return words
 
 
+def _ocr_words(image_path: str, engine: str = "auto") -> List[Dict[str, Any]]:
+    """Word boxes for evidence anchoring.
+
+    engine="rapidocr" (default choice measured in evidence_ab.json: coverage
+    +13 pts, gold-in-quote +12 pts vs tesseract) — PP-OCR via onnxruntime.
+    engine="tesseract" — original engine, kept as fallback/dependency-light path.
+    engine="auto" — rapidocr when installed, else tesseract.
+    """
+    if engine == "tesseract":
+        return _tesseract_words(image_path)
+    words = _rapidocr_words(image_path)
+    if words:
+        return words
+    if engine == "rapidocr":
+        return []
+    return _tesseract_words(image_path)
+
+
 def _union_bbox(words: List[Dict[str, Any]]) -> Optional[List[float]]:
     if not words:
         return None
@@ -94,12 +161,13 @@ def locate_field_evidence(
     words: Optional[List[Dict[str, Any]]] = None,
     page: int = 1,
     window: int = 6,
+    ocr_engine: str = "auto",
 ) -> Optional[Evidence]:
     """Best contiguous word window approximating ``field_value``."""
     if not field_value or not str(field_value).strip():
         return None
     if words is None:
-        words = _ocr_words(image_path)
+        words = _ocr_words(image_path, engine=ocr_engine)
     if not words:
         return None
 
@@ -149,8 +217,9 @@ def attach_evidence(
     fields: Dict[str, Any],
     image_path: str,
     page: int = 1,
+    ocr_engine: str = "auto",
 ) -> Dict[str, Optional[Evidence]]:
-    words = _ocr_words(image_path)
+    words = _ocr_words(image_path, engine=ocr_engine)
     out: Dict[str, Optional[Evidence]] = {}
     for k, v in (fields or {}).items():
         if k == "evidence":

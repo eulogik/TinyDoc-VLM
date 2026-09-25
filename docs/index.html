@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TinyDoc-VLM — The World's Smallest Document-Specialist VLM</title>
-  <meta name="description" content="256M parameter document-specialist VLM that runs on Raspberry Pi. Open-source, Apache 2.0.">
+  <title>TinyDoc-VLM — Grounded Document Extraction SDK</title>
+  <meta name="description" content="Local-first document extraction SDK — schema-valid JSON, evidence boxes, confidence scores. Free Ollama models, no API key. Apache 2.0.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -65,7 +65,7 @@
 
     <header>
       <h1><span>TinyDoc-VLM</span></h1>
-      <p class="subtitle">The World's Smallest Document-Specialist VLM — 256M parameters, runs on a Raspberry Pi, open-source.</p>
+      <p class="subtitle">Grounded document extraction SDK — schema-valid JSON, evidence boxes, confidence scores. Runs locally on free models. No API key.</p>
       <div class="badges">
         <a href="https://github.com/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/github/stars/eulogik/TinyDoc-VLM?style=social" alt="GitHub stars"></a>
         <a href="https://pypi.org/project/tinydoc/"><img src="https://img.shields.io/pypi/v/tinydoc?color=blue" alt="PyPI"></a>
@@ -84,33 +84,33 @@
       <div class="features">
         <div class="feature">
           <div class="icon">🧠</div>
-          <h3>256M Parameters</h3>
-          <p>SigLIP-B/16 vision encoder + Pixel-Shuffle compressor + SmolLM2-135M decoder. Optimized for edge.</p>
+          <h3>Beats the Free Competition</h3>
+          <p>Field F1 <b>0.870</b> on held-out SROIE receipts vs <b>0.376</b> for PP-OCR + heuristics and 0.227 for Tesseract + regex — measured on the same 100 documents.</p>
         </div>
         <div class="feature">
-          <div class="icon">📱</div>
-          <h3>&lt;1GB VRAM</h3>
-          <p>Runs on Raspberry Pi 5, MacBook Air, or any CPU with ONNX export. Over 100 tok/s on CPU.</p>
+          <div class="icon">🔍</div>
+          <h3>Evidence for Every Field</h3>
+          <p>Each extracted value ships with the OCR span and bounding box it came from — human-verifiable provenance, coverage 79.8%.</p>
         </div>
         <div class="feature">
           <div class="icon">📋</div>
-          <h3>Structured Output</h3>
-          <p>JSON extraction, key-value pairs, table parsing, OCR, and VQA — all from a single unified model.</p>
+          <h3>Schema-Valid Output</h3>
+          <p>JSON Schema validation + sanitization on every result (validity 1.000 on eval), plus a calibrated confidence score per field.</p>
         </div>
         <div class="feature">
-          <div class="icon">🎓</div>
-          <h3>3-Stage Training</h3>
-          <p>Layout pretrain → Document understanding → Instruction tuning on 10K+ synthetic documents.</p>
+          <div class="icon">⚙️</div>
+          <h3>Engine Ladder</h3>
+          <p>Free <code>ollama:qwen2.5vl:3b</code> by default, quality tiers up to 7B, ONNX and OCR-fallback engines behind one interface.</p>
         </div>
         <div class="feature">
           <div class="icon">📦</div>
           <h3>One pip Install</h3>
-          <p><code>pip install tinydoc</code> — Python SDK with Pydantic-typed results. PyTorch and ONNX backends.</p>
+          <p><code>pip install tinydoc</code> — Python SDK with Pydantic-typed results, CLI, and a local Gradio demo.</p>
         </div>
         <div class="feature">
           <div class="icon">🤗</div>
-          <h3>Open Weights</h3>
-          <p>Pre-trained weights on HuggingFace Hub. Apache 2.0 license — free for commercial use.</p>
+          <h3>Open & Free</h3>
+          <p>Apache 2.0 license — free for commercial use. Local-first: no API key, no cloud, no telemetry.</p>
         </div>
       </div>
     </section>
@@ -120,57 +120,63 @@
       <div class="code-block">
         <span class="comment"># Install the SDK</span><br>
         pip install tinydoc<br><br>
-        <span class="comment"># Use it in Python</span><br>
-        <span class="keyword">from</span> PIL <span class="keyword">import</span> Image<br>
-        <span class="keyword">from</span> tinydoc <span class="keyword">import</span> TinyDocExtractor<br><br>
-        extractor = TinyDocExtractor(device=<span class="string">"cpu"</span>)<br>
-        img = Image.open(<span class="string">"invoice.png"</span>)<br><br>
-        <span class="comment"># Ask a question</span><br>
-        result = extractor.ask(img, <span class="string">"What is the total?"</span>)<br>
-        print(result.answer)<br><br>
-        <span class="comment"># Extract JSON fields</span><br>
-        result = extractor.extract(img, output_format=<span class="string">"json"</span>)<br>
-        print(result.fields)<br><br>
-        <span class="comment"># Extract tables</span><br>
-        result = extractor.extract_table(img)<br>
-        print(result.markdown)
+        <span class="comment"># Requirements: a running Ollama with qwen2.5vl:3b (free, local)</span><br>
+        <span class="keyword">from</span> tinydoc.pipeline <span class="keyword">import</span> ReceiptPipeline<br><br>
+        pipe = ReceiptPipeline(<span class="string">"auto"</span>)<br>
+        doc = pipe.extract(<span class="string">"receipt.jpg"</span>)<br><br>
+        <span class="comment"># Schema-valid fields + confidence</span><br>
+        print(doc.fields, doc.schema_valid, doc.confidence)<br><br>
+        <span class="comment"># Evidence: OCR span + bbox behind every value</span><br>
+        <span class="keyword">for</span> fr <span class="keyword">in</span> doc.field_results:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;print(fr.name, fr.value, fr.evidence[<span class="string">"quote"</span>], fr.evidence[<span class="string">"bbox"</span>])<br><br>
+        <span class="comment"># Or from the shell</span><br>
+        tinydoc extract ./receipts/ --out results.jsonl --overlay overlays/
       </div>
     </section>
 
     <section id="architecture">
-      <h2><span class="emoji">🏗️</span> Architecture</h2>
+      <h2><span class="emoji">🏗️</span> How it works</h2>
       <div class="arch-diagram">
         <pre>
-Image (384×384)
+Receipt / invoice image
     ↓
-SigLIP Vision Encoder (93M)           ← 576 patches × 768 dim
+Engine (ollama:qwen2.5vl:3b — free &amp; local, or 7B / ONNX / OCR-fallback)
     ↓
-Pixel-Shuffle Compressor (scale=3)    ← 9× compression → 64 tokens
+Raw model output → JSON extraction → collapse repetition → sanitize
     ↓
-Visual Position Embeddings
+JSON Schema validation  ── schema_valid: true/false
     ↓
-SmolLM2 Decoder (135M)                ← 30 layers, GQA (9:3 heads), 8192 ctx
+Evidence anchoring (PP-OCR word boxes → best span + bbox per field)
     ↓
-Multi-Task Output Heads
+Confidence (evidence quality × schema × field rules)
     ↓
-JSON / KV Extraction / Table / OCR / QA</pre>
+DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
       </div>
     </section>
 
     <section id="benchmarks" class="benchmarks">
-      <h2><span class="emoji">📊</span> Benchmarks</h2>
+      <h2><span class="emoji">📊</span> Benchmarks (measured)</h2>
       <table>
         <thead>
           <tr><th>Benchmark</th><th>Metric</th><th>Score</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr><td>DocVQA</td><td>ANLS</td><td>—</td><td>⏳ Running</td></tr>
-          <tr><td>FUNSD</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
-          <tr><td>CORD</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
-          <tr><td>SROIE</td><td>F1</td><td>—</td><td>⏳ Running</td></tr>
-          <tr><td>PubTabNet</td><td>TEDS</td><td>—</td><td>⏳ Running</td></tr>
+          <tr><td>SROIE receipts — TinyDoc pipeline (qwen2.5vl:3b)</td><td>Field F1</td><td><b>0.870</b></td><td>✅ n=100, committed artifacts</td></tr>
+          <tr><td>SROIE receipts — PP-OCR + heuristics baseline</td><td>Field F1</td><td>0.376</td><td>✅ same 100 docs, same scorer</td></tr>
+          <tr><td>SROIE receipts — Tesseract + regex baseline</td><td>Field F1</td><td>0.227</td><td>✅ same 100 docs, same scorer</td></tr>
+          <tr><td>Schema validity (pipeline, SROIE eval)</td><td>Rate</td><td>1.000</td><td>✅ n=100</td></tr>
+          <tr><td>Evidence coverage (RapidOCR, post A/B)</td><td>Rate</td><td>0.798</td><td>✅ n=100 × 4 fields</td></tr>
+          <tr><td>FUNSD transfer probe (form → receipt-shaped keys)</td><td>Field F1</td><td>0.352</td><td>✅ n=50, nonstandard gold mapping</td></tr>
+          <tr><td>OCRBench — TinyDoc-VLM 256M research checkpoint</td><td>Accuracy</td><td>0.0%</td><td>⚠️ n=1000 — model retired from claims</td></tr>
+          <tr><td>DocVQA / CORD / PubTabNet</td><td>—</td><td>—</td><td>Not measured</td></tr>
         </tbody>
       </table>
+      <p style="margin-top:16px; color:#64748b; font-size:0.9rem;">
+        Every number above recomputes from committed artifacts in
+        <code>evaluation/phase0/results/</code>. The 256M checkpoint's earlier
+        benchmark figures were never measured and have been withdrawn — see
+        <code>docs/BENCHMARKS.md</code>.
+      </p>
     </section>
 
     <section id="links">
@@ -182,7 +188,7 @@ JSON / KV Extraction / Table / OCR / QA</pre>
         </div>
         <div class="feature">
           <h3>🤗 Model Hub</h3>
-          <p>Pre-trained weights — <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">eulogik/TinyDoc-VLM-256M</a></p>
+          <p>Research checkpoints (archived — see benchmarks) — <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">eulogik/TinyDoc-VLM-256M</a></p>
         </div>
         <div class="feature">
           <h3>🤗 Space Demo</h3>

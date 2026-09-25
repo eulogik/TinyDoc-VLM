@@ -15,6 +15,7 @@ setup(
     ],
     extras_require={
         "ocr": ["pytesseract>=0.3.10"],
+        "ocr-pp": ["rapidocr-onnxruntime>=1.3.0"],
         "smolvlm2": [
             "torch>=2.2.0",
             "transformers>=4.48.0",
@@ -24,6 +25,7 @@ setup(
         "onnx": ["onnxruntime>=1.19.0", "optimum>=1.22.0"],
         "all": [
             "pytesseract>=0.3.10",
+            "rapidocr-onnxruntime>=1.3.0",
             "torch>=2.2.0",
             "transformers>=4.48.0",
             "numpy>=1.26.0",

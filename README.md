@@ -162,12 +162,22 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 
 | Benchmark | Result | Source |
 |-----------|--------|--------|
-| OCRBench (v0.1 TinyDoc-256M) | **0.0%** | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
-| SROIE field F1 (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address residual **0.72**) | [`evaluation/phase0/results/`](evaluation/phase0/results/) |
-| FUNSD field F1 (free engine, n=50 form→receipt-shaped keys) | **0.352** (schema 0.880) | [`evaluation/phase0/results/scores_funsd_ollama.json`](evaluation/phase0/results/scores_funsd_ollama.json) |
-| DocVQA / CORD | **Not measured** for a working checkpoint | — |
+| SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
+| SROIE field F1 — PP-OCR + heuristics baseline (same 100 docs, same scorer) | 0.376 | [`scores_ppocr_heuristics.json`](evaluation/phase0/results/scores_ppocr_heuristics.json) |
+| SROIE field F1 — Tesseract + regex baseline | 0.227 | [`scores_ocr_regex.json`](evaluation/phase0/results/scores_ocr_regex.json) |
+| SROIE field F1 — SmolVLM2-500M local baseline | 0.330 | [`scores_smolvlm2.json`](evaluation/phase0/results/scores_smolvlm2.json) |
+| Evidence anchoring (coverage / gold-in-quote, RapidOCR) | 0.798 / 0.535 | [`evidence_ab.json`](evaluation/phase0/results/evidence_ab.json) |
+| FUNSD transfer probe (n=50, form→receipt-shaped keys, **nonstandard gold mapping**) | 0.352 | [`scores_funsd_ollama.json`](evaluation/phase0/results/scores_funsd_ollama.json) |
+| OCRBench — TinyDoc-VLM-256M research checkpoint (n=1000) | **0.0%** — retired from claims | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
+| DocVQA / CORD | **Not measured** | — |
 
-Ship status (2026-09-23): SDK unit tests **30 passed** · local Gradio demo `demo/app.py --share` · training skipped for Phase 1. Targets and estimated tables in older docs are **not** results. Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
+Every number above recomputes from committed artifacts:
+
+```bash
+python3 evaluation/phase0/recompute_scores.py   # claim audit — must exit 0
+```
+
+Ship status (2026-09-24): SDK unit tests **69 passed** (incl. evidence, overlay, CLI) · evidence engine = PP-OCR (measured A/B win over Tesseract: coverage 0.67→0.80, gold-in-quote 0.42→0.54) · competitive claim **measured**: 0.870 vs 0.376 for the free PP-OCR+heuristics competitor · local Gradio demo `demo/app.py --share` · training skipped. Estimated/target tables in older docs are **not** results (withdrawn: `docs/benchmark_results.json` `legacy_unverified`). Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
 
 ## Package Structure
 

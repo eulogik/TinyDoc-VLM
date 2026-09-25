@@ -1,5 +1,12 @@
 # TinyDoc-VLM — Pitch Deck
 
+> **⚠️ DO NOT PRESENT AS-IS — contains unmeasured numbers.**  
+> DocVQA 65.2% / OCRBench 60.3% (slides below) were never produced by an eval run  
+> (no artifacts exist). Actual measured: **OCRBench 0.0% (n=1000)** for the 256M  
+> checkpoint; **SROIE field F1 0.870 vs 0.376 (PP-OCR+heuristics)** for the shipped  
+> pipeline. Rewritten 2026-09-24 — rebuild claims from `docs/benchmark_results.json`  
+> `measured` block before any external use.
+
 **Tagline:** Document understanding that runs anywhere — no cloud, no GPU, no templates.
 
 **By:** eulogik

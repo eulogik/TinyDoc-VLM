@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "tesseract": {
+      "docs": 100,
+      "coverage": 0.6675,
+      "mean_score": 0.8617,
+      "gold_in_quote_rate": 0.415
+    },
+    "rapidocr": {
+      "docs": 100,
+      "coverage": 0.7975,
+      "mean_score": 0.8466,
+      "gold_in_quote_rate": 0.535
+    }
+  },
+  "decision": "adopt_rapidocr",
+  "rule": "adopt rapidocr only if gold_in_quote improves and coverage drop <= 5 points"
+}

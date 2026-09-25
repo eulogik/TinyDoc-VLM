@@ -145,3 +145,17 @@ GH_TOKEN
 **/*ghp_[A-Za-z0-9]*
 **/*hf_[A-Za-z0-9]*
 
+# Repo-local data links & run ledgers — exact names, NO trailing slash.
+# Trailing-slash patterns do NOT match symlinks, which silently unignores them.
+.unlazy/
+data/training
+data/eval_768
+data/eval_256m
+data/datasets/docmatix
+data/datasets/docvqa
+data/datasets/sroie
+data/synthetic/overnight_output
+evaluation/data
+# large local dataset drops (keep out of git regardless of type)
+data/datasets/
+

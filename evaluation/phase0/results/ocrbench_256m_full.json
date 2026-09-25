@@ -1,0 +1,70 @@
+{
+  "model": "eulogik/TinyDoc-VLM-256M",
+  "tag": "full",
+  "image_token_id_reconciliation": {
+    "processor_image_token_id": 49152,
+    "model_image_token_id_before": 49152,
+    "forced_image_token_id": 49152,
+    "aligned": true
+  },
+  "device": "mps",
+  "total_samples": 1000,
+  "scored_samples": 999,
+  "error_count": 1,
+  "ocrbench_score_strict": 0.0,
+  "ocrbench_score_lenient": 0.0,
+  "per_type": {
+    "Artistic Text Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Digit String Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Doc-oriented VQA": {
+      "n": 200,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Handwriting Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Handwritten Mathematical Expression Recognition": {
+      "n": 100,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Irregular Text Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Key Information Extraction": {
+      "n": 200,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Non-Semantic Text Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Regular Text Recognition": {
+      "n": 50,
+      "strict": 0.0,
+      "lenient": 0.0
+    },
+    "Scene Text-centric VQA": {
+      "n": 200,
+      "strict": 0.0,
+      "lenient": 0.0
+    }
+  },
+  "elapsed_seconds": 4696.25,
+  "scorer": "reimplementation: strict=casefold exact match vs any answer; lenient=normalized edit distance <=0.5 of prediction length"
+}
