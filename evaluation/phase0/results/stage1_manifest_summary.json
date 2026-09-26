@@ -1,20 +1,36 @@
 {
-  "source": "rajistics/sroie (official 626-row train split, images+labels)",
+  "source": "rajistics/sroie (626-row public train split, images+labels)",
   "n_total_public": 626,
   "n_holdout_hashes": 100,
-  "n_leaked_excluded": 59,
-  "leakage_filter": "perceptual 64x64 correlation >= 0.9 against all holdout images (exact sha256 hashing misses re-encoded duplicates)",
-  "n_dropped_insufficient_fields": 0,
-  "n_train": 427,
+  "n_leaked_excluded": 61,
+  "leakage_filter": "perceptual 64x64 correlation >= 0.9 (union of bilinear and nearest resampling) against all holdout images; exact sha256 hashing misses re-encoded duplicates",
+  "n_dropped_insufficient_fields": 3,
+  "n_dropped_holdout_linked": 63,
+  "n_components": 584,
+  "duplicate_component_sizes": {
+    "1": 558,
+    "2": 17,
+    "3": 7,
+    "4": 1,
+    "9": 1
+  },
+  "split_method": "whole duplicate components assigned deterministically: eval, then val, then train; never split across",
+  "n_train": 420,
   "n_val": 40,
   "n_clean_eval": 100,
   "clean_eval_artifact": "evaluation/phase0/results/sroie_eval_clean.json",
-  "min_fields_required": 3,
+  "min_fields_required": 4,
   "field_nonempty_counts": {
-    "company": 567,
-    "date": 567,
-    "address": 566,
-    "total": 566
+    "company": 560,
+    "date": 560,
+    "address": 560,
+    "total": 560
+  },
+  "integrity_checks": {
+    "cross_split_pairs": 0,
+    "holdout_linked_in_splits": 0,
+    "eval_gold_incomplete": 0,
+    "eval_files_missing": 0
   },
   "question": "sdk.tinydoc.pipeline.EXTRACT_PROMPT (identical to eval prompt)"
 }

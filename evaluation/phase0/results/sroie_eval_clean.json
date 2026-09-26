@@ -1,6 +1,7 @@
 [
   {
     "id": "clean_0000",
+    "pool_row": 0,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0000.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -12,6 +13,7 @@
   },
   {
     "id": "clean_0001",
+    "pool_row": 1,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0001.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -23,6 +25,7 @@
   },
   {
     "id": "clean_0002",
+    "pool_row": 2,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0002.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -34,6 +37,7 @@
   },
   {
     "id": "clean_0003",
+    "pool_row": 3,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0003.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -45,6 +49,7 @@
   },
   {
     "id": "clean_0004",
+    "pool_row": 4,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0004.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -56,6 +61,7 @@
   },
   {
     "id": "clean_0005",
+    "pool_row": 5,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0005.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -67,6 +73,7 @@
   },
   {
     "id": "clean_0006",
+    "pool_row": 6,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0006.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -78,6 +85,7 @@
   },
   {
     "id": "clean_0007",
+    "pool_row": 7,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0007.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -89,6 +97,7 @@
   },
   {
     "id": "clean_0008",
+    "pool_row": 9,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0008.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -100,6 +109,7 @@
   },
   {
     "id": "clean_0009",
+    "pool_row": 10,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0009.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -111,6 +121,7 @@
   },
   {
     "id": "clean_0010",
+    "pool_row": 11,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0010.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
@@ -122,18 +133,8 @@
   },
   {
     "id": "clean_0011",
+    "pool_row": 13,
     "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0011.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "HOME MASTER HARDWARE & ELECTRICAL",
-      "date": "22/12/2017",
-      "address": "NO.113G & 115G, JALAN SETIA GEMBILANG U13/BG BANDAR SETIA ALAM, 40170 BANDAR SETIA ALAM, SELANGOR.",
-      "total": "15.90"
-    }
-  },
-  {
-    "id": "clean_0012",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0012.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTORAN HASSANBISTRO",
@@ -143,8 +144,9 @@
     }
   },
   {
-    "id": "clean_0013",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0013.jpg",
+    "id": "clean_0012",
+    "pool_row": 14,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0012.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ASIA MART",
@@ -154,30 +156,9 @@
     }
   },
   {
-    "id": "clean_0014",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0014.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "HOME MASTER HARDWARE & ELECTRICAL",
-      "date": "22/12/2017",
-      "address": "NO.113G & 115G, JALAN SETIA GEMBILANG U13/BG BANDAR SETIA ALAM, 40170 BANDAR SETIA ALAM, SELANGOR.",
-      "total": "15.90"
-    }
-  },
-  {
-    "id": "clean_0015",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0015.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "LIGHTROOM GALLERY SDN BHD",
-      "date": "20/12/2017",
-      "address": "NO: 28, JALAN ASTANA 1C, BANDAR BUKIT RAJA, 41050 KLANG SELANGOR D.E, MALAYSIA",
-      "total": "73.00"
-    }
-  },
-  {
-    "id": "clean_0016",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0016.jpg",
+    "id": "clean_0013",
+    "pool_row": 17,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0013.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIGHTROOM GALLERY SDN BHD",
@@ -187,19 +168,9 @@
     }
   },
   {
-    "id": "clean_0017",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0017.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "LIGHTROOM GALLERY SDN BHD",
-      "date": "20/12/2017",
-      "address": "NO: 28,JALAN ASTANA 1C, BANDAR BUKIT RAJA, 41050 KLANG SELANGOR D.E, MALAYSIA",
-      "total": "73.00"
-    }
-  },
-  {
-    "id": "clean_0018",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0018.jpg",
+    "id": "clean_0014",
+    "pool_row": 19,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0014.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SHELL ISNI PETRO TRADING",
@@ -209,8 +180,9 @@
     }
   },
   {
-    "id": "clean_0019",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0019.jpg",
+    "id": "clean_0015",
+    "pool_row": 20,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0015.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYL ROASTED DELIGHTS SDN. BHD.",
@@ -220,8 +192,9 @@
     }
   },
   {
-    "id": "clean_0020",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0020.jpg",
+    "id": "clean_0016",
+    "pool_row": 22,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0016.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "FUYI MINI MARKET",
@@ -231,8 +204,9 @@
     }
   },
   {
-    "id": "clean_0021",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0021.jpg",
+    "id": "clean_0017",
+    "pool_row": 23,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0017.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TEO HENG STATIONERY & BOOKS",
@@ -242,8 +216,9 @@
     }
   },
   {
-    "id": "clean_0022",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0022.jpg",
+    "id": "clean_0018",
+    "pool_row": 24,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0018.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TEO HENG STATIONERY & BOOKS",
@@ -253,8 +228,9 @@
     }
   },
   {
-    "id": "clean_0023",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0023.jpg",
+    "id": "clean_0019",
+    "pool_row": 25,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0019.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TEO HENG STATIONERY & BOOKS",
@@ -264,8 +240,9 @@
     }
   },
   {
-    "id": "clean_0024",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0024.jpg",
+    "id": "clean_0020",
+    "pool_row": 26,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0020.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TED HENG STATIONERY & BOOKS",
@@ -275,8 +252,9 @@
     }
   },
   {
-    "id": "clean_0025",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0025.jpg",
+    "id": "clean_0021",
+    "pool_row": 27,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0021.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. (M) SDN BHD",
@@ -286,8 +264,9 @@
     }
   },
   {
-    "id": "clean_0026",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0026.jpg",
+    "id": "clean_0022",
+    "pool_row": 28,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0022.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -297,8 +276,9 @@
     }
   },
   {
-    "id": "clean_0027",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0027.jpg",
+    "id": "clean_0023",
+    "pool_row": 29,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0023.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "C W KHOO HARDWARE SDN BHD",
@@ -308,19 +288,9 @@
     }
   },
   {
-    "id": "clean_0028",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0028.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "05 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.20"
-    }
-  },
-  {
-    "id": "clean_0029",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0029.jpg",
+    "id": "clean_0024",
+    "pool_row": 31,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0024.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -330,8 +300,9 @@
     }
   },
   {
-    "id": "clean_0030",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0030.jpg",
+    "id": "clean_0025",
+    "pool_row": 32,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0025.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -341,19 +312,9 @@
     }
   },
   {
-    "id": "clean_0031",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0031.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "10 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": ""
-    }
-  },
-  {
-    "id": "clean_0032",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0032.jpg",
+    "id": "clean_0026",
+    "pool_row": 34,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0026.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PERNIAGAAN ZHENG HUI",
@@ -363,30 +324,9 @@
     }
   },
   {
-    "id": "clean_0033",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0033.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "12 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.20"
-    }
-  },
-  {
-    "id": "clean_0034",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0034.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "14 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.20"
-    }
-  },
-  {
-    "id": "clean_0035",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0035.jpg",
+    "id": "clean_0027",
+    "pool_row": 37,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0027.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "WARAKUYA PERMAS CITY SDN BHD",
@@ -396,8 +336,9 @@
     }
   },
   {
-    "id": "clean_0036",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0036.jpg",
+    "id": "clean_0028",
+    "pool_row": 38,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0028.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "YHM AEON TEBRAU CITY",
@@ -407,8 +348,9 @@
     }
   },
   {
-    "id": "clean_0037",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0037.jpg",
+    "id": "clean_0029",
+    "pool_row": 39,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0029.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "OWNER BY CASTLE BLUE S/B",
@@ -418,8 +360,9 @@
     }
   },
   {
-    "id": "clean_0038",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0038.jpg",
+    "id": "clean_0030",
+    "pool_row": 40,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0030.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "THREE STOOGES",
@@ -429,8 +372,9 @@
     }
   },
   {
-    "id": "clean_0039",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0039.jpg",
+    "id": "clean_0031",
+    "pool_row": 42,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0031.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TASTE OF THE WORLD SDN BHD",
@@ -440,8 +384,9 @@
     }
   },
   {
-    "id": "clean_0040",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0040.jpg",
+    "id": "clean_0032",
+    "pool_row": 43,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0032.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "32 PUB & BISTRO OWN BY CNU TRADING",
@@ -451,19 +396,9 @@
     }
   },
   {
-    "id": "clean_0041",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0041.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "18 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PARINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.60"
-    }
-  },
-  {
-    "id": "clean_0042",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0042.jpg",
+    "id": "clean_0033",
+    "pool_row": 45,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0033.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -473,8 +408,9 @@
     }
   },
   {
-    "id": "clean_0043",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0043.jpg",
+    "id": "clean_0034",
+    "pool_row": 47,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0034.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTAURANT SIN DU",
@@ -484,8 +420,9 @@
     }
   },
   {
-    "id": "clean_0044",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0044.jpg",
+    "id": "clean_0035",
+    "pool_row": 48,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0035.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "YONG TAT HARDWARE TRADING",
@@ -495,8 +432,9 @@
     }
   },
   {
-    "id": "clean_0045",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0045.jpg",
+    "id": "clean_0036",
+    "pool_row": 49,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0036.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PERNIAGAAN ZHENG HUI",
@@ -506,8 +444,9 @@
     }
   },
   {
-    "id": "clean_0046",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0046.jpg",
+    "id": "clean_0037",
+    "pool_row": 50,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0037.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TIMELESS KITCHENETTE SDN BHD",
@@ -517,8 +456,9 @@
     }
   },
   {
-    "id": "clean_0047",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0047.jpg",
+    "id": "clean_0038",
+    "pool_row": 51,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0038.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -528,8 +468,9 @@
     }
   },
   {
-    "id": "clean_0048",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0048.jpg",
+    "id": "clean_0039",
+    "pool_row": 52,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0039.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PAGOH REST AND SERVICE AREA",
@@ -539,19 +480,9 @@
     }
   },
   {
-    "id": "clean_0049",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0049.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "24 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$9.20"
-    }
-  },
-  {
-    "id": "clean_0050",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0050.jpg",
+    "id": "clean_0040",
+    "pool_row": 54,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0040.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "CARREFOUR RESTAURANT",
@@ -561,30 +492,9 @@
     }
   },
   {
-    "id": "clean_0051",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0051.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "19 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.20"
-    }
-  },
-  {
-    "id": "clean_0052",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0052.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "21 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.70"
-    }
-  },
-  {
-    "id": "clean_0053",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0053.jpg",
+    "id": "clean_0041",
+    "pool_row": 57,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0041.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -594,19 +504,9 @@
     }
   },
   {
-    "id": "clean_0054",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0054.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
-      "date": "30 MAR 2018",
-      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
-      "total": "$8.20"
-    }
-  },
-  {
-    "id": "clean_0055",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0055.jpg",
+    "id": "clean_0042",
+    "pool_row": 59,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0042.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TRIPLE SIX POINT ENTERPRISE 666",
@@ -616,8 +516,9 @@
     }
   },
   {
-    "id": "clean_0056",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0056.jpg",
+    "id": "clean_0043",
+    "pool_row": 60,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0043.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "BENS INDEPENDENT GROCER SDN. BHD",
@@ -627,8 +528,9 @@
     }
   },
   {
-    "id": "clean_0057",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0057.jpg",
+    "id": "clean_0044",
+    "pool_row": 61,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0044.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "NANDO'S CHICKENLAND MALAYSIA SDN BHD",
@@ -638,8 +540,9 @@
     }
   },
   {
-    "id": "clean_0058",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0058.jpg",
+    "id": "clean_0045",
+    "pool_row": 62,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0045.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -649,8 +552,9 @@
     }
   },
   {
-    "id": "clean_0059",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0059.jpg",
+    "id": "clean_0046",
+    "pool_row": 63,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0046.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PETRODELI ENTERPRISE",
@@ -660,8 +564,9 @@
     }
   },
   {
-    "id": "clean_0060",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0060.jpg",
+    "id": "clean_0047",
+    "pool_row": 64,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0047.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SUN WONG KUT SDN BHD",
@@ -671,8 +576,9 @@
     }
   },
   {
-    "id": "clean_0061",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0061.jpg",
+    "id": "clean_0048",
+    "pool_row": 65,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0048.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTAURANT JIAWEI JIAWEI HOUSE",
@@ -682,8 +588,9 @@
     }
   },
   {
-    "id": "clean_0062",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0062.jpg",
+    "id": "clean_0049",
+    "pool_row": 66,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0049.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PASARAYA BORONG PINTAR SDN BHD",
@@ -693,8 +600,9 @@
     }
   },
   {
-    "id": "clean_0063",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0063.jpg",
+    "id": "clean_0050",
+    "pool_row": 67,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0050.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIAN CHI PU TIAN VEGETARIAN RESTAURANT SDN BHD",
@@ -704,19 +612,9 @@
     }
   },
   {
-    "id": "clean_0064",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0064.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "PASARAYA BORONG PINTAR SDN BHD",
-      "date": "20180304",
-      "address": "NO 19-G& 19-1& 19-2 JALAN TASIK UTAMA 4, MEDAN NIAGA TASIK DAMAI",
-      "total": "3.20"
-    }
-  },
-  {
-    "id": "clean_0065",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0065.jpg",
+    "id": "clean_0051",
+    "pool_row": 69,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0051.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -726,8 +624,9 @@
     }
   },
   {
-    "id": "clean_0066",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0066.jpg",
+    "id": "clean_0052",
+    "pool_row": 70,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0052.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -737,8 +636,9 @@
     }
   },
   {
-    "id": "clean_0067",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0067.jpg",
+    "id": "clean_0053",
+    "pool_row": 71,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0053.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -748,8 +648,9 @@
     }
   },
   {
-    "id": "clean_0068",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0068.jpg",
+    "id": "clean_0054",
+    "pool_row": 72,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0054.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -759,8 +660,9 @@
     }
   },
   {
-    "id": "clean_0069",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0069.jpg",
+    "id": "clean_0055",
+    "pool_row": 73,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0055.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIAN HING STATIONERY SDN BHD",
@@ -770,30 +672,9 @@
     }
   },
   {
-    "id": "clean_0070",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0070.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "GL HANDICRAFT & TAIL ORING",
-      "date": "20/03/2018",
-      "address": "19, JALAN KANCIL, OFF JALAN PUDU, 55100 KUALA LUMPUR MALAYSIA",
-      "total": "102.00"
-    }
-  },
-  {
-    "id": "clean_0071",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0071.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "LIAN HING STATIONERY SDN BHD",
-      "date": "27/03/2018",
-      "address": "NO.32 & 33, JALAN SR 1/9, SEKSYEN 9, TAMAN SERDANG RAYA, 43300 SERI KEMBANGAN, SELANGOR DARUL EHSAN",
-      "total": "12.00"
-    }
-  },
-  {
-    "id": "clean_0072",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0072.jpg",
+    "id": "clean_0056",
+    "pool_row": 77,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0056.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "BANH MI CAFE SDN BHD",
@@ -803,8 +684,9 @@
     }
   },
   {
-    "id": "clean_0073",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0073.jpg",
+    "id": "clean_0057",
+    "pool_row": 78,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0057.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "THAI DELICIOUS RESTAURANT",
@@ -814,8 +696,9 @@
     }
   },
   {
-    "id": "clean_0074",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0074.jpg",
+    "id": "clean_0058",
+    "pool_row": 79,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0058.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR.D.I.Y(M)SDN BHD",
@@ -825,8 +708,9 @@
     }
   },
   {
-    "id": "clean_0075",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0075.jpg",
+    "id": "clean_0059",
+    "pool_row": 80,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0059.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "HON HWA HARDWARE TRADING",
@@ -836,8 +720,9 @@
     }
   },
   {
-    "id": "clean_0076",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0076.jpg",
+    "id": "clean_0060",
+    "pool_row": 81,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0060.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. SDN BHD",
@@ -847,8 +732,9 @@
     }
   },
   {
-    "id": "clean_0077",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0077.jpg",
+    "id": "clean_0061",
+    "pool_row": 82,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0061.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "HON HWA HARDWARE TRADING",
@@ -858,8 +744,9 @@
     }
   },
   {
-    "id": "clean_0078",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0078.jpg",
+    "id": "clean_0062",
+    "pool_row": 85,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0062.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. SDN BHD",
@@ -869,8 +756,9 @@
     }
   },
   {
-    "id": "clean_0079",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0079.jpg",
+    "id": "clean_0063",
+    "pool_row": 86,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0063.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. (KUCHAI) SDN BHD",
@@ -880,8 +768,9 @@
     }
   },
   {
-    "id": "clean_0080",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0080.jpg",
+    "id": "clean_0064",
+    "pool_row": 87,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0064.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "IKANO HANDEL SDN BHD",
@@ -891,8 +780,9 @@
     }
   },
   {
-    "id": "clean_0081",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0081.jpg",
+    "id": "clean_0065",
+    "pool_row": 88,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0065.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "IKANO HANDEL SDN BHD",
@@ -902,8 +792,9 @@
     }
   },
   {
-    "id": "clean_0082",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0082.jpg",
+    "id": "clean_0066",
+    "pool_row": 91,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0066.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TRI SHAAS SDN BHD",
@@ -913,8 +804,9 @@
     }
   },
   {
-    "id": "clean_0083",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0083.jpg",
+    "id": "clean_0067",
+    "pool_row": 92,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0067.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ADVANCO COMPANY",
@@ -924,8 +816,9 @@
     }
   },
   {
-    "id": "clean_0084",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0084.jpg",
+    "id": "clean_0068",
+    "pool_row": 94,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0068.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -935,8 +828,9 @@
     }
   },
   {
-    "id": "clean_0085",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0085.jpg",
+    "id": "clean_0069",
+    "pool_row": 95,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0069.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -946,8 +840,9 @@
     }
   },
   {
-    "id": "clean_0086",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0086.jpg",
+    "id": "clean_0070",
+    "pool_row": 96,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0070.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -957,8 +852,9 @@
     }
   },
   {
-    "id": "clean_0087",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0087.jpg",
+    "id": "clean_0071",
+    "pool_row": 97,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0071.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -968,8 +864,9 @@
     }
   },
   {
-    "id": "clean_0088",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0088.jpg",
+    "id": "clean_0072",
+    "pool_row": 98,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0072.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "WAHIN HARDWARE SDN BHD",
@@ -979,8 +876,9 @@
     }
   },
   {
-    "id": "clean_0089",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0089.jpg",
+    "id": "clean_0073",
+    "pool_row": 99,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0073.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -990,8 +888,9 @@
     }
   },
   {
-    "id": "clean_0090",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0090.jpg",
+    "id": "clean_0074",
+    "pool_row": 100,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0074.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -1001,8 +900,9 @@
     }
   },
   {
-    "id": "clean_0091",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0091.jpg",
+    "id": "clean_0075",
+    "pool_row": 101,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0075.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -1012,8 +912,9 @@
     }
   },
   {
-    "id": "clean_0092",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0092.jpg",
+    "id": "clean_0076",
+    "pool_row": 103,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0076.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -1023,19 +924,9 @@
     }
   },
   {
-    "id": "clean_0093",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0093.jpg",
-    "source": "sroie_public_train_clean",
-    "gold": {
-      "company": "T.A.S LEISURE SDN BHD",
-      "date": "30 DEC 17",
-      "address": "",
-      "total": "102.40"
-    }
-  },
-  {
-    "id": "clean_0094",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0094.jpg",
+    "id": "clean_0077",
+    "pool_row": 105,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0077.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SWEET FOREST CAFE",
@@ -1045,8 +936,9 @@
     }
   },
   {
-    "id": "clean_0095",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0095.jpg",
+    "id": "clean_0078",
+    "pool_row": 107,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0078.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ZAWIAJAYA FOOD N BEVERAGE SDN BHD",
@@ -1056,8 +948,9 @@
     }
   },
   {
-    "id": "clean_0096",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0096.jpg",
+    "id": "clean_0079",
+    "pool_row": 108,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0079.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIM SENG THO HARDWARE TRADING",
@@ -1067,8 +960,9 @@
     }
   },
   {
-    "id": "clean_0097",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0097.jpg",
+    "id": "clean_0080",
+    "pool_row": 110,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0080.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIM SENG THO HARDWARE TRADING",
@@ -1078,8 +972,9 @@
     }
   },
   {
-    "id": "clean_0098",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0098.jpg",
+    "id": "clean_0081",
+    "pool_row": 111,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0081.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -1089,14 +984,219 @@
     }
   },
   {
-    "id": "clean_0099",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0099.jpg",
+    "id": "clean_0082",
+    "pool_row": 112,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0082.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SUN VICTORY SDN BHD",
       "date": "14/01/2018",
       "address": "LEVEL G2, BLOCK D1, SOLARIS DUTAMAS, NO.1, JALAN DUTAMAS 1, 50480 KUALA LUMPUR",
       "total": "RM4.00"
+    }
+  },
+  {
+    "id": "clean_0083",
+    "pool_row": 113,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0083.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "02/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "93.07"
+    }
+  },
+  {
+    "id": "clean_0084",
+    "pool_row": 114,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0084.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "04/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "44.73"
+    }
+  },
+  {
+    "id": "clean_0085",
+    "pool_row": 116,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0085.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "11/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "116.28"
+    }
+  },
+  {
+    "id": "clean_0086",
+    "pool_row": 117,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0086.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "03/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "94.87"
+    }
+  },
+  {
+    "id": "clean_0087",
+    "pool_row": 120,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0087.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "13/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "6.36"
+    }
+  },
+  {
+    "id": "clean_0088",
+    "pool_row": 122,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0088.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "13/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "12.72"
+    }
+  },
+  {
+    "id": "clean_0089",
+    "pool_row": 126,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0089.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "03/02/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "60.95"
+    }
+  },
+  {
+    "id": "clean_0090",
+    "pool_row": 127,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0090.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "12/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "7.95"
+    }
+  },
+  {
+    "id": "clean_0091",
+    "pool_row": 128,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0091.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "31/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "82.68"
+    }
+  },
+  {
+    "id": "clean_0092",
+    "pool_row": 129,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0092.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "24/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "74.20"
+    }
+  },
+  {
+    "id": "clean_0093",
+    "pool_row": 130,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0093.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "BEYOND BROTHERS HARDWARE",
+      "date": "05/02/2018",
+      "address": "LOT 1-0-2, JLN 1/50, DIAMOND SQUARE, OFF JLN GOMBAK 53000 KUALA LUMPUR",
+      "total": "63.60"
+    }
+  },
+  {
+    "id": "clean_0094",
+    "pool_row": 131,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0094.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN IBRAHIM MAJU SB",
+      "date": "19/03/2018",
+      "address": "NO.2, GROUND FLOOR, JALAN REKO SENTRAL 8 TAMAN REKO SENTRAL, 43000 KAJANG SELANGOR DE",
+      "total": "5.30"
+    }
+  },
+  {
+    "id": "clean_0095",
+    "pool_row": 132,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0095.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "FARMASI MALURI S/B",
+      "date": "02/03/18",
+      "address": "23, JIN BURUNG JENTAYU, TMN BUKIT MALURI, KEPONG, 52100 KL.",
+      "total": "79.35"
+    }
+  },
+  {
+    "id": "clean_0096",
+    "pool_row": 134,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0096.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TRI SHAAS SDN BHD",
+      "date": "10/08/2017",
+      "address": "4-20, JALAN RIA 25/62 TAMAN SRI MUDA SEKSYEN 25, 40400 SHAH ALAM SELANGOR",
+      "total": "21.40"
+    }
+  },
+  {
+    "id": "clean_0097",
+    "pool_row": 135,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0097.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ASO ELECTRICAL TRADING SDN BHD",
+      "date": "04/12/2017",
+      "address": "NO 31G, JALAN SEPADU C 25/C, SECTION 25, TAMAN INDUSTRIES, AXIS 40400 SHAH ALAM, SELANGOR.",
+      "total": "99.00"
+    }
+  },
+  {
+    "id": "clean_0098",
+    "pool_row": 136,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0098.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "19-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "6.00"
+    }
+  },
+  {
+    "id": "clean_0099",
+    "pool_row": 137,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0099.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "19-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "9.10"
     }
   }
 ]

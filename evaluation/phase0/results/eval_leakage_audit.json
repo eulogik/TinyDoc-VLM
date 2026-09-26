@@ -3,50 +3,50 @@
   "n_holdout": 100,
   "n_public_train": 626,
   "exact_pixel_hash_leaks": 0,
-  "perceptual_leaks_at_corr_0.90": 59,
-  "holdout_fraction_leaked": 0.58,
-  "method": "64x64 grayscale normalized cross-correlation (Pearson); sha256 exact hash reported for contrast",
+  "perceptual_leaks_at_corr_0.90": 61,
+  "holdout_fraction_leaked": 0.6,
+  "method": "64x64 grayscale Pearson correlation, UNION of bilinear and nearest resampling (threshold does not depend on PIL resize default); sha256 exact hash reported for contrast. Label cross-check: company names agree on 61/61 matched pairs (independent verification 2026-09-26).",
   "implication": "Our 100-doc SROIE eval is NOT a clean held-out set: it overlaps the public train split. Absolute scores on it are optimistically biased for any model trained on public SROIE (including possibly the evaluated 3B). Paired same-document comparisons remain internally valid; absolute held-out claims do not.",
   "examples": [
     {
       "holdout_id": "img_000008",
-      "corr": 0.9989
+      "corr_best": 0.9989
     },
     {
       "holdout_id": "img_000019",
-      "corr": 0.9997
+      "corr_best": 0.9997
     },
     {
       "holdout_id": "img_000039",
-      "corr": 0.9996
+      "corr_best": 0.9995
     },
     {
       "holdout_id": "img_000044",
-      "corr": 0.9992
+      "corr_best": 0.9993
+    },
+    {
+      "holdout_id": "img_000656",
+      "corr_best": 0.9037
     },
     {
       "holdout_id": "img_000073",
-      "corr": 0.9997
+      "corr_best": 0.9997
     },
     {
       "holdout_id": "img_000081",
-      "corr": 0.9998
+      "corr_best": 0.9998
     },
     {
       "holdout_id": "img_000082",
-      "corr": 0.9996
+      "corr_best": 0.9996
     },
     {
       "holdout_id": "img_000087",
-      "corr": 0.9993
+      "corr_best": 0.9993
     },
     {
       "holdout_id": "img_000088",
-      "corr": 0.9997
-    },
-    {
-      "holdout_id": "img_000091",
-      "corr": 0.9992
+      "corr_best": 0.9997
     }
   ]
 }

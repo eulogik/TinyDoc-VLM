@@ -40,11 +40,27 @@ def main() -> int:
 
     from mlx_vlm.utils import load as load_model
 
+    adapter = Path(args.adapter)
+    if adapter.is_file():          # accept .../adapters.safetensors or its dir
+        adapter = adapter.parent
+    assert (adapter / "adapter_config.json").exists(), f"no adapter_config.json in {adapter}"
+
     items = json.loads(Path(args.eval_path).read_text())
     if args.limit:
         items = items[: args.limit]
 
-    model, processor = load_model(args.model, adapter_path=args.adapter)
+    model, processor = load_model(args.model, adapter_path=str(adapter))
+
+    # mirror the trainer's prompt construction exactly (mlx_vlm.prompt_utils;
+    # the transformers processor has NO chat template for this model)
+    from mlx_vlm.prompt_utils import apply_chat_template as mlx_chat
+
+    conv = [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": EXTRACT_PROMPT}]}]
+    try:
+        prompt = mlx_chat(processor, getattr(model, "config", {}), conv,
+                          add_generation_prompt=True, num_images=1)
+    except Exception:  # noqa: BLE001 — last-resort plain marker
+        prompt = f"<image>\n{EXTRACT_PROMPT}"
     print(f"model={args.model} adapter={args.adapter} n={len(items)}", flush=True)
 
     preds, scores = [], []
@@ -55,15 +71,16 @@ def main() -> int:
         try:
             from mlx_vlm.generate import generate as mlx_generate
 
-            raw = mlx_generate(
+            out = mlx_generate(
                 model,
                 processor,
-                EXTRACT_PROMPT,
+                prompt,
                 image=img,
                 max_tokens=args.max_tokens,
                 temperature=0.0,
             )
-            raw = raw if isinstance(raw, str) else str(raw)
+            raw = getattr(out, "text", None)
+            raw = raw if isinstance(raw, str) else str(out)
             obj = _extract_json(raw) or {}
             pred = {f: str(obj.get(f, "") or "").strip() for f in FIELDS}
             error = ""

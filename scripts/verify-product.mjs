@@ -99,8 +99,8 @@ function gateClaims() {
   }
 
   // measured SROIE contamination must stay disclosed in public docs
-  if (!/58%|0\.58/.test(readme) || !/leak|caveat/i.test(readme)) {
-    bad.push("README missing the SROIE train-overlap caveat (58% of eval receipts are public-train)");
+  if (!/60%|0\.60/.test(readme) || !/leak|caveat/i.test(readme)) {
+    bad.push("README missing the SROIE train-overlap caveat (60% of eval receipts are public-train)");
   }
   if (!/not a clean held-out|not a clean/i.test(bench)) {
     bad.push("BENCHMARKS.md missing the SROIE leakage caveat");

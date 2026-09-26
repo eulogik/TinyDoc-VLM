@@ -173,9 +173,9 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 
 > ⚠️ **SROIE caveat (measured 2026-09-25, [`eval_leakage_audit.json`](evaluation/phase0/results/eval_leakage_audit.json)).**
 > Our 100-doc SROIE set was drawn from the image pool without respecting the official
-> train/test boundary: **58% of those receipts also appear in the public SROIE train split**
-> (verified by 64×64 perceptual correlation; exact file hashing misses the re-encoded copies
-> and reported 0). Any model trained on public SROIE — possibly including the evaluated 3B —
+> train/test boundary: **60% of those receipts also appear in the public SROIE train split**
+> (verified by 64×64 perceptual correlation with two independent resamplers; exact file hashing
+> misses the re-encoded copies and reported 0). Any model trained on public SROIE — possibly including the evaluated 3B —
 > has therefore seen more than half this set, so the **absolute 0.870 is optimistically
 > biased**. Paired same-document comparisons (pipeline vs the 0.376/0.227 baselines) remain
 > internally valid; the absolute number is not a clean held-out score. A verified-clean
