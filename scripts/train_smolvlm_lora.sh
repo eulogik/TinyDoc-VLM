@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Stage-1: LoRA SFT of SmolVLM-500M for char-exact receipt extraction (M4/MLX).
 #
-# Trains ONLY on the leakage-filtered SROIE train split (427 docs) with the exact
+# Trains ONLY on the leakage-filtered SROIE train split (420 docs, whole duplicate
+# components assigned to eval/val/train so no near-duplicate crosses splits) with
 # eval prompt (EXTRACT_PROMPT) as the question and compact 4-key JSON as the
 # answer. Vision tower frozen; completion-only loss; watchdog-guarded.
 #
