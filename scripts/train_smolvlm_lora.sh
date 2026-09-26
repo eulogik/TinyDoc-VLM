@@ -31,7 +31,19 @@ case "$MODE" in
     # kill. $2 = iters already banked (read from the last "Iter N" save line).
     # Optimizer state resets (standard); ≤1 save-interval of overlap re-trains.
     DONE_ITERS="${2:?usage: $0 resume <done_iters>}"
-    ITERS=$((1200 - DONE_ITERS)); OUT="$ADAPTER_DIR/full"; RESUME="--adapter-path $OUT" ;;
+    ITERS=$((1200 - DONE_ITERS)); OUT="$ADAPTER_DIR/full"; RESUME="--adapter-path $OUT"
+    # archive prior segment's numbered saves BEFORE they get overwritten:
+    # filenames are segment-relative, so tag them with global iters now.
+    mkdir -p "$OUT/banked"
+    PREV_START=$(cat "$OUT/banked/CURRENT_START" 2>/dev/null || echo 0)
+    for f in "$OUT"/0000*_adapters.safetensors; do
+      [ -e "$f" ] || continue
+      nnn=$(basename "$f" | grep -oE '^[0-9]+')
+      g=$((PREV_START + 10#$nnn))
+      mv "$f" "$OUT/banked/global_${g}_adapters.safetensors"
+      echo "global_${g} <= segment(start=$PREV_START)+seg-iter $((10#$nnn)) [auto-archived $(date -u +%FT%TZ)]" >> "$OUT/banked/MAPPING.txt"
+    done
+    echo "$DONE_ITERS" > "$OUT/banked/CURRENT_START" ;;
   *) echo "usage: $0 [smoke|full|resume <done_iters>]"; exit 2 ;;
 esac
 mkdir -p "$OUT"
