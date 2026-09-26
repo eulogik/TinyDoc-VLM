@@ -24,9 +24,15 @@ ADAPTER_DIR="$SCRATCH/adapters"
 mkdir -p "$ADAPTER_DIR"
 
 case "$MODE" in
-  smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke" ;;
-  full)  ITERS=1200; OUT="$ADAPTER_DIR/full" ;;
-  *) echo "usage: $0 [smoke|full]"; exit 2 ;;
+  smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke"; RESUME="" ;;
+  full)  ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;
+  resume)
+    # wave-tolerance: warm-start from the latest checkpoint after a watchdog
+    # kill. $2 = iters already banked (read from the last "Iter N" save line).
+    # Optimizer state resets (standard); ≤1 save-interval of overlap re-trains.
+    DONE_ITERS="${2:?usage: $0 resume <done_iters>}"
+    ITERS=$((1200 - DONE_ITERS)); OUT="$ADAPTER_DIR/full"; RESUME="--adapter-path $OUT" ;;
+  *) echo "usage: $0 [smoke|full|resume <done_iters>]"; exit 2 ;;
 esac
 mkdir -p "$OUT"
 
@@ -34,6 +40,7 @@ mkdir -p "$OUT"
 # and evaluate on the clean val split periodically via steps-per-eval.
 exec "$VENV/bin/python" -m mlx_vlm.lora \
   --model-path "$MODEL" \
+  $RESUME \
   --dataset "$DATA/hf_train" \
   --split train \
   --lora-rank 16 \
@@ -48,5 +55,7 @@ exec "$VENV/bin/python" -m mlx_vlm.lora \
   --steps-per-report 10 \
   --steps-per-eval 200 \
   --val-batches 5 \
-  --steps-per-save 200 \
+  --steps-per-eval 200 \
+  --val-batches 5 \
+  --steps-per-save 50 \
   --output-path "$OUT"
