@@ -1,0 +1,242 @@
+[
+  {
+    "id": "clean_0020",
+    "pool_row": 26,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0020.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TED HENG STATIONERY & BOOKS",
+      "date": "12/02/2018",
+      "address": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+      "total": "153.35"
+    }
+  },
+  {
+    "id": "clean_0021",
+    "pool_row": 27,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0021.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR. D.I.Y. (M) SDN BHD",
+      "date": "14-03-18",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+      "total": "37.10"
+    }
+  },
+  {
+    "id": "clean_0022",
+    "pool_row": 28,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0022.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "99 SPEED MART S/B",
+      "date": "24-01-18",
+      "address": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1076-IJOK",
+      "total": "2.50"
+    }
+  },
+  {
+    "id": "clean_0023",
+    "pool_row": 29,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0023.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "C W KHOO HARDWARE SDN BHD",
+      "date": "01-03-18",
+      "address": "NO.50,JALAN PBS 14/11, KAWASAN PERINDUSTRIAN BUKIT SERDANG,",
+      "total": "21.20"
+    }
+  },
+  {
+    "id": "clean_0024",
+    "pool_row": 31,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0024.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "AEON CO. (M) BHD",
+      "date": "06/03/2018",
+      "address": "3RD FLR, AEON TAMAN MALURI SD JLN JEJAKA, TAMAN MALURI CHERAS, 55100 KUALA LUMPUR",
+      "total": "75.00"
+    }
+  },
+  {
+    "id": "clean_0025",
+    "pool_row": 32,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0025.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
+      "date": "03 MAR 2018",
+      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI 81200 JOHOR BAHRU,JOHOR",
+      "total": "$8.20"
+    }
+  },
+  {
+    "id": "clean_0026",
+    "pool_row": 34,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0026.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "PERNIAGAAN ZHENG HUI",
+      "date": "09/03/2018",
+      "address": "NO.59 JALAN PERMAS 9/5 BANDAR BARU PERMAS JAYA 81750 JOHOR BAHRU",
+      "total": "332.30"
+    }
+  },
+  {
+    "id": "clean_0027",
+    "pool_row": 37,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0027.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "WARAKUYA PERMAS CITY SDN BHD",
+      "date": "10/03/2018",
+      "address": "JALAN PERMAS UTARA 1 PERMAS JAYA 81750 MASAI JOHOR",
+      "total": "57.80"
+    }
+  },
+  {
+    "id": "clean_0028",
+    "pool_row": 38,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0028.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "YHM AEON TEBRAU CITY",
+      "date": "11/03/2018",
+      "address": "S117, SECOND FLOOR, AEON TEBRAU CITY, 1, JALAN DESA TEBRAU, TAMAN DESA TEBRAU, 81100 JOHOR BAHRU, JOHOR.",
+      "total": "13.10"
+    }
+  },
+  {
+    "id": "clean_0029",
+    "pool_row": 39,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0029.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "OWNER BY CASTLE BLUE S/B",
+      "date": "30/03/2018",
+      "address": "AVTIVO PLAZA,LOT B-F-11, BLOCK B NO1.JALAN PJU 9/1,D'SARA AVEVUE BANDAR SRI D'SARA, 52000 KL",
+      "total": "189.75"
+    }
+  },
+  {
+    "id": "clean_0030",
+    "pool_row": 40,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0030.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "THREE STOOGES",
+      "date": "12/03/2018",
+      "address": "109, SS21/1A, DAMANSARA UTAMA",
+      "total": "343.95"
+    }
+  },
+  {
+    "id": "clean_0031",
+    "pool_row": 42,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0031.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TASTE OF THE WORLD SDN BHD",
+      "date": "5/3/2018",
+      "address": "LOT 38, 39 101 BOULEVARD, JALAN KENARI 5, BANDAR PUCHONG JAYA, 47170 PUCHONG, SELANGOR",
+      "total": "64.15"
+    }
+  },
+  {
+    "id": "clean_0032",
+    "pool_row": 43,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0032.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "32 PUB & BISTRO OWN BY CNU TRADING",
+      "date": "10-03-2018",
+      "address": "78G, JALAN SS21/62, DAMANSARA UTAMA, 47400 PETALING JAYA.",
+      "total": "190.00"
+    }
+  },
+  {
+    "id": "clean_0033",
+    "pool_row": 45,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0033.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
+      "date": "27 MAR 2018",
+      "address": "12, JALAN TAMPOI 7/4,KAWASAN PARINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
+      "total": "$6.90"
+    }
+  },
+  {
+    "id": "clean_0034",
+    "pool_row": 47,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0034.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTAURANT SIN DU",
+      "date": "09/03/2018",
+      "address": "K3-113, JL IBRAHIM SULTAN 80300 JOHOR BAHRU JOHOR",
+      "total": "170.00"
+    }
+  },
+  {
+    "id": "clean_0035",
+    "pool_row": 48,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0035.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "YONG TAT HARDWARE TRADING",
+      "date": "13/03/2018",
+      "address": "NO 4,JALAN PERJIRANAN 10, TAMAN AIR BIRU, 81700 PASIR GUDANG, JOHOR.",
+      "total": "100.90"
+    }
+  },
+  {
+    "id": "clean_0036",
+    "pool_row": 49,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0036.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "PERNIAGAAN ZHENG HUI",
+      "date": "15/03/2018",
+      "address": "NO.59 JALAN PERMAS 9/5 BANDAR BARU PERMAS JAYA 81750 JOHOR BAHRU",
+      "total": "8.00"
+    }
+  },
+  {
+    "id": "clean_0037",
+    "pool_row": 50,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0037.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TIMELESS KITCHENETTE SDN BHD",
+      "date": "2018-03-23",
+      "address": "LOT 50, FLOOR T2,SKY AVENUE GENTING HIGHLANDS PAHANG, 69000 PAHANG MALAYSIA",
+      "total": "593.10"
+    }
+  },
+  {
+    "id": "clean_0038",
+    "pool_row": 51,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0038.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "UNIHAKKA INTERNATIONAL SDN BHD",
+      "date": "22 MAR 2018",
+      "address": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
+      "total": "$7.60"
+    }
+  },
+  {
+    "id": "clean_0039",
+    "pool_row": 52,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0039.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "PAGOH REST AND SERVICE AREA",
+      "date": "23/03/2018",
+      "address": "LOT R1, KWS REHAT & RAWAT PAGOH ARAH UTARA, SIMPANG AMPAT PAGOH, LEBUHRAYA UTARA SELATAN, 84600,PAGOH,JOHOR",
+      "total": "10.00"
+    }
+  }
+]

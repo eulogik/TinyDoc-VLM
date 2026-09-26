@@ -1,0 +1,242 @@
+[
+  {
+    "id": "clean_0060",
+    "pool_row": 81,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0060.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR. D.I.Y. SDN BHD",
+      "date": "24-11-17",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+      "total": "RM 3.90"
+    }
+  },
+  {
+    "id": "clean_0061",
+    "pool_row": 82,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0061.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "HON HWA HARDWARE TRADING",
+      "date": "08/02/2017",
+      "address": "NO 37, JALAN MANIS 7, TAMAN SEGAR, 56100 CHERAS, KUALA LUMPUR.",
+      "total": "277.00"
+    }
+  },
+  {
+    "id": "clean_0062",
+    "pool_row": 85,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0062.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR. D.I.Y. SDN BHD",
+      "date": "28-12-17",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+      "total": "9.90"
+    }
+  },
+  {
+    "id": "clean_0063",
+    "pool_row": 86,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0063.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR. D.I.Y. (KUCHAI) SDN BHD",
+      "date": "08-03-17",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+      "total": "37.80"
+    }
+  },
+  {
+    "id": "clean_0064",
+    "pool_row": 87,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0064.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "IKANO HANDEL SDN BHD",
+      "date": "27/07/17",
+      "address": "NO 2A JALAN COCHRANE TAMAN MALURI 55100 KUALA LUMPUR",
+      "total": "538.00"
+    }
+  },
+  {
+    "id": "clean_0065",
+    "pool_row": 88,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0065.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "IKANO HANDEL SDN BHD",
+      "date": "09/08/17",
+      "address": "NO 2A JALAN COCHRANE TAMAN MALURI 55100 KUALA LUMPUR",
+      "total": "99.80"
+    }
+  },
+  {
+    "id": "clean_0066",
+    "pool_row": 91,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0066.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TRI SHAAS SDN BHD",
+      "date": "4/02/2017",
+      "address": "4-20, JALAN RIA 25/62 TAMAN SRI MUDA SEKSYEN 25, 40400 SHAH ALAM SELANGOR",
+      "total": "85.10"
+    }
+  },
+  {
+    "id": "clean_0067",
+    "pool_row": 92,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0067.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ADVANCO COMPANY",
+      "date": "23/03/2018",
+      "address": "NO 1&3, JALAN WANGSA DELIMA 12, WANGSA LINK, WANGSA MAJU, 53300 KUALA LUMPUR",
+      "total": "83.00"
+    }
+  },
+  {
+    "id": "clean_0068",
+    "pool_row": 94,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0068.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "AEON CO. (M) BHD",
+      "date": "09/02/2018",
+      "address": "3RD FLR, AEON TAMAN MALURI SC JLN JEJAKA, TAMAN MALURI CHERAS, 55100 KUALA LUMPUR",
+      "total": "5.90"
+    }
+  },
+  {
+    "id": "clean_0069",
+    "pool_row": 95,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0069.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "POPULAR BOOK CO. (M) SDN BHD",
+      "date": "07/01/18",
+      "address": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA KL FESTIVAL CITY MALL",
+      "total": "31.45"
+    }
+  },
+  {
+    "id": "clean_0070",
+    "pool_row": 96,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0070.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "POPULAR BOOK CO. (M) SDN BHD",
+      "date": "29/03/18",
+      "address": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA",
+      "total": "9.65"
+    }
+  },
+  {
+    "id": "clean_0071",
+    "pool_row": 97,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0071.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "POPULAR BOOK CO. (M) SDN BHD",
+      "date": "12/01/18",
+      "address": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA",
+      "total": "21.00"
+    }
+  },
+  {
+    "id": "clean_0072",
+    "pool_row": 98,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0072.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "WAHIN HARDWARE SDN BHD",
+      "date": "04/12/17",
+      "address": "425, JALAN PAHANG, SETAPAK, 53000 KUALA LUMPUR.",
+      "total": "42.40"
+    }
+  },
+  {
+    "id": "clean_0073",
+    "pool_row": 99,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0073.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "04/12/2017",
+      "address": "NO 290, JALAN AIR PANAS. SETAPAK, 53200, KUALA LUMPUR",
+      "total": "47.70"
+    }
+  },
+  {
+    "id": "clean_0074",
+    "pool_row": 100,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0074.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "02/12/2017",
+      "address": "NO 290, JALAN AIR PANAS. SETAPAK. 53200, KUALA LUMPUR.",
+      "total": "7.42"
+    }
+  },
+  {
+    "id": "clean_0075",
+    "pool_row": 101,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0075.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "02/12/2017",
+      "address": "NO 290, JALAN AIR PANAS. SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "29.68"
+    }
+  },
+  {
+    "id": "clean_0076",
+    "pool_row": 103,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0076.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "28/12/2017",
+      "address": "NO 290, JALAN AIR PANAS. SETAPAK, 53200, KUALA LUMPUR",
+      "total": "148.40"
+    }
+  },
+  {
+    "id": "clean_0077",
+    "pool_row": 105,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0077.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SWEET FOREST CAFE",
+      "date": "14-02-2018",
+      "address": "NO 21, JLN BUNGA KANTAN TAMAN P. RAMLEE SETAPAK 53000 KUALA LUMPUR",
+      "total": "30.30"
+    }
+  },
+  {
+    "id": "clean_0078",
+    "pool_row": 107,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0078.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ZAWIAJAYA FOOD N BEVERAGE SDN BHD",
+      "date": "21-03-2018",
+      "address": "106-107, LEVEL 1 THE MINES MALL SERDANG SRI KEMBANGAN, 43300 SELANGOR DARUL EHSAN.",
+      "total": "48.15"
+    }
+  },
+  {
+    "id": "clean_0079",
+    "pool_row": 108,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0079.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "LIM SENG THO HARDWARE TRADING",
+      "date": "03/02/2018",
+      "address": "NO 7. SIMPANG OFF BATU VILLAGE, JALAN IPOH BATU 5, 51200 KUALA LUMPUR MALAYSIA",
+      "total": "7.00"
+    }
+  }
+]

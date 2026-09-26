@@ -1,0 +1,242 @@
+[
+  {
+    "id": "clean_0000",
+    "pool_row": 0,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0000.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "BOOK TA .K (TAMAN DAYA) SDN BHD",
+      "date": "25/12/2018",
+      "address": "NO.53 55,57 & 59, JALAN SAGU 18, TAMAN DAYA, 81100 JOHOR BAHRU, JOHOR.",
+      "total": "9.00"
+    }
+  },
+  {
+    "id": "clean_0001",
+    "pool_row": 1,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0001.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "INDAH GIFT & HOME DECO",
+      "date": "19/10/2018",
+      "address": "27, JALAN DEDAP 13, TAMAN JOHOR JAYA, 81100 JOHOR BAHRU, JOHOR.",
+      "total": "60.30"
+    }
+  },
+  {
+    "id": "clean_0002",
+    "pool_row": 2,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0002.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR D.I.Y. (JOHOR) SDN BHD",
+      "date": "12-01-19",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (MR DIY TESCO TERBAU)",
+      "total": "33.90"
+    }
+  },
+  {
+    "id": "clean_0003",
+    "pool_row": 3,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0003.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "YONGFATT ENTERPRISE",
+      "date": "25/12/2018",
+      "address": "NO 122.124. JALAN DEDAP 13 81100 JOHOR BAHRU",
+      "total": "80.90"
+    }
+  },
+  {
+    "id": "clean_0004",
+    "pool_row": 4,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0004.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "MR D.I.Y. (M) SDN BHD",
+      "date": "18-11-18",
+      "address": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (TESCO PUTRA NILAI)",
+      "total": "30.90"
+    }
+  },
+  {
+    "id": "clean_0005",
+    "pool_row": 5,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0005.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ABC HO TRADING",
+      "date": "09/01/2019",
+      "address": "NO.2&4, JALAN HARMONI 3/2, TAMAN DESA HARMONI. 81100 JOHOR BAHRU JOHOR",
+      "total": "31.00"
+    }
+  },
+  {
+    "id": "clean_0006",
+    "pool_row": 6,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0006.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SOON HUAT MACHINERY ENTERPRISE",
+      "date": "11/01/2019",
+      "address": "NO.53 JALAN PUTRA 1, TAMAN SRI PUTRA, 81200 JOHOR BAHRU JOHOR",
+      "total": "327.00"
+    }
+  },
+  {
+    "id": "clean_0007",
+    "pool_row": 7,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0007.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "S.H.H. MOTOR (SUNGAI RENGIT) SDN. BHD.",
+      "date": "23-01-2019",
+      "address": "NO. 343, JALAN KURAU, SUNGAI RENGIT, 81620 PENGERANG, JOHOR.",
+      "total": "20.00"
+    }
+  },
+  {
+    "id": "clean_0008",
+    "pool_row": 9,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0008.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "GERBANG ALAF RESTAURANTS SDN BHD",
+      "date": "18/01/2018",
+      "address": "LEVEL 6, BANGUNAN TH, DAMANSARA UPTOWN3 NO.3, JALAN SS21/39,47400 PETALING JAYA SELANGOR",
+      "total": "26.60"
+    }
+  },
+  {
+    "id": "clean_0009",
+    "pool_row": 10,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0009.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SAM SAM TRADING CO",
+      "date": "29-12-2017",
+      "address": "67,JLN MEWAH 25/63 TMN SRI MUDA, 40400 SHAH ALAM.",
+      "total": "14.10"
+    }
+  },
+  {
+    "id": "clean_0010",
+    "pool_row": 11,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0010.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "AIK HUAT HARDWARE ENTERPRISE (SETIA ALAM) SDN BHD",
+      "date": "15/06/2017",
+      "address": "NO. 17-G, JALAN SETIA INDAH (X) U13/X, SETIA ALAM, SEKSYEN U13, 40170 SHAH ALAM,",
+      "total": "15.00"
+    }
+  },
+  {
+    "id": "clean_0011",
+    "pool_row": 13,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0011.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN HASSANBISTRO",
+      "date": "12/28/2017",
+      "address": "NO.2-1-1 JALAN SEITA PRIMA Q U 13/Q SEITA ALAM 40170 SHAN ALAM SELANGOR",
+      "total": "15.00"
+    }
+  },
+  {
+    "id": "clean_0012",
+    "pool_row": 14,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0012.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ASIA MART",
+      "date": "22/12/2017",
+      "address": "NO.23 BATU 10, TAMAN SENTOSA, JALAN KAPAR, 42200 KLANG, SELANGOR.",
+      "total": "32.70"
+    }
+  },
+  {
+    "id": "clean_0013",
+    "pool_row": 17,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0013.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "LIGHTROOM GALLERY SDN BHD",
+      "date": "20/11/2017",
+      "address": "NO: 28, JALAN ASTANA 1C, BANDAR BUKIT RAJA, 41050 KLANG SELANGOR D.E, MALAYSIA",
+      "total": "39.80"
+    }
+  },
+  {
+    "id": "clean_0014",
+    "pool_row": 19,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0014.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SHELL ISNI PETRO TRADING",
+      "date": "18/03/18",
+      "address": "LOT 2685 JLN GENTING KLANG 53300 KL SITE 1066",
+      "total": "86.00"
+    }
+  },
+  {
+    "id": "clean_0015",
+    "pool_row": 20,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0015.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYL ROASTED DELIGHTS SDN. BHD.",
+      "date": "06/03/2018",
+      "address": "75. JALAN SS 22/19, DAMANSARA JAYA, 47400 PJ",
+      "total": "54.50"
+    }
+  },
+  {
+    "id": "clean_0016",
+    "pool_row": 22,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0016.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "FUYI MINI MARKET",
+      "date": "25/01/2018",
+      "address": "NO 43-45-47G, TAMAN SEJATI, IJOK, 45600 BESTARI JAYA, KUALA SELANGOR.",
+      "total": "9.00"
+    }
+  },
+  {
+    "id": "clean_0017",
+    "pool_row": 23,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0017.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TEO HENG STATIONERY & BOOKS",
+      "date": "17/01/2018",
+      "address": "NO.53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+      "total": "27.55"
+    }
+  },
+  {
+    "id": "clean_0018",
+    "pool_row": 24,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0018.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TEO HENG STATIONERY & BOOKS",
+      "date": "15/01/2018",
+      "address": "NO.53, JALAN BESAR, 45600 BATANG BEJUNTAL SELANGOR DARUL EHSAN",
+      "total": "55.10"
+    }
+  },
+  {
+    "id": "clean_0019",
+    "pool_row": 25,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0019.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TEO HENG STATIONERY & BOOKS",
+      "date": "23/01/2018",
+      "address": "NO.53,JALAN BESAR,45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+      "total": "18.00"
+    }
+  }
+]

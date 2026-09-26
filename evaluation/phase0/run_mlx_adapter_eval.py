@@ -31,7 +31,8 @@ RESULTS = ROOT / "evaluation/phase0/results"
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=f"{SCRATCH}/models/smolvlm500m")
-    ap.add_argument("--adapter", required=True)
+    ap.add_argument("--adapter", default=None,
+                    help="adapter dir (or adapters.safetensors); omit for base-model ablation")
     ap.add_argument("--eval-path", default=str(RESULTS / "sroie_eval_clean.json"))
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--out-suffix", default="_clean")
@@ -40,16 +41,23 @@ def main() -> int:
 
     from mlx_vlm.utils import load as load_model
 
-    adapter = Path(args.adapter)
-    if adapter.is_file():          # accept .../adapters.safetensors or its dir
-        adapter = adapter.parent
-    assert (adapter / "adapter_config.json").exists(), f"no adapter_config.json in {adapter}"
+    adapter = None
+    if args.adapter:
+        adapter = Path(args.adapter)
+        if adapter.is_file():          # accept .../adapters.safetensors or its dir
+            adapter = adapter.parent
+        assert (adapter / "adapter_config.json").exists(), f"no adapter_config.json in {adapter}"
+        adapter = str(adapter)
 
     items = json.loads(Path(args.eval_path).read_text())
     if args.limit:
         items = items[: args.limit]
 
-    model, processor = load_model(args.model, adapter_path=str(adapter))
+    if adapter:
+        model, processor = load_model(args.model, adapter_path=adapter)
+    else:
+        model, processor = load_model(args.model)
+    tag = "lora" if adapter else "base"
 
     # mirror the trainer's prompt construction exactly (mlx_vlm.prompt_utils;
     # the transformers processor has NO chat template for this model)
@@ -61,7 +69,7 @@ def main() -> int:
                           add_generation_prompt=True, num_images=1)
     except Exception:  # noqa: BLE001 — last-resort plain marker
         prompt = f"<image>\n{EXTRACT_PROMPT}"
-    print(f"model={args.model} adapter={args.adapter} n={len(items)}", flush=True)
+    print(f"model={args.model} adapter={adapter} n={len(items)}", flush=True)
 
     preds, scores = [], []
     for i, item in enumerate(items):
@@ -107,8 +115,8 @@ def main() -> int:
 
     agg = macro_prf(scores)
     out = {
-        "engine": f"smolvlm500m_lora{args.out_suffix}",
-        "adapter": args.adapter,
+        "engine": f"smolvlm500m_{tag}{args.out_suffix}",
+        "adapter": adapter,
         "n_examples": len(preds),
         "field_f1": agg["field_f1"],
         "schema_valid_rate": agg["schema_valid_rate"],
@@ -119,8 +127,8 @@ def main() -> int:
         },
         "errors": sum(1 for p in preds if p["error"]),
     }
-    (RESULTS / f"scores_smolvlm500m_lora{args.out_suffix}.json").write_text(json.dumps(out, indent=2))
-    (RESULTS / f"preds_smolvlm500m_lora{args.out_suffix}.jsonl").write_text(
+    (RESULTS / f"scores_smolvlm500m_{tag}{args.out_suffix}.json").write_text(json.dumps(out, indent=2))
+    (RESULTS / f"preds_smolvlm500m_{tag}{args.out_suffix}.jsonl").write_text(
         "\n".join(json.dumps(p) for p in preds) + "\n"
     )
     print(json.dumps(out, indent=2))

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "clean_0080",
+    "pool_row": 110,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0080.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "LIM SENG THO HARDWARE TRADING",
+      "date": "29/12/2017",
+      "address": "NO 7, SIMPANG OFF BATU VILLAGE, JALAN IPOH BATU 5, 51200 KUALA LUMPUR MALAYSIA",
+      "total": "6.00"
+    }
+  },
+  {
+    "id": "clean_0081",
+    "pool_row": 111,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0081.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "28/12/2017",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "465.34"
+    }
+  },
+  {
+    "id": "clean_0082",
+    "pool_row": 112,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0082.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SUN VICTORY SDN BHD",
+      "date": "14/01/2018",
+      "address": "LEVEL G2, BLOCK D1, SOLARIS DUTAMAS, NO.1, JALAN DUTAMAS 1, 50480 KUALA LUMPUR",
+      "total": "RM4.00"
+    }
+  },
+  {
+    "id": "clean_0083",
+    "pool_row": 113,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0083.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "02/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "93.07"
+    }
+  },
+  {
+    "id": "clean_0084",
+    "pool_row": 114,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0084.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "04/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "44.73"
+    }
+  },
+  {
+    "id": "clean_0085",
+    "pool_row": 116,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0085.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "11/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "116.28"
+    }
+  },
+  {
+    "id": "clean_0086",
+    "pool_row": 117,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0086.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "03/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "94.87"
+    }
+  },
+  {
+    "id": "clean_0087",
+    "pool_row": 120,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0087.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "13/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "6.36"
+    }
+  },
+  {
+    "id": "clean_0088",
+    "pool_row": 122,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0088.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "13/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "12.72"
+    }
+  },
+  {
+    "id": "clean_0089",
+    "pool_row": 126,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0089.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "03/02/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "60.95"
+    }
+  },
+  {
+    "id": "clean_0090",
+    "pool_row": 127,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0090.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "12/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "7.95"
+    }
+  },
+  {
+    "id": "clean_0091",
+    "pool_row": 128,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0091.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "31/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "82.68"
+    }
+  },
+  {
+    "id": "clean_0092",
+    "pool_row": 129,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0092.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "SYARIKAT PERNIAGAAN GIN KEE",
+      "date": "24/01/2018",
+      "address": "NO 290, JALAN AIR PANAS, SETAPAK, 53200, KUALA LUMPUR.",
+      "total": "74.20"
+    }
+  },
+  {
+    "id": "clean_0093",
+    "pool_row": 130,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0093.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "BEYOND BROTHERS HARDWARE",
+      "date": "05/02/2018",
+      "address": "LOT 1-0-2, JLN 1/50, DIAMOND SQUARE, OFF JLN GOMBAK 53000 KUALA LUMPUR",
+      "total": "63.60"
+    }
+  },
+  {
+    "id": "clean_0094",
+    "pool_row": 131,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0094.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN IBRAHIM MAJU SB",
+      "date": "19/03/2018",
+      "address": "NO.2, GROUND FLOOR, JALAN REKO SENTRAL 8 TAMAN REKO SENTRAL, 43000 KAJANG SELANGOR DE",
+      "total": "5.30"
+    }
+  },
+  {
+    "id": "clean_0095",
+    "pool_row": 132,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0095.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "FARMASI MALURI S/B",
+      "date": "02/03/18",
+      "address": "23, JIN BURUNG JENTAYU, TMN BUKIT MALURI, KEPONG, 52100 KL.",
+      "total": "79.35"
+    }
+  },
+  {
+    "id": "clean_0096",
+    "pool_row": 134,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0096.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "TRI SHAAS SDN BHD",
+      "date": "10/08/2017",
+      "address": "4-20, JALAN RIA 25/62 TAMAN SRI MUDA SEKSYEN 25, 40400 SHAH ALAM SELANGOR",
+      "total": "21.40"
+    }
+  },
+  {
+    "id": "clean_0097",
+    "pool_row": 135,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0097.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "ASO ELECTRICAL TRADING SDN BHD",
+      "date": "04/12/2017",
+      "address": "NO 31G, JALAN SEPADU C 25/C, SECTION 25, TAMAN INDUSTRIES, AXIS 40400 SHAH ALAM, SELANGOR.",
+      "total": "99.00"
+    }
+  },
+  {
+    "id": "clean_0098",
+    "pool_row": 136,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0098.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "19-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "6.00"
+    }
+  },
+  {
+    "id": "clean_0099",
+    "pool_row": 137,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0099.jpg",
+    "source": "sroie_public_train_clean",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "19-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "9.10"
+    }
+  }
+]
