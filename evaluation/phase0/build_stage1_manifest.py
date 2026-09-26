@@ -322,6 +322,22 @@ def main() -> int:
         })
     (RESULTS / "sroie_eval_clean.json").write_text(json.dumps(clean_eval, indent=2))
 
+    # export val the same way (checkpoint selection must score val, never test)
+    val_dir = out / "val_images"
+    val_dir.mkdir(exist_ok=True)
+    val_set = []
+    for k, i in enumerate(val_rows_idx):
+        name = f"val_{k:04d}.jpg"
+        raw_pil[i].convert("RGB").save(val_dir / name, quality=95)
+        val_set.append({
+            "id": f"val_{k:04d}",
+            "pool_row": int(i),
+            "image_path": str(val_dir / name),
+            "source": "sroie_public_train_val",
+            "gold": golds[i],
+        })
+    (RESULTS / "sroie_val.json").write_text(json.dumps(val_set, indent=2))
+
     Dataset.from_list([{k: r[k] for k in cols} for r in (build_row(i) for i in train_rows_idx)]).save_to_disk(out / "train")
     Dataset.from_list([{k: r[k] for k in cols} for r in (build_row(i) for i in val_rows_idx)]).save_to_disk(out / "val")
 

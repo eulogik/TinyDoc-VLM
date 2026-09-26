@@ -1,0 +1,482 @@
+[
+  {
+    "id": "val_0000",
+    "pool_row": 138,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0000.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "14-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "4.80"
+    }
+  },
+  {
+    "id": "val_0001",
+    "pool_row": 139,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0001.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "21-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "6.70"
+    }
+  },
+  {
+    "id": "val_0002",
+    "pool_row": 140,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0002.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "16-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "9.60"
+    }
+  },
+  {
+    "id": "val_0003",
+    "pool_row": 141,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0003.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "12-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "7.00"
+    }
+  },
+  {
+    "id": "val_0004",
+    "pool_row": 142,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0004.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RESTORAN WAN SHENG",
+      "date": "14-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "2.30"
+    }
+  },
+  {
+    "id": "val_0005",
+    "pool_row": 143,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0005.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "RSTORAN WAN SHENG",
+      "date": "05-03-2018",
+      "address": "NO.2, JALAN TEMENGGUNG 19/9, SEKSYEN 9, BANDAR MAHKOTA CHERAS, 43200 CHERAS, SELANGOR",
+      "total": "6.00"
+    }
+  },
+  {
+    "id": "val_0006",
+    "pool_row": 144,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0006.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GERBANG ALAF RESTAURANTS SDN BHD",
+      "date": "21/03/2018",
+      "address": "LEVEL 6, BANGUNAN TH, DAMANSARA UPTOWN3 NO.3, JALAN SS21/39, 47400 PETALING JAYA SELANGOR",
+      "total": "25.40"
+    }
+  },
+  {
+    "id": "val_0007",
+    "pool_row": 145,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0007.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GERBANG ALAF RESTAURANTS SDN BHD",
+      "date": "10/03/2018",
+      "address": "LEVEL 6, BANGUNAN TH, DAMANSARA UPTOWN3 NO.3, JALAN SS21/39, 47400 PETALING JAYA SELANGOR",
+      "total": "8.50"
+    }
+  },
+  {
+    "id": "val_0008",
+    "pool_row": 146,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0008.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "PAPPARICH BMC",
+      "date": "24 MAR 18",
+      "address": "JALAN TEMENGGUNG 23/9 BANDAR MAHKOTA CHERAS 43200 SELANGOR DARUL EHSAN, MALAYSIA",
+      "total": "72.93"
+    }
+  },
+  {
+    "id": "val_0009",
+    "pool_row": 147,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0009.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "MIZU MENTAI SDN. BHD.",
+      "date": "31-03-2018",
+      "address": "NO: 1-1&2 GROUND FLOOR, JLN TEMENGGUNG 13/9, 43200 CHERAS SELANGOR",
+      "total": "65.55"
+    }
+  },
+  {
+    "id": "val_0010",
+    "pool_row": 148,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0010.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GERBANG ALAF RESTAURANTS SDN BHD",
+      "date": "18/03/2018",
+      "address": "LEVEL 6, BANGUNAN TH, DAMANSARA UPTOWN3 NO.3, JALAN SS21/39, 47400 PETALING JAYA SELANGOR",
+      "total": "13.10"
+    }
+  },
+  {
+    "id": "val_0011",
+    "pool_row": 149,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0011.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "HAPPY SNACKS ENTERPRISE",
+      "date": "20/03/2018",
+      "address": "19 & 19A, JALAN MERANTI 2A, SEKSYEI BANDAR BARU BATANG KALI, 44300",
+      "total": "26.82"
+    }
+  },
+  {
+    "id": "val_0012",
+    "pool_row": 151,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0012.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "L TWO FLORIST & HANDICRAFT",
+      "date": "21/03/2018",
+      "address": "NO.49, JALAN MAHAGONI 7/2, SEKSYEN 4 BANDAR UTAMA, 44300 BATANG KALI, SELANGOR.",
+      "total": "9.00"
+    }
+  },
+  {
+    "id": "val_0013",
+    "pool_row": 152,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0013.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "WATSON'S PERSONAL CARE STORES SDN BHD",
+      "date": "25032018",
+      "address": "USJ SUMMIT, SUBANG (SS)",
+      "total": "RM41.45"
+    }
+  },
+  {
+    "id": "val_0014",
+    "pool_row": 153,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0014.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "POPULAR BOOK CO. (M) SDN BHD",
+      "date": "06/02/18",
+      "address": "NO 8, JALAN 7/118B, DESA TAN RAZAH 56000 KUALA LUMPUR, MALAYSIA KSL CITY",
+      "total": "14.65"
+    }
+  },
+  {
+    "id": "val_0015",
+    "pool_row": 154,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0015.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "KHE ELECTRICAL TRADING",
+      "date": "22/03/2018",
+      "address": "33-G JALAN MAJU 3/1 TAMAN LEMBAH MAJU CHERAS, 56100 KL",
+      "total": "101.75"
+    }
+  },
+  {
+    "id": "val_0016",
+    "pool_row": 155,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0016.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GERBANG ALAF RESTAURANTS SDN BHD",
+      "date": "02/03/2018",
+      "address": "LEVEL 6, BANGUNAN TH, DAMANSARA UPTOWN3 NO.3, JALAN SS21/39, 47400 PETALING JAYA SELANGOR",
+      "total": "28.50"
+    }
+  },
+  {
+    "id": "val_0017",
+    "pool_row": 156,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0017.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "TK DIVISION KITCHEN SDN BHD",
+      "date": "17/1/2018",
+      "address": "19-1. JALAN MALINJA 2, TAMAN BUNGA RAYA, 53100 SETAPAK, KUALA LUMPUR.",
+      "total": "RM 29.70"
+    }
+  },
+  {
+    "id": "val_0018",
+    "pool_row": 157,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0018.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GOLDEN SCOOP SDN BHD",
+      "date": "16/02/2018",
+      "address": "A-16-1, TOWER A, NORTHPOINT OFFICE, MID VALLEY CITY, NO1, MEDAN SYED PUTRA UTARA KUALA LUMPUR MALAYSIA",
+      "total": "21.50"
+    }
+  },
+  {
+    "id": "val_0019",
+    "pool_row": 158,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0019.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "99 SPEED MART S/B",
+      "date": "03-02-18",
+      "address": "LOT P. T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1934-LAMAN RIMBUNAN",
+      "total": "3.70"
+    }
+  },
+  {
+    "id": "val_0020",
+    "pool_row": 159,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0020.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "FUN N CHEER (MALURI)",
+      "date": "05/01/2018",
+      "address": "LOT 37636 , JALAN 6/37A, TAMAN BUKIT MALURI , 52100 KUALA LUMPUR",
+      "total": "29.80"
+    }
+  },
+  {
+    "id": "val_0021",
+    "pool_row": 160,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0021.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "CT281 - TEALIVE SHELL KEPONG OTTOGO ENTERPRISE",
+      "date": "21/01/2018",
+      "address": "SHELL STATION PT15944, MUKIM BATU, JLN BESAR KEPONG",
+      "total": "RM8.60"
+    }
+  },
+  {
+    "id": "val_0022",
+    "pool_row": 161,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0022.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "NADEJE PRESTIGE SDN BHD",
+      "date": "2018/02/22",
+      "address": "LOT NO. : G1 . 116A,GROUND FLOOR , SUNWAY PYRAMID , NO.3, JALAN PJS 11/15, BANDAR SUNWAY , 47500 PETALING JAYA.",
+      "total": "RM39.00"
+    }
+  },
+  {
+    "id": "val_0023",
+    "pool_row": 162,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0023.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "99 SPEED MART S/B",
+      "date": "17-02-18",
+      "address": "LOT P. T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1181-TMN SRI SINAR",
+      "total": "213.00"
+    }
+  },
+  {
+    "id": "val_0024",
+    "pool_row": 163,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0024.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "99 SPEED MART S/B",
+      "date": "17-02-18",
+      "address": "LOT P. T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1362-JLN DEVELOPMENT",
+      "total": "108.50"
+    }
+  },
+  {
+    "id": "val_0025",
+    "pool_row": 164,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0025.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "SUNFISH",
+      "date": "05/01/2018",
+      "address": "22 LRG PERUSAHAAN 4 KIMPAL INDS.PARK B.CAVES",
+      "total": "28.70"
+    }
+  },
+  {
+    "id": "val_0026",
+    "pool_row": 165,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0026.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "MR . DAKGALBI SOLARIS",
+      "date": "2018-01-05",
+      "address": "NO.J-G-02, SOHO KI, SOLARIS MONT KIERA, 50 480 KL",
+      "total": "71.00"
+    }
+  },
+  {
+    "id": "val_0027",
+    "pool_row": 166,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0027.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "THE STORE (MALAYSIA) SDN BHD",
+      "date": "14-01-2018",
+      "address": "LOT 34817 JALAN BATU AMBAR TAMAN KOK LIAN 51200 KUALA LUMPUR,",
+      "total": "35.80"
+    }
+  },
+  {
+    "id": "val_0028",
+    "pool_row": 167,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0028.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "LITTLE CRAVINGS SDN BHD",
+      "date": "18-03-2018",
+      "address": "HQ: 7, JLN SS21/34, 47400 PJ",
+      "total": "RM53.60"
+    }
+  },
+  {
+    "id": "val_0029",
+    "pool_row": 168,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0029.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "KING'S CONFECTIONERY S/B",
+      "date": "11/03/18",
+      "address": "NO.41, JALAN SERI BINTANG 2 TAMAN SRI BINTANG, 52100 KUALA LUMPUR.",
+      "total": "25.15"
+    }
+  },
+  {
+    "id": "val_0030",
+    "pool_row": 169,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0030.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "YAM FRESH",
+      "date": "2018-03-18",
+      "address": "NO. 145G, JALAN RIMBUNAN RAYA 1, LAMAN RIMBUNAN KEPONG, 52100 KUALA LUMPUR",
+      "total": "RM29.30"
+    }
+  },
+  {
+    "id": "val_0031",
+    "pool_row": 170,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0031.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "ZEN AND COFFEE 28 S/B",
+      "date": "25 MAR 2018",
+      "address": "NO 53, JALAN 3/62A, BANDAR MENJALARA, 52200 KUALA LUMPUR.",
+      "total": "105.00"
+    }
+  },
+  {
+    "id": "val_0032",
+    "pool_row": 171,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0032.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "GUARDIAN HEALTH AND BEAUTY SDN BHD",
+      "date": "04/03/18",
+      "address": "GUARDIAN GIANT BREM MALL G-19 LEVEL G BREM MALL",
+      "total": "12.00"
+    }
+  },
+  {
+    "id": "val_0033",
+    "pool_row": 173,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0033.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "DOMMAL FOOD SERVICES SDN BHD",
+      "date": "26/03/18",
+      "address": "D-08, M AVENUE , JLN 1 / 38A SEGAMBUT BAHAGIA 51200 KUALA LUMPUR",
+      "total": "60.60"
+    }
+  },
+  {
+    "id": "val_0034",
+    "pool_row": 174,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0034.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "MY HAPPY PHARMACY PLT",
+      "date": "01/02/2018",
+      "address": "NO 12 GF, JALAN MAMANDA 5, TAMAN DATO AHMAD RAZALI, JALAN AMPANG, 68000 AMPANG, SELANGOR.",
+      "total": "20.50"
+    }
+  },
+  {
+    "id": "val_0035",
+    "pool_row": 176,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0035.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "KEDAI PAPAN YEW CHUAN",
+      "date": "28/02/2018",
+      "address": "LOT 276 JALAN BANTING 43800 DENGKIL, SELANGOR.",
+      "total": "101.76"
+    }
+  },
+  {
+    "id": "val_0036",
+    "pool_row": 178,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0036.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "KEDAI PAPAN YEW CHUAN",
+      "date": "31/03/2018",
+      "address": "LOT 276 JALAN BANTING 43800 DENGKIL, SELANGOR.",
+      "total": "174.90"
+    }
+  },
+  {
+    "id": "val_0037",
+    "pool_row": 179,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0037.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "KEDAI PAPAN YEW CHUAN",
+      "date": "17/03/2018",
+      "address": "LOT 276 JALAN BANTING 43800 DENGKIL, SELANGOR.",
+      "total": "174.90"
+    }
+  },
+  {
+    "id": "val_0038",
+    "pool_row": 180,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0038.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "BHPETROL SUBANG AIRPORT",
+      "date": "18-01-2018",
+      "address": "JALAN LAPANGAN TERBANG SUBANG 47200 SUBANG SELANGOR",
+      "total": "41.95"
+    }
+  },
+  {
+    "id": "val_0039",
+    "pool_row": 181,
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0039.jpg",
+    "source": "sroie_public_train_val",
+    "gold": {
+      "company": "BHPETROL PALEKBANG",
+      "date": "24-03-2018",
+      "address": "LOT 1626, MUKIM KAMPUNG LAUT TUMPAT 16200 PALEKBANG, KELANTAN",
+      "total": "6.00"
+    }
+  }
+]
