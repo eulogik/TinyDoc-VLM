@@ -69,5 +69,5 @@ exec "$VENV/bin/python" -m mlx_vlm.lora \
   --val-batches 5 \
   --steps-per-eval 200 \
   --val-batches 5 \
-  --steps-per-save 50 \
+  --steps-per-save 25 \
   --output-path "$OUT"
