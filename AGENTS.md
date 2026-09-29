@@ -20,7 +20,13 @@ memory watchdog when they are model inference.
 - RapidOCR venv (python3.11): `/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/ocr_venv`
   — has rapidocr-onnxruntime, pytesseract, pydantic, jsonschema.
 - Scratch dir: `/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/`
-  (repo `/tmp` gets wiped by macOS).
+  (repo `/tmp` gets wiped by macOS). NOTE 2026-09-29: a macOS REBOOT also
+  wipes this scratch dir — venv, model weights, datasets, and training
+  checkpoints do NOT survive reboots. Everything is rebuildable from the repo
+  (builder + supervisor scripts); committed artifacts in `evaluation/phase0/results/`
+  are the source of truth. Rebuild order: venv → SmolVLM-500M weights →
+  rajistics/sroie → build_stage1_manifest.py → hf_train/hf_val parquets →
+  supervise_training.sh.
 - Ollama: never send `format:"json"`; prompt-v1 lives in
   `engines.EXTRACT_PROMPT` ↔ `pipeline.OllamaEngine` (must stay in sync).
 - Eval images live behind the untracked `data/training` symlink — never
