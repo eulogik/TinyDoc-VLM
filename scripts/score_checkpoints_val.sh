@@ -14,6 +14,10 @@ BANKED="$SCRATCH/adapters/full/banked"
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"
   [ -f "$ckpt" ] || { echo "missing $ckpt — skipping"; continue; }
+  if [ -f "$REPO/evaluation/phase0/results/scores_smolvlm500m_lora_valg$g.json" ]; then
+    echo "global_$g already scored — skipping"
+    continue
+  fi
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
     --adapter "$(dirname "$ckpt")" \
