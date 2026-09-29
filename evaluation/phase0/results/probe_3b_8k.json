@@ -1,0 +1,70 @@
+{
+  "num_ctx": 8192,
+  "rows": [
+    {
+      "id": "clean_0017",
+      "pred": {
+        "company": "TEO HENG STATIONERY & BOOKS",
+        "date": "17/01/2018",
+        "address": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+        "total": "27.55"
+      },
+      "latency_ms": 40092.41580963135,
+      "error": "",
+      "f1": 1.0,
+      "address_hit": true
+    },
+    {
+      "id": "clean_0018",
+      "pred": {
+        "company": "TEO HENG STATIONERY & BOOKS",
+        "date": "15/01/2018",
+        "address": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+        "total": "55.10"
+      },
+      "latency_ms": 35843.733072280884,
+      "error": "",
+      "f1": 0.75,
+      "address_hit": false
+    },
+    {
+      "id": "clean_0019",
+      "pred": {
+        "company": "TEO HENG STATIONERY & BOOKS",
+        "date": "23/01/2018",
+        "address": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+        "total": "18.00"
+      },
+      "latency_ms": 36096.83918952942,
+      "error": "",
+      "f1": 1.0,
+      "address_hit": true
+    },
+    {
+      "id": "clean_0020",
+      "pred": {
+        "company": "TED HENG STATIONERY & BOOKS",
+        "date": "12/02/2018",
+        "address": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+        "total": "153.35"
+      },
+      "latency_ms": 36847.28479385376,
+      "error": "",
+      "f1": 1.0,
+      "address_hit": true
+    },
+    {
+      "id": "clean_0021",
+      "pred": {
+        "company": "MR. D.I.Y. (M) SDN BHD",
+        "date": "13 MAR 2018",
+        "address": "LOT 1951-A & 1951-B, JALAN (PB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+        "total": "37.10"
+      },
+      "latency_ms": 37695.72472572327,
+      "error": "",
+      "f1": 0.5,
+      "address_hit": false
+    }
+  ]
+}

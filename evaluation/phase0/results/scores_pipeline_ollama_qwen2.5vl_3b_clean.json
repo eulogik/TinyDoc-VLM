@@ -1,0 +1,59 @@
+{
+  "engine": "receipt_pipeline:ollama:qwen2.5vl:3b",
+  "n_examples": 100,
+  "field_f1": 0.9282051282051282,
+  "field_precision": 0.9526315789473684,
+  "field_recall": 0.905,
+  "schema_valid_rate": 0.95,
+  "pipeline_schema_valid_rate": 0.95,
+  "anls_mean": 0.9243900608180105,
+  "exact_json_all_fields": 0.8,
+  "avg_latency_ms": 15367.132046222687,
+  "per_field_hit_rate": {
+    "company": 0.9,
+    "date": 0.94,
+    "address": 0.83,
+    "total": 0.95
+  },
+  "errors": 5,
+  "error_ids": [
+    "clean_0017",
+    "clean_0018",
+    "clean_0019",
+    "clean_0020",
+    "clean_0021"
+  ],
+  "merged_from_chunks": [
+    {
+      "suffix": "_clean_c0",
+      "n": 20,
+      "errors": 3,
+      "field_f1": 0.9054054054054055
+    },
+    {
+      "suffix": "_clean_c1",
+      "n": 20,
+      "errors": 2,
+      "field_f1": 0.8421052631578948
+    },
+    {
+      "suffix": "_clean_c2",
+      "n": 20,
+      "errors": 0,
+      "field_f1": 0.9375
+    },
+    {
+      "suffix": "_clean_c3",
+      "n": 20,
+      "errors": 0,
+      "field_f1": 0.975
+    },
+    {
+      "suffix": "_clean_c4",
+      "n": 20,
+      "errors": 0,
+      "field_f1": 0.975
+    }
+  ],
+  "merge_method": "concatenated per-doc preds in doc order; macro recomputed with evaluation/phase0/metrics.py macro_prf (identical scorer); identical engine/prompt/temperature in every chunk"
+}

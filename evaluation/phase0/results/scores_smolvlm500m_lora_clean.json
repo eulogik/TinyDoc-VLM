@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm500m_lora_clean",
+  "adapter": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/valstage/global_900",
+  "n_examples": 100,
+  "field_f1": 0.22889305816135083,
+  "schema_valid_rate": 0.63,
+  "anls_mean": 0.157459676566023,
+  "avg_latency_ms": 4183.287286758423,
+  "per_field_hit_rate": {
+    "company": 0.22,
+    "date": 0.12,
+    "address": 0.12,
+    "total": 0.15
+  },
+  "errors": 0
+}

@@ -1,0 +1,37 @@
+{
+  "n_paired": 100,
+  "f1_adapter": 0.2289,
+  "f1_3b_clean": 0.9282,
+  "paired_doc_wins_adapter": 0,
+  "paired_doc_losses_adapter": 93,
+  "paired_doc_ties": 7,
+  "address_sign_test_p": 0.0,
+  "address_discordants": {
+    "adapter_only_hit": 0,
+    "baseline_only_hit": 71
+  },
+  "address_adapter": {
+    "hit_rate": 0.12,
+    "raw_exact_rate": 0.01,
+    "mean_cer": 0.9244071096056105
+  },
+  "address_baseline": {
+    "hit_rate": 0.83,
+    "raw_exact_rate": 0.6,
+    "mean_cer": 0.10741847517683535
+  },
+  "latency_ms_adapter": 4183.3,
+  "latency_ms_baseline": 15367.1,
+  "errors_adapter": 0,
+  "errors_baseline": 5,
+  "criteria": {
+    "address_hit_ge_bar": false,
+    "f1_no_regression": false,
+    "latency_le_bar": false
+  },
+  "bars": {
+    "address_hit": 0.8,
+    "latency_ms": 1000.0
+  },
+  "decision": "no_ship"
+}

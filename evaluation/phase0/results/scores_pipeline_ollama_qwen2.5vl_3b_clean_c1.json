@@ -1,0 +1,36 @@
+{
+  "n_examples": 20,
+  "field_precision": 0.8888888888888888,
+  "field_recall": 0.8,
+  "field_f1": 0.8421052631578948,
+  "anls_mean": 0.8445888613028059,
+  "schema_valid_rate": 0.9,
+  "exact_json_all_fields": 0.65,
+  "engine": "receipt_pipeline:ollama:qwen2.5vl:3b",
+  "eval_path": "evaluation/phase0/results/sroie_eval_clean_c1.json",
+  "limit": 20,
+  "avg_latency_ms": 13188.261210918427,
+  "with_evidence": false,
+  "pipeline_schema_valid_rate": 0.9,
+  "mean_confidence": 0.36225,
+  "mean_evidence_coverage": 0.0,
+  "split": "clean_c1",
+  "per_field": {
+    "company": {
+      "hit_rate": 0.8,
+      "anls_mean": 0.75
+    },
+    "date": {
+      "hit_rate": 0.85,
+      "anls_mean": 0.8949999999999999
+    },
+    "address": {
+      "hit_rate": 0.65,
+      "anls_mean": 0.8821054452112234
+    },
+    "total": {
+      "hit_rate": 0.9,
+      "anls_mean": 0.85125
+    }
+  }
+}

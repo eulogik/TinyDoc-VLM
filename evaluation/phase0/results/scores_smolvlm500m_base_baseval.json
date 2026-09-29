@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm500m_base_baseval",
+  "adapter": null,
+  "n_examples": 40,
+  "field_f1": 0.23376623376623376,
+  "schema_valid_rate": 0.525,
+  "anls_mean": 0.1978071628026198,
+  "avg_latency_ms": 2984.3303203582764,
+  "per_field_hit_rate": {
+    "company": 0.225,
+    "date": 0.175,
+    "address": 0.1,
+    "total": 0.175
+  },
+  "errors": 0
+}

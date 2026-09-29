@@ -1,0 +1,20 @@
+[
+  {
+    "id": "clean_0069",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0069.jpg",
+    "pred": "NO 8, JALAN 7/119B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA KL FESTIVAL CITY MALL",
+    "gold": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA KL FESTIVAL CITY MALL",
+    "anls": 0.9882352941176471,
+    "pred_len": 85,
+    "gold_len": 85
+  },
+  {
+    "id": "clean_0070",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0070.jpg",
+    "pred": "NO 8, JALAN 7/118B, DESA TUN RAZAK 58000 KUALA LUMPUR, MALAYSIA",
+    "gold": "NO 8, JALAN 7/118B, DESA TUN RAZAK 56000 KUALA LUMPUR, MALAYSIA",
+    "anls": 0.9841269841269842,
+    "pred_len": 63,
+    "gold_len": 63
+  }
+]

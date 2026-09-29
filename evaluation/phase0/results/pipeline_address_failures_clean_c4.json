@@ -1,0 +1,11 @@
+[
+  {
+    "id": "clean_0095",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0095.jpg",
+    "pred": "23, Jln Burung Jentayu, Tmn Bukit Maluri, Kepong, 52100 KL.",
+    "gold": "23, JIN BURUNG JENTAYU, TMN BUKIT MALURI, KEPONG, 52100 KL.",
+    "anls": 0.9830508474576272,
+    "pred_len": 59,
+    "gold_len": 59
+  }
+]

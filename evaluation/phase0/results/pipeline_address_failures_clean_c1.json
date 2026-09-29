@@ -1,0 +1,65 @@
+[
+  {
+    "id": "clean_0020",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0020.jpg",
+    "pred": "",
+    "gold": "NO. 53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
+    "anls": 0.0,
+    "pred_len": 0,
+    "gold_len": 64
+  },
+  {
+    "id": "clean_0021",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0021.jpg",
+    "pred": "",
+    "gold": "LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR",
+    "anls": 0.0,
+    "pred_len": 0,
+    "gold_len": 96
+  },
+  {
+    "id": "clean_0022",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0022.jpg",
+    "pred": "LOT P.T. 2811, JALAN MBSA TAMAN BERKELEY 41150 KLANG, SELANGOR",
+    "gold": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1076-IJOK",
+    "anls": 0.8108108108108107,
+    "pred_len": 62,
+    "gold_len": 74
+  },
+  {
+    "id": "clean_0024",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0024.jpg",
+    "pred": "3RD FLR, AEON TAMAN MALURI SC JLN JEJAKA, TAMAN MALURI CHERAS, 55100 KUALA LUMPUR",
+    "gold": "3RD FLR, AEON TAMAN MALURI SD JLN JEJAKA, TAMAN MALURI CHERAS, 55100 KUALA LUMPUR",
+    "anls": 0.9876543209876543,
+    "pred_len": 81,
+    "gold_len": 81
+  },
+  {
+    "id": "clean_0029",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0029.jpg",
+    "pred": "Avtivo Plaza, Lot B-F-11, Block B No.1, Jalan PJU 9/1, D'sara Avevue Bandar Sri D'sara, 52000 KL",
+    "gold": "AVTIVO PLAZA,LOT B-F-11, BLOCK B NO1.JALAN PJU 9/1,D'SARA AVEVUE BANDAR SRI D'SARA, 52000 KL",
+    "anls": 0.9479166666666666,
+    "pred_len": 96,
+    "gold_len": 92
+  },
+  {
+    "id": "clean_0033",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0033.jpg",
+    "pred": "12, JALAN TAMPOI 7/4,KAWASAN PERINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
+    "gold": "12, JALAN TAMPOI 7/4,KAWASAN PARINDUSTRIAN TAMPOI,81200 JOHOR BAHRU,JOHOR",
+    "anls": 0.9863013698630136,
+    "pred_len": 73,
+    "gold_len": 73
+  },
+  {
+    "id": "clean_0039",
+    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0039.jpg",
+    "pred": "LOT R1, KWS REHAT & RAWAT PAGOH ARAH UTARA, SIMPANG AMPAT PAGOH, LEBUH RAYA UTARA SELATAN, 84600, PAGOH, JOHOR",
+    "gold": "LOT R1, KWS REHAT & RAWAT PAGOH ARAH UTARA, SIMPANG AMPAT PAGOH, LEBUHRAYA UTARA SELATAN, 84600,PAGOH,JOHOR",
+    "anls": 0.9727272727272728,
+    "pred_len": 110,
+    "gold_len": 107
+  }
+]
