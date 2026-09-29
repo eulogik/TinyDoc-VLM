@@ -18,9 +18,14 @@ for g in $1; do
     echo "global_$g already scored — skipping"
     continue
   fi
+  # load_model(adapter_path=dir) needs dir/adapter_config.json + dir/adapters.safetensors
+  STAGE="$SCRATCH/valstage/global_$g"
+  mkdir -p "$STAGE"
+  ln -sf "$SCRATCH/adapters/full/adapter_config.json" "$STAGE/adapter_config.json"
+  ln -sf "$ckpt" "$STAGE/adapters.safetensors"
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
-    --adapter "$(dirname "$ckpt")" \
+    --adapter "$STAGE" \
     --eval-path "$REPO/evaluation/phase0/results/sroie_val.json" \
     --out-suffix "_valg$g" --max-tokens 256
 done
