@@ -10,7 +10,7 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="${SCRATCH:-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode}"
 DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
 VENV="$SCRATCH/venv_mlx"
-BANKED="$DATA_ROOT/adapters/full/banked"
+BANKED="${BANKED:-$DATA_ROOT/adapters/full/banked}"
 
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"
@@ -22,7 +22,7 @@ for g in $1; do
   # load_model(adapter_path=dir) needs dir/adapter_config.json + dir/adapters.safetensors
   STAGE="$SCRATCH/valstage/global_$g"
   mkdir -p "$STAGE"
-  ln -sf "$SCRATCH/adapters/full/adapter_config.json" "$STAGE/adapter_config.json"
+  ln -sf "$(dirname "$ckpt")/../adapter_config.json" "$STAGE/adapter_config.json"
   ln -sf "$ckpt" "$STAGE/adapters.safetensors"
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
