@@ -32,6 +32,18 @@ done_global() {
     | grep -oE 'global_[0-9]+' | grep -oE '[0-9]+' | sort -n | tail -1
 }
 
+# Mirror banked checkpoints to KIOXIA (persistent across macOS reboots, which
+# wipe scratch). Best-effort: silently skips if the volume is unmounted.
+# Restore after a wipe: rebuild venv/weights/data per AGENTS.md, then
+#   cp -r "/Volumes/KIOXIA 1TB/tinydoc_stage1_bank/banked" $OUT/ && cp "/Volumes/KIOXIA 1TB/tinydoc_stage1_bank"/adapters.safetensors "$OUT/" && bash scripts/supervise_training.sh
+mirror_bank() {
+  local dest="/Volumes/KIOXIA 1TB/tinydoc_stage1_bank"
+  mkdir -p "$dest" 2>/dev/null || return 0
+  rsync -a --delete "$OUT/banked/" "$dest/banked/" 2>/dev/null || return 0
+  cp -f "$OUT/adapters.safetensors" "$OUT/adapter_config.json" "$dest/" 2>/dev/null || true
+  log "mirrored bank to KIOXIA"
+}
+
 # archive this segment's numbered saves with global identity ($1 = seg start)
 archive_seg() {
   local start="$1" f nnn g
@@ -84,5 +96,6 @@ while true; do
   LASTITER=$(grep -a -oE "Iter [0-9]+" "$SEGLOG" | tail -1 || echo "Iter ?")
   log "segment from=$DONE exit=$CODE last=($LASTITER)"
   archive_seg "$DONE"
+  mirror_bank
   sleep 5
 done
