@@ -1,7 +1,7 @@
 [
   {
     "id": "clean_0042",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0042.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0042.jpg",
     "pred": "No 148 16 Jalan Permas 4/3 Bandar Baru Permas Jay",
     "gold": "NO 14 & 16 JALAN PERMAS 4/3 BANDAR BARU PERMAS JAY",
     "anls": 0.96,
@@ -10,7 +10,7 @@
   },
   {
     "id": "clean_0051",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0051.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0051.jpg",
     "pred": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 44150 KLANG, SELANGOR 1249-TMN PANDAN CAHAYA",
     "gold": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1249-TMN PANDAN CAHAYA",
     "anls": 0.9885057471264368,
@@ -19,7 +19,7 @@
   },
   {
     "id": "clean_0052",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0052.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0052.jpg",
     "pred": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SCLANGOR 1317 TRILLIUM SB BESI",
     "gold": "LOT P.T. 2811, JALAN ANGSA, TAMAN BERKELEY 41150 KLANG, SELANGOR 1317 TRILLIUM S6 BESI",
     "anls": 0.9767441860465116,

@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm500m_lora_s2bval",
+  "adapter": "/Volumes/KIOXIA 1TB/tinydoc/valstage/s2b_final",
+  "n_examples": 40,
+  "field_f1": 0.08791208791208792,
+  "schema_valid_rate": 0.95,
+  "anls_mean": 0.04653716216216216,
+  "avg_latency_ms": 1814.893102645874,
+  "per_field_hit_rate": {
+    "company": 0.1,
+    "date": 0.025,
+    "address": 0.05,
+    "total": 0.025
+  },
+  "errors": 0
+}
