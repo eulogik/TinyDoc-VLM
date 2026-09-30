@@ -37,9 +37,10 @@ case "$MODE" in
   smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke"; RESUME="" ;;
   full) ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;
   # s2: Stage-2 twin-mirror (2 epochs over 1920 docs @ eff.batch 8 = 480 iters)
+  # Explicit TRAIN_* env wins; else S2_* stage defaults; else Stage-1 values.
   s2) ITERS="${S2_ITERS:-480}"; OUT="${S2_OUT:-$ADAPTER_DIR/stage2a}"; RESUME="" ;
-      TRAIN_LR="${S2_LR:-1e-4}"; TRAIN_DROPOUT="${S2_DROPOUT:-0.05}" ;
-      TRAIN_DATA="${S2_DATA:-$DATA_ROOT/stage2_data/hf_train2/data}" ;;
+      TRAIN_LR="${TRAIN_LR:-${S2_LR:-1e-4}}"; TRAIN_DROPOUT="${TRAIN_DROPOUT:-${S2_DROPOUT:-0.05}}" ;
+      TRAIN_DATA="${TRAIN_DATA:-${S2_DATA:-$DATA_ROOT/stage2_data/hf_train2/data}}" ;;
   resume)
     # wave-tolerance: warm-start from the latest checkpoint after a watchdog
     # kill. $2 = iters already banked (read from the last "Iter N" save line).
