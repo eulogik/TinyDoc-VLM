@@ -11,6 +11,7 @@ SCRATCH="${SCRATCH:-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode}"
 DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
 VENV="$SCRATCH/venv_mlx"
 BANKED="${BANKED:-$DATA_ROOT/adapters/full/banked}"
+MODEL="${MODEL:-$DATA_ROOT/models/smolvlm500m}"
 
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"
@@ -26,6 +27,7 @@ for g in $1; do
   ln -sf "$ckpt" "$STAGE/adapters.safetensors"
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
+    --model "$MODEL" \
     --adapter "$STAGE" \
     --eval-path "$REPO/evaluation/phase0/results/sroie_val.json" \
     --out-suffix "_valg$g" --max-tokens 256
