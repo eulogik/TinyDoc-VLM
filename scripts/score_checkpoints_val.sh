@@ -30,6 +30,7 @@ for g in $1; do
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
     --model "$MODEL" \
+    ${EVAL_RESIZE:+--image-resize $EVAL_RESIZE} \
     --adapter "$STAGE" \
     --eval-path "$REPO/evaluation/phase0/results/sroie_val.json" \
     --out-suffix "${VALPREFIX}$g" --max-tokens 256

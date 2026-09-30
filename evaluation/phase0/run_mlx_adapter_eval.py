@@ -37,6 +37,8 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--out-suffix", default="_clean")
     ap.add_argument("--max-tokens", type=int, default=256)
+    ap.add_argument("--image-resize", type=int, nargs=2, default=None, metavar=("W", "H"),
+                    help="aspect-preserving fit-inside box (train/eval consistency), e.g. --image-resize 512 512")
     args = ap.parse_args()
 
     from mlx_vlm.utils import load as load_model
@@ -86,6 +88,7 @@ def main() -> int:
                 image=img,
                 max_tokens=args.max_tokens,
                 temperature=0.0,
+                **({"resize_shape": tuple(args.image_resize)} if args.image_resize else {}),
             )
             raw = getattr(out, "text", None)
             raw = raw if isinstance(raw, str) else str(out)

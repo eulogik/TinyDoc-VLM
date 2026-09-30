@@ -68,6 +68,10 @@ mkdir -p "$OUT"
 # and evaluate on the clean val split periodically via steps-per-eval.
 # Build argv with set -- (POSIX, bash-3.2/set -u safe: never empty, always
 # quoted). Paths may contain spaces (KIOXIA) — never interpolate unquoted.
+# Optional resize pre-processing: TRAIN_RESIZE_ARGS="--image-resize-shape 512 512"
+# (aspect-preserving fit-inside-box; verified in mlx_vlm/utils.resize_image).
+# Intentionally UNQUOTED at use (expands to zero args when empty, N args when set).
+TRAIN_RESIZE_ARGS="${TRAIN_RESIZE_ARGS:-}"
 set -- "$VENV/bin/python" -m mlx_vlm.lora \
   --model-path "$MODEL"
 if [ -n "$RESUME" ]; then
@@ -93,4 +97,5 @@ set -- "$@" \
   --val-batches 5 \
   --steps-per-save 25 \
   --output-path "$OUT"
+set -- "$@" $TRAIN_RESIZE_ARGS
 exec "$@"
