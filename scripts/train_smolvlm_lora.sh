@@ -46,7 +46,7 @@ case "$MODE" in
     # Optimizer state resets (standard); ≤1 save-interval of overlap re-trains.
     DONE_ITERS="${2:?usage: $0 resume <done_iters>}"
     RTARGET="${RESUME_TARGET:-1200}"; ROUT="${RESUME_OUT:-$ADAPTER_DIR/full}"
-    ITERS=$((RTARGET - DONE_ITERS)); OUT="$ROUT"; RESUME="--adapter-path $OUT"
+    ITERS=$((RTARGET - DONE_ITERS)); OUT="$ROUT"; RESUME=1
     # archive prior segment's numbered saves BEFORE they get overwritten:
     # filenames are segment-relative, so tag them with global iters now.
     mkdir -p "$OUT/banked"
@@ -65,9 +65,14 @@ mkdir -p "$OUT"
 
 # Ship-bar checkpointing: save every 200 iters so a crash never loses the run,
 # and evaluate on the clean val split periodically via steps-per-eval.
-exec "$VENV/bin/python" -m mlx_vlm.lora \
-  --model-path "$MODEL" \
-  $RESUME \
+# Build argv with set -- (POSIX, bash-3.2/set -u safe: never empty, always
+# quoted). Paths may contain spaces (KIOXIA) — never interpolate unquoted.
+set -- "$VENV/bin/python" -m mlx_vlm.lora \
+  --model-path "$MODEL"
+if [ -n "$RESUME" ]; then
+  set -- "$@" --adapter-path "$OUT"
+fi
+set -- "$@" \
   --dataset "$TRAIN_DATA" \
   --split train \
   --lora-rank 16 \
@@ -87,3 +92,4 @@ exec "$VENV/bin/python" -m mlx_vlm.lora \
   --val-batches 5 \
   --steps-per-save 25 \
   --output-path "$OUT"
+exec "$@"
