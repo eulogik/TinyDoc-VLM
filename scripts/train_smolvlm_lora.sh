@@ -37,7 +37,7 @@ case "$MODE" in
   smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke"; RESUME="" ;;
   full) ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;
   # s2: Stage-2 twin-mirror (2 epochs over 1920 docs @ eff.batch 8 = 480 iters)
-  s2) ITERS="${S2_ITERS:-480}"; OUT="$ADAPTER_DIR/stage2a"; RESUME="" ;
+  s2) ITERS="${S2_ITERS:-480}"; OUT="${S2_OUT:-$ADAPTER_DIR/stage2a}"; RESUME="" ;
       TRAIN_LR="${S2_LR:-1e-4}"; TRAIN_DROPOUT="${S2_DROPOUT:-0.05}" ;
       TRAIN_DATA="${S2_DATA:-$DATA_ROOT/stage2_data/hf_train2/data}" ;;
   resume)
