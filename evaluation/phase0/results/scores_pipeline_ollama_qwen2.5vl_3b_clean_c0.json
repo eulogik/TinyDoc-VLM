@@ -9,7 +9,7 @@
   "engine": "receipt_pipeline:ollama:qwen2.5vl:3b",
   "eval_path": "evaluation/phase0/results/sroie_eval_clean_c0.json",
   "limit": 20,
-  "avg_latency_ms": 10399.924910068512,
+  "avg_latency_ms": 8474.868857860565,
   "with_evidence": false,
   "pipeline_schema_valid_rate": 0.85,
   "mean_confidence": 0.342125,

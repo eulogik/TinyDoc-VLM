@@ -1,7 +1,7 @@
 [
   {
     "id": "clean_0011",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0011.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0011.jpg",
     "pred": "NO.2-1-1 JALAN SETIA PRIMA Q U 13/Q SETIA ALAM 40170 SHAH ALAM SELANGOR",
     "gold": "NO.2-1-1 JALAN SEITA PRIMA Q U 13/Q SEITA ALAM 40170 SHAN ALAM SELANGOR",
     "anls": 0.9295774647887324,
@@ -10,7 +10,7 @@
   },
   {
     "id": "clean_0017",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0017.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0017.jpg",
     "pred": "",
     "gold": "NO.53, JALAN BESAR, 45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
     "anls": 0.0,
@@ -19,7 +19,7 @@
   },
   {
     "id": "clean_0018",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0018.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0018.jpg",
     "pred": "",
     "gold": "NO.53, JALAN BESAR, 45600 BATANG BEJUNTAL SELANGOR DARUL EHSAN",
     "anls": 0.0,
@@ -28,7 +28,7 @@
   },
   {
     "id": "clean_0019",
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0019.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0019.jpg",
     "pred": "",
     "gold": "NO.53,JALAN BESAR,45600 BATANG BERJUNTAI SELANGOR DARUL EHSAN",
     "anls": 0.0,

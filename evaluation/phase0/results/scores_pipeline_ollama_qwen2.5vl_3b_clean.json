@@ -8,7 +8,7 @@
   "pipeline_schema_valid_rate": 0.95,
   "anls_mean": 0.9243900608180105,
   "exact_json_all_fields": 0.8,
-  "avg_latency_ms": 15367.132046222687,
+  "avg_latency_ms": 12618.842437267303,
   "per_field_hit_rate": {
     "company": 0.9,
     "date": 0.94,
