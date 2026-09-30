@@ -14,8 +14,16 @@ set -u
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="${SCRATCH:-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode}"
 DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
-OUT="$DATA_ROOT/adapters/full"
-TARGET=1200
+# Stage selection via env (defaults = Stage-1 full run). Stage-2 example:
+#   SUP_OUT=$DATA_ROOT/adapters/stage2a SUP_TARGET=480 SUP_FRESH_MODE=s2 \
+#   RESUME_OUT=$DATA_ROOT/adapters/stage2a RESUME_TARGET=480 \
+#   TRAIN_DATA=$DATA_ROOT/stage2_data/hf_train2 TRAIN_LR=1e-4 TRAIN_DROPOUT=0.05 \
+#   bash scripts/supervise_training.sh
+SUP_OUT="${SUP_OUT:-$DATA_ROOT/adapters/full}"
+SUP_TARGET="${SUP_TARGET:-1200}"
+SUP_FRESH_MODE="${SUP_FRESH_MODE:-full}"
+OUT="$SUP_OUT"
+TARGET="$SUP_TARGET"
 SUPLOG="$SCRATCH/supervisor.log"
 
 log() { echo "[$(date -u +%FT%TZ)] $*" >> "$SUPLOG"; }
@@ -87,7 +95,7 @@ while true; do
   rm -f "$SEGLOG"
   log "launching segment from $DONE (remaining $((TARGET - DONE)))"
   if [ "$DONE" -eq 0 ]; then
-    bash "$REPO/scripts/train_smolvlm_lora.sh" full > "$SEGLOG" 2>&1 &
+    bash "$REPO/scripts/train_smolvlm_lora.sh" "$SUP_FRESH_MODE" > "$SEGLOG" 2>&1 &
   else
     bash "$REPO/scripts/train_smolvlm_lora.sh" resume "$DONE" > "$SEGLOG" 2>&1 &
   fi

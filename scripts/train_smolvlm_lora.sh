@@ -29,15 +29,24 @@ SROIE_LABELS="$DATA_ROOT/data/sroie-labels"
 mkdir -p "$ADAPTER_DIR"
 
 MODE="${1:-smoke}"
+# Hyperparams are env-overridable; defaults = Stage-1 values.
+TRAIN_LR="${TRAIN_LR:-1e-5}"
+TRAIN_DROPOUT="${TRAIN_DROPOUT:-0.0}"
+TRAIN_DATA="${TRAIN_DATA:-$DATA/hf_train}"
 case "$MODE" in
   smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke"; RESUME="" ;;
-  full)  ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;
+  full) ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;
+  # s2: Stage-2 twin-mirror (2 epochs over 1920 docs @ eff.batch 8 = 480 iters)
+  s2) ITERS="${S2_ITERS:-480}"; OUT="$ADAPTER_DIR/stage2a"; RESUME="" ;
+      TRAIN_LR="${S2_LR:-1e-4}"; TRAIN_DROPOUT="${S2_DROPOUT:-0.05}" ;
+      TRAIN_DATA="${S2_DATA:-$DATA_ROOT/stage2_data/hf_train2/data}" ;;
   resume)
     # wave-tolerance: warm-start from the latest checkpoint after a watchdog
     # kill. $2 = iters already banked (read from the last "Iter N" save line).
     # Optimizer state resets (standard); ≤1 save-interval of overlap re-trains.
     DONE_ITERS="${2:?usage: $0 resume <done_iters>}"
-    ITERS=$((1200 - DONE_ITERS)); OUT="$ADAPTER_DIR/full"; RESUME="--adapter-path $OUT"
+    RTARGET="${RESUME_TARGET:-1200}"; ROUT="${RESUME_OUT:-$ADAPTER_DIR/full}"
+    ITERS=$((RTARGET - DONE_ITERS)); OUT="$ROUT"; RESUME="--adapter-path $OUT"
     # archive prior segment's numbered saves BEFORE they get overwritten:
     # filenames are segment-relative, so tag them with global iters now.
     mkdir -p "$OUT/banked"
@@ -50,7 +59,7 @@ case "$MODE" in
       echo "global_${g} <= segment(start=$PREV_START)+seg-iter $((10#$nnn)) [auto-archived $(date -u +%FT%TZ)]" >> "$OUT/banked/MAPPING.txt"
     done
     echo "$DONE_ITERS" > "$OUT/banked/CURRENT_START" ;;
-  *) echo "usage: $0 [smoke|full|resume <done_iters>]"; exit 2 ;;
+  *) echo "usage: $0 [smoke|full|s2|resume <done_iters>]"; exit 2 ;;
 esac
 mkdir -p "$OUT"
 
@@ -59,13 +68,14 @@ mkdir -p "$OUT"
 exec "$VENV/bin/python" -m mlx_vlm.lora \
   --model-path "$MODEL" \
   $RESUME \
-  --dataset "$DATA/hf_train" \
+  --dataset "$TRAIN_DATA" \
   --split train \
   --lora-rank 16 \
   --lora-alpha 32 \
+  --lora-dropout "$TRAIN_DROPOUT" \
   --batch-size 1 \
   --gradient-accumulation-steps 8 \
-  --learning-rate 1e-5 \
+  --learning-rate "$TRAIN_LR" \
   --grad-checkpoint \
   --max-seq-length 1024 \
   --train-on-completions \
