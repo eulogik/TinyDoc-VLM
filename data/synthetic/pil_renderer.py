@@ -532,3 +532,67 @@ def augment_image(img: Image.Image) -> Image.Image:
         img = img.convert("L").convert("RGB")
 
     return img
+
+
+def augment_receipt_strong(img: Image.Image, rng: random.Random | None = None) -> Image.Image:
+    """Receipt-grade augmentation for Stage-2 SFT (PIL-only, label-preserving).
+
+    Every transform keeps all printed content inside the frame (white fill,
+    keep-size semantics): rotation ±5deg, mild perspective, brightness/contrast
+    jitter, light gaussian blur + noise, JPEG recompression, occasional shadow
+    gradient (thermal-print look). Ranges follow OCR-augmentation practice
+    (Beerten: rotate <= ~8deg, blur <= 5, white borders) tightened so gold
+    labels stay exact.
+    """
+    from PIL import ImageEnhance, ImageFilter, ImageOps
+
+    r = rng or random
+    img = img.convert("RGB")
+    w, h = img.size
+
+    # 1) rotation (keep size, white fill)
+    if r.random() < 0.7:
+        img = img.rotate(r.uniform(-5, 5), resample=Image.BICUBIC,
+                         expand=False, fillcolor=(255, 255, 255))
+    # 2) mild perspective (corner jitter <= 2% of dims, keep size)
+    if r.random() < 0.4:
+        jx, jy = w * 0.02, h * 0.02
+        coeffs = []
+        for cx, cy in ((0, 0), (w, 0), (w, h), (0, h)):
+            coeffs.extend((cx + r.uniform(-jx, jx), cy + r.uniform(-jy, jy)))
+        # find coeffs mapping target quad back to source: use inverse via QUAD
+        img = img.transform((w, h), Image.QUAD, tuple(coeffs),
+                            resample=Image.BICUBIC, fillcolor=(255, 255, 255))
+    # 3) brightness / contrast jitter
+    if r.random() < 0.7:
+        img = ImageEnhance.Brightness(img).enhance(r.uniform(0.85, 1.1))
+    if r.random() < 0.5:
+        img = ImageEnhance.Contrast(img).enhance(r.uniform(0.85, 1.15))
+    # 4) light blur (thermal-printer softness)
+    if r.random() < 0.3:
+        img = img.filter(ImageFilter.GaussianBlur(radius=r.uniform(0.5, 1.5)))
+    # 5) gaussian noise (light; keeps text legible)
+    if r.random() < 0.4:
+        noise = Image.effect_noise((w, h), sigma=r.uniform(4, 12)).convert("L")
+        img = Image.composite(
+            Image.new("RGB", (w, h), (255, 255, 255)), img,
+            noise.point(lambda v: v // 4))
+    # 6) JPEG recompression artifacts
+    if r.random() < 0.5:
+        import io as _io
+        buf = _io.BytesIO()
+        img.save(buf, format="JPEG", quality=int(r.uniform(40, 95)))
+        buf.seek(0)
+        img = Image.open(buf).convert("RGB")
+    # 7) occasional shadow gradient (uneven lighting): multiply by a
+    # horizontal or vertical white->gray ramp built with pure PIL ops
+    if r.random() < 0.25:
+        lo = int(255 * r.uniform(0.82, 0.95))
+        ramp = Image.linear_gradient("L").resize((w, 1) if r.random() < 0.5 else (1, h))
+        ramp = ramp.resize((w, h)).point(lambda v: lo + (255 - lo) * v // 255)
+        img = Image.composite(
+            Image.new("RGB", (w, h), (255, 255, 255)), img, ramp.point(lambda v: 255 - v))
+    # 8) occasional grayscale (printer B&W)
+    if r.random() < 0.2:
+        img = ImageOps.grayscale(img).convert("RGB")
+    return img

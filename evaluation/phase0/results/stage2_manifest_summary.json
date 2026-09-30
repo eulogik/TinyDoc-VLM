@@ -1,0 +1,11 @@
+{
+  "n_real": 420,
+  "n_synth": 1500,
+  "n_train": 1920,
+  "seed": 20260930,
+  "frozen_val": "evaluation/phase0/results/sroie_val.json (40)",
+  "frozen_test": "evaluation/phase0/results/sroie_eval_clean.json (100)",
+  "synthetic_leak_pairs": 0,
+  "question": "sdk.tinydoc.pipeline.EXTRACT_PROMPT (identical to eval prompt)",
+  "gold_convention": "SROIE style (transcribe as printed; totals without currency)"
+}
