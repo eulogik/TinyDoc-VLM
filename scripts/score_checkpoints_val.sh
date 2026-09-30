@@ -18,7 +18,7 @@ VALPREFIX="${VALPREFIX:-_valg}"
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"
   [ -f "$ckpt" ] || { echo "missing $ckpt — skipping"; continue; }
-  if [ -f "$REPO/evaluation/phase0/results/scores_smolvlm500m_lora_valg$g.json" ]; then
+  if [ -f "$REPO/evaluation/phase0/results/scores_smolvlm500m_lora${VALPREFIX}$g.json" ]; then
     echo "global_$g already scored — skipping"
     continue
   fi
