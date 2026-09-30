@@ -105,6 +105,14 @@ while true; do
   LASTITER=$(grep -a -oE "Iter [0-9]+" "$SEGLOG" | tail -1 || echo "Iter ?")
   log "segment from=$DONE exit=$CODE last=($LASTITER)"
   archive_seg "$DONE"
+  # Clean finish (exit 0 + "Training completed!") with no new numbered save
+  # (short tail below the save interval): bank the final weights at TARGET
+  # so DONE advances instead of looping forever on a 5-iter tail.
+  if [ "$CODE" -eq 0 ] && grep -aq "Training completed!" "$SEGLOG"; then
+    cp "$OUT/adapters.safetensors" "$OUT/banked/global_${TARGET}_adapters.safetensors"
+    echo "global_${TARGET} <= final completed-training weights [supervisor $(date -u +%FT%TZ)]" >> "$OUT/banked/MAPPING.txt"
+    log "banked final weights as global_$TARGET"
+  fi
   mirror_bank
   sleep 5
 done
