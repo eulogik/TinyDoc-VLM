@@ -7,9 +7,10 @@
 # Usage: bash scripts/score_checkpoints_val.sh "350 400 450 500 ..."
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-SCRATCH="/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode"
+SCRATCH="${SCRATCH:-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode}"
+DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
 VENV="$SCRATCH/venv_mlx"
-BANKED="$SCRATCH/adapters/full/banked"
+BANKED="$DATA_ROOT/adapters/full/banked"
 
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"

@@ -2,7 +2,7 @@
   {
     "id": "clean_0080",
     "pool_row": 110,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0080.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0080.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIM SENG THO HARDWARE TRADING",
@@ -14,7 +14,7 @@
   {
     "id": "clean_0081",
     "pool_row": 111,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0081.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0081.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -26,7 +26,7 @@
   {
     "id": "clean_0082",
     "pool_row": 112,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0082.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0082.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SUN VICTORY SDN BHD",
@@ -38,7 +38,7 @@
   {
     "id": "clean_0083",
     "pool_row": 113,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0083.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0083.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -50,7 +50,7 @@
   {
     "id": "clean_0084",
     "pool_row": 114,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0084.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0084.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -62,7 +62,7 @@
   {
     "id": "clean_0085",
     "pool_row": 116,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0085.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0085.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -74,7 +74,7 @@
   {
     "id": "clean_0086",
     "pool_row": 117,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0086.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0086.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -86,7 +86,7 @@
   {
     "id": "clean_0087",
     "pool_row": 120,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0087.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0087.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -98,7 +98,7 @@
   {
     "id": "clean_0088",
     "pool_row": 122,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0088.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0088.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -110,7 +110,7 @@
   {
     "id": "clean_0089",
     "pool_row": 126,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0089.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0089.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -122,7 +122,7 @@
   {
     "id": "clean_0090",
     "pool_row": 127,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0090.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0090.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -134,7 +134,7 @@
   {
     "id": "clean_0091",
     "pool_row": 128,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0091.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0091.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -146,7 +146,7 @@
   {
     "id": "clean_0092",
     "pool_row": 129,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0092.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0092.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -158,7 +158,7 @@
   {
     "id": "clean_0093",
     "pool_row": 130,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0093.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0093.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "BEYOND BROTHERS HARDWARE",
@@ -170,7 +170,7 @@
   {
     "id": "clean_0094",
     "pool_row": 131,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0094.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0094.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTORAN IBRAHIM MAJU SB",
@@ -182,7 +182,7 @@
   {
     "id": "clean_0095",
     "pool_row": 132,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0095.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0095.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "FARMASI MALURI S/B",
@@ -194,7 +194,7 @@
   {
     "id": "clean_0096",
     "pool_row": 134,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0096.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0096.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TRI SHAAS SDN BHD",
@@ -206,7 +206,7 @@
   {
     "id": "clean_0097",
     "pool_row": 135,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0097.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0097.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ASO ELECTRICAL TRADING SDN BHD",
@@ -218,7 +218,7 @@
   {
     "id": "clean_0098",
     "pool_row": 136,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0098.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0098.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -230,7 +230,7 @@
   {
     "id": "clean_0099",
     "pool_row": 137,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0099.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0099.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTORAN WAN SHENG",

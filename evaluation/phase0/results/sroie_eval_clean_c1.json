@@ -2,7 +2,7 @@
   {
     "id": "clean_0020",
     "pool_row": 26,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0020.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0020.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TED HENG STATIONERY & BOOKS",
@@ -14,7 +14,7 @@
   {
     "id": "clean_0021",
     "pool_row": 27,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0021.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0021.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. (M) SDN BHD",
@@ -26,7 +26,7 @@
   {
     "id": "clean_0022",
     "pool_row": 28,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0022.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0022.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -38,7 +38,7 @@
   {
     "id": "clean_0023",
     "pool_row": 29,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0023.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0023.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "C W KHOO HARDWARE SDN BHD",
@@ -50,7 +50,7 @@
   {
     "id": "clean_0024",
     "pool_row": 31,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0024.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0024.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -62,7 +62,7 @@
   {
     "id": "clean_0025",
     "pool_row": 32,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0025.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0025.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -74,7 +74,7 @@
   {
     "id": "clean_0026",
     "pool_row": 34,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0026.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0026.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PERNIAGAAN ZHENG HUI",
@@ -86,7 +86,7 @@
   {
     "id": "clean_0027",
     "pool_row": 37,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0027.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0027.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "WARAKUYA PERMAS CITY SDN BHD",
@@ -98,7 +98,7 @@
   {
     "id": "clean_0028",
     "pool_row": 38,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0028.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0028.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "YHM AEON TEBRAU CITY",
@@ -110,7 +110,7 @@
   {
     "id": "clean_0029",
     "pool_row": 39,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0029.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0029.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "OWNER BY CASTLE BLUE S/B",
@@ -122,7 +122,7 @@
   {
     "id": "clean_0030",
     "pool_row": 40,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0030.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0030.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "THREE STOOGES",
@@ -134,7 +134,7 @@
   {
     "id": "clean_0031",
     "pool_row": 42,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0031.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0031.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TASTE OF THE WORLD SDN BHD",
@@ -146,7 +146,7 @@
   {
     "id": "clean_0032",
     "pool_row": 43,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0032.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0032.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "32 PUB & BISTRO OWN BY CNU TRADING",
@@ -158,7 +158,7 @@
   {
     "id": "clean_0033",
     "pool_row": 45,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0033.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0033.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -170,7 +170,7 @@
   {
     "id": "clean_0034",
     "pool_row": 47,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0034.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0034.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTAURANT SIN DU",
@@ -182,7 +182,7 @@
   {
     "id": "clean_0035",
     "pool_row": 48,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0035.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0035.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "YONG TAT HARDWARE TRADING",
@@ -194,7 +194,7 @@
   {
     "id": "clean_0036",
     "pool_row": 49,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0036.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0036.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PERNIAGAAN ZHENG HUI",
@@ -206,7 +206,7 @@
   {
     "id": "clean_0037",
     "pool_row": 50,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0037.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0037.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TIMELESS KITCHENETTE SDN BHD",
@@ -218,7 +218,7 @@
   {
     "id": "clean_0038",
     "pool_row": 51,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0038.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0038.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -230,7 +230,7 @@
   {
     "id": "clean_0039",
     "pool_row": 52,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0039.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0039.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PAGOH REST AND SERVICE AREA",

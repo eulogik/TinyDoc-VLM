@@ -15,14 +15,20 @@
 # the 0.7.3 formatter emits a dict, which its own VisionDataset cannot consume.
 set -euo pipefail
 
-MODE="${1:-smoke}"
-SCRATCH="/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode"
+# Split-disk layout (2026-09-30): cleaners/purges eat scratch, so only the
+# regenerable venv + logs live there. Everything slow or irreplaceable
+# (weights, datasets, stage1 splits, adapters) lives under DATA_ROOT, which
+# defaults to KIOXIA (persistent, reboot-safe). Override via environment.
+SCRATCH="${SCRATCH:-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode}"
+DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
 VENV="$SCRATCH/venv_mlx"
-DATA="$SCRATCH/stage1_data"
-MODEL="$SCRATCH/models/smolvlm500m"
-ADAPTER_DIR="$SCRATCH/adapters"
+DATA="$DATA_ROOT/stage1_data"
+MODEL="$DATA_ROOT/models/smolvlm500m"
+ADAPTER_DIR="$DATA_ROOT/adapters"
+SROIE_LABELS="$DATA_ROOT/data/sroie-labels"
 mkdir -p "$ADAPTER_DIR"
 
+MODE="${1:-smoke}"
 case "$MODE" in
   smoke) ITERS=10; OUT="$ADAPTER_DIR/smoke"; RESUME="" ;;
   full)  ITERS=1200; OUT="$ADAPTER_DIR/full"; RESUME="" ;;

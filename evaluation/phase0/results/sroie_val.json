@@ -2,7 +2,7 @@
   {
     "id": "val_0000",
     "pool_row": 138,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0000.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0000.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -14,7 +14,7 @@
   {
     "id": "val_0001",
     "pool_row": 139,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0001.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0001.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -26,7 +26,7 @@
   {
     "id": "val_0002",
     "pool_row": 140,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0002.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0002.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -38,7 +38,7 @@
   {
     "id": "val_0003",
     "pool_row": 141,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0003.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0003.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -50,7 +50,7 @@
   {
     "id": "val_0004",
     "pool_row": 142,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0004.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0004.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RESTORAN WAN SHENG",
@@ -62,7 +62,7 @@
   {
     "id": "val_0005",
     "pool_row": 143,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0005.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0005.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "RSTORAN WAN SHENG",
@@ -74,7 +74,7 @@
   {
     "id": "val_0006",
     "pool_row": 144,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0006.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0006.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GERBANG ALAF RESTAURANTS SDN BHD",
@@ -86,7 +86,7 @@
   {
     "id": "val_0007",
     "pool_row": 145,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0007.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0007.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GERBANG ALAF RESTAURANTS SDN BHD",
@@ -98,7 +98,7 @@
   {
     "id": "val_0008",
     "pool_row": 146,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0008.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0008.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "PAPPARICH BMC",
@@ -110,7 +110,7 @@
   {
     "id": "val_0009",
     "pool_row": 147,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0009.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0009.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "MIZU MENTAI SDN. BHD.",
@@ -122,7 +122,7 @@
   {
     "id": "val_0010",
     "pool_row": 148,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0010.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0010.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GERBANG ALAF RESTAURANTS SDN BHD",
@@ -134,7 +134,7 @@
   {
     "id": "val_0011",
     "pool_row": 149,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0011.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0011.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "HAPPY SNACKS ENTERPRISE",
@@ -146,7 +146,7 @@
   {
     "id": "val_0012",
     "pool_row": 151,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0012.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0012.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "L TWO FLORIST & HANDICRAFT",
@@ -158,7 +158,7 @@
   {
     "id": "val_0013",
     "pool_row": 152,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0013.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0013.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "WATSON'S PERSONAL CARE STORES SDN BHD",
@@ -170,7 +170,7 @@
   {
     "id": "val_0014",
     "pool_row": 153,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0014.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0014.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -182,7 +182,7 @@
   {
     "id": "val_0015",
     "pool_row": 154,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0015.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0015.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "KHE ELECTRICAL TRADING",
@@ -194,7 +194,7 @@
   {
     "id": "val_0016",
     "pool_row": 155,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0016.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0016.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GERBANG ALAF RESTAURANTS SDN BHD",
@@ -206,7 +206,7 @@
   {
     "id": "val_0017",
     "pool_row": 156,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0017.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0017.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "TK DIVISION KITCHEN SDN BHD",
@@ -218,7 +218,7 @@
   {
     "id": "val_0018",
     "pool_row": 157,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0018.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0018.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GOLDEN SCOOP SDN BHD",
@@ -230,7 +230,7 @@
   {
     "id": "val_0019",
     "pool_row": 158,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0019.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0019.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -242,7 +242,7 @@
   {
     "id": "val_0020",
     "pool_row": 159,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0020.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0020.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "FUN N CHEER (MALURI)",
@@ -254,7 +254,7 @@
   {
     "id": "val_0021",
     "pool_row": 160,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0021.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0021.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "CT281 - TEALIVE SHELL KEPONG OTTOGO ENTERPRISE",
@@ -266,7 +266,7 @@
   {
     "id": "val_0022",
     "pool_row": 161,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0022.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0022.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "NADEJE PRESTIGE SDN BHD",
@@ -278,7 +278,7 @@
   {
     "id": "val_0023",
     "pool_row": 162,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0023.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0023.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -290,7 +290,7 @@
   {
     "id": "val_0024",
     "pool_row": 163,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0024.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0024.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -302,7 +302,7 @@
   {
     "id": "val_0025",
     "pool_row": 164,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0025.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0025.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "SUNFISH",
@@ -314,7 +314,7 @@
   {
     "id": "val_0026",
     "pool_row": 165,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0026.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0026.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "MR . DAKGALBI SOLARIS",
@@ -326,7 +326,7 @@
   {
     "id": "val_0027",
     "pool_row": 166,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0027.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0027.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "THE STORE (MALAYSIA) SDN BHD",
@@ -338,7 +338,7 @@
   {
     "id": "val_0028",
     "pool_row": 167,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0028.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0028.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "LITTLE CRAVINGS SDN BHD",
@@ -350,7 +350,7 @@
   {
     "id": "val_0029",
     "pool_row": 168,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0029.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0029.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "KING'S CONFECTIONERY S/B",
@@ -362,7 +362,7 @@
   {
     "id": "val_0030",
     "pool_row": 169,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0030.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0030.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "YAM FRESH",
@@ -374,7 +374,7 @@
   {
     "id": "val_0031",
     "pool_row": 170,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0031.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0031.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "ZEN AND COFFEE 28 S/B",
@@ -386,7 +386,7 @@
   {
     "id": "val_0032",
     "pool_row": 171,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0032.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0032.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "GUARDIAN HEALTH AND BEAUTY SDN BHD",
@@ -398,7 +398,7 @@
   {
     "id": "val_0033",
     "pool_row": 173,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0033.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0033.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "DOMMAL FOOD SERVICES SDN BHD",
@@ -410,7 +410,7 @@
   {
     "id": "val_0034",
     "pool_row": 174,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0034.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0034.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "MY HAPPY PHARMACY PLT",
@@ -422,7 +422,7 @@
   {
     "id": "val_0035",
     "pool_row": 176,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0035.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0035.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "KEDAI PAPAN YEW CHUAN",
@@ -434,7 +434,7 @@
   {
     "id": "val_0036",
     "pool_row": 178,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0036.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0036.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "KEDAI PAPAN YEW CHUAN",
@@ -446,7 +446,7 @@
   {
     "id": "val_0037",
     "pool_row": 179,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0037.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0037.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "KEDAI PAPAN YEW CHUAN",
@@ -458,7 +458,7 @@
   {
     "id": "val_0038",
     "pool_row": 180,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0038.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0038.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "BHPETROL SUBANG AIRPORT",
@@ -470,7 +470,7 @@
   {
     "id": "val_0039",
     "pool_row": 181,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/val_images/val_0039.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/val_images/val_0039.jpg",
     "source": "sroie_public_train_val",
     "gold": {
       "company": "BHPETROL PALEKBANG",

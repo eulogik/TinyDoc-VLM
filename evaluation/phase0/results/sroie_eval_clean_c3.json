@@ -2,7 +2,7 @@
   {
     "id": "clean_0060",
     "pool_row": 81,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0060.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0060.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. SDN BHD",
@@ -14,7 +14,7 @@
   {
     "id": "clean_0061",
     "pool_row": 82,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0061.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0061.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "HON HWA HARDWARE TRADING",
@@ -26,7 +26,7 @@
   {
     "id": "clean_0062",
     "pool_row": 85,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0062.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0062.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. SDN BHD",
@@ -38,7 +38,7 @@
   {
     "id": "clean_0063",
     "pool_row": 86,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0063.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0063.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR. D.I.Y. (KUCHAI) SDN BHD",
@@ -50,7 +50,7 @@
   {
     "id": "clean_0064",
     "pool_row": 87,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0064.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0064.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "IKANO HANDEL SDN BHD",
@@ -62,7 +62,7 @@
   {
     "id": "clean_0065",
     "pool_row": 88,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0065.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0065.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "IKANO HANDEL SDN BHD",
@@ -74,7 +74,7 @@
   {
     "id": "clean_0066",
     "pool_row": 91,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0066.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0066.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TRI SHAAS SDN BHD",
@@ -86,7 +86,7 @@
   {
     "id": "clean_0067",
     "pool_row": 92,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0067.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0067.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ADVANCO COMPANY",
@@ -98,7 +98,7 @@
   {
     "id": "clean_0068",
     "pool_row": 94,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0068.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0068.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -110,7 +110,7 @@
   {
     "id": "clean_0069",
     "pool_row": 95,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0069.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0069.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -122,7 +122,7 @@
   {
     "id": "clean_0070",
     "pool_row": 96,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0070.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0070.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -134,7 +134,7 @@
   {
     "id": "clean_0071",
     "pool_row": 97,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0071.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0071.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -146,7 +146,7 @@
   {
     "id": "clean_0072",
     "pool_row": 98,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0072.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0072.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "WAHIN HARDWARE SDN BHD",
@@ -158,7 +158,7 @@
   {
     "id": "clean_0073",
     "pool_row": 99,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0073.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0073.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -170,7 +170,7 @@
   {
     "id": "clean_0074",
     "pool_row": 100,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0074.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0074.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -182,7 +182,7 @@
   {
     "id": "clean_0075",
     "pool_row": 101,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0075.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0075.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -194,7 +194,7 @@
   {
     "id": "clean_0076",
     "pool_row": 103,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0076.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0076.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SYARIKAT PERNIAGAAN GIN KEE",
@@ -206,7 +206,7 @@
   {
     "id": "clean_0077",
     "pool_row": 105,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0077.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0077.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SWEET FOREST CAFE",
@@ -218,7 +218,7 @@
   {
     "id": "clean_0078",
     "pool_row": 107,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0078.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0078.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "ZAWIAJAYA FOOD N BEVERAGE SDN BHD",
@@ -230,7 +230,7 @@
   {
     "id": "clean_0079",
     "pool_row": 108,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0079.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0079.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIM SENG THO HARDWARE TRADING",

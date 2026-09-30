@@ -2,7 +2,7 @@
   {
     "id": "clean_0040",
     "pool_row": 54,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0040.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0040.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "CARREFOUR RESTAURANT",
@@ -14,7 +14,7 @@
   {
     "id": "clean_0041",
     "pool_row": 57,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0041.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0041.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "UNIHAKKA INTERNATIONAL SDN BHD",
@@ -26,7 +26,7 @@
   {
     "id": "clean_0042",
     "pool_row": 59,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0042.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0042.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "TRIPLE SIX POINT ENTERPRISE 666",
@@ -38,7 +38,7 @@
   {
     "id": "clean_0043",
     "pool_row": 60,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0043.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0043.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "BENS INDEPENDENT GROCER SDN. BHD",
@@ -50,7 +50,7 @@
   {
     "id": "clean_0044",
     "pool_row": 61,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0044.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0044.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "NANDO'S CHICKENLAND MALAYSIA SDN BHD",
@@ -62,7 +62,7 @@
   {
     "id": "clean_0045",
     "pool_row": 62,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0045.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0045.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -74,7 +74,7 @@
   {
     "id": "clean_0046",
     "pool_row": 63,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0046.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0046.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PETRODELI ENTERPRISE",
@@ -86,7 +86,7 @@
   {
     "id": "clean_0047",
     "pool_row": 64,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0047.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0047.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "SUN WONG KUT SDN BHD",
@@ -98,7 +98,7 @@
   {
     "id": "clean_0048",
     "pool_row": 65,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0048.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0048.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "RESTAURANT JIAWEI JIAWEI HOUSE",
@@ -110,7 +110,7 @@
   {
     "id": "clean_0049",
     "pool_row": 66,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0049.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0049.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "PASARAYA BORONG PINTAR SDN BHD",
@@ -122,7 +122,7 @@
   {
     "id": "clean_0050",
     "pool_row": 67,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0050.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0050.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIAN CHI PU TIAN VEGETARIAN RESTAURANT SDN BHD",
@@ -134,7 +134,7 @@
   {
     "id": "clean_0051",
     "pool_row": 69,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0051.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0051.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -146,7 +146,7 @@
   {
     "id": "clean_0052",
     "pool_row": 70,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0052.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0052.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "99 SPEED MART S/B",
@@ -158,7 +158,7 @@
   {
     "id": "clean_0053",
     "pool_row": 71,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0053.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0053.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "AEON CO. (M) BHD",
@@ -170,7 +170,7 @@
   {
     "id": "clean_0054",
     "pool_row": 72,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0054.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0054.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "POPULAR BOOK CO. (M) SDN BHD",
@@ -182,7 +182,7 @@
   {
     "id": "clean_0055",
     "pool_row": 73,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0055.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0055.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "LIAN HING STATIONERY SDN BHD",
@@ -194,7 +194,7 @@
   {
     "id": "clean_0056",
     "pool_row": 77,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0056.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0056.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "BANH MI CAFE SDN BHD",
@@ -206,7 +206,7 @@
   {
     "id": "clean_0057",
     "pool_row": 78,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0057.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0057.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "THAI DELICIOUS RESTAURANT",
@@ -218,7 +218,7 @@
   {
     "id": "clean_0058",
     "pool_row": 79,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0058.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0058.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "MR.D.I.Y(M)SDN BHD",
@@ -230,7 +230,7 @@
   {
     "id": "clean_0059",
     "pool_row": 80,
-    "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/stage1_data/eval_images/clean_0059.jpg",
+    "image_path": "/Volumes/KIOXIA 1TB/tinydoc/stage1_data/eval_images/clean_0059.jpg",
     "source": "sroie_public_train_clean",
     "gold": {
       "company": "HON HWA HARDWARE TRADING",
