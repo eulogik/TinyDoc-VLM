@@ -72,6 +72,7 @@ mkdir -p "$OUT"
 # (aspect-preserving fit-inside-box; verified in mlx_vlm/utils.resize_image).
 # Intentionally UNQUOTED at use (expands to zero args when empty, N args when set).
 TRAIN_RESIZE_ARGS="${TRAIN_RESIZE_ARGS:-}"
+TRAIN_MAXSEQ="${TRAIN_MAXSEQ:-1024}"
 set -- "$VENV/bin/python" -m mlx_vlm.lora \
   --model-path "$MODEL"
 if [ -n "$RESUME" ]; then
@@ -87,7 +88,7 @@ set -- "$@" \
   --gradient-accumulation-steps 8 \
   --learning-rate "$TRAIN_LR" \
   --grad-checkpoint \
-  --max-seq-length 1024 \
+  --max-seq-length "$TRAIN_MAXSEQ" \
   --train-on-completions \
   --iters "$ITERS" \
   --steps-per-report 10 \
