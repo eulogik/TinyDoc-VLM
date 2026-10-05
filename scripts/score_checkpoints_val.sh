@@ -12,13 +12,14 @@ DATA_ROOT="${DATA_ROOT:-/Volumes/KIOXIA 1TB/tinydoc}"
 VENV="$SCRATCH/venv_mlx"
 BANKED="${BANKED:-$DATA_ROOT/adapters/full/banked}"
 MODEL="${MODEL:-$DATA_ROOT/models/smolvlm500m}"
+TAGPREFIX="${TAGPREFIX:-smolvlm500m}"
 # out-suffix prefix per stage (Stage-1 _valg* names are taken by committed files)
 VALPREFIX="${VALPREFIX:-_valg}"
 
 for g in $1; do
   ckpt="$BANKED/global_${g}_adapters.safetensors"
   [ -f "$ckpt" ] || { echo "missing $ckpt — skipping"; continue; }
-  if [ -f "$REPO/evaluation/phase0/results/scores_smolvlm500m_lora${VALPREFIX}$g.json" ]; then
+  if [ -f "$REPO/evaluation/phase0/results/scores_${TAGPREFIX}_lora${VALPREFIX}$g.json" ]; then
     echo "global_$g already scored — skipping"
     continue
   fi
@@ -30,6 +31,7 @@ for g in $1; do
   echo "=== val-scoring global_$g ==="
   "$VENV/bin/python" "$REPO/evaluation/phase0/run_mlx_adapter_eval.py" \
     --model "$MODEL" \
+    --tag-prefix "$TAGPREFIX" \
     ${EVAL_RESIZE:+--image-resize $EVAL_RESIZE} \
     --adapter "$STAGE" \
     --eval-path "$REPO/evaluation/phase0/results/sroie_val.json" \
@@ -37,6 +39,6 @@ for g in $1; do
 done
 echo "--- val F1 summary ---"
 for g in $1; do
-  f="$REPO/evaluation/phase0/results/scores_smolvlm500m_lora${VALPREFIX}$g.json"
+  f="$REPO/evaluation/phase0/results/scores_${TAGPREFIX}_lora${VALPREFIX}$g.json"
   [ -f "$f" ] && python3 -c "import json;d=json.load(open('$f'));print('global_$g val_f1=%.4f schema=%.3f lat=%dms' % (d['field_f1'], d['schema_valid_rate'], d['avg_latency_ms']))"
 done
