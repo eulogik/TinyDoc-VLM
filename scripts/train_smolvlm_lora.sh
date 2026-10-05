@@ -80,6 +80,10 @@ if [ -n "$RESUME" ]; then
 fi
 TRAIN_RANK="${TRAIN_RANK:-16}"
 TRAIN_ALPHA="${TRAIN_ALPHA:-32}"
+# TRAIN_VISION=1 unfreezes the vision tower (default frozen). Untested for SFT
+# here; literature warns naive unfreeze can hurt without text-reading warmup.
+TRAIN_VISION_ARGS=""
+if [ -n "${TRAIN_VISION:-}" ]; then TRAIN_VISION_ARGS="--train-vision"; fi
 set -- "$@" \
   --dataset "$TRAIN_DATA" \
   --split train \
@@ -100,5 +104,5 @@ set -- "$@" \
   --val-batches 5 \
   --steps-per-save 25 \
   --output-path "$OUT"
-set -- "$@" $TRAIN_RESIZE_ARGS
+set -- "$@" $TRAIN_RESIZE_ARGS $TRAIN_VISION_ARGS
 exec "$@"
