@@ -68,11 +68,11 @@ archive_seg() {
 }
 
 wait_window() {
-  local i nir a
+  local i nir a need="${1:-5000}"
   for i in $(seq 1 100); do
     nir=$(nir_cpu); a=$(avail_mb)
-    if { [ -z "$nir" ] || [ "$nir" -lt 50 ]; } && [ "$a" -ge 5000 ]; then
-      log "window open (nir=${nir:-gone} avail=${a}MB)"
+    if { [ -z "$nir" ] || [ "$nir" -lt 50 ]; } && [ "$a" -ge "$need" ]; then
+      log "window open (nir=${nir:-gone} avail=${a}MB need=${need}MB)"
       return 0
     fi
     sleep 30
@@ -81,13 +81,14 @@ wait_window() {
 }
 
 log "supervisor start (target=$TARGET)"
+BACKOFF_NEED=5000
 while true; do
   DONE=$(done_global); DONE=${DONE:-0}
   if [ "$DONE" -ge "$TARGET" ]; then
     log "COMPLETE: banked $DONE >= $TARGET"
     break
   fi
-  if ! wait_window; then
+  if ! wait_window "$BACKOFF_NEED"; then
     log "no quiet window in 50min at done=$DONE — supervisor exiting (relaunch me)"
     exit 3
   fi
@@ -105,6 +106,16 @@ while true; do
   LASTITER=$(grep -a -oE "Iter [0-9]+" "$SEGLOG" | tail -1 || echo "Iter ?")
   log "segment from=$DONE exit=$CODE last=($LASTITER)"
   archive_seg "$DONE"
+  # Zero-progress kill (no new Iter lines): the host is too pressured for even
+  # startup — back off hard and demand a calmer window next round instead of
+  # hot-looping model loads into the same pressure.
+  if [ "$LASTITER" = "Iter ?" ]; then
+    log "zero-progress segment — backing off 6 min, next window needs 7000MB"
+    sleep 360
+    BACKOFF_NEED=7000
+  else
+    BACKOFF_NEED=5000
+  fi
   # Clean finish (exit 0 + "Training completed!") with no new numbered save
   # (short tail below the save interval): bank the final weights at TARGET
   # so DONE advances instead of looping forever on a 5-iter tail.
