@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm2-2.2b_lora_s2evalg480",
+  "adapter": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/valstage/global_480",
+  "n_examples": 40,
+  "field_f1": 0.60625,
+  "schema_valid_rate": 1.0,
+  "anls_mean": 0.727407027919355,
+  "avg_latency_ms": 7353.515517711639,
+  "per_field_hit_rate": {
+    "company": 0.575,
+    "date": 0.8,
+    "address": 0.175,
+    "total": 0.875
+  },
+  "errors": 0
+}

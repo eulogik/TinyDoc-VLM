@@ -1,0 +1,35 @@
+{
+  "stage": "v2-lora-2.2b-twin-mirror",
+  "adapter": "stage2e global_400 (val 0.6188)",
+  "n_paired": 100,
+  "f1_adapter": 0.5377,
+  "f1_base_zero_shot": 0.5357,
+  "paired_doc_wins_adapter": 4,
+  "paired_doc_losses_adapter": 4,
+  "paired_doc_ties": 92,
+  "address_adapter": {
+    "hit_rate": 0.15,
+    "raw_exact_rate": 0.02,
+    "mean_cer": 0.4726
+  },
+  "address_base": {
+    "hit_rate": 0.13,
+    "raw_exact_rate": 0.01,
+    "mean_cer": 0.4763
+  },
+  "latency_ms_adapter": 7638.9,
+  "latency_ms_base": 6775.9,
+  "errors_adapter": 0,
+  "errors_base": 0,
+  "criteria": {
+    "address_hit_ge_0.50": false,
+    "f1_ge_0.60": false,
+    "paired_win_vs_base": false
+  },
+  "bars": {
+    "address_hit": 0.5,
+    "f1": 0.6
+  },
+  "decision": "no_ship",
+  "diagnosis": "SFT changed almost nothing per-doc (4/4/92). Address misses are fine-grained misreads (DEKO/DEDAP, dropped tokens), not truncation (4/85) \u2014 vision-precision problem. Next: resolution (Config C on 2.2B)."
+}
