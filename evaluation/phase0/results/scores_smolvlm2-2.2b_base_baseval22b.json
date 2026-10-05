@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm2-2.2b_base_baseval22b",
+  "adapter": null,
+  "n_examples": 40,
+  "field_f1": 0.6,
+  "schema_valid_rate": 1.0,
+  "anls_mean": 0.7156290406568935,
+  "avg_latency_ms": 6719.120395183563,
+  "per_field_hit_rate": {
+    "company": 0.55,
+    "date": 0.8,
+    "address": 0.15,
+    "total": 0.9
+  },
+  "errors": 0
+}

@@ -41,6 +41,8 @@ def main() -> int:
                     help="aspect-preserving fit-inside box (train/eval consistency), e.g. --image-resize 512 512")
     ap.add_argument("--tag-prefix", default="smolvlm500m",
                     help="output filename/engine prefix (e.g. smolvlm2-2.2b for Nirnay-2 base runs)")
+    ap.add_argument("--prompt-extra", default="",
+                    help="appended to EXTRACT_PROMPT (prompt experiments; recorded in output)")
     args = ap.parse_args()
 
     from mlx_vlm.utils import load as load_model
@@ -67,7 +69,8 @@ def main() -> int:
     # the transformers processor has NO chat template for this model)
     from mlx_vlm.prompt_utils import apply_chat_template as mlx_chat
 
-    conv = [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": EXTRACT_PROMPT}]}]
+    question = EXTRACT_PROMPT + (("\n" + args.prompt_extra) if args.prompt_extra else "")
+    conv = [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": question}]}]
     try:
         prompt = mlx_chat(processor, getattr(model, "config", {}), conv,
                           add_generation_prompt=True, num_images=1)
@@ -122,6 +125,7 @@ def main() -> int:
     out = {
         "engine": f"{args.tag_prefix}_{tag}{args.out_suffix}",
         "adapter": adapter,
+        "prompt_extra": args.prompt_extra or None,
         "n_examples": len(preds),
         "field_f1": agg["field_f1"],
         "schema_valid_rate": agg["schema_valid_rate"],

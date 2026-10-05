@@ -1,0 +1,19 @@
+{
+  "engine": "hybrid-2.2b-tess_clean",
+  "rule": "F3: tesseract psm-6, postcode window -4/+1, keep VLM iff norm(VLM) in norm(window)",
+  "vlm_source": "evaluation/phase0/results/preds_smolvlm2-2.2b_base_clean.jsonl",
+  "n_examples": 100,
+  "field_f1": 0.5984848484848485,
+  "schema_valid_rate": 0.9,
+  "anls_mean": 0.6682919384477753,
+  "avg_latency_ms": 327.2495746612549,
+  "total_wall_s": 33.4,
+  "per_field_hit_rate": {
+    "company": 0.49,
+    "date": 0.77,
+    "address": 0.36,
+    "total": 0.75
+  },
+  "address_vlm_only_hits": 13,
+  "errors": 0
+}

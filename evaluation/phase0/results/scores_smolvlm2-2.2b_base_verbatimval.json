@@ -1,0 +1,17 @@
+{
+  "engine": "smolvlm2-2.2b_base_verbatimval",
+  "adapter": null,
+  "prompt_extra": "Copy every field character-by-character exactly as printed. Never paraphrase, abbreviate, or reorder.",
+  "n_examples": 40,
+  "field_f1": 0.5705329153605015,
+  "schema_valid_rate": 0.975,
+  "anls_mean": 0.7063772887726417,
+  "avg_latency_ms": 6973.735183477402,
+  "per_field_hit_rate": {
+    "company": 0.5,
+    "date": 0.725,
+    "address": 0.2,
+    "total": 0.85
+  },
+  "errors": 0
+}
