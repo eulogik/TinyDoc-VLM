@@ -39,6 +39,8 @@ def main() -> int:
     ap.add_argument("--max-tokens", type=int, default=256)
     ap.add_argument("--image-resize", type=int, nargs=2, default=None, metavar=("W", "H"),
                     help="aspect-preserving fit-inside box (train/eval consistency), e.g. --image-resize 512 512")
+    ap.add_argument("--tag-prefix", default="smolvlm500m",
+                    help="output filename/engine prefix (e.g. smolvlm2-2.2b for Nirnay-2 base runs)")
     args = ap.parse_args()
 
     from mlx_vlm.utils import load as load_model
@@ -118,7 +120,7 @@ def main() -> int:
 
     agg = macro_prf(scores)
     out = {
-        "engine": f"smolvlm500m_{tag}{args.out_suffix}",
+        "engine": f"{args.tag_prefix}_{tag}{args.out_suffix}",
         "adapter": adapter,
         "n_examples": len(preds),
         "field_f1": agg["field_f1"],
@@ -130,8 +132,8 @@ def main() -> int:
         },
         "errors": sum(1 for p in preds if p["error"]),
     }
-    (RESULTS / f"scores_smolvlm500m_{tag}{args.out_suffix}.json").write_text(json.dumps(out, indent=2))
-    (RESULTS / f"preds_smolvlm500m_{tag}{args.out_suffix}.jsonl").write_text(
+    (RESULTS / f"scores_{args.tag_prefix}_{tag}{args.out_suffix}.json").write_text(json.dumps(out, indent=2))
+    (RESULTS / f"preds_{args.tag_prefix}_{tag}{args.out_suffix}.jsonl").write_text(
         "\n".join(json.dumps(p) for p in preds) + "\n"
     )
     print(json.dumps(out, indent=2))

@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm2-2.2b_base_smoke",
+  "adapter": null,
+  "n_examples": 3,
+  "field_f1": 0.5833333333333334,
+  "schema_valid_rate": 1.0,
+  "anls_mean": 0.8092393264462413,
+  "avg_latency_ms": 7025.447368621826,
+  "per_field_hit_rate": {
+    "company": 0.6666666666666666,
+    "date": 1.0,
+    "address": 0.0,
+    "total": 0.6666666666666666
+  },
+  "errors": 0
+}
