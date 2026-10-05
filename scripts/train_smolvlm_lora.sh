@@ -78,11 +78,13 @@ set -- "$VENV/bin/python" -m mlx_vlm.lora \
 if [ -n "$RESUME" ]; then
   set -- "$@" --adapter-path "$OUT"
 fi
+TRAIN_RANK="${TRAIN_RANK:-16}"
+TRAIN_ALPHA="${TRAIN_ALPHA:-32}"
 set -- "$@" \
   --dataset "$TRAIN_DATA" \
   --split train \
-  --lora-rank 16 \
-  --lora-alpha 32 \
+  --lora-rank "$TRAIN_RANK" \
+  --lora-alpha "$TRAIN_ALPHA" \
   --lora-dropout "$TRAIN_DROPOUT" \
   --batch-size 1 \
   --gradient-accumulation-steps 8 \
