@@ -1,0 +1,407 @@
+{
+  "greedy_hits": 7,
+  "oracle_hits": 10,
+  "n": 40,
+  "rows": [
+    {
+      "id": "val_0000",
+      "greedy_hit": false,
+      "oracle_hit": true,
+      "samples": [
+        "No.2, Jalan Temengggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor"
+      ]
+    },
+    {
+      "id": "val_0001",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Baar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Baar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temengggun 19/9, Seksy 9, Baatar Mahkota Cheras, 43200 Cheras, Selangor"
+      ]
+    },
+    {
+      "id": "val_0002",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No.2, Jalan Temengong 19/9, Seksyen 9, Badar Maktota Cheas, 43200 Cheras, Selangor",
+        "43200 Changsha, Singpan",
+        "No.2, Jalan Temengung 19/9, Seksyen 9, Badar Makhta Cheas, 43209 Charis, Selangor"
+      ]
+    },
+    {
+      "id": "val_0003",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Mahkota Cheras, 43200 Cheras, Selangor"
+      ]
+    },
+    {
+      "id": "val_0004",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Banjar Mahkota, Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bandar Makkota, Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggung 19/9, Seksyen 9, Bana Karang Makpota, Cheras, 43200 Cheras, Selangor"
+      ]
+    },
+    {
+      "id": "val_0005",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No.2, Jalan Temenggong, Seksyen 9, Bandar Makkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temengong 19/9, Seksyen 9, Bandar Makkota Cheras, 43200 Cheras, Selangor",
+        "No.2, Jalan Temenggong 19/9, Seksyen 9, Bandar Makkora, Cheras, 43200 Cheras, Selangor"
+      ]
+    },
+    {
+      "id": "val_0006",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "Level 6, Bangunan TH, Damansara Jaya, No. 3, Jalan SS2/139, 47400 Petaling Jaya",
+        "Level 6, Banguna Th, Damansara Jptown3, No.3, Jalan SS21/39,47400 Petaling Jaya",
+        "Level 5, Bangunan TH, Damansara Jptown3 No.3, Jalan SS2/139,47400 Petaling Jaya"
+      ]
+    },
+    {
+      "id": "val_0007",
+      "greedy_hit": false,
+      "oracle_hit": true,
+      "samples": [
+        "Level 1, Golden Arches Restau\u00e9rs Sdn Bhd, No. 3, Jalan SS21/39, Petaling Jaya, Setanor, Level 6, Bangunan TH, Damansara Utama, No. 03, 47400 Petaling Jaya",
+        "Level 6, Bangunan TH, Damansara Uptown3, No.3, Jalan SS21/39, 47400 Petaling Jaya",
+        "Level 6, Bangunan TH, Damansara Uptown, No.3, Jalan SS21/39, Petaling Jaya"
+      ]
+    },
+    {
+      "id": "val_0008",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "",
+        "4320 Selangor Darul Ehsan, Malaysia",
+        "4320 Selangor Darul Ehsan, Malaysia"
+      ]
+    },
+    {
+      "id": "val_0009",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "MARKOTA CHERAS, MIZU MENTAI, BHD. (1248446-V), NO: 1-1&2 GROUND FLOOR, JLN TEHENGUNG 13/3, 43200 CERAS SELANGOR, GST Reg. No. 50-1375290-160",
+        "MIZU MENTAI SON. BHND. (1248465-V)",
+        "MIZU MENTAI SON. BHD. (1248446-V)"
+      ]
+    },
+    {
+      "id": "val_0010",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "65351-M, Level 6, Bangunan TH, Damansara Uptown 3, No.3, Jalan SS21/3, Petaling Jaya, Selangor",
+        "Level 6, Bangunan TH, Damansara Uptown 3, No.3, Jalan SS21/3, Petaling Jaya, Selangor",
+        "Level 6, Bangunan TH, Damansara Uptown 3, No.3, Jalan SS21/1/3, Petaling Jaya, Selangor"
+      ]
+    },
+    {
+      "id": "val_0011",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "Jalan Meranti 2A, Seksyei, Bandar Baru Batang Kali, 44300",
+        "19&19A , JALAN MERANTII 2 A , SEKSYEI BANDAR BATANG KALI, 44300",
+        "19&19A , JALAM MERANTI 2A , SEKSYEI BANDAR BATANG KALI, 44300"
+      ]
+    },
+    {
+      "id": "val_0012",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "49, Jalan Mahagong, 712, Seksyen 4, Bandar Utama, 44300 Batang Kali, Selangor",
+        "No. 49, Jalan Mahagong 712, Seksyen 4, Bandar Utama, 44300 Batang Kali, Selangor",
+        "No. 49, Jalan Mahagong 7/2, Seksyen 4, Bandar Utama, 44300 Batang Kali, Selangor."
+      ]
+    },
+    {
+      "id": "val_0013",
+      "greedy_hit": false,
+      "oracle_hit": true,
+      "samples": [
+        "Watson's Personal Care Stores 3dn Bhd Company Reg No. : 2898828 GST Reg No. : 000947339264 USJ Summit, Subang (S)",
+        "Watson's Personal Care Stores 3dn Bld, 289882V, GST Reg No. 000947339264, USJ Summit, Subang (S), 2224, WS CUT SCISSORS $18.00 S, 2221, WS BABY WIPES $7.90 S, 2143, WS TOWEL $5.99 S, 95448, WATSONS BASKET $0.00 Z, 714, WATSONS BASKET $1.00 Z, '0404010036 2032018 13:11:54 0003 ika', 00404010036 2032018 13:11:54",
+        "Subang (S)"
+      ]
+    },
+    {
+      "id": "val_0014",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No 8, Jalan 7/6, Jalan Un Raziak, 56000 Kuala Lumpur, Malaysia",
+        "Sdn BHD, 8, Jalan Kuala Lumpur, Malaysia",
+        "50000 Kuala Lumpur, Malaysia"
+      ]
+    },
+    {
+      "id": "val_0015",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "33-G JALAN MAUJ 3/1, TAMAN LEMBAH MAJU, CHERAS, 56100 K.L",
+        "33-G JALAN MAUJ 3/1",
+        "33-G JALAN MAUJ 3/1, TANAH LEMAHBAH MAJU, CHERAS, 56100 KL"
+      ]
+    },
+    {
+      "id": "val_0016",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "Level 6, Jalan SS21/39, 47400 Petaling Jaya Selangor",
+        "Level 6, Bangunan Tham Sarupa Upton 3, No.3 Jalan SS21/39,47400 Petaling Jaya Selangor",
+        "Level 6, Bandar Kuala Lipis, Melaka"
+      ]
+    },
+    {
+      "id": "val_0017",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "53100 SETARAK KULIAH LUMPUR",
+        "19-1, JALAN MALINJA 2, TAMAN BUNGA RAYA, SETARAK KUALA LUMPUR",
+        "53100 SEPATAK KUALA LUMPUR"
+      ]
+    },
+    {
+      "id": "val_0018",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "A 16-1, Tower A, Northpoint Office, Mid Valley, City No1, Medan Syed Putra Utara Kuala Lumpur, Malaysia",
+        "Desa Park City\nGolden Scoop Sdn Bhd\nA16-1 Tower A, Northpoint Office\nMid Valley, City No1, Medan Syed Putra Utara Kuala Lumpur, Malaysia",
+        "Desa Park City, Golden Scoop Sdn Bhd, A16-1, Tower A, Northpoint Office, Mid Valley City No1, Medan Syed Putra Utara Kuala Lumpur, Lunp, Malaysia"
+      ]
+    },
+    {
+      "id": "val_0019",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "LOT P, 2811, JALAN ANGGA, 1934-LAMAN RIMBUNAN, 41150 KLANG, SELANGOR",
+        "LOT P. 2811, JALAN ANGSA, 41150 KLANG, SELANGOR",
+        "LOT P, 2811, JALAN ANGSA, 41150 KLANG, SELANGOR"
+      ]
+    },
+    {
+      "id": "val_0020",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "Lot 37636, Jalan 6/37A, Taman Bukit Maluri, 52100 Kuala Lumpur",
+        "Jalan 6/37A, Taman Bukit Maluri, 52100 Kuala Lumpur",
+        "Lot 37636, Jalan 6/37A, Taman Bukit Maluri, 52100 Kuala Lumpur"
+      ]
+    },
+    {
+      "id": "val_0021",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "CT281 - Realive Shell Repong",
+        "0025 0623 0632 X",
+        "CT801 Teak Shell Repong, Otto G Enterprise, 0025 76362-X, GSTID: 00180802176, SHELL STATION BATU 1544, Nukm, Jl. Besar Kepong"
+      ]
+    },
+    {
+      "id": "val_0022",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "116A, GROUND FLOOR, SUNWAY PYRAMID, NO3, JALAN PJS 11/15, BANDAR SUNWAY 47500 PETALING JAYA",
+        "116A GRAUND FLOOR SUNWAY PYRAMID NO.3, JALAN PJS 11/15, BANDAR SUNWAY 47500 PETALING JAYA (1198447-X)",
+        "LOT 10. G1.116A. GROUND FLOOR, SINWAY PYRAMID, NO.3, JALAN PJS 11/15, BANDAR SUNWAY 47500 PETALING JAYA"
+      ]
+    },
+    {
+      "id": "val_0023",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "",
+        "LOT P.T. 2811, JALAN ANSA, TAM AIMAI BERKELEY",
+        "LOT P.T. 2811, JALAN ANSAR, TAM AIMAI BERKELEY, 41150 KLANG, SELANGOR, 11811-TIN MIN SRI SUNGAI, GST ID. NO : 00018747712"
+      ]
+    },
+    {
+      "id": "val_0024",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "LOT P.T. 2811, JALAN ANGSH, TAMAN BERKELEY, 41150 KLANG, SELANGOR, 1362-JN DEVELOPMENT",
+        "LOT P.T. 2811, JALAN ANGSI, TAMAN BERKELEY, 41150 KLANG, SELANGOR",
+        "LOT P. T. 2811, JALAN ANGSKAN, TAMAN BERKELEY"
+      ]
+    },
+    {
+      "id": "val_0025",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "KIM PAPL IND S. PARK B. CAVES",
+        "22 LRJ PERUSABAHAN 4",
+        "22 KIMPAL IND. PARK B. CAVES"
+      ]
+    },
+    {
+      "id": "val_0026",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No. J-G02, Solaris KI, Solaris Mont Kiera, 50",
+        "No.J-G02, Solaris Ki, Solaris Mont Kiera, 50",
+        "No. J-G02, Soho Ki, Solaris Mont Kiera, 50"
+      ]
+    },
+    {
+      "id": "val_0027",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "LOT 34817 JALAN BATU AMBAR TAMAN KOK LIAH 5120 RASA LUPAK",
+        "LOT 34817 JALAN BATU WMBAR TAMAN KOK LIAN 5120 RAULA LUPUR",
+        "LOT 34817 JALAN BATU WMBA"
+      ]
+    },
+    {
+      "id": "val_0028",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "1 UTAMA",
+        "LITTLE CRAWINGS SDN BHD (562007-D)",
+        "LITTLE CRAWINGS SDN BHD (562007-D)"
+      ]
+    },
+    {
+      "id": "val_0029",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "N.41 JALAN ERI BINTANG 2, TAMAN SRI BINTANG, 5100 KUALA LUMPUR",
+        "N.41 JALAN ERI BINTANG 2, TAMAN SRI BINTANG, 2100 KUALA LUMPUR",
+        "{'street': 'N.41 JALAN ERI BINTANG 2', 'city': 'TAMAN SRI BINTANG', 'postcode': '3100 KUALA LUMPUR'}"
+      ]
+    },
+    {
+      "id": "val_0030",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "N. 145G, Jalan Ribunan Raya 1, Laman Rimbunan Kepong, 52100 Kuala Lumpur",
+        "No.145G, Jalan Rimbunan Kepong, 52100 Kuala Lumpur",
+        ""
+      ]
+    },
+    {
+      "id": "val_0031",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "No 53, Jalan 3/62A, Bandar menjalar, 5200 Kuala Lumpur",
+        "No 53, Jalan 3/62A, Bandar menjalara, 5200 Kuala Lumpur",
+        "No 53, Jalan 362A, Bandar menjalara, 5200 Kuala Lumpur"
+      ]
+    },
+    {
+      "id": "val_0032",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "Prem Mall, G-19 Level G Mall, 6258408, 01101083-T, 000899874816",
+        "G19 Level G Mall",
+        "Prem Mall, Tel: 0-62584088, Tp: 62584089, Cp: 62584081, Address: 610816, Gt Reg: 000099874816, RT: 03, RW: 03, No: 1"
+      ]
+    },
+    {
+      "id": "val_0033",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "5100 Kuala Lumpur",
+        "5100 Kuala Lumpur",
+        "5100 Kuala Lumpur"
+      ]
+    },
+    {
+      "id": "val_0034",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "68000 AMPANG, SELANGOR",
+        "TAMANDATAHAMADAH RAMADAN, 68000 ANGASON, SELANGOR",
+        "TAMAN DATO AHMAD RAZALI, JALAN AMPANG, 68000 AMPANG, SELANGOR"
+      ]
+    },
+    {
+      "id": "val_0035",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "LOT 276 JALAN BANTING 43800 DENGKIL, SELANGOR",
+        "LOT 276 JALAN BANTING, 43800 DENGKIL, SELANGOR",
+        "43800 DENGKIL SELANGOR"
+      ]
+    },
+    {
+      "id": "val_0036",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "LOT: 76 JALAN BAITING 43800\u00e2NGKI SELANGOR.",
+        "LOT 76 JALAN BAITING 43800 ENGKIL-JELANGOR",
+        "LOT 76 JALAIN BAITING, 43800 ENGKI LELANGOR"
+      ]
+    },
+    {
+      "id": "val_0037",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "LOT 276 JALAN BANTING 43800 ENGGKI SELANGOR",
+        "LOT 276 JALAN BANTING 43800 ENGKIJA/JELANGOR",
+        "Bantang, Jalan, 96, No 276, 43800,ENGKIL, LELANGOR"
+      ]
+    },
+    {
+      "id": "val_0038",
+      "greedy_hit": false,
+      "oracle_hit": false,
+      "samples": [
+        "Jalan Laang Subang 47200, Selebang",
+        "Jalan Laang Subang",
+        "Jalan Laangan Terbang, 47200 Subang, Selangor"
+      ]
+    },
+    {
+      "id": "val_0039",
+      "greedy_hit": true,
+      "oracle_hit": true,
+      "samples": [
+        "Lot 1626, Mukim Kampung Laut Tumpat, 16200 Palekbang, Kelantan",
+        "Lot 1626, Mukim Kampung Laut, 16200 Palekbang, Tumpat, Kelantan",
+        "Lot 1626, Mukim Kampung Laut Tumpat, 16200 Palekbang, Kelantan"
+      ]
+    }
+  ]
+}
