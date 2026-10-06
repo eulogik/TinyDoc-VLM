@@ -26,12 +26,13 @@ def main() -> int:
     ap.add_argument("--droot", default="/Volumes/KIOXIA 1TB/tinydoc")
     args = ap.parse_args()
 
-    from PIL import Image
     from datasets import Dataset, load_from_disk
+    from PIL import Image
 
     droot = Path(args.droot)
-    mix = [json.loads(l) for l in
-           open(droot / "hardmine" / "mix.jsonl").read().splitlines() if l.strip()]
+    with open(droot / "hardmine" / "mix.jsonl") as _fh:
+        _lines = [l for l in _fh.read().splitlines() if l.strip()]
+    mix = [json.loads(l) for l in _lines]
     rows = []
     for m in mix:
         img = Image.open(m["image_path"]).convert("RGB")

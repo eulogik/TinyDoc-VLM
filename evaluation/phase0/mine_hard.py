@@ -53,6 +53,7 @@ def main() -> int:
 
     def _as_pil(v):
         import io as _io2
+
         from PIL import Image as _I
         if isinstance(v, _I.Image):
             return v
