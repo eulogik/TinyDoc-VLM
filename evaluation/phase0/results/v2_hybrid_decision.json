@@ -1,0 +1,38 @@
+{
+  "stage": "v2-hybrid-2.2b-tess-F3",
+  "rule": "F3: tesseract psm-6, postcode window -4/+1, keep VLM iff norm(VLM) in norm(window)",
+  "n_paired": 100,
+  "f1_hybrid": 0.5985,
+  "f1_base_zero_shot": 0.5357,
+  "paired_doc_wins_hybrid": 31,
+  "paired_doc_losses_hybrid": 8,
+  "paired_doc_ties": 61,
+  "address_sign_test_p": 0.0003,
+  "address_discordants": {
+    "hybrid_only_hit": 31,
+    "base_only_hit": 8
+  },
+  "address_hybrid": {
+    "hit_rate": 0.36,
+    "raw_exact_rate": 0.0,
+    "mean_cer": 0.6382
+  },
+  "address_base": {
+    "hit_rate": 0.13,
+    "raw_exact_rate": 0.01,
+    "mean_cer": 0.4763
+  },
+  "latency_ms_hybrid": 327.2,
+  "errors_hybrid": 0,
+  "errors_base": 0,
+  "criteria": {
+    "address_hit_ge_0.50": false,
+    "f1_ge_0.60": false,
+    "paired_win_vs_base": true
+  },
+  "bars": {
+    "address_hit": 0.5,
+    "f1": 0.6
+  },
+  "decision": "no_ship"
+}
