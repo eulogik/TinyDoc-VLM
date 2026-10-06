@@ -1,0 +1,17 @@
+{
+  "engine": "smolvlm2-2.2b_lora_s2ivalg25",
+  "adapter": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/valstage/global_25",
+  "prompt_extra": null,
+  "n_examples": 40,
+  "field_f1": 0.61875,
+  "schema_valid_rate": 1.0,
+  "anls_mean": 0.7306686577809625,
+  "avg_latency_ms": 7988.602501153946,
+  "per_field_hit_rate": {
+    "company": 0.575,
+    "date": 0.8,
+    "address": 0.2,
+    "total": 0.9
+  },
+  "errors": 0
+}
