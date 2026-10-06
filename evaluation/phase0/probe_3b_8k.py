@@ -53,7 +53,9 @@ def teacher_relabel(num_ctx: int) -> int:
     for jf in sorted(_glob.glob(f"{droot}/teacher_*.jsonl")):
         if jf.endswith("teacher_8k.jsonl"):
             continue
-        for line in open(jf):
+        with open(jf) as _fh:
+            _lines = _fh.readlines()
+        for line in _lines:
             r = json.loads(line)
             if r.get("error"):
                 todo.append(r)
