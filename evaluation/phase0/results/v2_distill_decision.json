@@ -1,0 +1,35 @@
+{
+  "stage": "v2-distill-2.2b-teacher-3b",
+  "adapter": "stage2h global_400 (val 0.6101)",
+  "n_paired": 100,
+  "f1_adapter": 0.5395,
+  "f1_base_zero_shot": 0.5357,
+  "paired_doc_wins_adapter": 5,
+  "paired_doc_losses_adapter": 5,
+  "paired_doc_ties": 90,
+  "address_adapter": {
+    "hit_rate": 0.15,
+    "raw_exact_rate": 0.03,
+    "mean_cer": 0.4612
+  },
+  "address_base": {
+    "hit_rate": 0.13,
+    "raw_exact_rate": 0.01,
+    "mean_cer": 0.4763
+  },
+  "latency_ms_adapter": 7580.4,
+  "latency_ms_base": 6775.9,
+  "errors_adapter": 0,
+  "errors_base": 0,
+  "criteria": {
+    "address_hit_ge_0.50": false,
+    "f1_ge_0.60": false,
+    "paired_win_vs_base": false
+  },
+  "bars": {
+    "address_hit": 0.5,
+    "f1": 0.6
+  },
+  "decision": "no_ship",
+  "diagnosis": "Distillation changes nothing (test 0.5395 vs base 0.5357). Teacher style does not transfer address reading; student vision front-end cannot resolve small glyphs and LoRA-on-language-tower cannot fix it."
+}

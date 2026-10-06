@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm2-2.2b_lora_clean768",
+  "adapter": "/Volumes/KIOXIA 1TB/tinydoc/valstage/s2f_final",
+  "n_examples": 100,
+  "field_f1": 0.5375,
+  "schema_valid_rate": 1.0,
+  "anls_mean": 0.7354030833001937,
+  "avg_latency_ms": 7324.556310176849,
+  "per_field_hit_rate": {
+    "company": 0.48,
+    "date": 0.79,
+    "address": 0.15,
+    "total": 0.73
+  },
+  "errors": 0
+}
