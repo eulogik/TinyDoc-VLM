@@ -3,7 +3,9 @@
 Engines (measured Phase 0, see evaluation/phase0/results/baseline_table.md):
   - ollama:qwen2.5vl:3b  (default; best free field-F1 on SROIE)
   - ocr_regex             (floor / offline fallback)
-  - smolvlm2              (optional local HF weights)
+  - smolvlm2              (optional local HF weights, torch/MPS path)
+  - mlx_2p2b              (first-party edge VLM, MLX 4-bit, Apple Silicon)
+  - hybrid_2p2b           (v2 product: mlx_2p2b fields + frozen F3 OCR address)
 
 Large model weights live on the KIOXIA external disk (never the system volume).
 """
@@ -487,6 +489,100 @@ class SmolVLM2Engine(BaseEngine):
         return {k: str(obj.get(k, "")) for k in FIELDS}
 
 
+class MlxVlmEngine(BaseEngine):
+    """First-party edge VLM via MLX (Apple Silicon only).
+
+    The MEASURED path: SmolVLM2-2.2B-Instruct 4-bit, EXTRACT_PROMPT (the same
+    constant the phase-0 harness scores under — see tests/test_prompt_parity.py),
+    trainer-parity chat template (mlx_vlm.prompt_utils; the transformers
+    processor has no chat template for this model), greedy decoding.
+    Clean-100 zero-shot: F1 0.536, schema 0.99
+    (evaluation/phase0/results/scores_smolvlm2-2.2b_base_clean.json).
+    """
+
+    name = "mlx_2p2b"
+
+    def __init__(self, model_path: Optional[str] = None, max_tokens: int = 256):
+        import os as _os
+
+        cand = [
+            model_path,
+            _os.environ.get("TINYDOC_MLX_MODEL"),
+            str(KIOXIA_ROOT / "tinydoc" / "models" / "smolvlm2-2.2b-mlx"),
+            str(SMOL_PATH),
+        ]
+        path = next((c for c in cand if c and Path(c).exists()), None)
+        if path is None:
+            raise FileNotFoundError(
+                "MLX SmolVLM2 weights not found; pass model_path or set "
+                "TINYDOC_MLX_MODEL"
+            )
+        try:
+            from mlx_vlm.utils import load as load_model
+        except ImportError as e:
+            raise ImportError(
+                "mlx_vlm is required for MlxVlmEngine (Apple Silicon only)"
+            ) from e
+        self.model_path = path
+        self.max_tokens = max_tokens
+        self.model, self.processor = load_model(path)
+        self.name = "mlx_2p2b_base"
+
+    def extract_fields(self, image_path: str) -> Dict[str, str]:
+        from mlx_vlm.generate import generate as mlx_generate
+        from mlx_vlm.prompt_utils import apply_chat_template as mlx_chat
+
+        conv = [{"role": "user", "content": [
+            {"type": "image"}, {"type": "text", "text": EXTRACT_PROMPT}]}]
+        try:
+            prompt = mlx_chat(self.processor, getattr(self.model, "config", {}),
+                              conv, add_generation_prompt=True, num_images=1)
+        except Exception:
+            prompt = f"<image>\n{EXTRACT_PROMPT}"
+        out = mlx_generate(
+            self.model, self.processor, prompt, image=str(image_path),
+            max_tokens=self.max_tokens, temperature=0.0,
+        )
+        raw = getattr(out, "text", None)
+        raw = raw if isinstance(raw, str) else str(out)
+        obj = _extract_json(raw) or {}
+        return {k: str(obj.get(k, "") or "").strip() for k in FIELDS}
+
+
+class HybridAddressEngine(BaseEngine):
+    """v2 product engine: VLM fields + frozen-rule F3 OCR address.
+
+    Frozen rule F3 (val-selected, single-sourced in .evidence):
+    tesseract PSM-6 postcode window (-4/+1); keep the VLM address iff its
+    normalized form appears inside the normalized window, else the window.
+    Clean-100 measured: F1 0.5985, address 0.36, schema 0.90, paired win vs
+    the VLM alone 31/8/61 (p=0.0003). See v2_hybrid_decision.json.
+    """
+
+    name = "hybrid_2p2b"
+
+    def __init__(self, vlm: Optional[BaseEngine] = None, **vlm_kwargs):
+        from .evidence import fuse_address, ocr_address_window, tesseract_psm6_lines
+
+        self.vlm = vlm or MlxVlmEngine(**vlm_kwargs)
+        self._window = staticmethod(ocr_address_window)
+        self._lines = staticmethod(tesseract_psm6_lines)
+        self._fuse = staticmethod(fuse_address)
+        self.name = f"hybrid({self.vlm.name})+tessF3"
+
+    def extract_fields(self, image_path: str) -> Dict[str, str]:
+        fields = {k: str(v or "")
+                  for k, v in self.vlm.extract_fields(image_path).items()}
+        for k in FIELDS:
+            fields.setdefault(k, "")
+        try:
+            window = self._window(self._lines(str(image_path)))
+        except Exception:
+            window = ""
+        fields["address"] = self._fuse(fields.get("address", ""), window)
+        return fields
+
+
 class RoutedEngine(BaseEngine):
     """Primary engine with OCR-floor fill for schema-breaking empty fields.
 
@@ -534,6 +630,10 @@ def build_engine(name: str = "auto", **kwargs) -> BaseEngine:
         return OcrRegexEngine()
     if name == "smolvlm2":
         return SmolVLM2Engine(**kwargs)
+    if name == "mlx_2p2b":
+        return MlxVlmEngine(**kwargs)
+    if name == "hybrid_2p2b":
+        return HybridAddressEngine(**kwargs)
     raise ValueError(f"unknown engine {name}")
 
 
