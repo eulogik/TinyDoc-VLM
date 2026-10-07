@@ -163,7 +163,7 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 | Benchmark | Result | Source |
 |-----------|--------|--------|
 | SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) ⚠️ **not a clean held-out set — see caveat** | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
-| SROIE field F1 — first-party hybrid v2 product path (MLX SmolVLM2-2.2B + tesseract F3 address, **verified-clean 100**) | **0.603** (schema 0.93; address 0.37; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc — engineering track) | [`scores_product_hybrid_clean.json`](evaluation/phase0/results/scores_product_hybrid_clean.json) · decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json) |
+| SROIE field F1 — first-party hybrid v2 product path (MLX SmolVLM2-2.2B + tesseract F3 address, **verified-clean 100**) | **0.603 — SHIPPED v2.0** (schema 0.93; address 0.37 beta; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc engineering track) | [`scores_product_hybrid_clean.json`](evaluation/phase0/results/scores_product_hybrid_clean.json) · decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json) |
 | SROIE field F1 — PP-OCR + heuristics baseline (same 100 docs, same scorer) | 0.376 | [`scores_ppocr_heuristics.json`](evaluation/phase0/results/scores_ppocr_heuristics.json) |
 | SROIE field F1 — Tesseract + regex baseline | 0.227 | [`scores_ocr_regex.json`](evaluation/phase0/results/scores_ocr_regex.json) |
 | SROIE field F1 — SmolVLM2-500M local baseline | 0.330 | [`scores_smolvlm2.json`](evaluation/phase0/results/scores_smolvlm2.json) |
@@ -188,6 +188,7 @@ Every number above recomputes from committed artifacts:
 python3 evaluation/phase0/recompute_scores.py   # claim audit — must exit 0
 ```
 
+Ship status (v2.0, 2026-10-07): first-party hybrid `hybrid_2p2b` **shipped** on clean-100 F1 **0.603** (schema 0.93; address 0.37 disclosed beta; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc on engineering track) — decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json), product code `sdk/tinydoc/pipeline.py` (`MlxVlmEngine`, `HybridAddressEngine`).
 Ship status (2026-09-25): SDK unit tests **69 passed** (incl. evidence, overlay, CLI) · engine ladder decided: **keep qwen2.5vl:3b** (7B paired pilot: identical F1, 4.5× slower, unstable on 16GB) · evidence engine = PP-OCR (measured A/B win over Tesseract: coverage 0.67→0.80, gold-in-quote 0.42→0.54) · competitive claim **measured**: 0.870 vs 0.376 for the free PP-OCR+heuristics competitor · local Gradio demo `demo/app.py --share` · training skipped. Estimated/target tables in older docs are **not** results (withdrawn: `docs/benchmark_results.json` `legacy_unverified`). Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
 
 ## Package Structure

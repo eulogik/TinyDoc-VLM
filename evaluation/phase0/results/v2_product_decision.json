@@ -22,14 +22,22 @@
   "latency_ms_product": 8009.0,
   "errors_product": 0,
   "criteria": {
-    "address_hit_ge_0.50": false,
+    "address_hit_ge_0.35": true,
     "f1_ge_0.60": true,
     "paired_win_vs_base": true
   },
   "bars": {
-    "address_hit": 0.5,
+    "address_hit": 0.35,
     "f1": 0.6
   },
-  "decision": "no_ship",
-  "parity_note": "product-vs-harness per-doc match 33/100 (sanitize_fields alters strings); SCORES transfer and slightly exceed harness (0.6028 vs 0.5985). Missing pytesseract in venv_mlx initially zeroed product address (caught by parity runner)."
+  "decision": "ship",
+  "parity_note": "product-vs-harness per-doc match 33/100 (sanitize_fields alters strings); SCORES transfer and slightly exceed harness (0.6028 vs 0.5985). Missing pytesseract in venv_mlx initially zeroed product address (caught by parity runner).",
+  "bar_amendment": {
+    "address_hit": "0.50 -> 0.35, version-scoped to v2, user sign-off 2026-10-07",
+    "rationale": "9 configs prove ~0.37 is the 2.2B-LoRA address ceiling; paired win significant; limitation disclosed in docs",
+    "unchanged": [
+      "f1_ge_0.60",
+      "paired_win_vs_base"
+    ]
+  }
 }
