@@ -163,6 +163,7 @@ Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/sp
 | Benchmark | Result | Source |
 |-----------|--------|--------|
 | SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) ⚠️ **not a clean held-out set — see caveat** | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
+| SROIE field F1 — first-party hybrid v2 product path (MLX SmolVLM2-2.2B + tesseract F3 address, **verified-clean 100**) | **0.603** (schema 0.93; address 0.37; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc — engineering track) | [`scores_product_hybrid_clean.json`](evaluation/phase0/results/scores_product_hybrid_clean.json) · decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json) |
 | SROIE field F1 — PP-OCR + heuristics baseline (same 100 docs, same scorer) | 0.376 | [`scores_ppocr_heuristics.json`](evaluation/phase0/results/scores_ppocr_heuristics.json) |
 | SROIE field F1 — Tesseract + regex baseline | 0.227 | [`scores_ocr_regex.json`](evaluation/phase0/results/scores_ocr_regex.json) |
 | SROIE field F1 — SmolVLM2-500M local baseline | 0.330 | [`scores_smolvlm2.json`](evaluation/phase0/results/scores_smolvlm2.json) |

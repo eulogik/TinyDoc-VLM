@@ -1,7 +1,7 @@
 {
   "metadata": {
     "rewritten": "2026-09-24",
-    "policy": "Every score in `measured` recomputes from a committed artifact in evaluation/phase0/results/. Scores in `legacy_unverified` were never measured — no artifacts exist — and MUST NOT be cited, published, or pitched.",
+    "policy": "Every score in `measured` recomputes from a committed artifact in evaluation/phase0/results/. Scores in `legacy_unverified` were never measured \u2014 no artifacts exist \u2014 and MUST NOT be cited, published, or pitched.",
     "scorer": "evaluation/phase0/metrics.py (ANLS + field-level P/R/F1, identical harness for every engine)"
   },
   "measured": [
@@ -9,7 +9,7 @@
       "name": "SROIE receipt extraction",
       "system": "TinyDoc pipeline (ollama:qwen2.5vl:3b)",
       "metric": "Field F1 (company, date, address, total)",
-      "score": 0.870,
+      "score": 0.87,
       "n": 100,
       "artifact": "evaluation/phase0/results/scores_ollama.json",
       "notes": "schema_valid 1.000; per-field hit: company 0.85, date 0.94, address 0.72, total 0.97"
@@ -21,7 +21,7 @@
       "score": 0.376,
       "n": 100,
       "artifact": "evaluation/phase0/results/scores_ppocr_heuristics.json",
-      "notes": "the free local competitor — same 100 docs, same scorer"
+      "notes": "the free local competitor \u2014 same 100 docs, same scorer"
     },
     {
       "name": "SROIE receipt extraction",
@@ -35,7 +35,7 @@
       "name": "SROIE receipt extraction",
       "system": "SmolVLM2-500M (local HF) baseline",
       "metric": "Field F1",
-      "score": 0.330,
+      "score": 0.33,
       "n": 100,
       "artifact": "evaluation/phase0/results/scores_smolvlm2.json"
     },
@@ -46,7 +46,7 @@
       "score": 0.352,
       "n": 50,
       "artifact": "evaluation/phase0/results/scores_funsd_ollama.json",
-      "notes": "form→receipt-shaped keys; nonstandard gold mapping (date=answers[0]) — a probe, not a leaderboard number"
+      "notes": "form\u2192receipt-shaped keys; nonstandard gold mapping (date=answers[0]) \u2014 a probe, not a leaderboard number"
     },
     {
       "name": "OCRBench",
@@ -55,21 +55,30 @@
       "score": 0.0,
       "n": 1000,
       "artifact": "evaluation/phase0/results/ocrbench_256m_full.json",
-      "notes": "all 10 categories; model degenerates under every prompt incl. exact training format — checkpoint retired from performance claims"
+      "notes": "all 10 categories; model degenerates under every prompt incl. exact training format \u2014 checkpoint retired from performance claims"
     },
     {
       "name": "Evidence anchoring (post A/B)",
-      "system": "PP-OCR word boxes → locate_field_evidence",
+      "system": "PP-OCR word boxes \u2192 locate_field_evidence",
       "metric": "Coverage / gold-in-quote",
       "score": 0.798,
       "secondary_score": 0.535,
       "n": 100,
       "artifact": "evaluation/phase0/results/evidence_ab.json",
-      "notes": "tesseract arm: coverage 0.668, gold-in-quote 0.415 — RapidOCR adopted on measured win"
+      "notes": "tesseract arm: coverage 0.668, gold-in-quote 0.415 \u2014 RapidOCR adopted on measured win"
+    },
+    {
+      "name": "SROIE receipt extraction (verified-clean set)",
+      "system": "first-party hybrid v2 product path (MLX SmolVLM2-2.2B-Instruct 4-bit + tesseract PSM-6 F3 address)",
+      "metric": "Field F1 (company, date, address, total)",
+      "score": 0.6028,
+      "n": 100,
+      "artifact": "evaluation/phase0/results/scores_product_hybrid_clean.json",
+      "notes": "schema_valid 0.93; per-field hit: company 0.49, date 0.77, address 0.37, total 0.76; paired win vs VLM alone 31/8/61 (p=0.0003); latency mean ~8.0s/doc; ship-bar decision: no_ship (address<0.50) in v2_product_decision.json"
     }
   ],
   "legacy_unverified": {
-    "warning": "WITHDRAWN 2026-09-24 — dated 2026-06-25, zero artifacts, never reproduced. OCRBench was later measured at 0.0% (n=1000). Kept only for provenance of earlier claims.",
+    "warning": "WITHDRAWN 2026-09-24 \u2014 dated 2026-06-25, zero artifacts, never reproduced. OCRBench was later measured at 0.0% (n=1000). Kept only for provenance of earlier claims.",
     "benchmarks": [
       {
         "name": "DocVQA",

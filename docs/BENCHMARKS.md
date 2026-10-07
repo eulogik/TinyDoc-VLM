@@ -60,6 +60,15 @@ All rows: same 100 held-out SROIE receipt images, same scorer
 | SmolVLM2-500M local baseline | 0.330 | `results/scores_smolvlm2.json` |
 | Tesseract + regex | 0.227 | `results/scores_ocr_regex.json` |
 
+First-party edge track (verified-clean 100, `results/sroie_eval_clean.json`):
+
+| System | Field F1 | Notes / artifact |
+|---|---|---|
+| **Hybrid v2 product path (`hybrid_2p2b`: MLX SmolVLM2-2.2B 4-bit + tesseract F3 address)** | **0.603** | `results/scores_product_hybrid_clean.json` — schema 0.93, address 0.37, paired win vs VLM alone 31/8/61 (p=0.0003), ~8s/doc; decision `results/v2_product_decision.json` (no_ship: address bar) |
+| SmolVLM2-2.2B zero-shot (MLX 4-bit) | 0.536 | `results/scores_smolvlm2-2.2b_base_clean.json` — address 0.13 |
+| 2.2B LoRA SFT (gold / distill / r32 / 768px) | 0.535–0.540 | five configs, paired ≤5/5/90 vs base — SFT moves nothing; address 0.15–0.18 |
+| 3B re-measured on clean-100 (reference, not shippable first-party) | 0.928 | `results/scores_pipeline_ollama_qwen2.5vl_3b_clean.json` — address 0.83 |
+
 Per-field hit rates (pipeline vs PP-OCR+heuristics): company 0.85 vs 0.28, date 0.94 vs 0.52,
 address 0.72 vs 0.03, total 0.97 vs 0.60.
 

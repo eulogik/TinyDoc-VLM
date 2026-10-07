@@ -1,0 +1,87 @@
+{
+  "n": 100,
+  "match": 33,
+  "mismatch": 67,
+  "match_rate": 0.33,
+  "product_field_f1": 0.6027742749054225,
+  "latency_ms_mean": 8009,
+  "latency_ms_median": 7807,
+  "latency_ms_p90": 9295,
+  "mismatch_examples": [
+    {
+      "id": "clean_0000",
+      "product": {
+        "company": "BOOK TAK (TAMAN DAYA) SDN BHD",
+        "date": "25/12/2018",
+        "address": "BOOK TA -K (TAMAN DAYA) SDN 8HD 789 7-W NO.S? $5,57 & 59, JALAN SAGU 18, TAMAN DAYA 81100 JOHOR BAHRU. JOHOR.",
+        "total": "9.00"
+      },
+      "harness": {
+        "company": "BOOK TAK (TAMAN DAYA) SDN BHD",
+        "date": "25/12/2018",
+        "address": "tan woon yann BOOK TA -K (TAMAN DAYA) SDN BHD 78941 7-W NO.5? 55,57 & 59, JALAN SAGU 18,",
+        "total": "9.00"
+      }
+    },
+    {
+      "id": "clean_0002",
+      "product": {
+        "company": "MR D.I.Y. (JOHOR) SDN.BHD",
+        "date": "12-01-19",
+        "address": "MR O.1.\u00a5. (JOHOR) SDN BHD (CO.REG :933109-x) LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (MR DIY TESCO TERBAU)",
+        "total": "RM 33.92"
+      },
+      "harness": {
+        "company": "MR D.I.Y. (JOHOR) SDN.BHD",
+        "date": "12-01-19",
+        "address": "MR O.1.\u00a5. (JOHOR) SDN BHD (CO.REG :933109-x) LOT 1851-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG , 43300 SERI KEMBANGAN, SELANGOR (MR DIY TESCO TERBAU)",
+        "total": "RM 33.92"
+      }
+    },
+    {
+      "id": "clean_0003",
+      "product": {
+        "company": "YONGFATT ENTERPRISE",
+        "date": "25/12/2018",
+        "address": "tan woon yann YONGFATT ENTERPRISE (.3M0517726) NO 122.124. JALAN DEDAP 13. 81100 JOHOR BAHRU TEL 07-3523888",
+        "total": "80.91"
+      },
+      "harness": {
+        "company": "YONGFATT ENTERPRISE",
+        "date": "25/12/2018",
+        "address": "tan woon yann YONGFATT ENTERPRISE (JM0517726) NO.122.124. JALAN DEDAP 13. 81100 JOHOR BAHRU TEL 67-3523888",
+        "total": "80.91"
+      }
+    },
+    {
+      "id": "clean_0004",
+      "product": {
+        "company": "KAWASAN PERINDUSTRIAN BALAKONG, 4300 SER KEMBANGAN, SELANGOR",
+        "date": "TESO PUTRA NILAI",
+        "address": "MR O.T.Y. (HM) SON BHD (CO.REG : 86Q67)-D) LOT i@5)-A & 1Q51-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (TESCO PUTRA NILAL)",
+        "total": "RM 30.91"
+      },
+      "harness": {
+        "company": "KAWASAN PERINDUSTRIAN BALAKONG, 4300 SER KEMBANGAN, SELANGOR",
+        "date": "TESO PUTRA NILAI",
+        "address": "UR O.T.Y. CM) SON BHD (COREG : 86Q67)-D) {OT 1251-A & 1851-B, JALAN KPB 6, KAWASAN PERINDUSTRIAN BALAKONG, 43300 SERI KEMBANGAN, SELANGOR (TESCO PUTRA NILAI)",
+        "total": "RM 30.91"
+      }
+    },
+    {
+      "id": "clean_0006",
+      "product": {
+        "company": "SOON HUAT MACHINERY ENTERPRISE",
+        "date": "11/01/2019",
+        "address": "SOON HUAT MACHINERY ENTERPRISE (JM0352019-K) NO.53 JALAN PUTRA 1, TAMAN SRI PUTRA, 81200 JOHOR BAHRU JOHOR",
+        "total": "327.00"
+      },
+      "harness": {
+        "company": "SOON HUAT MACHINERY ENTERPRISE",
+        "date": "11/01/2019",
+        "address": "SOON HUAT MACHINERY ENTERPRISE (JIM0352019-K) NO.53 JALAN PUTRA 1, TAMAN SRI PUTRA, 81200 JOHOR BAHRU JOHOR",
+        "total": "327.00"
+      }
+    }
+  ]
+}

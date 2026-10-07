@@ -1,0 +1,19 @@
+{
+  "engine": "receipt_pipeline:hybrid_2p2b",
+  "n_examples": 100,
+  "field_f1": 0.6027742749054225,
+  "field_precision": 0.6081424936386769,
+  "field_recall": 0.5975,
+  "schema_valid_rate": 0.93,
+  "pipeline_schema_valid_rate": 0.93,
+  "anls_mean": 0.6723947775554815,
+  "exact_json_all_fields": 0.17,
+  "avg_latency_ms": 8009.005405902863,
+  "per_field_hit_rate": {
+    "company": 0.49,
+    "date": 0.77,
+    "address": 0.37,
+    "total": 0.76
+  },
+  "errors": 0
+}

@@ -1,0 +1,35 @@
+{
+  "stage": "v2-product-hybrid_2p2b-shipped-path",
+  "n_paired": 100,
+  "f1_product": 0.6028,
+  "f1_base_zero_shot": 0.5357,
+  "paired_doc_wins_product": 32,
+  "paired_doc_losses_product": 7,
+  "paired_doc_ties": 61,
+  "address_sign_test_p": 0.0001,
+  "address_discordants": {
+    "product_only_hit": 31,
+    "base_only_hit": 7
+  },
+  "address_product": {
+    "hit_rate": 0.37,
+    "mean_cer": 0.6282
+  },
+  "address_base": {
+    "hit_rate": 0.13,
+    "mean_cer": 0.4763
+  },
+  "latency_ms_product": 8009.0,
+  "errors_product": 0,
+  "criteria": {
+    "address_hit_ge_0.50": false,
+    "f1_ge_0.60": true,
+    "paired_win_vs_base": true
+  },
+  "bars": {
+    "address_hit": 0.5,
+    "f1": 0.6
+  },
+  "decision": "no_ship",
+  "parity_note": "product-vs-harness per-doc match 33/100 (sanitize_fields alters strings); SCORES transfer and slightly exceed harness (0.6028 vs 0.5985). Missing pytesseract in venv_mlx initially zeroed product address (caught by parity runner)."
+}
