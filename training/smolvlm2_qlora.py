@@ -102,6 +102,14 @@ def main():
     ap.add_argument("--accum", type=int, default=8)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--lora-r", type=int, default=16)
+    ap.add_argument("--vision-lora", action="store_true",
+                    help="Extend LoRA targets to the SigLIP vision tower "
+                         "(out_proj/fc1/fc2; q/k/v already match vision by "
+                         "suffix). The genuinely untried capacity for small "
+                         "glyph reading on this track.")
+    ap.add_argument("--train-projector", action="store_true",
+                    help="Unfreeze the multi-modal projector (tiny, standard "
+                         "LLaVA practice) alongside LoRA.")
     ap.add_argument("--eval-every", type=int, default=250)
     ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
@@ -173,13 +181,41 @@ def main():
         logger.warning("grad-ckpt not enabled: %s", e)
 
     from peft import LoraConfig
+    targets = ["q_proj", "k_proj", "v_proj", "o_proj",
+               "gate_proj", "up_proj", "down_proj"]
+    if args.vision_lora:
+        # SigLIP tower names in transformers; language has no fc/out_proj
+        # so these suffixes only match vision (q/k/v already match both).
+        targets += ["out_proj", "fc1", "fc2"]
     peft_cfg = LoraConfig(
         r=args.lora_r, lora_alpha=args.lora_r * 2, lora_dropout=0.05,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                        "gate_proj", "up_proj", "down_proj"],
+        target_modules=targets,
         task_type="CAUSAL_LM",
     )
-    logger.info("LoRA r=%d on %s", args.lora_r, peft_cfg.target_modules)
+    logger.info("LoRA r=%d vision_lora=%s on %s",
+                args.lora_r, args.vision_lora, peft_cfg.target_modules)
+    if args.train_projector:
+        # unfreeze the (tiny) cross-modal projector before Trainer init so
+        # the optimizer picks it up; candidates cover naming variants.
+        n_proj = 0
+        seen = set()
+        for mod_name in ("multi_modal_projector", "mm_projector", "projector",
+                         "connector", "aligner"):
+            mod = model
+            try:
+                for part in mod_name.split("."):
+                    mod = getattr(mod, part)
+            except AttributeError:
+                continue
+            if id(mod) in seen:
+                continue
+            seen.add(id(mod))
+            for p in mod.parameters():
+                if not p.requires_grad:
+                    p.requires_grad = True
+                    n_proj += p.numel()
+        logger.info("Unfroze projector modules, trainable projector params: %d",
+                    n_proj)
     from trl import SFTConfig, SFTTrainer
     from transformers.trainer_callback import TrainerCallback
 
@@ -245,6 +281,19 @@ def main():
         callbacks=[HubPushCallback(args.hub_id, token, processor)],
     )
     trainer.model.print_trainable_parameters()
+    # proof-of-coverage: list trainable params touching vision/projector
+    try:
+        vis = [n for n, p in trainer.model.named_parameters()
+               if p.requires_grad and any(k in n for k in
+                   ("vision", "visual", "projector", "connector", "aligner",
+                    "fc1", "fc2", "out_proj"))]
+        logger.info("Trainable vision/projector params: %d tensors, %d params",
+                    len(vis), sum(trainer.model.get_parameter(n).numel()
+                                  for n in vis))
+        for n in vis[:10]:
+            logger.info("  adapted: %s", n)
+    except Exception as e:
+        logger.warning("vision coverage audit failed (non-fatal): %s", e)
 
     # --- Resume from latest checkpoint (local, else hub) ---
     resume_checkpoint = None
