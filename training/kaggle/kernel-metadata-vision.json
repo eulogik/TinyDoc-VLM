@@ -1,5 +1,5 @@
 {
-  "id": "eulogikdevelopers/smolvlm2-tinydoc-vision",
+  "id": "eulogikdevelopers/smolvlm2-tinydoc-vision-qlora",
   "title": "SmolVLM2 TinyDoc Vision QLoRA",
   "code_file": "kaggle_smolvlm2_vision.ipynb",
   "language": "python",
