@@ -31,6 +31,55 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+# Frozen rule F3 (val-40 selected 2026-10-05/06: 20/40 address hits vs VLM
+# ~6/40; test 36/100): tesseract PSM-6 lines around the first 5-digit
+# (Malaysian) postcode line, -4/+1 window; keep the VLM address iff its
+# normalized form appears inside the normalized window, else the window.
+# Single source of truth for the product path AND the phase-0 harness
+# (run_hybrid_eval.py imports these; see tests/test_hybrid_parity.py).
+POSTCODE_RE = re.compile(r"\b\d{5}\b")
+F3_WINDOW_BEFORE = 4
+F3_WINDOW_AFTER = 1
+F3_PSM_CONFIG = "--psm 6"
+
+
+def tesseract_psm6_lines(image_path: str) -> List[str]:
+    """OCR text lines via tesseract PSM-6 (layout-faithful block mode).
+
+    Same engine + config as the validated harness path (tesseract CLI PSM-6);
+    pytesseract binding only. Returns [] when OCR is unavailable.
+    """
+    try:
+        import pytesseract
+        from PIL import Image
+    except ImportError:
+        return []
+    try:
+        text = pytesseract.image_to_string(
+            Image.open(image_path), config=F3_PSM_CONFIG)
+    except Exception:
+        return []
+    return [ln.strip() for ln in text.splitlines() if ln.strip()]
+
+
+def ocr_address_window(lines: List[str]) -> str:
+    """Pure F3 window: lines[max(0,i-4)..i+1] around first postcode line."""
+    idx = next((i for i, ln in enumerate(lines)
+                if POSTCODE_RE.search(ln)), None)
+    if idx is None:
+        return ""
+    return " ".join(lines[max(0, idx - F3_WINDOW_BEFORE):idx + F3_WINDOW_AFTER + 1])
+
+
+def fuse_address(vlm_address: str, window: str) -> str:
+    """Pure F3 keep-rule: VLM iff norm(VLM) is a non-empty substring of
+    norm(window), else the window."""
+    v = _norm(vlm_address)
+    if v and v in _norm(window):
+        return (vlm_address or "").strip()
+    return window
+
+
 _RAPIDOCR_CACHE: Dict[str, Any] = {"engine": None, "failed": False}
 
 

@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 import time
@@ -27,8 +26,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT / "evaluation" / "phase0"))
+sys.path.insert(0, str(ROOT / "sdk"))
 
-from metrics import FIELDS, field_match, macro_prf, normalize_text
+from metrics import FIELDS, field_match, macro_prf
+from tinydoc.evidence import fuse_address as hybrid_address
+from tinydoc.evidence import ocr_address_window as ocr_window
 
 RESULTS = ROOT / "evaluation/phase0/results"
 RULE = "F3: tesseract psm-6, postcode window -4/+1, keep VLM iff norm(VLM) in norm(window)"
@@ -42,18 +44,8 @@ def ocr_lines(image_path: str) -> list[str]:
     return [l.strip() for l in out.stdout.splitlines() if l.strip()]
 
 
-def ocr_window(lines: list[str]) -> str:
-    idx = next((i for i, l in enumerate(lines) if re.search(r"\b\d{5}\b", l)), None)
-    if idx is None:
-        return ""
-    return " ".join(lines[max(0, idx - 4):idx + 2])
-
-
-def hybrid_address(vlm_addr: str, window: str) -> str:
-    v = normalize_text(vlm_addr)
-    if v and v in normalize_text(window):
-        return vlm_addr.strip()
-    return window
+# NOTE: ocr_window / hybrid_address now imported from tinydoc.evidence
+# (single source of truth with the product path); definitions removed here.
 
 
 def main() -> int:
