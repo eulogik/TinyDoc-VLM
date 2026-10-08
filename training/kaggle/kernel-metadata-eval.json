@@ -1,0 +1,23 @@
+{
+  "id": "eulogikdevelopers/smolvlm2-vision-eval",
+  "title": "SmolVLM2 Vision Eval",
+  "code_file": "kaggle_smolvlm2_eval.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": "true",
+  "machine_shape": "NvidiaTeslaT4",
+  "enable_internet": true,
+  "competition_sources": [],
+  "dataset_sources": [
+    "eulogikdevelopers/tinydoc-clean-eval"
+  ],
+  "kernel_sources": [],
+  "model_sources": [],
+  "secrets": [
+    {
+      "name": "HF_TOKEN",
+      "source": "Secrets"
+    }
+  ]
+}
