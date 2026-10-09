@@ -43,6 +43,11 @@ def main() -> int:
     ap.add_argument("--out-suffix", default="_kv300val")
     ap.add_argument("--max-tokens", type=int, default=256)
     ap.add_argument("--tag-prefix", default="smolvlm2-2.2b")
+    ap.add_argument("--doc-timeout", type=int, default=420,
+                    help="seconds per doc before recording a timeout error row")
+    ap.add_argument("--max-consec-timeouts", type=int, default=3,
+                    help="abort the run after this many consecutive timeouts "
+                         "(bounds damage from hung generation)")
     args = ap.parse_args()
 
     import torch
@@ -75,27 +80,60 @@ def main() -> int:
     items = items[args.offset:(args.offset + args.limit) if args.limit else None]
 
     preds, scores = [], []
+    import concurrent.futures as _fut
+
+    def _run_one(item):
+        t0 = time.time()
+        try:
+            img = Image.open(item["image_path"]).convert("RGB")
+            inputs = processor(text=[prompt], images=[[img]],
+                               return_tensors="pt")
+            inputs = {k: (v.to(device) if hasattr(v, "to") else v)
+                      for k, v in inputs.items() if k != "image_token_id"}
+            out = model.generate(**inputs, max_new_tokens=args.max_tokens,
+                                 do_sample=False, use_cache=True)
+            n_in = inputs["input_ids"].shape[-1]
+            tok = getattr(processor, "tokenizer", processor)
+            raw = tok.decode(out[0][n_in:], skip_special_tokens=True).strip()
+            obj = _extract_json(raw) or {}
+            pred = {f: str(obj.get(f, "") or "").strip() for f in FIELDS}
+            error = ""
+        except Exception as e:  # noqa: BLE001
+            raw, pred, error = "", {f: "" for f in FIELDS}, \
+                f"{type(e).__name__}: {e}"
+        lat = (time.time() - t0) * 1000
+        return raw, pred, error, lat
+
+    pool = _fut.ThreadPoolExecutor(max_workers=1)
+    consec_timeouts = 0
     with torch.no_grad():
         for i, item in enumerate(items):
-            t0 = time.time()
+            fut = pool.submit(_run_one, item)
             try:
-                img = Image.open(item["image_path"]).convert("RGB")
-                inputs = processor(text=[prompt], images=[[img]],
-                                   return_tensors="pt")
-                inputs = {k: (v.to(device) if hasattr(v, "to") else v)
-                          for k, v in inputs.items() if k != "image_token_id"}
-                out = model.generate(**inputs, max_new_tokens=args.max_tokens,
-                                     do_sample=False, use_cache=True)
-                n_in = inputs["input_ids"].shape[-1]
-                tok = getattr(processor, "tokenizer", processor)
-                raw = tok.decode(out[0][n_in:], skip_special_tokens=True).strip()
-                obj = _extract_json(raw) or {}
-                pred = {f: str(obj.get(f, "") or "").strip() for f in FIELDS}
-                error = ""
-            except Exception as e:  # noqa: BLE001
-                raw, pred, error = "", {f: "" for f in FIELDS}, \
-                    f"{type(e).__name__}: {e}"
-            lat = (time.time() - t0) * 1000
+                raw, pred, error, lat = fut.result(timeout=args.doc_timeout)
+                consec_timeouts = 0
+            except _fut.TimeoutError:
+                consec_timeouts += 1
+                raw, pred = "", {f: "" for f in FIELDS}
+                error = f"TimeoutError: generate exceeded {args.doc_timeout}s"
+                lat = args.doc_timeout * 1000.0
+                print(f"  [{i + 1}/{len(items)}] TIMEOUT "
+                      f"({consec_timeouts} consecutive)", flush=True)
+                if consec_timeouts >= args.max_consec_timeouts:
+                    print("  aborting run: too many consecutive timeouts",
+                          flush=True)
+                    preds.append({"id": item.get("id"),
+                                  "image_path": item["image_path"],
+                                  "pred": pred,
+                                  "gold": {f: item["gold"].get(f, "")
+                                           for f in FIELDS},
+                                  "latency_ms": lat, "raw": "",
+                                  "error": error + " (run aborted)",
+                                  "score": score_example(
+                                      pred, {f: item["gold"].get(f, "")
+                                             for f in FIELDS})})
+                    scores.append(preds[-1]["score"])
+                    break
             sc = score_example(pred, gold := {f: item["gold"].get(f, "") for f in FIELDS})
             preds.append({"id": item.get("id"), "image_path": item["image_path"],
                           "pred": pred, "gold": gold, "latency_ms": lat,
@@ -106,6 +144,7 @@ def main() -> int:
                 print(f"  [{i + 1}/{len(items)}] f1={agg['field_f1']:.3f}",
                       flush=True)
 
+    pool.shutdown(wait=False, cancel_futures=True)
     agg = macro_prf(scores)
     out = {
         "engine": f"{args.tag_prefix}_{tag}{args.out_suffix}",
