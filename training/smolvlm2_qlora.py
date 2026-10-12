@@ -37,7 +37,8 @@ logger = logging.getLogger(__name__)
 
 MODEL_ID = "HuggingFaceTB/SmolVLM2-2.2B-Instruct"  # fallback only
 MAX_TARGET_CHARS = 1500  # drop pathological long targets (table-JSON dumps)
-EVAL_SPLIT = 500SEED = 42
+EVAL_SPLIT = 500
+SEED = 42
 
 
 def fetch_bundle(data_repo: str, token: str, workdir: Path) -> Path:
@@ -115,7 +116,8 @@ def main():
                          "90-step default suits 300+ step runs)")
     ap.add_argument("--eval-split", type=int, default=EVAL_SPLIT,
                     help="rows held out from the bundle for train-time eval "
-                         "(from train data only; frozen val/test untouched)")    ap.add_argument("--dry-run", action="store_true",
+                         "(from train data only; frozen val/test untouched)")
+    ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
     ap.add_argument("--model-path", default=None,
                     help="Local path to SmolVLM2 model (Kaggle dataset). "
