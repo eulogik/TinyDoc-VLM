@@ -37,8 +37,7 @@ logger = logging.getLogger(__name__)
 
 MODEL_ID = "HuggingFaceTB/SmolVLM2-2.2B-Instruct"  # fallback only
 MAX_TARGET_CHARS = 1500  # drop pathological long targets (table-JSON dumps)
-EVAL_SPLIT = 500
-SEED = 42
+EVAL_SPLIT = 500SEED = 42
 
 
 def fetch_bundle(data_repo: str, token: str, workdir: Path) -> Path:
@@ -111,7 +110,12 @@ def main():
                     help="Unfreeze the multi-modal projector (tiny, standard "
                          "LLaVA practice) alongside LoRA.")
     ap.add_argument("--eval-every", type=int, default=250)
-    ap.add_argument("--dry-run", action="store_true",
+    ap.add_argument("--warmup-steps", type=int, default=90,
+                    help="LR warmup steps (scale down for short runs; "
+                         "90-step default suits 300+ step runs)")
+    ap.add_argument("--eval-split", type=int, default=EVAL_SPLIT,
+                    help="rows held out from the bundle for train-time eval "
+                         "(from train data only; frozen val/test untouched)")    ap.add_argument("--dry-run", action="store_true",
                     help="Build dataset + print stats, skip training")
     ap.add_argument("--model-path", default=None,
                     help="Local path to SmolVLM2 model (Kaggle dataset). "
@@ -143,7 +147,8 @@ def main():
 
     from datasets import Dataset
     # Hold out eval split BEFORE mapping (keep raw rows for image loading)
-    eval_rows, train_rows = rows[:EVAL_SPLIT], rows[EVAL_SPLIT:]
+    eval_rows, train_rows = rows[:args.eval_split], rows[args.eval_split:]
+    assert train_rows, f"eval-split {args.eval_split} consumed all {len(rows)} rows"
 
     def gen(split_rows):
         for r in split_rows:
@@ -195,26 +200,25 @@ def main():
     logger.info("LoRA r=%d vision_lora=%s on %s",
                 args.lora_r, args.vision_lora, peft_cfg.target_modules)
     if args.train_projector:
-        # unfreeze the (tiny) cross-modal projector before Trainer init so
-        # the optimizer picks it up; candidates cover naming variants.
+        # unfreeze the cross-modal connector by module-name search (robust
+        # to wrapper nesting: SmolVLM keeps it at *.connector, not top
+        # level). Must run before Trainer init for optimizer pickup.
         n_proj = 0
-        seen = set()
-        for mod_name in ("multi_modal_projector", "mm_projector", "projector",
-                         "connector", "aligner"):
-            mod = model
-            try:
-                for part in mod_name.split("."):
-                    mod = getattr(mod, part)
-            except AttributeError:
+        for mod_name, mod in model.named_modules():
+            low = mod_name.lower()
+            if not any(k in low for k in
+                       ("connector", "projector", "aligner", "modality_projection")):
                 continue
-            if id(mod) in seen:
+            if "lora_" in low:
                 continue
-            seen.add(id(mod))
-            for p in mod.parameters():
+            n_mod = sum(p.numel() for p in mod.parameters(recurse=False))
+            if n_mod == 0:
+                continue
+            for p in mod.parameters(recurse=False):
                 if not p.requires_grad:
                     p.requires_grad = True
-                    n_proj += p.numel()
-        logger.info("Unfroze projector modules, trainable projector params: %d",
+            n_proj += n_mod
+        logger.info("Unfroze connector modules, trainable projector params: %d",
                     n_proj)
     from trl import SFTConfig, SFTTrainer
     from transformers.trainer_callback import TrainerCallback
@@ -254,7 +258,7 @@ def main():
         gradient_checkpointing=True,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_steps=90,
+        warmup_steps=args.warmup_steps,
         logging_steps=25,
         eval_strategy="steps",
         eval_steps=args.eval_every,
