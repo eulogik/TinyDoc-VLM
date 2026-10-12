@@ -130,7 +130,10 @@ def main():
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(message)s")
     token = os.environ.get("HF_TOKEN")
-    assert token, "HF_TOKEN env required"
+    if not token:
+        logger.warning("HF_TOKEN env missing: Hub checkpoint sync DISABLED; "
+                       "adapters survive only in kernel output (download via "
+                       "`kaggle kernels output`). Set the HF_TOKEN secret to sync.")
 
     import torch
     from PIL import Image
