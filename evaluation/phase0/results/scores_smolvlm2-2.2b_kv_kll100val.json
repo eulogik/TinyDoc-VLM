@@ -1,0 +1,16 @@
+{
+  "engine": "smolvlm2-2.2b_kv_kll100val",
+  "adapter": "/Volumes/KIOXIA 1TB/tinydoc/adapters/kaggle_lowlr/checkpoint-100",
+  "n_examples": 40,
+  "field_f1": 0.4276729559748428,
+  "schema_valid_rate": 0.95,
+  "anls_mean": 0.6328172633659204,
+  "avg_latency_ms": 9633.760088682175,
+  "per_field_hit_rate": {
+    "company": 0.4,
+    "date": 0.625,
+    "address": 0.05,
+    "total": 0.625
+  },
+  "errors": 0
+}
