@@ -51,6 +51,17 @@ for field in result.field_results:
     print(field.name, field.value, field.evidence)
 ```
 
+## Trust layer status
+
+- **Evidence is OCR-span**, not VLM-predicted boxes. A 100-box probe measured
+  hit@0.5 of **0.04–0.20** against a 0.70 gate, so boxes are not claimed yet.
+- **Confidence is field-level calibrated only.** Evidence-on field ECE is
+  **0.115–0.135** raw and **0.005–0.014** after document-grouped isotonic
+  cross-validation. Document-level exact-4 confidence is **not** calibrated
+  (ECE 0.09–0.10); do not treat it as a probability.
+- Grounding and calibration artifacts are linked from the
+  [v3 plan](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
+
 ## Why this card, not a live demo?
 
 The previous Space loaded `eulogik/TinyDoc-VLM-256M`, which measured **0.0% on
