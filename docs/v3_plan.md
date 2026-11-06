@@ -312,14 +312,25 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 - **Fast tier: Qwen3-VL-2B-Instruct** — measured **0.9200 F1 / 0.84 address / 1.00 schema / 7.0 s**; 1.9 GB Q4; native dynamic resolution, 2D grounding, 262k context. Use the **`-instruct`** tag: the plain `qwen3-vl:2b` tag is a thinking variant that spent all 512 tokens reasoning and returned empty content under the current token cap.
 - **Fallback if both miss a new vertical: Qwen3-VL-4B** (vendor-reported DocVQA 95.3) — check peak memory on the 16 GB host before enabling it.
 - Runtime: Ollama Q4 for the pilot; MLX 4-bit for the Mac product; GGUF/llama.cpp for CPU later.
-- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated), PDF/multi-page.
+- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated). PDF/multi-page is **not shipped**: the invoice probe is page-1 only.
 - **No model training.** The base is the model; the product is the trust layer.
 
-**Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today.
+**Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today. The invoice probe now shows the residual is **document consistency, flags, amount exactness, and multipage**, not basic layout transfer.
 
 ### v3.1 — “TinyDoc-2B” grounded LoRA (4–6 weeks, conditional)
 
-**Trigger:** v3.0 passes the product gates but leaves a measured residual that prompting/OCR fusion cannot close — e.g., address < 0.85, invoice fields < 0.80, or no bbox grounding.
+**Trigger (now measured):** v3.0 passes the receipt gate but leaves a document-level residual that prompting/OCR fusion has not closed:
+
+| Residual | Measured |
+|---|---|
+| Invoice key-header accuracy | 90.6% (gate met) |
+| Invoice fully correct | **55.8%** — 44% need review |
+| Invoice flags | **0/7** inconsistent/multi-invoice; 2/172 false alarms |
+| Invoice multipage | 61.1% key-header, **0% fully correct** (page 1 only) |
+| Invoice amount exactness | currency 83.8%, subtotal 84.4%, tax 87.2%, total 87.7% |
+| VLM boxes | hit@0.5 0.04–0.20 vs 0.70 gate |
+
+So the v3.1 target is **document consistency + amount exactness + boxes**, not re-teaching receipt layout. Do not train on the benchmark answers; build a separate 10k–20k grounded set and a 200-doc multi-vertical val. If only synthetic invoices are available (CORD images absent, DocILE gated), run a **small** synthetic-only adapter as a controlled experiment and kill it if it does not transfer to a held-out real/synthetic mix.
 
 **Definition:** Qwen3-VL-2B + LoRA on ~10k–20k grounded extraction examples, released as an adapter. This is the “our model” artifact: same base, but specialized to output schema’d fields with boxes and abstention.
 
