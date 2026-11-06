@@ -132,6 +132,10 @@ def test_invoice_probe_matches_artifacts():
     assert summary["key_header_scored"] == invoice["results"]["key_header_scored"]
     assert summary["fully_correct"] == invoice["results"]["fully_correct"]
     assert summary["parse_errors"] == 0
+    key_ci = invoice["results"]["key_header_accuracy_ci95"]
+    full_ci = invoice["results"]["fully_correct_rate_ci95"]
+    assert key_ci[0] <= summary["key_header_accuracy"] <= key_ci[1]
+    assert full_ci[0] <= summary["fully_correct_rate"] <= full_ci[1]
 
     scores = json.loads((ROOT / artifacts["scores"]).read_text())
     assert len(scores["documents"]) == invoice["n_docs"]

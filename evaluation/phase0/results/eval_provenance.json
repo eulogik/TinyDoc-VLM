@@ -341,7 +341,15 @@
             "key_header_accuracy": 0.9032,
             "fully_correct_rate": 0.5
           }
-        }
+        },
+        "key_header_accuracy_ci95": [
+          0.885531,
+          0.925714
+        ],
+        "fully_correct_rate_ci95": [
+          0.486188,
+          0.629834
+        ]
       },
       "artifacts": {
         "summary": "evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json",

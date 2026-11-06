@@ -8,6 +8,16 @@
   "key_header_scored": 1576,
   "fully_correct": 101,
   "fully_correct_rate": 0.5580110497237569,
+  "ci95": {
+    "key_header_accuracy": [
+      0.8855305466237942,
+      0.9257142857142857
+    ],
+    "fully_correct_rate": [
+      0.4861878453038674,
+      0.6298342541436464
+    ]
+  },
   "per_field": {
     "currency": {
       "correct": 150,

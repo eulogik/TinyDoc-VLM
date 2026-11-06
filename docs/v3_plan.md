@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 116 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 118 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -199,8 +199,8 @@ before the run and not tuned on the answers.
 
 | Metric | Result |
 |---|---:|
-| Key header field accuracy | **90.6%** (1428/1576) — clears the 0.80 field bar |
-| Documents with every key header field right | **55.8%** (101/181) |
+| Key header field accuracy | **90.6%** (1428/1576; 95% CI 88.6–92.6) — clears the 0.80 field bar |
+| Documents with every key header field right | **55.8%** (101/181; 95% CI 48.6–63.0) |
 | Line-item F1, mean | 0.929 (179 docs; 158 with all lines right) |
 | p50 / mean latency | 26.5 s / 28.7 s per doc |
 | Inconsistent invoices flagged | 0 of 5 |

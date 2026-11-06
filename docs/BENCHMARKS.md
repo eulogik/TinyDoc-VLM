@@ -119,8 +119,8 @@ invoices.** The prompt was fixed before the run and not tuned on the answers.
 
 | Metric | Result |
 |---|---:|
-| Key header field accuracy | **90.6%** (1428/1576) |
-| Documents with every key header field right | **55.8%** (101/181) |
+| Key header field accuracy | **90.6%** (1428/1576; 95% CI 88.6–92.6) |
+| Documents with every key header field right | **55.8%** (101/181; 95% CI 48.6–63.0) |
 | Line-item F1, mean | 0.929 (179 docs) |
 | p50 / mean latency | 26.5 s / 28.7 s |
 | Inconsistent invoices flagged | 0 of 5 |

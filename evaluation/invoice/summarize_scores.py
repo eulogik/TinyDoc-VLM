@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import statistics
 from collections import defaultdict
 from pathlib import Path
@@ -31,6 +32,51 @@ KEY_FIELDS = (
     "total",
     "document_type",
 )
+
+
+def _percentile(values: list[float], q: float) -> float:
+    ordered = sorted(values)
+    index = min(max(round(q * (len(ordered) - 1)), 0), len(ordered) - 1)
+    return ordered[index]
+
+
+def bootstrap_ci(docs: list[dict], n_boot: int = 2000, seed: int = 42) -> dict:
+    """Document-level bootstrap for key-header accuracy and fully-correct rate."""
+    per_doc = []
+    for doc in docs:
+        correct = scored = 0
+        for name in KEY_FIELDS:
+            result = (doc.get("fields") or {}).get(name)
+            if result is None:
+                continue
+            scored += 1
+            correct += int(bool(result.get("correct")))
+        per_doc.append((correct, scored, int(bool(doc.get("fully_correct")))))
+    if not per_doc:
+        return {"key_header_accuracy": [0.0, 0.0], "fully_correct_rate": [0.0, 0.0]}
+
+    rng = random.Random(seed)
+    key_samples: list[float] = []
+    full_samples: list[float] = []
+    for _ in range(n_boot):
+        key_correct = key_scored = fully = 0
+        for _ in per_doc:
+            correct, scored, is_full = per_doc[rng.randrange(len(per_doc))]
+            key_correct += correct
+            key_scored += scored
+            fully += is_full
+        key_samples.append(key_correct / key_scored if key_scored else 0.0)
+        full_samples.append(fully / len(per_doc))
+    return {
+        "key_header_accuracy": [
+            _percentile(key_samples, 0.025),
+            _percentile(key_samples, 0.975),
+        ],
+        "fully_correct_rate": [
+            _percentile(full_samples, 0.025),
+            _percentile(full_samples, 0.975),
+        ],
+    }
 
 
 def summarize(scores: dict, rows: list[dict] | None = None) -> dict:
@@ -83,6 +129,7 @@ def summarize(scores: dict, rows: list[dict] | None = None) -> dict:
         "key_header_scored": key_scored,
         "fully_correct": fully_correct,
         "fully_correct_rate": fully_correct / len(docs) if docs else 0.0,
+        "ci95": bootstrap_ci(docs),
         "per_field": dict(sorted(per_field.items())),
         "per_category": dict(sorted(per_category.items())),
         "flags": (scores.get("summary") or {}).get("flags"),

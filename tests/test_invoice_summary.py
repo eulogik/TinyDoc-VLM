@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "evaluation" / "invoice"))
 
-from summarize_scores import summarize
+from summarize_scores import bootstrap_ci, summarize
 
 
 def _doc(doc_id, category, key_hits, fully, line_f1=None):
@@ -59,3 +59,26 @@ def test_summary_without_rows():
     assert out["n_docs"] == 0
     assert out["key_header_accuracy"] == 0.0
     assert "latency_ms" not in out
+
+
+def test_bootstrap_ci_constant_documents():
+    docs = [
+        _doc(f"d{i}", "clean", {"vendor_name": True, "invoice_number": True}, True)
+        for i in range(10)
+    ]
+    ci = bootstrap_ci(docs, n_boot=200)
+    assert ci["key_header_accuracy"] == [1.0, 1.0]
+    assert ci["fully_correct_rate"] == [1.0, 1.0]
+
+
+def test_bootstrap_ci_contains_point_estimate():
+    docs = [
+        _doc("a", "clean", {"vendor_name": True, "invoice_number": True}, True),
+        _doc("b", "photo", {"vendor_name": False, "invoice_number": True}, False),
+        _doc("c", "photo", {"vendor_name": False, "invoice_number": False}, False),
+    ]
+    ci = bootstrap_ci(docs, n_boot=500)
+    low, high = ci["key_header_accuracy"]
+    assert low <= 3 / 6 <= high
+    low, high = ci["fully_correct_rate"]
+    assert low <= 1 / 3 <= high
