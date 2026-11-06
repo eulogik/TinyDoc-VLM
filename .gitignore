@@ -159,3 +159,7 @@ evaluation/data
 # large local dataset drops (keep out of git regardless of type)
 data/datasets/
 
+
+# Invoice probe: local corpus images/manifest live on the external disk
+evaluation/invoice/manifest_v1.jsonl
+evaluation/invoice/rendered/
