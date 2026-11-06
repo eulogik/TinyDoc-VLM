@@ -176,6 +176,50 @@ def main() -> int:
         if acc != 0.0:
             failures.append(f"ocrbench artifact accuracy {acc} != 0.0")
 
+    # Negative probe results are published claims too. Require the artifacts and
+    # check the numbers quoted in README / docs/BENCHMARKS / docs/v3_plan.
+    grounding_claims = [
+        ("qwen2.5vl_3b", "grounding_probe_qwen2.5vl_3b.json", 0.041, 0.04),
+        ("qwen3-vl_2b", "grounding_probe_qwen3-vl_2b-instruct.json", 0.308, 0.20),
+    ]
+    for label, name, mean_iou, hit in grounding_claims:
+        path = RESULTS / name
+        if not path.exists():
+            failures.append(f"grounding probe artifact missing: {name}")
+            continue
+        g = json.loads(path.read_text())
+        ok = (
+            abs(float(g.get("mean_iou", -1)) - mean_iou) <= 5e-4
+            and abs(float(g.get("hit_at_0.5", -1)) - hit) <= 1e-9
+            and g.get("parse_rate") == 1.0
+            and g.get("n") == 100
+        )
+        print(
+            f"claim: grounding {label} mean IoU {g.get('mean_iou'):.3f}, "
+            f"hit@0.5 {g.get('hit_at_0.5'):.2f} (gate 0.70) -> {'PASS' if ok else 'FAIL'}"
+        )
+        if not ok:
+            failures.append(f"grounding probe numbers changed for {label}")
+
+    confidence_claims = [
+        ("qwen2.5vl_3b", "confidence_probe_qwen2.5vl_3b_clean.json", 0.545),
+        ("qwen3-vl_2b", "confidence_probe_qwen3-vl_2b-instruct_clean.json", 0.518),
+    ]
+    for label, name, ece_value in confidence_claims:
+        path = RESULTS / name
+        if not path.exists():
+            failures.append(f"confidence probe artifact missing: {name}")
+            continue
+        c = json.loads(path.read_text())
+        field = c.get("field_level") or {}
+        ok = abs(float(field.get("ece_10bin", -1)) - ece_value) <= 5e-4 and c.get("n_docs") == 100
+        print(
+            f"claim: confidence {label} field ECE {field.get('ece_10bin'):.3f} "
+            f"(uncalibrated) -> {'PASS' if ok else 'FAIL'}"
+        )
+        if not ok:
+            failures.append(f"confidence probe numbers changed for {label}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

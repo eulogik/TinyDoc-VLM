@@ -112,8 +112,10 @@ and prompt-v1.
 
 ## Evidence and honesty
 
-- Evidence kind is always `ocr_span` (Tesseract word boxes), **not** VLM-predicted
-  boxes. Treat it as provenance, not as model grounding.
+- Evidence kind is always `ocr_span` (RapidOCR word boxes), **not** VLM-predicted
+  boxes. Treat it as provenance, not as model grounding. A 100-box probe measured
+  VLM bbox hit@0.5 of **0.20** (2B) and **0.04** (3B), below the 0.70 product gate,
+  so OCR spans remain the shipped path.
 - The schema is packaged (`tinydoc/schemas/sroie_receipt.schema.json`); validation
   uses `jsonschema`.
 - Confidence is currently a heuristic, **not calibrated** (mean 0.4025; ECE 0.52–0.55

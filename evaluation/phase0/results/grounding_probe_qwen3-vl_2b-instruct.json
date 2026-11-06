@@ -1,0 +1,2215 @@
+{
+  "model": "qwen3-vl:2b-instruct",
+  "manifest": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/manifest.jsonl",
+  "n": 100,
+  "parsed": 100,
+  "parse_rate": 1.0,
+  "mean_iou": 0.30759523209936374,
+  "mean_iou_parsed": 0.30759523209936374,
+  "hit_at_0.5": 0.2,
+  "hit_at_0.5_parsed": 0.2,
+  "errors": 0,
+  "p50_latency_ms": 393.67759227752686,
+  "rows": [
+    {
+      "id": "g0001",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the vendor name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>30 20 458 47</box>",
+      "pred": [
+        30.0,
+        20.0,
+        458.0,
+        47.0
+      ],
+      "target": [
+        38.0,
+        20.0,
+        451.0,
+        38.0
+      ],
+      "iou": 0.6433021806853583,
+      "hit_at_0.5": true,
+      "latency_ms": 327.55255699157715,
+      "error": ""
+    },
+    {
+      "id": "g0002",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the invoice number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 48 819 64</box>",
+      "pred": [
+        695.0,
+        48.0,
+        819.0,
+        64.0
+      ],
+      "target": [
+        700.0,
+        53.0,
+        816.0,
+        60.0
+      ],
+      "iou": 0.4092741935483871,
+      "hit_at_0.5": false,
+      "latency_ms": 370.3322410583496,
+      "error": ""
+    },
+    {
+      "id": "g0003",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the invoice date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 62 825 75</box>",
+      "pred": [
+        695.0,
+        62.0,
+        825.0,
+        75.0
+      ],
+      "target": [
+        700.0,
+        68.0,
+        830.0,
+        75.0
+      ],
+      "iou": 0.5072463768115942,
+      "hit_at_0.5": true,
+      "latency_ms": 379.0888786315918,
+      "error": ""
+    },
+    {
+      "id": "g0004",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the due date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 75 838 92</box>",
+      "pred": [
+        695.0,
+        75.0,
+        838.0,
+        92.0
+      ],
+      "target": [
+        700.0,
+        82.0,
+        840.0,
+        90.0
+      ],
+      "iou": 0.4511646914589293,
+      "hit_at_0.5": false,
+      "latency_ms": 367.7818775177002,
+      "error": ""
+    },
+    {
+      "id": "g0005",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the customer name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>38 109 115 125</box>",
+      "pred": [
+        38.0,
+        109.0,
+        115.0,
+        125.0
+      ],
+      "target": [
+        38.0,
+        123.0,
+        111.0,
+        130.0
+      ],
+      "iou": 0.09142141515341265,
+      "hit_at_0.5": false,
+      "latency_ms": 383.9569091796875,
+      "error": ""
+    },
+    {
+      "id": "g0006",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the account number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>555 137 679 149</box>",
+      "pred": [
+        555.0,
+        137.0,
+        679.0,
+        149.0
+      ],
+      "target": [
+        562.0,
+        136.0,
+        671.0,
+        143.0
+      ],
+      "iou": 0.4095178459611772,
+      "hit_at_0.5": false,
+      "latency_ms": 396.7468738555908,
+      "error": ""
+    },
+    {
+      "id": "g0007",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 712 960 730</box>",
+      "pred": [
+        666.0,
+        712.0,
+        960.0,
+        730.0
+      ],
+      "target": [
+        875.0,
+        719.0,
+        928.0,
+        728.0
+      ],
+      "iou": 0.09013605442176871,
+      "hit_at_0.5": false,
+      "latency_ms": 398.46301078796387,
+      "error": ""
+    },
+    {
+      "id": "g0008",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 725 809 742</box>",
+      "pred": [
+        666.0,
+        725.0,
+        809.0,
+        742.0
+      ],
+      "target": [
+        875.0,
+        735.0,
+        920.0,
+        744.0
+      ],
+      "iou": 0.0,
+      "hit_at_0.5": false,
+      "latency_ms": 398.8170623779297,
+      "error": ""
+    },
+    {
+      "id": "g0009",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Point to the box containing the total amount. Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>660 752 964 782</box>",
+      "pred": [
+        660.0,
+        752.0,
+        964.0,
+        782.0
+      ],
+      "target": [
+        875.0,
+        763.0,
+        938.0,
+        772.0
+      ],
+      "iou": 0.062171052631578946,
+      "hit_at_0.5": false,
+      "latency_ms": 427.1230697631836,
+      "error": ""
+    },
+    {
+      "id": "g0010",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Locate the line item for \"Quality-focused bi-directional applicati\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>40 198 275 212</box>",
+      "pred": [
+        40.0,
+        198.0,
+        275.0,
+        212.0
+      ],
+      "target": [
+        38.0,
+        197.0,
+        962.0,
+        216.0
+      ],
+      "iou": 0.18740031897926634,
+      "hit_at_0.5": false,
+      "latency_ms": 414.8368835449219,
+      "error": ""
+    },
+    {
+      "id": "g0011",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Locate the line item for \"Synchronized impactful protocol\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 222 265 235</box>",
+      "pred": [
+        43.0,
+        222.0,
+        265.0,
+        235.0
+      ],
+      "target": [
+        38.0,
+        218.0,
+        962.0,
+        237.0
+      ],
+      "iou": 0.16438824333561175,
+      "hit_at_0.5": false,
+      "latency_ms": 384.6111297607422,
+      "error": ""
+    },
+    {
+      "id": "g0012",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000000.png",
+      "prompt": "Locate the line item for \"Proactive dynamic open system\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 242 225 257</box>",
+      "pred": [
+        43.0,
+        242.0,
+        225.0,
+        257.0
+      ],
+      "target": [
+        38.0,
+        239.0,
+        962.0,
+        258.0
+      ],
+      "iou": 0.15550239234449761,
+      "hit_at_0.5": false,
+      "latency_ms": 384.1578960418701,
+      "error": ""
+    },
+    {
+      "id": "g0013",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the store name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>494 24 994 55</box>",
+      "pred": [
+        494.0,
+        24.0,
+        994.0,
+        55.0
+      ],
+      "target": [
+        500.0,
+        30.0,
+        1000.0,
+        51.0
+      ],
+      "iou": 0.6638935108153078,
+      "hit_at_0.5": true,
+      "latency_ms": 3240.492105484009,
+      "error": ""
+    },
+    {
+      "id": "g0014",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the transaction date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>65 97 225 115</box>",
+      "pred": [
+        65.0,
+        97.0,
+        225.0,
+        115.0
+      ],
+      "target": [
+        67.0,
+        100.0,
+        222.0,
+        110.0
+      ],
+      "iou": 0.5381944444444444,
+      "hit_at_0.5": true,
+      "latency_ms": 377.1252632141113,
+      "error": ""
+    },
+    {
+      "id": "g0015",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the transaction ID? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 117 220 132</box>",
+      "pred": [
+        68.0,
+        117.0,
+        220.0,
+        132.0
+      ],
+      "target": [
+        67.0,
+        121.0,
+        218.0,
+        131.0
+      ],
+      "iou": 0.6550218340611353,
+      "hit_at_0.5": true,
+      "latency_ms": 381.929874420166,
+      "error": ""
+    },
+    {
+      "id": "g0016",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 345 891 367</box>",
+      "pred": [
+        655.0,
+        345.0,
+        891.0,
+        367.0
+      ],
+      "target": [
+        822.0,
+        350.0,
+        896.0,
+        363.0
+      ],
+      "iou": 0.17062963667490966,
+      "hit_at_0.5": false,
+      "latency_ms": 393.9030170440674,
+      "error": ""
+    },
+    {
+      "id": "g0017",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 367 891 388</box>",
+      "pred": [
+        655.0,
+        367.0,
+        891.0,
+        388.0
+      ],
+      "target": [
+        822.0,
+        371.0,
+        893.0,
+        384.0
+      ],
+      "iou": 0.18004817342432758,
+      "hit_at_0.5": false,
+      "latency_ms": 400.14195442199707,
+      "error": ""
+    },
+    {
+      "id": "g0018",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Where is the total amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>634 399 948 425</box>",
+      "pred": [
+        634.0,
+        399.0,
+        948.0,
+        425.0
+      ],
+      "target": [
+        822.0,
+        403.0,
+        920.0,
+        417.0
+      ],
+      "iou": 0.16805487506124447,
+      "hit_at_0.5": false,
+      "latency_ms": 392.28010177612305,
+      "error": ""
+    },
+    {
+      "id": "g0019",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Locate the line item for \"Reduced well-modulated task-force\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 185 380 199</box>",
+      "pred": [
+        68.0,
+        185.0,
+        380.0,
+        199.0
+      ],
+      "target": [
+        56.0,
+        183.0,
+        967.0,
+        206.0
+      ],
+      "iou": 0.2084665680332172,
+      "hit_at_0.5": false,
+      "latency_ms": 415.8599376678467,
+      "error": ""
+    },
+    {
+      "id": "g0020",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Locate the line item for \"Intuitive stable solution\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 208 275 227</box>",
+      "pred": [
+        68.0,
+        208.0,
+        275.0,
+        227.0
+      ],
+      "target": [
+        56.0,
+        209.0,
+        967.0,
+        231.0
+      ],
+      "iou": 0.18400908686848733,
+      "hit_at_0.5": false,
+      "latency_ms": 386.33012771606445,
+      "error": ""
+    },
+    {
+      "id": "g0021",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000001.png",
+      "prompt": "Locate the line item for \"Inverse composite attitude\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 231 305 254</box>",
+      "pred": [
+        68.0,
+        231.0,
+        305.0,
+        254.0
+      ],
+      "target": [
+        56.0,
+        234.0,
+        967.0,
+        257.0
+      ],
+      "iou": 0.21879615952732645,
+      "hit_at_0.5": false,
+      "latency_ms": 384.0792179107666,
+      "error": ""
+    },
+    {
+      "id": "g0022",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000002.png",
+      "prompt": "Where is the date of birth? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 314 484 369</box>",
+      "pred": [
+        351.0,
+        314.0,
+        484.0,
+        369.0
+      ],
+      "target": [
+        360.0,
+        326.0,
+        477.0,
+        352.0
+      ],
+      "iou": 0.41585782638414215,
+      "hit_at_0.5": false,
+      "latency_ms": 3394.603729248047,
+      "error": ""
+    },
+    {
+      "id": "g0023",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000002.png",
+      "prompt": "Where is the ID number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>348 442 484 494</box>",
+      "pred": [
+        348.0,
+        442.0,
+        484.0,
+        494.0
+      ],
+      "target": [
+        360.0,
+        456.0,
+        479.0,
+        481.0
+      ],
+      "iou": 0.4206730769230769,
+      "hit_at_0.5": false,
+      "latency_ms": 394.43302154541016,
+      "error": ""
+    },
+    {
+      "id": "g0024",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000002.png",
+      "prompt": "Where is the department? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>344 569 468 625</box>",
+      "pred": [
+        344.0,
+        569.0,
+        468.0,
+        625.0
+      ],
+      "target": [
+        360.0,
+        585.0,
+        463.0,
+        619.0
+      ],
+      "iou": 0.5043202764976958,
+      "hit_at_0.5": true,
+      "latency_ms": 391.93272590637207,
+      "error": ""
+    },
+    {
+      "id": "g0025",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000002.png",
+      "prompt": "Where is the expiry date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 704 484 752</box>",
+      "pred": [
+        351.0,
+        704.0,
+        484.0,
+        752.0
+      ],
+      "target": [
+        360.0,
+        715.0,
+        479.0,
+        741.0
+      ],
+      "iou": 0.48464912280701755,
+      "hit_at_0.5": false,
+      "latency_ms": 400.7298946380615,
+      "error": ""
+    },
+    {
+      "id": "g0026",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the vendor name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>30 20 164 44</box>",
+      "pred": [
+        30.0,
+        20.0,
+        164.0,
+        44.0
+      ],
+      "target": [
+        38.0,
+        20.0,
+        162.0,
+        35.0
+      ],
+      "iou": 0.5783582089552238,
+      "hit_at_0.5": true,
+      "latency_ms": 3228.9140224456787,
+      "error": ""
+    },
+    {
+      "id": "g0027",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the invoice number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 51 824 65</box>",
+      "pred": [
+        695.0,
+        51.0,
+        824.0,
+        65.0
+      ],
+      "target": [
+        700.0,
+        53.0,
+        822.0,
+        60.0
+      ],
+      "iou": 0.4728682170542636,
+      "hit_at_0.5": false,
+      "latency_ms": 369.88186836242676,
+      "error": ""
+    },
+    {
+      "id": "g0028",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the invoice date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 58 835 72</box>",
+      "pred": [
+        695.0,
+        58.0,
+        835.0,
+        72.0
+      ],
+      "target": [
+        700.0,
+        68.0,
+        830.0,
+        75.0
+      ],
+      "iou": 0.22127659574468084,
+      "hit_at_0.5": false,
+      "latency_ms": 373.7759590148926,
+      "error": ""
+    },
+    {
+      "id": "g0029",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the due date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 79 842 95</box>",
+      "pred": [
+        695.0,
+        79.0,
+        842.0,
+        95.0
+      ],
+      "target": [
+        700.0,
+        82.0,
+        840.0,
+        90.0
+      ],
+      "iou": 0.47619047619047616,
+      "hit_at_0.5": false,
+      "latency_ms": 374.64404106140137,
+      "error": ""
+    },
+    {
+      "id": "g0030",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the customer name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 115 143 135</box>",
+      "pred": [
+        43.0,
+        115.0,
+        143.0,
+        135.0
+      ],
+      "target": [
+        38.0,
+        123.0,
+        141.0,
+        132.0
+      ],
+      "iou": 0.4312958435207824,
+      "hit_at_0.5": false,
+      "latency_ms": 383.1920623779297,
+      "error": ""
+    },
+    {
+      "id": "g0031",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the account number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>558 135 677 148</box>",
+      "pred": [
+        558.0,
+        135.0,
+        677.0,
+        148.0
+      ],
+      "target": [
+        562.0,
+        136.0,
+        672.0,
+        143.0
+      ],
+      "iou": 0.497737556561086,
+      "hit_at_0.5": false,
+      "latency_ms": 400.03299713134766,
+      "error": ""
+    },
+    {
+      "id": "g0032",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 712 958 730</box>",
+      "pred": [
+        666.0,
+        712.0,
+        958.0,
+        730.0
+      ],
+      "target": [
+        875.0,
+        719.0,
+        928.0,
+        728.0
+      ],
+      "iou": 0.09075342465753425,
+      "hit_at_0.5": false,
+      "latency_ms": 394.42896842956543,
+      "error": ""
+    },
+    {
+      "id": "g0033",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 725 958 742</box>",
+      "pred": [
+        666.0,
+        725.0,
+        958.0,
+        742.0
+      ],
+      "target": [
+        875.0,
+        735.0,
+        914.0,
+        744.0
+      ],
+      "iou": 0.05414518048393495,
+      "hit_at_0.5": false,
+      "latency_ms": 393.66817474365234,
+      "error": ""
+    },
+    {
+      "id": "g0034",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Point to the box containing the total amount. Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>660 752 964 782</box>",
+      "pred": [
+        660.0,
+        752.0,
+        964.0,
+        782.0
+      ],
+      "target": [
+        875.0,
+        763.0,
+        938.0,
+        772.0
+      ],
+      "iou": 0.062171052631578946,
+      "hit_at_0.5": false,
+      "latency_ms": 424.84378814697266,
+      "error": ""
+    },
+    {
+      "id": "g0035",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Locate the line item for \"Front-line client-server alliance\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>40 200 214 212</box>",
+      "pred": [
+        40.0,
+        200.0,
+        214.0,
+        212.0
+      ],
+      "target": [
+        38.0,
+        197.0,
+        962.0,
+        216.0
+      ],
+      "iou": 0.11893369788106631,
+      "hit_at_0.5": false,
+      "latency_ms": 411.1952781677246,
+      "error": ""
+    },
+    {
+      "id": "g0036",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000004.png",
+      "prompt": "Locate the line item for \"Grass-roots tertiary process improvement\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 220 275 234</box>",
+      "pred": [
+        43.0,
+        220.0,
+        275.0,
+        234.0
+      ],
+      "target": [
+        38.0,
+        218.0,
+        962.0,
+        237.0
+      ],
+      "iou": 0.1850079744816587,
+      "hit_at_0.5": false,
+      "latency_ms": 409.4042778015137,
+      "error": ""
+    },
+    {
+      "id": "g0037",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the store name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>488 24 962 54</box>",
+      "pred": [
+        488.0,
+        24.0,
+        962.0,
+        54.0
+      ],
+      "target": [
+        500.0,
+        30.0,
+        960.0,
+        51.0
+      ],
+      "iou": 0.679324894514768,
+      "hit_at_0.5": true,
+      "latency_ms": 3225.4598140716553,
+      "error": ""
+    },
+    {
+      "id": "g0038",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the transaction date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>66 97 225 115</box>",
+      "pred": [
+        66.0,
+        97.0,
+        225.0,
+        115.0
+      ],
+      "target": [
+        67.0,
+        100.0,
+        222.0,
+        110.0
+      ],
+      "iou": 0.5415793151642209,
+      "hit_at_0.5": true,
+      "latency_ms": 379.1799545288086,
+      "error": ""
+    },
+    {
+      "id": "g0039",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the transaction ID? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 117 220 130</box>",
+      "pred": [
+        68.0,
+        117.0,
+        220.0,
+        130.0
+      ],
+      "target": [
+        67.0,
+        121.0,
+        218.0,
+        131.0
+      ],
+      "iou": 0.6320224719101124,
+      "hit_at_0.5": true,
+      "latency_ms": 381.27803802490234,
+      "error": ""
+    },
+    {
+      "id": "g0040",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 320 944 342</box>",
+      "pred": [
+        655.0,
+        320.0,
+        944.0,
+        342.0
+      ],
+      "target": [
+        822.0,
+        324.0,
+        904.0,
+        337.0
+      ],
+      "iou": 0.16766278703994966,
+      "hit_at_0.5": false,
+      "latency_ms": 400.62904357910156,
+      "error": ""
+    },
+    {
+      "id": "g0041",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>658 341 891 361</box>",
+      "pred": [
+        658.0,
+        341.0,
+        891.0,
+        361.0
+      ],
+      "target": [
+        822.0,
+        346.0,
+        893.0,
+        359.0
+      ],
+      "iou": 0.1914212548015365,
+      "hit_at_0.5": false,
+      "latency_ms": 393.68700981140137,
+      "error": ""
+    },
+    {
+      "id": "g0042",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the discount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>658 362 880 384</box>",
+      "pred": [
+        658.0,
+        362.0,
+        880.0,
+        384.0
+      ],
+      "target": [
+        822.0,
+        367.0,
+        880.0,
+        380.0
+      ],
+      "iou": 0.15438165438165438,
+      "hit_at_0.5": false,
+      "latency_ms": 390.07115364074707,
+      "error": ""
+    },
+    {
+      "id": "g0043",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Where is the total amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>625 392 952 420</box>",
+      "pred": [
+        625.0,
+        392.0,
+        952.0,
+        420.0
+      ],
+      "target": [
+        822.0,
+        399.0,
+        933.0,
+        413.0
+      ],
+      "iou": 0.16972477064220184,
+      "hit_at_0.5": false,
+      "latency_ms": 391.50118827819824,
+      "error": ""
+    },
+    {
+      "id": "g0044",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Locate the line item for \"quickly society\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>64 154 125 175</box>",
+      "pred": [
+        64.0,
+        154.0,
+        125.0,
+        175.0
+      ],
+      "target": [
+        56.0,
+        183.0,
+        967.0,
+        206.0
+      ],
+      "iou": 0.0,
+      "hit_at_0.5": false,
+      "latency_ms": 407.54222869873047,
+      "error": ""
+    },
+    {
+      "id": "g0045",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Locate the line item for \"way physical\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 208 188 228</box>",
+      "pred": [
+        68.0,
+        208.0,
+        188.0,
+        228.0
+      ],
+      "target": [
+        56.0,
+        209.0,
+        967.0,
+        231.0
+      ],
+      "iou": 0.11308401944251563,
+      "hit_at_0.5": false,
+      "latency_ms": 376.45578384399414,
+      "error": ""
+    },
+    {
+      "id": "g0046",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000005.png",
+      "prompt": "Locate the line item for \"Team-oriented modular solution\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 232 355 255</box>",
+      "pred": [
+        68.0,
+        232.0,
+        355.0,
+        255.0
+      ],
+      "target": [
+        56.0,
+        234.0,
+        967.0,
+        257.0
+      ],
+      "iou": 0.2799739861569192,
+      "hit_at_0.5": false,
+      "latency_ms": 382.52902030944824,
+      "error": ""
+    },
+    {
+      "id": "g0047",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000006.png",
+      "prompt": "Where is the date of birth? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 314 488 374</box>",
+      "pred": [
+        351.0,
+        314.0,
+        488.0,
+        374.0
+      ],
+      "target": [
+        360.0,
+        326.0,
+        477.0,
+        352.0
+      ],
+      "iou": 0.3700729927007299,
+      "hit_at_0.5": false,
+      "latency_ms": 3390.6118869781494,
+      "error": ""
+    },
+    {
+      "id": "g0048",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000006.png",
+      "prompt": "Where is the ID number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>344 438 484 498</box>",
+      "pred": [
+        344.0,
+        438.0,
+        484.0,
+        498.0
+      ],
+      "target": [
+        360.0,
+        456.0,
+        479.0,
+        481.0
+      ],
+      "iou": 0.3541666666666667,
+      "hit_at_0.5": false,
+      "latency_ms": 402.9650688171387,
+      "error": ""
+    },
+    {
+      "id": "g0049",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000006.png",
+      "prompt": "Where is the department? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>344 574 484 634</box>",
+      "pred": [
+        344.0,
+        574.0,
+        484.0,
+        634.0
+      ],
+      "target": [
+        360.0,
+        585.0,
+        474.0,
+        619.0
+      ],
+      "iou": 0.4614285714285714,
+      "hit_at_0.5": false,
+      "latency_ms": 391.326904296875,
+      "error": ""
+    },
+    {
+      "id": "g0050",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000006.png",
+      "prompt": "Where is the expiry date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 706 484 752</box>",
+      "pred": [
+        351.0,
+        706.0,
+        484.0,
+        752.0
+      ],
+      "target": [
+        360.0,
+        715.0,
+        479.0,
+        741.0
+      ],
+      "iou": 0.505720823798627,
+      "hit_at_0.5": true,
+      "latency_ms": 390.18702507019043,
+      "error": ""
+    },
+    {
+      "id": "g0051",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the vendor name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>30 20 398 47</box>",
+      "pred": [
+        30.0,
+        20.0,
+        398.0,
+        47.0
+      ],
+      "target": [
+        38.0,
+        20.0,
+        395.0,
+        38.0
+      ],
+      "iou": 0.6467391304347826,
+      "hit_at_0.5": true,
+      "latency_ms": 3225.416421890259,
+      "error": ""
+    },
+    {
+      "id": "g0052",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the invoice number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 51 825 67</box>",
+      "pred": [
+        695.0,
+        51.0,
+        825.0,
+        67.0
+      ],
+      "target": [
+        700.0,
+        53.0,
+        824.0,
+        60.0
+      ],
+      "iou": 0.4173076923076923,
+      "hit_at_0.5": false,
+      "latency_ms": 387.9859447479248,
+      "error": ""
+    },
+    {
+      "id": "g0053",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the invoice date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>704 58 828 72</box>",
+      "pred": [
+        704.0,
+        58.0,
+        828.0,
+        72.0
+      ],
+      "target": [
+        700.0,
+        68.0,
+        824.0,
+        76.0
+      ],
+      "iou": 0.21352313167259787,
+      "hit_at_0.5": false,
+      "latency_ms": 366.1329746246338,
+      "error": ""
+    },
+    {
+      "id": "g0054",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the due date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 78 838 94</box>",
+      "pred": [
+        695.0,
+        78.0,
+        838.0,
+        94.0
+      ],
+      "target": [
+        700.0,
+        82.0,
+        840.0,
+        90.0
+      ],
+      "iou": 0.4791666666666667,
+      "hit_at_0.5": false,
+      "latency_ms": 368.4539794921875,
+      "error": ""
+    },
+    {
+      "id": "g0055",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the customer name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>36 114 125 135</box>",
+      "pred": [
+        36.0,
+        114.0,
+        125.0,
+        135.0
+      ],
+      "target": [
+        38.0,
+        123.0,
+        125.0,
+        130.0
+      ],
+      "iou": 0.3258426966292135,
+      "hit_at_0.5": false,
+      "latency_ms": 392.60101318359375,
+      "error": ""
+    },
+    {
+      "id": "g0056",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the account number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>555 135 677 148</box>",
+      "pred": [
+        555.0,
+        135.0,
+        677.0,
+        148.0
+      ],
+      "target": [
+        562.0,
+        136.0,
+        672.0,
+        143.0
+      ],
+      "iou": 0.4854981084489281,
+      "hit_at_0.5": false,
+      "latency_ms": 404.3762683868408,
+      "error": ""
+    },
+    {
+      "id": "g0057",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 713 958 730</box>",
+      "pred": [
+        666.0,
+        713.0,
+        958.0,
+        730.0
+      ],
+      "target": [
+        875.0,
+        719.0,
+        928.0,
+        728.0
+      ],
+      "iou": 0.09609186140209508,
+      "hit_at_0.5": false,
+      "latency_ms": 396.6219425201416,
+      "error": ""
+    },
+    {
+      "id": "g0058",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 725 958 745</box>",
+      "pred": [
+        666.0,
+        725.0,
+        958.0,
+        745.0
+      ],
+      "target": [
+        875.0,
+        735.0,
+        928.0,
+        744.0
+      ],
+      "iou": 0.08167808219178083,
+      "hit_at_0.5": false,
+      "latency_ms": 395.9341049194336,
+      "error": ""
+    },
+    {
+      "id": "g0059",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Where is the total amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>661 749 961 778</box>",
+      "pred": [
+        661.0,
+        749.0,
+        961.0,
+        778.0
+      ],
+      "target": [
+        875.0,
+        763.0,
+        938.0,
+        772.0
+      ],
+      "iou": 0.06517241379310344,
+      "hit_at_0.5": false,
+      "latency_ms": 394.5431709289551,
+      "error": ""
+    },
+    {
+      "id": "g0060",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Locate the line item for \"Re-contextualized user-facing Graphical \". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>40 200 348 214</box>",
+      "pred": [
+        40.0,
+        200.0,
+        348.0,
+        214.0
+      ],
+      "target": [
+        38.0,
+        197.0,
+        962.0,
+        216.0
+      ],
+      "iou": 0.24561403508771928,
+      "hit_at_0.5": false,
+      "latency_ms": 422.9168891906738,
+      "error": ""
+    },
+    {
+      "id": "g0061",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Locate the line item for \"Ameliorated clear-thinking implementatio\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 220 280 235</box>",
+      "pred": [
+        43.0,
+        220.0,
+        280.0,
+        235.0
+      ],
+      "target": [
+        38.0,
+        218.0,
+        962.0,
+        237.0
+      ],
+      "iou": 0.20249487354750512,
+      "hit_at_0.5": false,
+      "latency_ms": 411.466121673584,
+      "error": ""
+    },
+    {
+      "id": "g0062",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000008.png",
+      "prompt": "Locate the line item for \"Operative real-time middleware\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 242 214 257</box>",
+      "pred": [
+        43.0,
+        242.0,
+        214.0,
+        257.0
+      ],
+      "target": [
+        38.0,
+        239.0,
+        962.0,
+        258.0
+      ],
+      "iou": 0.1461038961038961,
+      "hit_at_0.5": false,
+      "latency_ms": 379.38666343688965,
+      "error": ""
+    },
+    {
+      "id": "g0063",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the store name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>494 24 724 54</box>",
+      "pred": [
+        494.0,
+        24.0,
+        724.0,
+        54.0
+      ],
+      "target": [
+        500.0,
+        30.0,
+        724.0,
+        47.0
+      ],
+      "iou": 0.5518840579710145,
+      "hit_at_0.5": true,
+      "latency_ms": 3224.062204360962,
+      "error": ""
+    },
+    {
+      "id": "g0064",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the transaction date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>66 97 222 114</box>",
+      "pred": [
+        66.0,
+        97.0,
+        222.0,
+        114.0
+      ],
+      "target": [
+        67.0,
+        100.0,
+        222.0,
+        110.0
+      ],
+      "iou": 0.5844645550527904,
+      "hit_at_0.5": true,
+      "latency_ms": 374.0808963775635,
+      "error": ""
+    },
+    {
+      "id": "g0065",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the transaction ID? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 117 220 134</box>",
+      "pred": [
+        68.0,
+        117.0,
+        220.0,
+        134.0
+      ],
+      "target": [
+        67.0,
+        121.0,
+        218.0,
+        131.0
+      ],
+      "iou": 0.5782575173477256,
+      "hit_at_0.5": true,
+      "latency_ms": 386.63506507873535,
+      "error": ""
+    },
+    {
+      "id": "g0066",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 345 891 367</box>",
+      "pred": [
+        655.0,
+        345.0,
+        891.0,
+        367.0
+      ],
+      "target": [
+        822.0,
+        350.0,
+        896.0,
+        363.0
+      ],
+      "iou": 0.17062963667490966,
+      "hit_at_0.5": false,
+      "latency_ms": 393.2662010192871,
+      "error": ""
+    },
+    {
+      "id": "g0067",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>658 367 882 388</box>",
+      "pred": [
+        658.0,
+        367.0,
+        882.0,
+        388.0
+      ],
+      "target": [
+        822.0,
+        371.0,
+        884.0,
+        384.0
+      ],
+      "iou": 0.1649048625792812,
+      "hit_at_0.5": false,
+      "latency_ms": 391.18003845214844,
+      "error": ""
+    },
+    {
+      "id": "g0068",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Where is the discount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>658 388 758 408</box>",
+      "pred": [
+        658.0,
+        388.0,
+        758.0,
+        408.0
+      ],
+      "target": [
+        822.0,
+        393.0,
+        880.0,
+        406.0
+      ],
+      "iou": 0.0,
+      "hit_at_0.5": false,
+      "latency_ms": 390.35797119140625,
+      "error": ""
+    },
+    {
+      "id": "g0069",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Point to the box containing the total amount. Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>625 420 954 448</box>",
+      "pred": [
+        625.0,
+        420.0,
+        954.0,
+        448.0
+      ],
+      "target": [
+        822.0,
+        424.0,
+        933.0,
+        439.0
+      ],
+      "iou": 0.1807425097698654,
+      "hit_at_0.5": false,
+      "latency_ms": 434.4332218170166,
+      "error": ""
+    },
+    {
+      "id": "g0070",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Locate the line item for \"Vision-oriented real-time project\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 179 351 202</box>",
+      "pred": [
+        68.0,
+        179.0,
+        351.0,
+        202.0
+      ],
+      "target": [
+        56.0,
+        183.0,
+        967.0,
+        206.0
+      ],
+      "iou": 0.2434684174779262,
+      "hit_at_0.5": false,
+      "latency_ms": 414.1979217529297,
+      "error": ""
+    },
+    {
+      "id": "g0071",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Locate the line item for \"Visionary uniform circuit\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 207 351 228</box>",
+      "pred": [
+        68.0,
+        207.0,
+        351.0,
+        228.0
+      ],
+      "target": [
+        56.0,
+        209.0,
+        967.0,
+        231.0
+      ],
+      "iou": 0.2609180900621118,
+      "hit_at_0.5": false,
+      "latency_ms": 378.05914878845215,
+      "error": ""
+    },
+    {
+      "id": "g0072",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000009.png",
+      "prompt": "Locate the line item for \"Cross-group background throughput\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 232 395 255</box>",
+      "pred": [
+        68.0,
+        232.0,
+        395.0,
+        255.0
+      ],
+      "target": [
+        56.0,
+        234.0,
+        967.0,
+        257.0
+      ],
+      "iou": 0.3178136714953487,
+      "hit_at_0.5": false,
+      "latency_ms": 378.2072067260742,
+      "error": ""
+    },
+    {
+      "id": "g0073",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000010.png",
+      "prompt": "Where is the date of birth? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>356 314 481 367</box>",
+      "pred": [
+        356.0,
+        314.0,
+        481.0,
+        367.0
+      ],
+      "target": [
+        360.0,
+        326.0,
+        477.0,
+        352.0
+      ],
+      "iou": 0.45916981132075474,
+      "hit_at_0.5": false,
+      "latency_ms": 3395.2598571777344,
+      "error": ""
+    },
+    {
+      "id": "g0074",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000010.png",
+      "prompt": "Where is the ID number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>348 442 484 494</box>",
+      "pred": [
+        348.0,
+        442.0,
+        484.0,
+        494.0
+      ],
+      "target": [
+        360.0,
+        456.0,
+        479.0,
+        481.0
+      ],
+      "iou": 0.4206730769230769,
+      "hit_at_0.5": false,
+      "latency_ms": 402.28986740112305,
+      "error": ""
+    },
+    {
+      "id": "g0075",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000010.png",
+      "prompt": "Where is the department? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>348 72 500 114</box>",
+      "pred": [
+        348.0,
+        72.0,
+        500.0,
+        114.0
+      ],
+      "target": [
+        360.0,
+        585.0,
+        444.0,
+        611.0
+      ],
+      "iou": 0.0,
+      "hit_at_0.5": false,
+      "latency_ms": 374.4699954986572,
+      "error": ""
+    },
+    {
+      "id": "g0076",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000010.png",
+      "prompt": "Where is the expiry date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 698 484 752</box>",
+      "pred": [
+        351.0,
+        698.0,
+        484.0,
+        752.0
+      ],
+      "target": [
+        360.0,
+        715.0,
+        479.0,
+        741.0
+      ],
+      "iou": 0.43079922027290446,
+      "hit_at_0.5": false,
+      "latency_ms": 389.9540901184082,
+      "error": ""
+    },
+    {
+      "id": "g0077",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the vendor name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>30 20 198 45</box>",
+      "pred": [
+        30.0,
+        20.0,
+        198.0,
+        45.0
+      ],
+      "target": [
+        38.0,
+        20.0,
+        198.0,
+        35.0
+      ],
+      "iou": 0.5714285714285714,
+      "hit_at_0.5": true,
+      "latency_ms": 3220.970869064331,
+      "error": ""
+    },
+    {
+      "id": "g0078",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the invoice number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 52 825 67</box>",
+      "pred": [
+        695.0,
+        52.0,
+        825.0,
+        67.0
+      ],
+      "target": [
+        700.0,
+        53.0,
+        824.0,
+        60.0
+      ],
+      "iou": 0.4451282051282051,
+      "hit_at_0.5": false,
+      "latency_ms": 381.41489028930664,
+      "error": ""
+    },
+    {
+      "id": "g0079",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the invoice date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 57 835 72</box>",
+      "pred": [
+        695.0,
+        57.0,
+        835.0,
+        72.0
+      ],
+      "target": [
+        700.0,
+        68.0,
+        830.0,
+        75.0
+      ],
+      "iou": 0.20883534136546184,
+      "hit_at_0.5": false,
+      "latency_ms": 367.4490451812744,
+      "error": ""
+    },
+    {
+      "id": "g0080",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the due date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>695 77 838 92</box>",
+      "pred": [
+        695.0,
+        77.0,
+        838.0,
+        92.0
+      ],
+      "target": [
+        700.0,
+        82.0,
+        840.0,
+        90.0
+      ],
+      "iou": 0.5108745950948634,
+      "hit_at_0.5": true,
+      "latency_ms": 367.56205558776855,
+      "error": ""
+    },
+    {
+      "id": "g0081",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the customer name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>36 115 170 134</box>",
+      "pred": [
+        36.0,
+        115.0,
+        170.0,
+        134.0
+      ],
+      "target": [
+        38.0,
+        123.0,
+        172.0,
+        130.0
+      ],
+      "iou": 0.3609375,
+      "hit_at_0.5": false,
+      "latency_ms": 379.09722328186035,
+      "error": ""
+    },
+    {
+      "id": "g0082",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the account number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>555 137 677 149</box>",
+      "pred": [
+        555.0,
+        137.0,
+        677.0,
+        149.0
+      ],
+      "target": [
+        562.0,
+        136.0,
+        672.0,
+        143.0
+      ],
+      "iou": 0.4193138500635324,
+      "hit_at_0.5": false,
+      "latency_ms": 400.5389213562012,
+      "error": ""
+    },
+    {
+      "id": "g0083",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 712 960 730</box>",
+      "pred": [
+        666.0,
+        712.0,
+        960.0,
+        730.0
+      ],
+      "target": [
+        875.0,
+        719.0,
+        928.0,
+        728.0
+      ],
+      "iou": 0.09013605442176871,
+      "hit_at_0.5": false,
+      "latency_ms": 394.0849304199219,
+      "error": ""
+    },
+    {
+      "id": "g0084",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 725 960 745</box>",
+      "pred": [
+        666.0,
+        725.0,
+        960.0,
+        745.0
+      ],
+      "target": [
+        875.0,
+        735.0,
+        921.0,
+        744.0
+      ],
+      "iou": 0.07040816326530612,
+      "hit_at_0.5": false,
+      "latency_ms": 398.313045501709,
+      "error": ""
+    },
+    {
+      "id": "g0085",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Locate the total. Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>666 752 960 777</box>",
+      "pred": [
+        666.0,
+        752.0,
+        960.0,
+        777.0
+      ],
+      "target": [
+        875.0,
+        763.0,
+        938.0,
+        772.0
+      ],
+      "iou": 0.07714285714285714,
+      "hit_at_0.5": false,
+      "latency_ms": 394.0708637237549,
+      "error": ""
+    },
+    {
+      "id": "g0086",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Locate the line item for \"Exclusive exuding interface\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>40 200 200 212</box>",
+      "pred": [
+        40.0,
+        200.0,
+        200.0,
+        212.0
+      ],
+      "target": [
+        38.0,
+        197.0,
+        962.0,
+        216.0
+      ],
+      "iou": 0.10936431989063568,
+      "hit_at_0.5": false,
+      "latency_ms": 409.6567630767822,
+      "error": ""
+    },
+    {
+      "id": "g0087",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Locate the line item for \"Team-oriented grid-enabled paradigm\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 220 250 235</box>",
+      "pred": [
+        43.0,
+        220.0,
+        250.0,
+        235.0
+      ],
+      "target": [
+        38.0,
+        218.0,
+        962.0,
+        237.0
+      ],
+      "iou": 0.1768626110731374,
+      "hit_at_0.5": false,
+      "latency_ms": 381.8187713623047,
+      "error": ""
+    },
+    {
+      "id": "g0088",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/invoice_g000012.png",
+      "prompt": "Locate the line item for \"Synergistic uniform ability\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>43 242 240 258</box>",
+      "pred": [
+        43.0,
+        242.0,
+        240.0,
+        258.0
+      ],
+      "target": [
+        38.0,
+        239.0,
+        962.0,
+        258.0
+      ],
+      "iou": 0.17953975848712692,
+      "hit_at_0.5": false,
+      "latency_ms": 391.55101776123047,
+      "error": ""
+    },
+    {
+      "id": "g0089",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the store name? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>494 24 694 52</box>",
+      "pred": [
+        494.0,
+        24.0,
+        694.0,
+        52.0
+      ],
+      "target": [
+        500.0,
+        30.0,
+        693.0,
+        47.0
+      ],
+      "iou": 0.5858928571428571,
+      "hit_at_0.5": true,
+      "latency_ms": 3222.223997116089,
+      "error": ""
+    },
+    {
+      "id": "g0090",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the transaction date? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>66 97 222 114</box>",
+      "pred": [
+        66.0,
+        97.0,
+        222.0,
+        114.0
+      ],
+      "target": [
+        67.0,
+        100.0,
+        222.0,
+        110.0
+      ],
+      "iou": 0.5844645550527904,
+      "hit_at_0.5": true,
+      "latency_ms": 379.472017288208,
+      "error": ""
+    },
+    {
+      "id": "g0091",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the transaction ID? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 117 220 134</box>",
+      "pred": [
+        68.0,
+        117.0,
+        220.0,
+        134.0
+      ],
+      "target": [
+        67.0,
+        121.0,
+        218.0,
+        131.0
+      ],
+      "iou": 0.5782575173477256,
+      "hit_at_0.5": true,
+      "latency_ms": 388.0290985107422,
+      "error": ""
+    },
+    {
+      "id": "g0092",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the subtotal? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 294 891 314</box>",
+      "pred": [
+        655.0,
+        294.0,
+        891.0,
+        314.0
+      ],
+      "target": [
+        822.0,
+        299.0,
+        896.0,
+        311.0
+      ],
+      "iou": 0.17322175732217573,
+      "hit_at_0.5": false,
+      "latency_ms": 402.5530815124512,
+      "error": ""
+    },
+    {
+      "id": "g0093",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the tax amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>655 315 884 335</box>",
+      "pred": [
+        655.0,
+        315.0,
+        884.0,
+        335.0
+      ],
+      "target": [
+        822.0,
+        320.0,
+        884.0,
+        333.0
+      ],
+      "iou": 0.1759825327510917,
+      "hit_at_0.5": false,
+      "latency_ms": 392.711877822876,
+      "error": ""
+    },
+    {
+      "id": "g0094",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Where is the total amount? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>625 344 952 375</box>",
+      "pred": [
+        625.0,
+        344.0,
+        952.0,
+        375.0
+      ],
+      "target": [
+        822.0,
+        351.0,
+        920.0,
+        366.0
+      ],
+      "iou": 0.1450133175495709,
+      "hit_at_0.5": false,
+      "latency_ms": 395.65086364746094,
+      "error": ""
+    },
+    {
+      "id": "g0095",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Locate the line item for \"Configurable object-oriented definition\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 180 412 200</box>",
+      "pred": [
+        68.0,
+        180.0,
+        412.0,
+        200.0
+      ],
+      "target": [
+        56.0,
+        183.0,
+        967.0,
+        206.0
+      ],
+      "iou": 0.26599954514441665,
+      "hit_at_0.5": false,
+      "latency_ms": 405.91907501220703,
+      "error": ""
+    },
+    {
+      "id": "g0096",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Locate the line item for \"Multi-lateral 24hour orchestration\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 207 365 227</box>",
+      "pred": [
+        68.0,
+        207.0,
+        365.0,
+        227.0
+      ],
+      "target": [
+        56.0,
+        209.0,
+        967.0,
+        231.0
+      ],
+      "iou": 0.25906183368869934,
+      "hit_at_0.5": false,
+      "latency_ms": 406.34703636169434,
+      "error": ""
+    },
+    {
+      "id": "g0097",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/receipt_g000013.png",
+      "prompt": "Locate the line item for \"make wide\". Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>68 234 166 252</box>",
+      "pred": [
+        68.0,
+        234.0,
+        166.0,
+        252.0
+      ],
+      "target": [
+        56.0,
+        234.0,
+        967.0,
+        257.0
+      ],
+      "iou": 0.08418842170572233,
+      "hit_at_0.5": false,
+      "latency_ms": 380.7380199432373,
+      "error": ""
+    },
+    {
+      "id": "g0098",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000014.png",
+      "prompt": "Where is the date of birth? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>351 314 484 368</box>",
+      "pred": [
+        351.0,
+        314.0,
+        484.0,
+        368.0
+      ],
+      "target": [
+        360.0,
+        326.0,
+        479.0,
+        352.0
+      ],
+      "iou": 0.43079922027290446,
+      "hit_at_0.5": false,
+      "latency_ms": 3390.5301094055176,
+      "error": ""
+    },
+    {
+      "id": "g0099",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000014.png",
+      "prompt": "Where is the ID number? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>348 442 484 494</box>",
+      "pred": [
+        348.0,
+        442.0,
+        484.0,
+        494.0
+      ],
+      "target": [
+        360.0,
+        456.0,
+        479.0,
+        481.0
+      ],
+      "iou": 0.4206730769230769,
+      "hit_at_0.5": false,
+      "latency_ms": 406.2521457672119,
+      "error": ""
+    },
+    {
+      "id": "g0100",
+      "image_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/images/id_card_g000014.png",
+      "prompt": "Where is the department? Answer with <box>x1 y1 x2 y2</box> coordinates. Coordinates are integers in [0,1000] relative to image width and height. Reply with only <box>x1 y1 x2 y2</box>.",
+      "raw": "<box>348 569 404 625</box>",
+      "pred": [
+        348.0,
+        569.0,
+        404.0,
+        625.0
+      ],
+      "target": [
+        360.0,
+        585.0,
+        393.0,
+        611.0
+      ],
+      "iou": 0.2735969387755102,
+      "hit_at_0.5": false,
+      "latency_ms": 400.27594566345215,
+      "error": ""
+    }
+  ]
+}

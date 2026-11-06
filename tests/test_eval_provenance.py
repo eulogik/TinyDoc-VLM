@@ -38,3 +38,37 @@ def test_provenance_hashes_and_labels():
 
     assert data["multi_vertical"]["invoices"]["status"] == "missing"
     assert (ROOT / data["claim_audit"]).exists()
+
+
+def test_probe_provenance_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    probes = data["probes"]
+
+    grounding = probes["grounding"]
+    assert grounding["status"] == "failed"
+    assert grounding["seed"] == 20261106
+    assert grounding["num_docs"] == 30
+    for name, expected in grounding["results"].items():
+        result = json.loads((ROOT / expected["path"]).read_text())
+        assert result["n"] == expected["n"], name
+        assert abs(result["parse_rate"] - expected["parse_rate"]) < 1e-9, name
+        assert abs(result["mean_iou"] - expected["mean_iou"]) < 5e-4, name
+        assert abs(result["hit_at_0.5"] - expected["hit_at_0.5"]) < 1e-9, name
+        # The product gate is 0.70; these results must not accidentally pass.
+        assert result["hit_at_0.5"] < 0.70, name
+
+    confidence = probes["confidence"]
+    assert confidence["status"] == "uncalibrated"
+    for name, expected in confidence["results"].items():
+        result = json.loads((ROOT / expected["path"]).read_text())
+        assert result["n_docs"] == confidence["n_docs"], name
+        assert result["used_field_confidences"] is False, name
+        field = result["field_level"]
+        assert abs(field["ece_10bin"] - expected["ece_10bin"]) < 5e-4, name
+        assert abs(field["brier"] - expected["brier"]) < 5e-4, name
+        assert abs(field["mean_confidence"] - expected["mean_confidence"]) < 1e-9, name
+        assert abs(field["accuracy"] - expected["accuracy"]) < 1e-9, name
+
+    manifest = Path(grounding.get("manifest_path", ""))
+    if manifest.exists():
+        assert hashlib.sha256(manifest.read_bytes()).hexdigest() == grounding["manifest_sha256"]

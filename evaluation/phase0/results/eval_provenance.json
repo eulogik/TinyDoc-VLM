@@ -90,5 +90,62 @@
       "blocker": "images exist, but no manifest/runner is wired into the phase-0 harness"
     }
   },
-  "claim_audit": "evaluation/phase0/recompute_scores.py"
+  "claim_audit": "evaluation/phase0/recompute_scores.py",
+  "probes": {
+    "grounding": {
+      "date": "2026-11-06",
+      "set": "synthetic_grounding_20261106",
+      "generator": "data/synthetic/gen_grounding_sample.py",
+      "seed": 20261106,
+      "num_docs": 30,
+      "n_box_queries": 196,
+      "n_evaluated": 100,
+      "manifest_bytes": 94220,
+      "manifest_sha256": "89d8690f0f6f03d1a2afe5d075d70a922ebbae09d196867fefaf2ec127e3c928",
+      "manifest_note": "manifest and images live on the external disk / data/training symlink; regenerate with the same seed if absent",
+      "gate": "hit@0.5 >= 0.70 for VLM-predicted boxes",
+      "status": "failed",
+      "results": {
+        "qwen2.5vl_3b": {
+          "path": "evaluation/phase0/results/grounding_probe_qwen2.5vl_3b.json",
+          "n": 100,
+          "parse_rate": 1.0,
+          "mean_iou": 0.04097,
+          "hit_at_0.5": 0.04
+        },
+        "qwen3_vl_2b_instruct": {
+          "path": "evaluation/phase0/results/grounding_probe_qwen3-vl_2b-instruct.json",
+          "n": 100,
+          "parse_rate": 1.0,
+          "mean_iou": 0.3076,
+          "hit_at_0.5": 0.2
+        }
+      },
+      "decision": "v3.0 ships OCR-span evidence only; do not claim VLM boxes",
+      "manifest_path": "/Volumes/KIOXIA 1TB/tinydoc/grounding_probe_20261106/manifest.jsonl"
+    },
+    "confidence": {
+      "date": "2026-11-06",
+      "n_docs": 100,
+      "level": "field",
+      "status": "uncalibrated",
+      "results": {
+        "qwen2.5vl_3b": {
+          "path": "evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean.json",
+          "ece_10bin": 0.545,
+          "brier": 0.3468,
+          "mean_confidence": 0.4025,
+          "accuracy": 0.9475
+        },
+        "qwen3_vl_2b_instruct": {
+          "path": "evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean.json",
+          "ece_10bin": 0.518,
+          "brier": 0.3414,
+          "mean_confidence": 0.4025,
+          "accuracy": 0.92
+        }
+      },
+      "decision": "do not present confidence as calibrated or as a probability until Phase 2.4"
+    }
+  }
 }

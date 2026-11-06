@@ -137,7 +137,8 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence
 ```
 
 Evidence is **OCR-span**, not VLM-predicted boxes. Treat it as provenance, not
-as model grounding. The next eval measures VLM bbox IoU before claiming boxes.
+as model grounding. A 100-box probe measured VLM bbox hit@0.5 of **0.20** (2B) and
+**0.04** (3B), below the 0.70 product gate, so OCR spans remain the shipped path.
 
 ## Evaluation and honesty
 
@@ -163,7 +164,7 @@ Machine-readable provenance and SHA-256 hashes for every set are in
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 94 passed
+python3 -m pytest tests/ -q                 # 95 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit

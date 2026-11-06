@@ -25,7 +25,7 @@ Three measured facts decide the next version:
 >
 > **v4 — a 0.9B “tiny” parser/extractor only after the trust layer and data engine are proven.**
 
-The product moat is not the base model. It is **field-level accuracy + bbox/quote evidence + calibrated confidence/abstention + vertical schemas + honest eval**. The repo already has most of that machinery; it has not been wired to a model that can read.
+The product moat is not the base model. It is **field-level accuracy + bbox/quote evidence + calibrated confidence/abstention + vertical schemas + honest eval**. The repo already has most of that machinery; it has not been wired to a model that can read, and neither confidence calibration nor VLM boxes ship yet (measured below).
 
 ---
 
@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 94 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 95 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -140,6 +140,28 @@ with model/agreement signals plus isotonic or Lasso calibration, then re-measure
 Artifacts: `results/confidence_probe_qwen2.5vl_3b_clean.json`,
 `results/confidence_probe_qwen3-vl_2b-instruct_clean.json`.
 
+### 1.8 Grounding probe: VLM boxes do not clear the gate (measured 2026-11-06)
+
+100 synthetic boxes from 30 rendered docs, identical prompt, `<box>` parsing,
+coordinates normalized to [0,1000]:
+
+| Engine | Parse rate | Mean IoU | Hit@0.5 | p50 latency |
+|---|---:|---:|---:|---:|
+| Qwen2.5-VL-3B | 1.00 | **0.041** | **0.04** | 655 ms |
+| Qwen3-VL-2B-Instruct | 1.00 | **0.308** | **0.20** | 394 ms |
+
+2B by field: names **0.667** (n=12), dates **0.368** (n=19), IDs **0.333** (n=12),
+amounts **0.000** (n=26), line items **0.000** (n=23). The 3B was worse on 92/100
+rows and often boxed the field *label* instead of the value; that may be
+prompt/format-sensitive, but no prompt variant has cleared the gate.
+
+**Decision:** v3.0 ships **OCR-span evidence only**. Do not claim VLM-predicted
+boxes or bbox grounding. The product gate is mAP@0.5 ≥0.70; measured hit@0.5 is
+0.04–0.20. Revisit only with a native-grounding prompt and a larger box set.
+
+Artifacts: `results/grounding_probe_qwen2.5vl_3b.json`,
+`results/grounding_probe_qwen3-vl_2b-instruct.json`.
+
 ---
 
 ## 2. Root causes — why the current track failed
@@ -169,7 +191,7 @@ A v3 release is only “done” when all of these are true on a frozen, provenan
 | Field F1, forms (FUNSD official or private) | **≥ 0.80** | Second layout family |
 | Schema-valid rate | **≥ 0.98** | Product must not emit broken JSON |
 | Evidence coverage (quote + bbox) | **≥ 0.90** of non-empty fields | Trust layer |
-| bbox mAP@IoU 0.5 (where GT boxes exist) | **≥ 0.70** | Real grounding, not OCR-span only |
+| bbox mAP@IoU 0.5 (where GT boxes exist) | **≥ 0.70** | Real grounding, not OCR-span only — **not met: 0.04–0.20 hit@0.5; OCR spans ship** |
 | Calibration (ECE) | **≤ 0.05** | Confidence must mean something |
 | Top-band precision at 50% coverage | **≥ 0.98** | HITL routing story |
 | Latency, M4 4-bit | **≤ 4 s/page** | Usable local |
@@ -267,15 +289,23 @@ Two candidate routes:
 
 **Decision:** ship **both tiers** in v3.0 — 3B as the quality default, 2B as the fast/edge tier. Neither needs training to clear the receipt gate. The 2B does not beat the 3B, so a v3.1 LoRA on the 2B is justified only if it closes the 2.75-point gap or unlocks boxes/abstention on a new vertical.
 
-**Still to run:** the grounding probe (30 synthetic docs with GT boxes; `{value, bbox}` IoU) and the confidence probe (Hunter/Mapper agreement, ECE/AURC). Those decide whether v3.0 ships VLM boxes or keeps OCR-span evidence.
+**Measured follow-ups (2026-11-06):**
 
-**Grounding probe prepared:** `evaluation/phase0/run_grounding_probe.py` parses `<box>`/JSON/pixel outputs, normalizes to [0,1000], and reports IoU, hit@0.5, parse rate, and latency. Parser/IoU tests pass. It still needs an explicit inference approval:
+- **Grounding fails the gate:** hit@0.5 is **0.20** for Qwen3-VL-2B and **0.04** for Qwen2.5-VL-3B, versus the 0.70 product gate. v3.0 ships **OCR-span evidence**, not VLM boxes. See §1.8.
+- **Confidence is uncalibrated:** field-level ECE is **0.518–0.545** on clean-100, and the score is constant (0.4025) with evidence off. Phase 2.4 must fix it. See §1.7.
+- **Multi-vertical:** FUNSD images/labels are present (199 docs; 50 scored in the probe); CORD is empty and DocILE is gated, so invoices are still unmeasured. Do not claim invoice performance yet.
+
+Reproduce the grounding probe:
 
 ```bash
 python data/synthetic/gen_grounding_sample.py --num-docs 30 \
-    --output-dir /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe
+    --output-dir /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe_20261106
 python evaluation/phase0/run_grounding_probe.py \
-    --manifest /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe/manifest.jsonl \
+    --manifest /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe_20261106/manifest.jsonl \
+    --model qwen3-vl:2b-instruct --limit 100 \
+    --out evaluation/phase0/results/grounding_probe_qwen3-vl_2b-instruct.json
+python evaluation/phase0/run_grounding_probe.py \
+    --manifest /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe_20261106/manifest.jsonl \
     --model qwen2.5vl:3b --limit 100 \
     --out evaluation/phase0/results/grounding_probe_qwen2.5vl_3b.json
 ```
@@ -290,7 +320,7 @@ python evaluation/phase0/run_grounding_probe.py \
 |---|---|---|
 | 2.1 | Schema-driven prompts | Generate the prompt from JSON Schema; receipt/invoice/form packs; `additionalProperties: false`; typed money/date; absent-field behavior |
 | 2.2 | PDF/multi-page | `pdf2image`/pypdfium; page-level extraction; document assembly; page citations |
-| 2.3 | Evidence + boxes | OCR-span evidence (existing) + optional VLM bbox; normalize to page coordinates; overlay |
+| 2.3 | Evidence + boxes | OCR-span evidence ships (measured 0.80 coverage); VLM bbox only if a future probe clears the 0.70 gate. Normalize to page coordinates; overlay. |
 | 2.4 | Calibrated confidence | Hunter/Mapper agreement, logprob/entropy, OCR match, image quality, schema validity; isotonic/Lasso calibration; ECE/AURC report |
 | 2.5 | HITL routing | Per-field confidence bands; `needs_review` flag; top-band precision/coverage curve |
 | 2.6 | Engine router | `auto` picks the quality default (Qwen2.5-VL-3B) or fast tier (Qwen3-VL-2B) from config, falls back to OCR floor with a loud reason; no silent degradation |

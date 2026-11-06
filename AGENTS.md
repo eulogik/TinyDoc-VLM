@@ -40,7 +40,7 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 94 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 95 passed)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`
@@ -54,3 +54,7 @@ memory watchdog when they are model inference.
 - FUNSD is a transfer probe with nonstandard gold mapping — never cited as a
   leaderboard number.
 - The 256M checkpoint is retired from performance claims (OCRBench 0.0%, n=1000).
+- VLM-predicted boxes failed the grounding probe (hit@0.5 0.04–0.20 vs 0.70
+  gate). Ship OCR-span evidence only; never claim VLM grounding.
+- Confidence is an uncalibrated heuristic (mean 0.4025; field ECE 0.52–0.55).
+  Never present it as a probability.
