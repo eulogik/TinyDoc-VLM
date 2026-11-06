@@ -149,8 +149,12 @@ as model grounding. A 100-box probe measured VLM bbox hit@0.5 of **0.20** (2B) a
   is retained only as a historical, caveated number.
 - **FUNSD** is a transfer probe with nonstandard gold mapping; never cite it as a
   leaderboard number.
-- **Confidence is uncalibrated.** The current score is a heuristic (mean 0.4025;
-  ECE 0.52–0.55 on clean-100). Use it for routing experiments, not as a probability.
+- **Confidence is only partly calibrated.** With evidence off (the fast eval path) the
+  score is a constant 0.4025 and field ECE is 0.52–0.55; the SDK default attaches
+  evidence, where field ECE is **0.115–0.135** raw and **0.005–0.014** after
+  document-grouped isotonic OOF. Document-level exact-4 confidence is **not**
+  reliable (ECE 0.09–0.10). Use field-level scores for review routing, not as a
+  document probability.
 - **DocVQA / CORD / invoices** are not yet measured. No claims.
 - The claim audit recomputes every published pair from committed artifacts:
   `python3 evaluation/phase0/recompute_scores.py` must exit 0.
@@ -164,7 +168,7 @@ Machine-readable provenance and SHA-256 hashes for every set are in
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 95 passed
+python3 -m pytest tests/ -q                 # 106 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit

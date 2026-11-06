@@ -40,7 +40,7 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 95 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 106 passed)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`
@@ -56,5 +56,8 @@ memory watchdog when they are model inference.
 - The 256M checkpoint is retired from performance claims (OCRBench 0.0%, n=1000).
 - VLM-predicted boxes failed the grounding probe (hit@0.5 0.04–0.20 vs 0.70
   gate). Ship OCR-span evidence only; never claim VLM grounding.
-- Confidence is an uncalibrated heuristic (mean 0.4025; field ECE 0.52–0.55).
-  Never present it as a probability.
+- Confidence is only partly calibrated. Evidence-off eval runs are constant
+  (0.4025; field ECE 0.52–0.55); the evidence-on default is field ECE 0.115–0.135
+  raw and 0.005–0.014 after document-grouped isotonic OOF. Document-level ECE is
+  0.09–0.10 and does not reliably improve. Never present doc confidence as a
+  probability; field-level scores are for review routing only.

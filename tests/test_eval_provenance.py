@@ -72,3 +72,40 @@ def test_probe_provenance_matches_artifacts():
     manifest = Path(grounding.get("manifest_path", ""))
     if manifest.exists():
         assert hashlib.sha256(manifest.read_bytes()).hexdigest() == grounding["manifest_sha256"]
+
+
+def test_evidence_on_calibration_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    evidence = data["probes"]["confidence_evidence_on"]
+    assert evidence["path"].startswith("evidence_on")
+    assert evidence["n_docs"] == 100
+    assert evidence["calibration"]["folds"] == 5
+    assert evidence["calibration"]["grouping"].startswith("document")
+
+    for name, expected in evidence["results"].items():
+        for key in ("preds", "probe", "calibration"):
+            assert (ROOT / expected[key]).exists(), f"{name}: missing {key}"
+        report = json.loads((ROOT / expected["calibration"]).read_text())
+        assert report["n_docs"] == evidence["n_docs"], name
+        assert report["folds"] == evidence["calibration"]["folds"], name
+        assert report["constant_confidence"] is False, name
+
+        field = report["fields"]
+        assert abs(field["raw"]["ece_10bin"] - expected["field"]["ece_raw"]) < 5e-4, name
+        assert (
+            abs(field["isotonic_oof"]["ece_10bin"] - expected["field"]["ece_isotonic_oof"])
+            < 5e-4
+        ), name
+        # Field-level calibration must improve ECE.
+        assert field["isotonic_oof"]["ece_10bin"] < field["raw"]["ece_10bin"], name
+
+        doc = report["doc_exact4"]
+        assert abs(doc["raw"]["ece_10bin"] - expected["doc_exact4"]["ece_raw"]) < 5e-4, name
+        assert (
+            abs(doc["isotonic_oof"]["ece_10bin"] - expected["doc_exact4"]["ece_isotonic_oof"])
+            < 5e-4
+        ), name
+
+    # Document-level isotonic is not reliably better; the 2B got worse.
+    two_b = evidence["results"]["qwen3_vl_2b_instruct"]["doc_exact4"]
+    assert two_b["ece_isotonic_oof"] > two_b["ece_raw"]

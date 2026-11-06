@@ -220,6 +220,58 @@ def main() -> int:
         if not ok:
             failures.append(f"confidence probe numbers changed for {label}")
 
+    # Evidence-on default + document-grouped isotonic OOF. These are the numbers
+    # the public docs now quote; they must match both the probe and calibration
+    # artifacts.
+    evidence_confidence_claims = [
+        (
+            "qwen2.5vl_3b",
+            "confidence_probe_qwen2.5vl_3b_clean_evidence.json",
+            "calibration_qwen2.5vl_3b_clean.json",
+            0.1355,
+            0.0140,
+            0.0969,
+            0.0603,
+        ),
+        (
+            "qwen3-vl_2b",
+            "confidence_probe_qwen3-vl_2b-instruct_clean_evidence.json",
+            "calibration_qwen3-vl_2b-instruct_clean.json",
+            0.1154,
+            0.0049,
+            0.0917,
+            0.1064,
+        ),
+    ]
+    for label, probe_name, cal_name, raw_field, iso_field, raw_doc, iso_doc in (
+        evidence_confidence_claims
+    ):
+        probe_path, cal_path = RESULTS / probe_name, RESULTS / cal_name
+        if not probe_path.exists() or not cal_path.exists():
+            failures.append(f"evidence-on confidence artifacts missing for {label}")
+            continue
+        probe = json.loads(probe_path.read_text())
+        cal = json.loads(cal_path.read_text())
+        field = cal.get("fields") or {}
+        doc = cal.get("doc_exact4") or {}
+        ok = (
+            probe.get("used_field_confidences") is True
+            and abs(float(probe["field_level"]["ece_10bin"]) - raw_field) <= 5e-4
+            and abs(float(field["raw"]["ece_10bin"]) - raw_field) <= 5e-4
+            and abs(float(field["isotonic_oof"]["ece_10bin"]) - iso_field) <= 5e-4
+            and abs(float(probe["doc_exact4"]["ece_10bin"]) - raw_doc) <= 5e-4
+            and abs(float(doc["isotonic_oof"]["ece_10bin"]) - iso_doc) <= 5e-4
+            and cal.get("n_docs") == 100
+            and cal.get("folds") == 5
+        )
+        print(
+            f"claim: confidence {label} evidence-on field ECE {raw_field:.3f} "
+            f"-> isotonic OOF {iso_field:.3f}; doc {raw_doc:.3f} -> {iso_doc:.3f} "
+            f"-> {'PASS' if ok else 'FAIL'}"
+        )
+        if not ok:
+            failures.append(f"evidence-on confidence numbers changed for {label}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

@@ -145,7 +145,72 @@
           "accuracy": 0.92
         }
       },
-      "decision": "do not present confidence as calibrated or as a probability until Phase 2.4"
+      "decision": "do not present confidence as calibrated or as a probability until Phase 2.4",
+      "path": "evidence_off (eval harness; not the SDK default)",
+      "note": "constant 0.4025 because attach_evidence=False; measures the eval path, not ReceiptPipeline defaults"
+    },
+    "confidence_evidence_on": {
+      "date": "2026-11-06",
+      "path": "evidence_on (SDK default)",
+      "n_docs": 100,
+      "n_field_rows": 400,
+      "evidence_replay": {
+        "ocr": "rapidocr",
+        "vlm_calls": 0,
+        "seconds_per_doc": 0.88,
+        "method": "attach_evidence_from_preds.py replays OCR/evidence on saved fields"
+      },
+      "calibration": {
+        "method": "isotonic",
+        "folds": 5,
+        "grouping": "document (fields from one document never cross the split)",
+        "scope": "out-of-fold on clean-100, not an external test"
+      },
+      "results": {
+        "qwen2.5vl_3b": {
+          "preds": "evaluation/phase0/results/preds_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k_evidence.jsonl",
+          "probe": "evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean_evidence.json",
+          "calibration": "evaluation/phase0/results/calibration_qwen2.5vl_3b_clean.json",
+          "field": {
+            "ece_raw": 0.1355,
+            "ece_isotonic_oof": 0.014,
+            "brier_raw": 0.0769,
+            "brier_isotonic_oof": 0.0491,
+            "aurc_raw": 0.0187,
+            "aurc_isotonic_oof": 0.0229
+          },
+          "doc_exact4": {
+            "ece_raw": 0.0969,
+            "ece_isotonic_oof": 0.0603,
+            "brier_raw": 0.1521,
+            "brier_isotonic_oof": 0.1496,
+            "aurc_raw": 0.1505,
+            "aurc_isotonic_oof": 0.1574
+          }
+        },
+        "qwen3_vl_2b_instruct": {
+          "preds": "evaluation/phase0/results/preds_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k_evidence.jsonl",
+          "probe": "evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean_evidence.json",
+          "calibration": "evaluation/phase0/results/calibration_qwen3-vl_2b-instruct_clean.json",
+          "field": {
+            "ece_raw": 0.1154,
+            "ece_isotonic_oof": 0.0049,
+            "brier_raw": 0.0944,
+            "brier_isotonic_oof": 0.0717,
+            "aurc_raw": 0.0379,
+            "aurc_isotonic_oof": 0.0466
+          },
+          "doc_exact4": {
+            "ece_raw": 0.0917,
+            "ece_isotonic_oof": 0.1064,
+            "brier_raw": 0.1846,
+            "brier_isotonic_oof": 0.1942,
+            "aurc_raw": 0.2286,
+            "aurc_isotonic_oof": 0.2537
+          }
+        }
+      },
+      "decision": "field-level confidence is usable for review routing after a dedicated-split fit; document-level confidence is not a probability; isotonic does not reliably improve doc-level calibration"
     }
   }
 }

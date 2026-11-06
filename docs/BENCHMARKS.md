@@ -87,14 +87,23 @@ Supporting product metrics (n=100):
 | Schema validity | 1.000 | `results/scores_ollama.json` |
 | Evidence coverage (RapidOCR, after A/B) | 0.798 | `results/evidence_ab.json` |
 | Evidence quote contains gold value | 0.535 | `results/evidence_ab.json` (tesseract arm: 0.668 / 0.415 → RapidOCR adopted) |
-| Confidence ECE, field-level (Qwen2.5-VL-3B) | **0.545** | `results/confidence_probe_qwen2.5vl_3b_clean.json` — heuristic, **not calibrated** |
-| Confidence ECE, field-level (Qwen3-VL-2B) | **0.518** | `results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — heuristic, **not calibrated** |
+| Confidence ECE, field, 3B, evidence off (eval path) | **0.545** | `results/confidence_probe_qwen2.5vl_3b_clean.json` — constant 0.4025 |
+| Confidence ECE, field, 3B, evidence on (default) | **0.135** | `results/confidence_probe_qwen2.5vl_3b_clean_evidence.json` |
+| Confidence ECE, field, 3B, isotonic OOF | **0.014** | `results/calibration_qwen2.5vl_3b_clean.json` — 5 doc-grouped folds |
+| Confidence ECE, field, 2B, evidence off (eval path) | **0.518** | `results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — constant 0.4025 |
+| Confidence ECE, field, 2B, evidence on (default) | **0.115** | `results/confidence_probe_qwen3-vl_2b-instruct_clean_evidence.json` |
+| Confidence ECE, field, 2B, isotonic OOF | **0.005** | `results/calibration_qwen3-vl_2b-instruct_clean.json` — 5 doc-grouped folds |
 | VLM bbox hit@0.5 (Qwen3-VL-2B) | **0.20** | `results/grounding_probe_qwen3-vl_2b-instruct.json` — 100 synthetic boxes; gate is 0.70 |
 | VLM bbox hit@0.5 (Qwen2.5-VL-3B) | **0.04** | `results/grounding_probe_qwen2.5vl_3b.json` — same set |
 | FUNSD transfer probe (form→receipt keys) | 0.352 | `results/scores_funsd_ollama.json` — **nonstandard gold mapping** (date=answers[0]); a probe, not a leaderboard number |
 
-Confidence is a constant heuristic (0.4025 with evidence off); top-band precision equals
-overall accuracy because the scores tie. Do not present it as a probability.
+The bake-off ran with evidence **off** for speed. That path produces a constant 0.4025
+and is not the SDK default; its ECE (0.52–0.55) is a property of the eval harness, not
+the shipped pipeline. On the evidence-on default, field ECE is 0.115–0.135 raw and
+0.005–0.014 after document-grouped isotonic OOF. Document-level exact-4 confidence is
+**not** calibrated (ECE 0.092–0.097; isotonic improves the 3B to 0.060 but makes the 2B
+worse at 0.106). Use field-level confidence for review routing, never as a document
+probability. All calibration numbers are out-of-fold on clean-100, not an external test.
 
 VLM-predicted boxes are **not** shipped. On 100 boxes from 30 synthetic rendered documents
 (seed `20261106`), hit@0.5 was **0.20** for Qwen3-VL-2B and **0.04** for Qwen2.5-VL-3B,

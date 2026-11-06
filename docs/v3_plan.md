@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 95 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 106 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -121,9 +121,13 @@ These are small but matter for “everything evidence based”:
 5. **`docs/index.html` says 7B quality tier**; engine ladder decision says 3B stays, 7B crashes the 16GB host. Update.
 6. **PyPI 0.1.2 vs repo 0.2.0.** The 0.2.0 wheel/sdist build and install cleanly; upload is pending a PyPI token. Until then, the README points at the source install.
 
-### 1.7 Confidence is not calibrated (measured 2026-11-06)
+### 1.7 Confidence: field-level calibration is viable, document-level is not (measured 2026-11-06)
 
-`evaluation/phase0/run_confidence_probe.py` on the existing clean-100 predictions:
+The clean-100 bake-off ran with evidence **off** for speed. That path produces a constant
+score (0.4025), so its calibration is terrible and it is **not** the SDK default
+(`ReceiptPipeline.attach_evidence = True`). Two measurements now separate the paths.
+
+**Evidence off (fast eval path, not shipped default):**
 
 | Engine | Level | Accuracy | Mean confidence | ECE (10-bin) | Brier | AURC | Top-50% precision |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -132,13 +136,35 @@ These are small but matter for “everything evidence based”:
 | Qwen2.5-VL-3B | doc exact-4 | 0.830 | 0.4025 | **0.427** | 0.324 | 0.162 | 0.780 |
 | Qwen3-VL-2B | doc exact-4 | 0.770 | 0.4025 | **0.368** | 0.312 | 0.241 | 0.660 |
 
-The current confidence is a constant heuristic (0.4025 with evidence off), severely
-underconfident; because every document ties, top-band precision equals overall accuracy.
-**Do not call it calibrated and do not use it as a probability.** Phase 2.4 must replace it
-with model/agreement signals plus isotonic or Lasso calibration, then re-measure ECE/AURC.
+**Evidence on (shipped default):** replaying only the OCR/evidence stage on the saved
+predictions (RapidOCR, no VLM calls; ~0.9 s/doc) restores per-field confidence.
 
-Artifacts: `results/confidence_probe_qwen2.5vl_3b_clean.json`,
-`results/confidence_probe_qwen3-vl_2b-instruct_clean.json`.
+| Engine | Level | Accuracy | Mean confidence | ECE (10-bin) | Brier | AURC | Top-50% precision |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Qwen2.5-VL-3B | field, raw | 0.9475 | 0.8237 | **0.135** | 0.077 | 0.019 | 0.990 |
+| Qwen2.5-VL-3B | field, isotonic OOF | 0.9475 | 0.9496 | **0.014** | 0.049 | 0.023 | 0.965 |
+| Qwen3-VL-2B | field, raw | 0.9200 | 0.8215 | **0.115** | 0.094 | 0.038 | 0.980 |
+| Qwen3-VL-2B | field, isotonic OOF | 0.9200 | 0.9249 | **0.005** | 0.072 | 0.047 | 0.965 |
+| Qwen2.5-VL-3B | doc exact-4, raw | 0.830 | 0.7921 | **0.097** | 0.152 | 0.150 | 0.820 |
+| Qwen2.5-VL-3B | doc exact-4, isotonic OOF | 0.830 | 0.8540 | **0.060** | 0.150 | 0.157 | 0.820 |
+| Qwen3-VL-2B | doc exact-4, raw | 0.770 | 0.7893 | **0.092** | 0.185 | 0.229 | 0.760 |
+| Qwen3-VL-2B | doc exact-4, isotonic OOF | 0.770 | 0.7558 | **0.106** | 0.194 | 0.254 | 0.740 |
+
+Isotonic is fit with **5 folds grouped by document** (`run_confidence_calibration.py`),
+so fields from the same document never cross the split. Field-level ECE drops from
+0.12–0.14 to 0.005–0.014 and Brier from 0.08–0.09 to 0.05–0.07. Document-level
+calibration does **not** reliably improve: the 3B gains (0.097 → 0.060), but the 2B gets
+worse (0.092 → 0.106), and AURC rises for both at field level because isotonic creates
+ties. The honest product statement is:
+
+- **Field-level confidence is usable after calibration** for review routing.
+- **Document-level confidence is not a probability.** Do not rank documents by it yet.
+- These are out-of-fold estimates on clean-100 (public-train-derived, not external).
+  Fit the production map on a dedicated calibration split and re-measure before shipping.
+
+Artifacts: `results/confidence_probe_*_clean_evidence.json`,
+`results/calibration_*_clean.json`, and the evidence-on predictions
+`results/preds_pipeline_*_clean_ctx8k_evidence.jsonl`.
 
 ### 1.8 Grounding probe: VLM boxes do not clear the gate (measured 2026-11-06)
 
@@ -172,7 +198,7 @@ Ranked by evidence strength:
 2. **419–46k task-format pairs cannot teach vision.** The vision-LoRA runs prove it: high LR destroys the tower (0.0395), low LR moves nothing (0.4277). Language LoRA changes style, not reading. The 2.2B model already knows the JSON format; it does not know the characters.
 3. **NLL SFT on a narrow schema memorizes format.** Loss → 0.06, eval entropy 0.065 vs base 0.920 (grounding calibration), and test F1 flat. This is the documented “SFT memorizes” failure mode, not a data-volume problem alone.
 4. **The eval loop selected noise.** 40-doc val is systematically easier and too small; the “best val” SFT configs did not transfer to the 100-doc test. The test set was spent once (good), but the val decisions were not trustworthy.
-5. **No grounding or abstention supervision.** The product claims evidence/confidence, but the model has no bbox loss, no “absent field” training, and the confidence is a heuristic. The trust layer is not calibrated.
+5. **No grounding or abstention supervision.** The product claims evidence/confidence, but the model has no bbox loss, no “absent field” training, and confidence is a heuristic. Field-level isotonic calibration is measured (§1.7) but not wired into the SDK; document-level confidence is not calibrated.
 6. **The public surface outran the model.** PyPI/Space/README sold the 256M checkpoint long after it was retired. Even a good v3 model would inherit this credibility debt unless it is fixed first.
 
 ---
@@ -192,7 +218,7 @@ A v3 release is only “done” when all of these are true on a frozen, provenan
 | Schema-valid rate | **≥ 0.98** | Product must not emit broken JSON |
 | Evidence coverage (quote + bbox) | **≥ 0.90** of non-empty fields | Trust layer |
 | bbox mAP@IoU 0.5 (where GT boxes exist) | **≥ 0.70** | Real grounding, not OCR-span only — **not met: 0.04–0.20 hit@0.5; OCR spans ship** |
-| Calibration (ECE) | **≤ 0.05** | Confidence must mean something |
+| Calibration (field ECE) | **≤ 0.05** | Confidence must mean something — **met out-of-fold: 0.005–0.014**; production map still needs a dedicated calibration split. Doc-level ECE is 0.09–0.10 and is **not** a probability |
 | Top-band precision at 50% coverage | **≥ 0.98** | HITL routing story |
 | Latency, M4 4-bit | **≤ 4 s/page** | Usable local |
 | RAM, M4 4-bit | **≤ 4 GB** | 16 GB host with headroom |
@@ -225,7 +251,7 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 - **Fast tier: Qwen3-VL-2B-Instruct** — measured **0.9200 F1 / 0.84 address / 1.00 schema / 7.0 s**; 1.9 GB Q4; native dynamic resolution, 2D grounding, 262k context. Use the **`-instruct`** tag: the plain `qwen3-vl:2b` tag is a thinking variant that spent all 512 tokens reasoning and returned empty content under the current token cap.
 - **Fallback if both miss a new vertical: Qwen3-VL-4B** (vendor-reported DocVQA 95.3) — check peak memory on the 16 GB host before enabling it.
 - Runtime: Ollama Q4 for the pilot; MLX 4-bit for the Mac product; GGUF/llama.cpp for CPU later.
-- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (calibration is Phase 2.4; current heuristic ECE ≈ 0.52), PDF/multi-page.
+- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated), PDF/multi-page.
 - **No model training.** The base is the model; the product is the trust layer.
 
 **Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today.
@@ -292,7 +318,7 @@ Two candidate routes:
 **Measured follow-ups (2026-11-06):**
 
 - **Grounding fails the gate:** hit@0.5 is **0.20** for Qwen3-VL-2B and **0.04** for Qwen2.5-VL-3B, versus the 0.70 product gate. v3.0 ships **OCR-span evidence**, not VLM boxes. See §1.8.
-- **Confidence is uncalibrated:** field-level ECE is **0.518–0.545** on clean-100, and the score is constant (0.4025) with evidence off. Phase 2.4 must fix it. See §1.7.
+- **Confidence is field-level usable, not document-level calibrated:** evidence-off eval runs are constant 0.4025 (field ECE 0.518–0.545). The evidence-on default is field ECE **0.115–0.135**, and doc-grouped isotonic OOF reaches **0.005–0.014**; document-level ECE stays **0.092–0.097** and isotonic does not reliably improve the 2B. See §1.7.
 - **Multi-vertical:** FUNSD images/labels are present (199 docs; 50 scored in the probe); CORD is empty and DocILE is gated, so invoices are still unmeasured. Do not claim invoice performance yet.
 
 Reproduce the grounding probe:
@@ -321,7 +347,7 @@ python evaluation/phase0/run_grounding_probe.py \
 | 2.1 | Schema-driven prompts | Generate the prompt from JSON Schema; receipt/invoice/form packs; `additionalProperties: false`; typed money/date; absent-field behavior |
 | 2.2 | PDF/multi-page | `pdf2image`/pypdfium; page-level extraction; document assembly; page citations |
 | 2.3 | Evidence + boxes | OCR-span evidence ships (measured 0.80 coverage); VLM bbox only if a future probe clears the 0.70 gate. Normalize to page coordinates; overlay. |
-| 2.4 | Calibrated confidence | Hunter/Mapper agreement, logprob/entropy, OCR match, image quality, schema validity; isotonic/Lasso calibration; ECE/AURC report |
+| 2.4 | Calibrated confidence | Evidence-on field confidence is measured (ECE 0.12–0.14; isotonic OOF 0.005–0.014). Wire a field-level map fit on a dedicated split; doc-level confidence stays heuristic. Then ECE/AURC report + `needs_review` bands. |
 | 2.5 | HITL routing | Per-field confidence bands; `needs_review` flag; top-band precision/coverage curve |
 | 2.6 | Engine router | `auto` picks the quality default (Qwen2.5-VL-3B) or fast tier (Qwen3-VL-2B) from config, falls back to OCR floor with a loud reason; no silent degradation |
 | 2.7 | Batch CLI | Folder recursion, JSONL, `--schema`, `--overlay`, `--fail-fast`, `--limit`; progress + errors |
@@ -458,8 +484,12 @@ python evaluation/phase0/run_grounding_probe.py \
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_clean.json` — 0.9282 (superseded: 5 context-400 errors)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k.json` — 0.9475, address 0.86, 14.2 s (bake-off control)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k.json` — 0.9200, address 0.84, 7.0 s (bake-off candidate)
-- `evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean.json` — ECE 0.545, uncalibrated heuristic
-- `evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — ECE 0.518, uncalibrated heuristic
+- `evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean.json` — evidence-off ECE 0.545, uncalibrated heuristic
+- `evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — evidence-off ECE 0.518, uncalibrated heuristic
+- `evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean_evidence.json` — evidence-on ECE 0.135 (field), 0.097 (doc)
+- `evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean_evidence.json` — evidence-on ECE 0.115 (field), 0.092 (doc)
+- `evaluation/phase0/results/calibration_qwen2.5vl_3b_clean.json` — isotonic OOF ECE 0.014 (field), 0.060 (doc)
+- `evaluation/phase0/results/calibration_qwen3-vl_2b-instruct_clean.json` — isotonic OOF ECE 0.005 (field), 0.106 (doc; not improved)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_val_ctx8k.json` — 0.9250 (val-40)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen3-vl_2b-instruct_val_ctx8k.json` — 0.9250 (val-40)
 - `evaluation/phase0/results/scores_ollama.json` — 0.870 (60% leaked set)

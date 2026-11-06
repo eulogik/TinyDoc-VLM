@@ -1,0 +1,28 @@
+{
+  "preds": [
+    "evaluation/phase0/results/preds_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k_evidence.jsonl"
+  ],
+  "n_docs": 100,
+  "n_field_rows": 400,
+  "used_field_confidences": true,
+  "field_level": {
+    "n": 400,
+    "mean_confidence": 0.82374675,
+    "accuracy": 0.9475,
+    "ece_10bin": 0.13548774999999996,
+    "brier": 0.07688485237499999,
+    "aurc": 0.01874876647979449,
+    "top50_precision": 0.99,
+    "top70_precision": 0.9642857142857143
+  },
+  "doc_exact4": {
+    "n": 100,
+    "mean_confidence": 0.792088,
+    "accuracy": 0.83,
+    "ece_10bin": 0.09690599999999995,
+    "brier": 0.1520603552,
+    "aurc": 0.15045344887467932,
+    "top50_precision": 0.82,
+    "top70_precision": 0.8285714285714286
+  }
+}

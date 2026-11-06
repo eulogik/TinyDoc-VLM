@@ -118,8 +118,11 @@ and prompt-v1.
   so OCR spans remain the shipped path.
 - The schema is packaged (`tinydoc/schemas/sroie_receipt.schema.json`); validation
   uses `jsonschema`.
-- Confidence is currently a heuristic, **not calibrated** (mean 0.4025; ECE 0.52–0.55
-  on clean-100). Do not treat it as a probability until Phase 2.4 lands.
+- Confidence is a heuristic, not a probability. Evidence-off runs are constant
+  (0.4025; field ECE 0.52–0.55). The default evidence-on path measures field ECE
+  **0.115–0.135** raw and **0.005–0.014** after document-grouped isotonic OOF;
+  document-level confidence is **not** calibrated (ECE 0.09–0.10). Use field-level
+  scores for review routing only.
 - Every published number must recompute from `evaluation/phase0/results/`:
   `python3 evaluation/phase0/recompute_scores.py` must exit 0.
 - The 256M model card and the v2 decision are kept for reproducibility; neither is
