@@ -116,6 +116,8 @@ and prompt-v1.
   boxes. Treat it as provenance, not as model grounding.
 - The schema is packaged (`tinydoc/schemas/sroie_receipt.schema.json`); validation
   uses `jsonschema`.
+- Confidence is currently a heuristic, **not calibrated** (mean 0.4025; ECE 0.52–0.55
+  on clean-100). Do not treat it as a probability until Phase 2.4 lands.
 - Every published number must recompute from `evaluation/phase0/results/`:
   `python3 evaluation/phase0/recompute_scores.py` must exit 0.
 - The 256M model card and the v2 decision are kept for reproducibility; neither is

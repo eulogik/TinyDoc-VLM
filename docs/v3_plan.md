@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 89 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 94 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -120,6 +120,25 @@ These are small but matter for “everything evidence based”:
 4. **`AGENTS.md` says 69 tests; actual 82.** Update.
 5. **`docs/index.html` says 7B quality tier**; engine ladder decision says 3B stays, 7B crashes the 16GB host. Update.
 6. **PyPI 0.1.2 vs repo 0.2.0.** The 0.2.0 wheel/sdist build and install cleanly; upload is pending a PyPI token. Until then, the README points at the source install.
+
+### 1.7 Confidence is not calibrated (measured 2026-11-06)
+
+`evaluation/phase0/run_confidence_probe.py` on the existing clean-100 predictions:
+
+| Engine | Level | Accuracy | Mean confidence | ECE (10-bin) | Brier | AURC | Top-50% precision |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Qwen2.5-VL-3B | field | 0.9475 | 0.4025 | **0.545** | 0.347 | 0.053 | 0.925 |
+| Qwen3-VL-2B | field | 0.9200 | 0.4025 | **0.518** | 0.341 | 0.082 | 0.880 |
+| Qwen2.5-VL-3B | doc exact-4 | 0.830 | 0.4025 | **0.427** | 0.324 | 0.162 | 0.780 |
+| Qwen3-VL-2B | doc exact-4 | 0.770 | 0.4025 | **0.368** | 0.312 | 0.241 | 0.660 |
+
+The current confidence is a constant heuristic (0.4025 with evidence off), severely
+underconfident; because every document ties, top-band precision equals overall accuracy.
+**Do not call it calibrated and do not use it as a probability.** Phase 2.4 must replace it
+with model/agreement signals plus isotonic or Lasso calibration, then re-measure ECE/AURC.
+
+Artifacts: `results/confidence_probe_qwen2.5vl_3b_clean.json`,
+`results/confidence_probe_qwen3-vl_2b-instruct_clean.json`.
 
 ---
 
@@ -184,7 +203,7 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 - **Fast tier: Qwen3-VL-2B-Instruct** — measured **0.9200 F1 / 0.84 address / 1.00 schema / 7.0 s**; 1.9 GB Q4; native dynamic resolution, 2D grounding, 262k context. Use the **`-instruct`** tag: the plain `qwen3-vl:2b` tag is a thinking variant that spent all 512 tokens reasoning and returned empty content under the current token cap.
 - **Fallback if both miss a new vertical: Qwen3-VL-4B** (vendor-reported DocVQA 95.3) — check peak memory on the 16 GB host before enabling it.
 - Runtime: Ollama Q4 for the pilot; MLX 4-bit for the Mac product; GGUF/llama.cpp for CPU later.
-- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, calibrated confidence/abstention, PDF/multi-page.
+- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (calibration is Phase 2.4; current heuristic ECE ≈ 0.52), PDF/multi-page.
 - **No model training.** The base is the model; the product is the trust layer.
 
 **Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today.
@@ -409,6 +428,8 @@ python evaluation/phase0/run_grounding_probe.py \
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_clean.json` — 0.9282 (superseded: 5 context-400 errors)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k.json` — 0.9475, address 0.86, 14.2 s (bake-off control)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k.json` — 0.9200, address 0.84, 7.0 s (bake-off candidate)
+- `evaluation/phase0/results/confidence_probe_qwen2.5vl_3b_clean.json` — ECE 0.545, uncalibrated heuristic
+- `evaluation/phase0/results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — ECE 0.518, uncalibrated heuristic
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen2.5vl_3b_val_ctx8k.json` — 0.9250 (val-40)
 - `evaluation/phase0/results/scores_pipeline_ollama_qwen3-vl_2b-instruct_val_ctx8k.json` — 0.9250 (val-40)
 - `evaluation/phase0/results/scores_ollama.json` — 0.870 (60% leaked set)

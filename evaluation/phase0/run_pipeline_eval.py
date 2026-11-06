@@ -72,6 +72,8 @@ def run_pipeline(
             schema_ok = doc.schema_valid
             conf = doc.confidence
             cov = doc.evidence_coverage
+            field_conf = {fr.name: fr.confidence for fr in doc.field_results}
+            field_ev = {fr.name: fr.evidence for fr in doc.field_results}
             error = None
         except Exception as e:
             traceback.print_exc()
@@ -81,6 +83,8 @@ def run_pipeline(
             schema_ok = False
             conf = 0.0
             cov = 0.0
+            field_conf = {k: 0.0 for k in FIELDS}
+            field_ev = {k: None for k in FIELDS}
             error = str(e)
 
         gold = ex["gold"]
@@ -96,6 +100,8 @@ def run_pipeline(
             "schema_valid_pipeline": schema_ok,
             "schema_valid_metrics": sc["schema_valid"],
             "confidence": conf,
+            "field_confidences": field_conf,
+            "field_evidence": field_ev,
             "evidence_coverage": cov,
             "raw": raw[:2000],
             "error": error,

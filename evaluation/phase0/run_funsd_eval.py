@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -203,11 +204,13 @@ def main() -> None:
             return orig(image_path)
         b64 = base64.b64encode(Path(image_path).read_bytes()).decode()
         prompt = prompt_for_funsd()
+        timeout = float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "600"))
+        num_ctx = int(os.environ.get("TINYDOC_OLLAMA_NUM_CTX", "8192"))
         payload = {
             "model": target.model,
             "messages": [{"role": "user", "content": prompt, "images": [b64]}],
             "stream": False,
-            "options": {"temperature": 0, "num_predict": 512},
+            "options": {"temperature": 0, "num_predict": 512, "num_ctx": num_ctx},
         }
         req = urllib.request.Request(
             f"{target.host}/api/chat",
@@ -215,7 +218,7 @@ def main() -> None:
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=180) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read().decode())
         raw = (body.get("message") or {}).get("content", "") or ""
         from tinydoc.pipeline import _extract_json, FIELDS as PF

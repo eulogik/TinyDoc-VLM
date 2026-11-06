@@ -87,7 +87,12 @@ Supporting product metrics (n=100):
 | Schema validity | 1.000 | `results/scores_ollama.json` |
 | Evidence coverage (RapidOCR, after A/B) | 0.798 | `results/evidence_ab.json` |
 | Evidence quote contains gold value | 0.535 | `results/evidence_ab.json` (tesseract arm: 0.668 / 0.415 → RapidOCR adopted) |
+| Confidence ECE, field-level (Qwen2.5-VL-3B) | **0.545** | `results/confidence_probe_qwen2.5vl_3b_clean.json` — heuristic, **not calibrated** |
+| Confidence ECE, field-level (Qwen3-VL-2B) | **0.518** | `results/confidence_probe_qwen3-vl_2b-instruct_clean.json` — heuristic, **not calibrated** |
 | FUNSD transfer probe (form→receipt keys) | 0.352 | `results/scores_funsd_ollama.json` — **nonstandard gold mapping** (date=answers[0]); a probe, not a leaderboard number |
+
+Confidence is a constant heuristic (0.4025 with evidence off); top-band precision equals
+overall accuracy because the scores tie. Do not present it as a probability.
 
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).
@@ -101,12 +106,14 @@ Machine-readable provenance and SHA-256 hashes for every eval set:
 
 - **Scorer:** ANLS + field-level P/R/F1 + schema-valid rate; identical for every engine, no
   engine-specific tuning of gold.
-- **Held-out set:** 100 SROIE receipt images, images resolvable from stored `image_path`
-  (untracked symlink to the dataset).
+- **Eval set:** 100 SROIE receipts from the public train pool (duplicate-filtered vs our
+  holdout) — **not an external test**; provenance and hashes in `results/eval_provenance.json`.
 - **Baselines:** PP-OCR+heuristics is the honest free local competitor (OCR + rule extraction,
   no VLM, no API, no GPU); its heuristics are standard (business-token company line, date regex,
   total-near-"total", street/postal-cue address) with no per-doc tuning and no gold leakage.
-- **Engine latency (MPS, per doc):** 3b ≈ 2.3 s; 7b ≈ 45 s (in progress, `results/`).
+- **Engine latency (M4, Ollama Q4, warm, per doc, clean-100):** 3B ≈ 14.1 s; 2B ≈ 7.0 s.
+  The v2 hybrid is ≈8 s/doc on the MLX engineering track. A 7B pilot was rejected (identical
+  F1, 4.5× slower, unstable on the 16 GB host).
 
 ---
 
