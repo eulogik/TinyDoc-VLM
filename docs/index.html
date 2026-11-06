@@ -170,7 +170,9 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
           <tr><td>Evidence coverage (RapidOCR, post A/B)</td><td>Rate</td><td>0.798</td><td>✅ legacy 3B run</td></tr>
           <tr><td>FUNSD transfer probe (form → receipt-shaped keys)</td><td>Field F1</td><td>0.352</td><td>✅ n=50, nonstandard gold mapping</td></tr>
           <tr><td>OCRBench — TinyDoc-VLM 256M research checkpoint</td><td>Accuracy</td><td>0.0%</td><td>⚠️ n=1000 — model retired from claims</td></tr>
-          <tr><td>DocVQA / CORD / invoices</td><td>—</td><td>—</td><td>Not measured</td></tr>
+          <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, Qwen2.5-VL-3B</td><td>Key-header accuracy</td><td><b>90.6%</b></td><td>⚠️ fully correct 55.8%; synthetic, vendor-made, not real invoices</td></tr>
+          <tr><td>Invoice benchmark v1 — flags</td><td>Recall</td><td><b>0/7</b></td><td>❌ inconsistent/multi-invoice docs; 2/172 false alarms</td></tr>
+          <tr><td>DocVQA / CORD</td><td>—</td><td>—</td><td>Not measured</td></tr>
         </tbody>
       </table>
       <p style="margin-top:16px; color:#64748b; font-size:0.9rem;">
@@ -181,7 +183,8 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
         Every number recomputes from <code>evaluation/phase0/results/</code>;
         see <code>docs/BENCHMARKS.md</code> and <code>docs/v3_plan.md</code>.
         The 256M checkpoint's earlier benchmark figures were never measured and
-        have been withdrawn.
+        have been withdrawn. The invoice numbers are a page-1 synthetic transfer
+        probe, not real supplier-invoice accuracy; flagging and multipage fail.
       </p>
     </section>
 

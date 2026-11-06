@@ -110,6 +110,46 @@ VLM-predicted boxes are **not** shipped. On 100 boxes from 30 synthetic rendered
 against a 0.70 product gate. Evidence remains OCR-span only. This is a synthetic probe,
 not a public benchmark.
 
+## Invoice transfer probe (public synthetic benchmark)
+
+**Set:** [Invoice Extraction Benchmark v1](https://github.com/DrewKraken/invoice-extraction-benchmark)
+(CC BY 4.0), 181 synthetic invoices with answer keys, scored by the benchmark's own
+scorer. **Synthetic, vendor-made, page 1 only, not independent, not real supplier
+invoices.** The prompt was fixed before the run and not tuned on the answers.
+
+| Metric | Result |
+|---|---:|
+| Key header field accuracy | **90.6%** (1428/1576) |
+| Documents with every key header field right | **55.8%** (101/181) |
+| Line-item F1, mean | 0.929 (179 docs) |
+| p50 / mean latency | 26.5 s / 28.7 s |
+| Inconsistent invoices flagged | 0 of 5 |
+| Multi-invoice files flagged | 0 of 2 |
+| Consistent documents falsely flagged | 2 of 172 |
+
+| Category | n | Key-header | Fully correct |
+|---|---:|---:|---:|
+| clean | 31 | 95.4% | 74.2% |
+| credit | 10 | 97.5% | 80.0% |
+| scan | 15 | 97.0% | 73.3% |
+| handwritten | 8 | 94.3% | 62.5% |
+| photo | 45 | 92.1% | 57.8% |
+| tax | 14 | 90.3% | 50.0% |
+| currency | 19 | 89.3% | 52.6% |
+| freight | 16 | 88.8% | 43.8% |
+| hard | 13 | 87.0% | 30.8% |
+| multipage | 10 | 61.1% | 0.0% |
+
+Per field: document_type 98.9%, due_date 96.4%, invoice_date 95.0%,
+invoice_number 93.3%, vendor_name 90.1%, total 87.7%, tax 87.2%, subtotal 84.4%,
+currency 83.8%. References are 1/25 and are not a headline claim.
+
+**Read this as:** the prompt/schema transfers to invoices at the field level (above
+the 0.80 bar), but **not** as straight-through processing: 44% of documents have at
+least one key-field miss, flagging is unusable, and multipage is broken by the
+page-1 limit. Do not cite it as real-invoice accuracy. Artifacts:
+`evaluation/invoice/results/`.
+
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).
 

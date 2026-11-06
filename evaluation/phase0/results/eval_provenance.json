@@ -82,8 +82,13 @@
       "caveat": "nonstandard 4-key gold mapping"
     },
     "invoices": {
-      "status": "missing",
-      "blocker": "CORD images absent; DocILE access is gated; no invoice manifest yet"
+      "status": "synthetic_probe",
+      "set": "invoice_extraction_benchmark_v1",
+      "n": 181,
+      "page": "first page only",
+      "caveat": "synthetic, vendor-made, not independent, not real supplier invoices",
+      "real_invoices": "missing",
+      "probe": "probes.invoice_transfer"
     },
     "docvqa": {
       "status": "not_measured",
@@ -211,6 +216,140 @@
         }
       },
       "decision": "field-level confidence is usable for review routing after a dedicated-split fit; document-level confidence is not a probability; isotonic does not reliably improve doc-level calibration"
+    },
+    "invoice_transfer": {
+      "date": "2026-11-06",
+      "set": "invoice_extraction_benchmark_v1",
+      "source": "drew-ipp/invoice-extraction-benchmark (CC BY 4.0)",
+      "generator": "InvoiceParser Pro, synthetic, seed 42",
+      "n_docs": 181,
+      "page": "first page only (PDFs rendered at longest edge 1800 px)",
+      "caveat": "synthetic, vendor-made, not independent, not real supplier invoices",
+      "real_invoices": "missing",
+      "scorer": "benchmark scorer (python -m scorer.evaluate)",
+      "prompt": "evaluation/invoice/run_invoice_eval.py INVOICE_PROMPT (fixed before run)",
+      "results": {
+        "key_header_accuracy": 0.906091,
+        "key_header_correct": 1428,
+        "key_header_scored": 1576,
+        "fully_correct": 101,
+        "fully_correct_rate": 0.558011,
+        "line_f1_mean": 0.929,
+        "p50_latency_ms": 26464.0,
+        "mean_latency_ms": 28735.2,
+        "parse_errors": 0,
+        "flags": {
+          "inconsistent_invoices": {
+            "total": 5,
+            "flagged": 0
+          },
+          "multi_invoice_files": {
+            "total": 2,
+            "flagged": 0
+          },
+          "consistent_documents": {
+            "total": 172,
+            "flagged": 2
+          }
+        },
+        "per_field": {
+          "currency": {
+            "correct": 150,
+            "scored": 179
+          },
+          "document_type": {
+            "correct": 179,
+            "scored": 181
+          },
+          "due_date": {
+            "correct": 135,
+            "scored": 140
+          },
+          "invoice_date": {
+            "correct": 170,
+            "scored": 179
+          },
+          "invoice_number": {
+            "correct": 167,
+            "scored": 179
+          },
+          "subtotal": {
+            "correct": 151,
+            "scored": 179
+          },
+          "tax": {
+            "correct": 156,
+            "scored": 179
+          },
+          "total": {
+            "correct": 157,
+            "scored": 179
+          },
+          "vendor_name": {
+            "correct": 163,
+            "scored": 181
+          }
+        },
+        "per_category": {
+          "clean": {
+            "n": 31,
+            "key_header_accuracy": 0.9538,
+            "fully_correct_rate": 0.7419
+          },
+          "credit": {
+            "n": 10,
+            "key_header_accuracy": 0.975,
+            "fully_correct_rate": 0.8
+          },
+          "currency": {
+            "n": 19,
+            "key_header_accuracy": 0.8935,
+            "fully_correct_rate": 0.5263
+          },
+          "freight": {
+            "n": 16,
+            "key_header_accuracy": 0.8881,
+            "fully_correct_rate": 0.4375
+          },
+          "handwritten": {
+            "n": 8,
+            "key_header_accuracy": 0.9429,
+            "fully_correct_rate": 0.625
+          },
+          "hard": {
+            "n": 13,
+            "key_header_accuracy": 0.87,
+            "fully_correct_rate": 0.3077
+          },
+          "multipage": {
+            "n": 10,
+            "key_header_accuracy": 0.6111,
+            "fully_correct_rate": 0.0
+          },
+          "photo": {
+            "n": 45,
+            "key_header_accuracy": 0.921,
+            "fully_correct_rate": 0.5778
+          },
+          "scan": {
+            "n": 15,
+            "key_header_accuracy": 0.9704,
+            "fully_correct_rate": 0.7333
+          },
+          "tax": {
+            "n": 14,
+            "key_header_accuracy": 0.9032,
+            "fully_correct_rate": 0.5
+          }
+        }
+      },
+      "artifacts": {
+        "summary": "evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json",
+        "scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json",
+        "preds": "evaluation/invoice/results/preds_invoice_qwen2.5vl_3b.json",
+        "rows": "evaluation/invoice/results/rows_invoice_qwen2.5vl_3b.jsonl"
+      },
+      "decision": "field-level transfer passes 0.80 on synthetic page-1 data; do not claim real-invoice accuracy or straight-through processing; flags and multipage fail"
     }
   }
 }

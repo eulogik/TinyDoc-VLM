@@ -22,6 +22,25 @@ Caveats that must travel with every number:
 - **Line items and flags are secondary.** The plan's invoice gate is the key
   header field rate; line-item F1 and flag behavior are reported separately.
 
+## Current result (2026-11-06)
+
+Qwen2.5-VL-3B, 181/181 parsed, no errors:
+
+| Metric | Result |
+|---|---:|
+| Key header field accuracy | 90.6% (1428/1576) |
+| Documents fully correct | 55.8% (101/181) |
+| Line-item F1, mean | 0.929 (179 docs) |
+| p50 / mean latency | 26.5 s / 28.7 s |
+| Inconsistent invoices flagged | 0/5 |
+| Multi-invoice files flagged | 0/2 |
+| Consistent docs falsely flagged | 2/172 |
+
+This clears the 0.80 field-accuracy bar on synthetic page-1 data, but **not**
+straight-through processing: 44% of documents have at least one key-field miss,
+flagging is unusable, and multipage is 0% fully correct. Real supplier invoices
+are still unmeasured. Artifacts: `results/`.
+
 ## Files
 
 - `build_manifest.py` — render page 1 of PDFs with pypdfium2, emit JSONL with

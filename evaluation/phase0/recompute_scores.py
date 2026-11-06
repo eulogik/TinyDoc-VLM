@@ -272,6 +272,29 @@ def main() -> int:
         if not ok:
             failures.append(f"evidence-on confidence numbers changed for {label}")
 
+    invoice_summary = ROOT.parent / "invoice/results/summary_invoice_qwen2.5vl_3b.json"
+    invoice_scores = ROOT.parent / "invoice/results/scores_invoice_qwen2.5vl_3b.json"
+    if not invoice_summary.exists() or not invoice_scores.exists():
+        failures.append("invoice probe artifacts missing")
+    else:
+        inv = json.loads(invoice_summary.read_text())
+        inv_scores_data = json.loads(invoice_scores.read_text())
+        key = inv_scores_data.get("summary", {}).get("key_fields", {})
+        ok = (
+            inv.get("n_docs") == 181
+            and abs(float(inv.get("key_header_accuracy", -1)) - 0.906091) <= 1e-5
+            and abs(float(inv.get("fully_correct_rate", -1)) - 0.558011) <= 1e-5
+            and key.get("correct") == 1428
+            and key.get("scored") == 1576
+        )
+        print(
+            f"claim: invoice synthetic probe key-header {inv.get('key_header_accuracy'):.4f}, "
+            f"fully correct {inv.get('fully_correct_rate'):.4f}, n={inv.get('n_docs')} "
+            f"-> {'PASS' if ok else 'FAIL'}"
+        )
+        if not ok:
+            failures.append("invoice probe numbers changed")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

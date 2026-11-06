@@ -62,6 +62,14 @@ for field in result.field_results:
 - Grounding and calibration artifacts are linked from the
   [v3 plan](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
+## Invoice probe (synthetic, page 1)
+
+A public synthetic benchmark (Invoice Extraction Benchmark v1, 181 docs) measures
+**90.6% key-header field accuracy** but only **55.8% documents fully correct**.
+Flagging is **0/7** on inconsistent/multi-invoice files, and multipage is 0% fully
+correct because only page 1 is rendered. The set is synthetic and vendor-made;
+this is not real supplier-invoice accuracy.
+
 ## Why this card, not a live demo?
 
 The previous Space loaded `eulogik/TinyDoc-VLM-256M`, which measured **0.0% on

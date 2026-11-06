@@ -36,7 +36,9 @@ def test_provenance_hashes_and_labels():
     assert clean["source"] == "sroie_public_train_clean"
     assert clean["leakage"]["external_test"] is False
 
-    assert data["multi_vertical"]["invoices"]["status"] == "missing"
+    assert data["multi_vertical"]["invoices"]["status"] == "synthetic_probe"
+    assert data["multi_vertical"]["invoices"]["caveat"].startswith("synthetic")
+    assert data["multi_vertical"]["invoices"]["real_invoices"] == "missing"
     assert (ROOT / data["claim_audit"]).exists()
 
 
@@ -109,3 +111,38 @@ def test_evidence_on_calibration_matches_artifacts():
     # Document-level isotonic is not reliably better; the 2B got worse.
     two_b = evidence["results"]["qwen3_vl_2b_instruct"]["doc_exact4"]
     assert two_b["ece_isotonic_oof"] > two_b["ece_raw"]
+
+
+def test_invoice_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    invoice = data["probes"]["invoice_transfer"]
+    assert invoice["set"] == "invoice_extraction_benchmark_v1"
+    assert invoice["n_docs"] == 181
+    assert invoice["page"].startswith("first page")
+    assert "synthetic" in invoice["caveat"]
+    assert invoice["real_invoices"] == "missing"
+
+    artifacts = invoice["artifacts"]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    assert summary["n_docs"] == invoice["n_docs"]
+    for key in ("key_header_accuracy", "fully_correct_rate"):
+        assert abs(summary[key] - invoice["results"][key]) < 1e-5, key
+    assert abs(summary["line_items"]["f1_mean"] - invoice["results"]["line_f1_mean"]) < 1e-5
+    assert summary["key_header_correct"] == invoice["results"]["key_header_correct"]
+    assert summary["key_header_scored"] == invoice["results"]["key_header_scored"]
+    assert summary["fully_correct"] == invoice["results"]["fully_correct"]
+    assert summary["parse_errors"] == 0
+
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+    assert len(scores["documents"]) == invoice["n_docs"]
+    assert scores["summary"]["key_fields"]["correct"] == invoice["results"]["key_header_correct"]
+    assert scores["summary"]["key_fields"]["scored"] == invoice["results"]["key_header_scored"]
+    flags = invoice["results"]["flags"]
+    assert flags["inconsistent_invoices"] == {"total": 5, "flagged": 0}
+    assert flags["multi_invoice_files"] == {"total": 2, "flagged": 0}
+
+    categories = invoice["results"]["per_category"]
+    assert categories["clean"]["n"] == 31
+    assert categories["multipage"]["n"] == 10
+    assert categories["multipage"]["fully_correct_rate"] == 0.0
+    assert categories["photo"]["n"] == 45
