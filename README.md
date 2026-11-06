@@ -173,7 +173,7 @@ Machine-readable provenance and SHA-256 hashes for every set are in
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 118 passed
+python3 -m pytest tests/ -q                 # 120 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit

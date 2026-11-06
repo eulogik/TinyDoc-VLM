@@ -6,7 +6,7 @@
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 118 passed
+python3 -m pytest tests/ -q                 # expect 120 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
