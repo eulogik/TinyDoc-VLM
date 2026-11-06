@@ -154,11 +154,14 @@ as model grounding. The next eval measures VLM bbox IoU before claiming boxes.
 
 Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
 methodology and provenance are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+Machine-readable provenance and SHA-256 hashes for every set are in
+[`eval_provenance.json`](evaluation/phase0/results/eval_provenance.json), guarded by
+`tests/test_eval_provenance.py`.
 
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 82 passed
+python3 -m pytest tests/ -q                 # 89 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit

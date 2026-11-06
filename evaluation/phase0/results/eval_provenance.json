@@ -1,0 +1,94 @@
+{
+  "generated": "2026-11-06",
+  "policy": "Every published number must name its eval set and provenance. Clean-100 is not an external test set.",
+  "datasets": {
+    "sroie_eval": {
+      "path": "evaluation/phase0/results/sroie_eval.json",
+      "n": 100,
+      "sha256": "8d18fc0752d2a916fe49c87b26dbf74535173ae4e71eaf39e30431a0b075b9cf",
+      "bytes": 42889,
+      "source": "SROIE receipt images, original 100-doc project eval",
+      "provenance": "original set; 61/100 receipts also appear in the public SROIE train split (perceptual match across two resamplers)",
+      "leakage": {
+        "public_train_overlap": 61,
+        "fraction": 0.61,
+        "audit": "evaluation/phase0/results/eval_leakage_audit.json"
+      },
+      "use": "historical paired same-document comparisons only; do not use as a headline or held-out claim"
+    },
+    "sroie_eval_clean": {
+      "path": "evaluation/phase0/results/sroie_eval_clean.json",
+      "n": 100,
+      "sha256": "d4db971dcd575ac3dc71710c4dc7b4ef18633eafcbb9685257ef32362b536524",
+      "bytes": 38899,
+      "source": "sroie_public_train_clean",
+      "provenance": "100-doc split carved from the public SROIE train pool after removing duplicates of our 100-doc holdout; duplicate components split wholesale",
+      "leakage": {
+        "holdout_linked": 0,
+        "cross_split_pairs": 0,
+        "external_test": false,
+        "note": "clean relative to our holdout, not relative to Qwen pretraining; public SROIE may be in the base model's training data"
+      },
+      "use": "current engine comparisons (Qwen 3B/2B bake-off, hybrid v2); not an external generalization claim"
+    },
+    "sroie_val": {
+      "path": "evaluation/phase0/results/sroie_val.json",
+      "n": 40,
+      "sha256": "51d9fc8c1430b3628adac56a4cd8a459b072b375b24da9eb06f3b3b86263af23",
+      "bytes": 15293,
+      "source": "sroie_public_train_val",
+      "provenance": "40-doc val split from the same filtered public-SROIE pool",
+      "leakage": {
+        "external_test": false
+      },
+      "use": "sanity check only; n=40 is too small to select 1-3 point differences"
+    },
+    "funsd": {
+      "path": "evaluation/data/funsd/funsd.json",
+      "n_total": 199,
+      "n_evaluated": 50,
+      "sha256": "42f64da3cbe72fa1794f90dc9f6cc18d76f92025892134bdef3ae14689e019c0",
+      "bytes": 2560708,
+      "source": "FUNSD forms",
+      "provenance": "word-level NER labels aggregated into four receipt-shaped keys (company/date/address/total)",
+      "leakage": {
+        "external_test": true,
+        "note": "public dataset; may be in base-model pretraining"
+      },
+      "use": "transfer probe only; nonstandard gold mapping, never a leaderboard number"
+    },
+    "ocrbench_256m_full": {
+      "path": "evaluation/phase0/results/ocrbench_256m_full.json",
+      "n": 1000,
+      "sha256": "26ce880115004bd7352ddde325edfe5cf43170902b759ff1a8148a150e5f9cd9",
+      "bytes": 1583,
+      "source": "OCRBench",
+      "provenance": "full 1,000-sample evaluation of the retired 256M checkpoint",
+      "leakage": {
+        "external_test": true
+      },
+      "use": "retirement evidence only; 0.0% strict accuracy, no performance claim"
+    }
+  },
+  "multi_vertical": {
+    "receipts": {
+      "status": "measured",
+      "set": "sroie_eval_clean"
+    },
+    "forms": {
+      "status": "probe_only",
+      "set": "funsd",
+      "n_evaluated": 50,
+      "caveat": "nonstandard 4-key gold mapping"
+    },
+    "invoices": {
+      "status": "missing",
+      "blocker": "CORD images absent; DocILE access is gated; no invoice manifest yet"
+    },
+    "docvqa": {
+      "status": "not_measured",
+      "blocker": "images exist, but no manifest/runner is wired into the phase-0 harness"
+    }
+  },
+  "claim_audit": "evaluation/phase0/recompute_scores.py"
+}

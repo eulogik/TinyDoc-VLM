@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 82 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 89 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -115,7 +115,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 These are small but matter for “everything evidence based”:
 
 1. **Paired hybrid counts (fixed 2026-11-06).** Shipped path `preds_product_hybrid_clean.jsonl`: address **31/7/62** (p=0.000116); per-doc F1 **32/7/61**. The harness path `preds_hybrid-2.2b-tess_clean.jsonl` was **31/8/61** (p=0.00029). `v2_product_decision.json` now records the basis for both; README/BENCHMARKS quote the shipped path. `recompute_scores.py` should verify these counts.
-2. **“Verified-clean 100” needs a provenance label.** Rename in docs to “public-SROIE-train-derived, leakage-filtered vs our holdout; not an external test” or add a `provenance` field to the JSON.
+2. **“Verified-clean 100” provenance (fixed 2026-11-06).** `results/eval_provenance.json` records source, leakage, counts, and SHA-256 for every set; `tests/test_eval_provenance.py` guards it. Docs call the set “SROIE public-train-derived clean-100,” not an external test.
 3. **The 0.870 headline should be retired from the website** or carry the 60% caveat inline. The honest headline is **0.9475** (Qwen2.5-VL-3B) or **0.9200** (Qwen3-VL-2B) on clean-100, or **0.603** (first-party hybrid, clean-100).
 4. **`AGENTS.md` says 69 tests; actual 82.** Update.
 5. **`docs/index.html` says 7B quality tier**; engine ladder decision says 3B stays, 7B crashes the 16GB host. Update.
@@ -249,6 +249,19 @@ Two candidate routes:
 **Decision:** ship **both tiers** in v3.0 — 3B as the quality default, 2B as the fast/edge tier. Neither needs training to clear the receipt gate. The 2B does not beat the 3B, so a v3.1 LoRA on the 2B is justified only if it closes the 2.75-point gap or unlocks boxes/abstention on a new vertical.
 
 **Still to run:** the grounding probe (30 synthetic docs with GT boxes; `{value, bbox}` IoU) and the confidence probe (Hunter/Mapper agreement, ECE/AURC). Those decide whether v3.0 ships VLM boxes or keeps OCR-span evidence.
+
+**Grounding probe prepared:** `evaluation/phase0/run_grounding_probe.py` parses `<box>`/JSON/pixel outputs, normalizes to [0,1000], and reports IoU, hit@0.5, parse rate, and latency. Parser/IoU tests pass. It still needs an explicit inference approval:
+
+```bash
+python data/synthetic/gen_grounding_sample.py --num-docs 30 \
+    --output-dir /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe
+python evaluation/phase0/run_grounding_probe.py \
+    --manifest /Volumes/KIOXIA\ 1TB/tinydoc/grounding_probe/manifest.jsonl \
+    --model qwen2.5vl:3b --limit 100 \
+    --out evaluation/phase0/results/grounding_probe_qwen2.5vl_3b.json
+```
+
+**Multi-vertical status:** FUNSD images/labels are present (199 docs; 50 scored in the probe); CORD is empty and DocILE is gated, so invoices are still unmeasured. Do not claim invoice performance yet.
 
 ### Phase 2 — v3.0 product hardening (weeks 1–3, no training)
 

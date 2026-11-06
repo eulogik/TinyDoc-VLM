@@ -92,6 +92,9 @@ Supporting product metrics (n=100):
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).
 
+Machine-readable provenance and SHA-256 hashes for every eval set:
+`results/eval_provenance.json` (guarded by `tests/test_eval_provenance.py`).
+
 ---
 
 ## 3. Methodology
