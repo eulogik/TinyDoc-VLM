@@ -76,8 +76,10 @@ function gateClaims() {
   const index = existsSync(path.join(ROOT, "docs/index.html"))
     ? readFileSync(path.join(ROOT, "docs/index.html"), "utf8") : "";
   if (index.includes("⏳ Running")) bad.push("index.html still shows ⏳ Running");
-  if (!index.includes("0.870")) bad.push("index.html missing measured 0.870");
+  if (!index.includes("0.9475")) bad.push("index.html missing measured 0.9475");
+  if (!index.includes("0.9200")) bad.push("index.html missing measured 0.9200");
   if (!index.includes("0.376")) bad.push("index.html missing baseline 0.376");
+  if (!/not an external|60%|leaked/i.test(index)) bad.push("index.html missing the clean-100 provenance caveat");
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
