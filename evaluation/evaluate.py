@@ -1,8 +1,17 @@
 """
-Unified evaluation harness for TinyDoc-VLM.
-Supports DocVQA, OCRBench, FUNSD, CORD, and custom benchmarks.
+DEPRECATED (2026-11-06) — historical harness for the retired 256M model.
 
-Usage:
+Do **not** use this file for results. Its OCRBench/FUNSD/CORD scorers return
+`None` / `not_measured`, not measurements. The real, artifact-backed harness is:
+
+  evaluation/phase0/run_pipeline_eval.py   # SROIE fields, schema, ANLS, latency
+  evaluation/phase0/run_ocrbench_eval.py   # OCRBench
+  evaluation/phase0/run_funsd_eval.py      # FUNSD probe
+  evaluation/phase0/recompute_scores.py    # claim audit
+
+Kept only so old commands fail visibly instead of silently producing zeros.
+
+Usage (legacy):
     python evaluation/evaluate.py --model-path checkpoints/best --benchmark docvqa
 """
 
@@ -109,32 +118,38 @@ class OCRBenchBenchmark:
 
     def evaluate(self, model, processor) -> Dict:
         metrics = {
-            "ocrbench_text_recognition": 0.0,
-            "ocrbench_text_detection": 0.0,
-            "ocrbench_formula": 0.0,
-            "ocrbench_diagram": 0.0,
+            "ocrbench_text_recognition": None,
+            "ocrbench_text_detection": None,
+            "ocrbench_formula": None,
+            "ocrbench_diagram": None,
             "num_samples": 0,
+            "status": "not_measured",
         }
-        logger.warning("OCRBench requires the official evaluation dataset. Returning placeholder.")
+        logger.warning(
+            "DEPRECATED placeholder: OCRBench is not scored here. "
+            "Use evaluation/phase0/run_ocrbench_eval.py."
+        )
         return metrics
 
 
 class FUNSDBenchmark:
     """FUNSD form understanding evaluation."""
+
     def __init__(self, data_path: Path):
         self.data_path = data_path
 
     def evaluate(self, model, processor) -> Dict:
-        return {"funsd_f1": 0.0, "num_samples": 0}
+        return {"funsd_f1": None, "num_samples": 0, "status": "not_measured"}
 
 
 class CORDBenchmark:
     """CORD receipt extraction evaluation."""
+
     def __init__(self, data_path: Path):
         self.data_path = data_path
 
     def evaluate(self, model, processor) -> Dict:
-        return {"cord_f1": 0.0, "num_samples": 0}
+        return {"cord_f1": None, "num_samples": 0, "status": "not_measured"}
 
 
 BENCHMARKS = {
@@ -165,7 +180,13 @@ def evaluate_model(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate TinyDoc-VLM")
+    print(
+        "DEPRECATED: evaluation/evaluate.py is a historical 256M harness.\n"
+        "Its OCRBench/FUNSD/CORD scorers are NOT measurements.\n"
+        "Use evaluation/phase0/run_*_eval.py and recompute_scores.py instead.",
+        flush=True,
+    )
+    parser = argparse.ArgumentParser(description="Evaluate TinyDoc-VLM (deprecated)")
     parser.add_argument("--model-path", type=str, required=True, help="Path to model checkpoint")
     parser.add_argument("--benchmark", type=str, nargs="+", default=["docvqa"], help="Benchmarks to evaluate")
     parser.add_argument("--data-dir", type=str, default="evaluation/data", help="Benchmark data directory")

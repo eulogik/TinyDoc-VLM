@@ -34,10 +34,13 @@ memory watchdog when they are model inference.
 - `TINYDOC_OLLAMA_TIMEOUT` (default 180) controls Ollama client timeout; use
   600 for slow local runs — client disconnects mid-generation wedge the
   single-slot server.
+- `TINYDOC_OLLAMA_NUM_CTX` (default 8192) sets Ollama's context window. The
+  old implicit 4096 rejected 2481×3508 scans with HTTP 400, which phase-0
+  harnesses counted as empty predictions. Do not lower it for full-page scans.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 69 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 82 passed)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`

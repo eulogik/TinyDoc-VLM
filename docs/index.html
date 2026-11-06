@@ -69,13 +69,13 @@
       <div class="badges">
         <a href="https://github.com/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/github/stars/eulogik/TinyDoc-VLM?style=social" alt="GitHub stars"></a>
         <a href="https://pypi.org/project/tinydoc/"><img src="https://img.shields.io/pypi/v/tinydoc?color=blue" alt="PyPI"></a>
-        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M"><img src="https://img.shields.io/badge/🤗-Model-yellow" alt="HF Model"></a>
         <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/badge/🤗-Space-yellow" alt="HF Space"></a>
+        <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md"><img src="https://img.shields.io/badge/Model%20status-v3%20plan-yellow" alt="Model status"></a>
         <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green" alt="License"></a>
       </div>
       <div class="hero-cta">
         <a href="#quickstart" class="btn btn-primary">Get Started</a>
-        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM" class="btn btn-secondary">Try the Demo</a>
+        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM" class="btn btn-secondary">View Demo</a>
       </div>
     </header>
 
@@ -84,8 +84,8 @@
       <div class="features">
         <div class="feature">
           <div class="icon">🧠</div>
-          <h3>Beats the Free Competition</h3>
-          <p>Field F1 <b>0.870</b> on held-out SROIE receipts vs <b>0.376</b> for PP-OCR + heuristics and 0.227 for Tesseract + regex — measured on the same 100 documents.</p>
+          <h3>Measured, Not Marketed</h3>
+          <p>Field F1 <b>0.9475</b> with Qwen2.5-VL-3B and <b>0.9200</b> with Qwen3-VL-2B-Instruct vs <b>0.376</b> for PP-OCR + heuristics — same 100 documents, same scorer. <a href="#benchmarks">Provenance caveat</a>.</p>
         </div>
         <div class="feature">
           <div class="icon">🔍</div>
@@ -100,7 +100,7 @@
         <div class="feature">
           <div class="icon">⚙️</div>
           <h3>Engine Ladder</h3>
-          <p>Free <code>ollama:qwen2.5vl:3b</code> by default, quality tiers up to 7B, ONNX and OCR-fallback engines behind one interface.</p>
+          <p>Free <code>ollama:qwen2.5vl:3b</code> quality default, <code>ollama:qwen3-vl:2b-instruct</code> fast tier, plus MLX, ONNX and OCR-fallback engines behind one interface.</p>
         </div>
         <div class="feature">
           <div class="icon">📦</div>
@@ -120,7 +120,7 @@
       <div class="code-block">
         <span class="comment"># Install the SDK</span><br>
         pip install tinydoc<br><br>
-        <span class="comment"># Requirements: a running Ollama with qwen2.5vl:3b (free, local)</span><br>
+        <span class="comment"># Requirements: Ollama + qwen2.5vl:3b (quality) or qwen3-vl:2b-instruct (fast)</span><br>
         <span class="keyword">from</span> tinydoc.pipeline <span class="keyword">import</span> ReceiptPipeline<br><br>
         pipe = ReceiptPipeline(<span class="string">"auto"</span>)<br>
         doc = pipe.extract(<span class="string">"receipt.jpg"</span>)<br><br>
@@ -140,7 +140,7 @@
         <pre>
 Receipt / invoice image
     ↓
-Engine (ollama:qwen2.5vl:3b — free &amp; local, or 7B / ONNX / OCR-fallback)
+Engine (ollama:qwen2.5vl:3b — quality; qwen3-vl:2b-instruct — fast; MLX / OCR fallback)
     ↓
 Raw model output → JSON extraction → collapse repetition → sanitize
     ↓
@@ -161,21 +161,27 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
           <tr><th>Benchmark</th><th>Metric</th><th>Score</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr><td>SROIE receipts — TinyDoc pipeline (qwen2.5vl:3b)</td><td>Field F1</td><td><b>0.870</b></td><td>✅ n=100, committed artifacts</td></tr>
+          <tr><td>SROIE receipts — clean-100, Qwen2.5-VL-3B (quality)</td><td>Field F1</td><td><b>0.9475</b></td><td>✅ n=100, schema 1.00, 0 errors</td></tr>
+          <tr><td>SROIE receipts — clean-100, Qwen3-VL-2B-Instruct (fast)</td><td>Field F1</td><td><b>0.9200</b></td><td>✅ n=100, schema 1.00, 2× faster</td></tr>
+          <tr><td>SROIE receipts — clean-100, first-party hybrid v2</td><td>Field F1</td><td>0.603</td><td>✅ shipped v2, address 0.37</td></tr>
           <tr><td>SROIE receipts — PP-OCR + heuristics baseline</td><td>Field F1</td><td>0.376</td><td>✅ same 100 docs, same scorer</td></tr>
           <tr><td>SROIE receipts — Tesseract + regex baseline</td><td>Field F1</td><td>0.227</td><td>✅ same 100 docs, same scorer</td></tr>
-          <tr><td>Schema validity (pipeline, SROIE eval)</td><td>Rate</td><td>1.000</td><td>✅ n=100</td></tr>
-          <tr><td>Evidence coverage (RapidOCR, post A/B)</td><td>Rate</td><td>0.798</td><td>✅ n=100 × 4 fields</td></tr>
+          <tr><td>Schema validity (Qwen 3B / 2B)</td><td>Rate</td><td>1.000</td><td>✅ n=100</td></tr>
+          <tr><td>Evidence coverage (RapidOCR, post A/B)</td><td>Rate</td><td>0.798</td><td>✅ legacy 3B run</td></tr>
           <tr><td>FUNSD transfer probe (form → receipt-shaped keys)</td><td>Field F1</td><td>0.352</td><td>✅ n=50, nonstandard gold mapping</td></tr>
           <tr><td>OCRBench — TinyDoc-VLM 256M research checkpoint</td><td>Accuracy</td><td>0.0%</td><td>⚠️ n=1000 — model retired from claims</td></tr>
-          <tr><td>DocVQA / CORD / PubTabNet</td><td>—</td><td>—</td><td>Not measured</td></tr>
+          <tr><td>DocVQA / CORD / invoices</td><td>—</td><td>—</td><td>Not measured</td></tr>
         </tbody>
       </table>
       <p style="margin-top:16px; color:#64748b; font-size:0.9rem;">
-        Every number above recomputes from committed artifacts in
-        <code>evaluation/phase0/results/</code>. The 256M checkpoint's earlier
-        benchmark figures were never measured and have been withdrawn — see
-        <code>docs/BENCHMARKS.md</code>.
+        <b>Provenance:</b> clean-100 is a duplicate-filtered split of the public
+        SROIE <b>train</b> pool, not an external test; Qwen may have seen it in
+        pretraining. The original 100-doc set is 60% leaked. These numbers are for
+        same-document engine comparisons, not generalization claims.
+        Every number recomputes from <code>evaluation/phase0/results/</code>;
+        see <code>docs/BENCHMARKS.md</code> and <code>docs/v3_plan.md</code>.
+        The 256M checkpoint's earlier benchmark figures were never measured and
+        have been withdrawn.
       </p>
     </section>
 
@@ -184,15 +190,15 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
       <div class="features">
         <div class="feature">
           <h3>🐍 PyPI</h3>
-          <p><code>pip install tinydoc</code> — <a href="https://pypi.org/project/tinydoc/">pypi.org/project/tinydoc</a></p>
+          <p><code>pip install tinydoc</code> (PyPI 0.1.2, legacy) — 0.2.0 is a <a href="https://github.com/eulogik/TinyDoc-VLM#quick-start">source install</a>.</p>
         </div>
         <div class="feature">
-          <h3>🤗 Model Hub</h3>
-          <p>Research checkpoints (archived — see benchmarks) — <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">eulogik/TinyDoc-VLM-256M</a></p>
+          <h3>🤗 Model Status</h3>
+          <p>The 256M checkpoint is an archived research artifact (OCRBench 0.0%), not the product — <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md">read the v3 plan</a>.</p>
         </div>
         <div class="feature">
           <h3>🤗 Space Demo</h3>
-          <p>Try it live — <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">eulogik/TinyDoc-VLM Space</a></p>
+          <p>Static project card with local-run instructions — <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">eulogik/TinyDoc-VLM Space</a></p>
         </div>
         <div class="feature">
           <h3>📖 Documentation</h3>
@@ -214,7 +220,8 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
         Built by <a href="https://eulogik.com">eulogik</a> —
         <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> ·
         <a href="https://pypi.org/project/tinydoc/">PyPI</a> ·
-        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">HF Model</a> ·
+        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">Research checkpoint</a> ·
+        <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md">Model status</a> ·
         <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">HF Space</a>
       </p>
       <p style="margin-top: 8px;">Apache 2.0 &mdash; Free for commercial use</p>

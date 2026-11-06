@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import sys
+from math import comb
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -31,6 +32,27 @@ PAIRS = [
     ("preds_ppocr_heuristics.jsonl", "scores_ppocr_heuristics.json"),
     ("preds_pipeline_ollama_qwen2.5vl_3b.jsonl", "scores_pipeline_ollama_qwen2.5vl_3b.json"),
     ("preds_pipeline_ollama_qwen2.5vl_3b_unseen.jsonl", "scores_pipeline_ollama_qwen2.5vl_3b_unseen.json"),
+]
+
+# 2026-11-06 base bake-off. Optional: these artifacts may be absent from a
+# source checkout, but when present every published number must recompute.
+PILOT_PAIRS = [
+    (
+        "preds_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k.jsonl",
+        "scores_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k.json",
+    ),
+    (
+        "preds_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k.jsonl",
+        "scores_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k.json",
+    ),
+    (
+        "preds_pipeline_ollama_qwen2.5vl_3b_val_ctx8k.jsonl",
+        "scores_pipeline_ollama_qwen2.5vl_3b_val_ctx8k.json",
+    ),
+    (
+        "preds_pipeline_ollama_qwen3-vl_2b-instruct_val_ctx8k.jsonl",
+        "scores_pipeline_ollama_qwen3-vl_2b-instruct_val_ctx8k.json",
+    ),
 ]
 
 TOL = 0.006  # published aggregates are sometimes rounded to 2 decimals
@@ -57,48 +79,70 @@ def close(a: float, b: float) -> bool:
     return abs(float(a) - float(b)) <= TOL
 
 
+def audit_pair(
+    preds_name: str,
+    scores_name: str,
+    failures: list[str],
+    missing_is_failure: bool = True,
+) -> None:
+    p_path, s_path = RESULTS / preds_name, RESULTS / scores_name
+    if not p_path.exists() or not s_path.exists():
+        if missing_is_failure:
+            failures.append(f"{preds_name}: missing artifact")
+            print(f"{preds_name:<56} {'--':>4} {'--':>7} {'--':>7} MISSING")
+        else:
+            print(f"{preds_name:<56} {'--':>4} {'--':>7} {'--':>7} absent (optional)")
+        return
+
+    rows = [json.loads(line) for line in p_path.open() if line.strip()]
+    pub = json.loads(s_path.read_text())
+    re = recompute(rows)
+
+    ok = True
+    reasons = []
+    if int(pub.get("n_examples", re["n"])) != re["n"]:
+        ok = False
+        reasons.append(f"n {pub.get('n_examples')}!={re['n']}")
+    if "field_f1" in pub and not close(pub["field_f1"], re["field_f1"]):
+        ok = False
+        reasons.append(f"f1 {pub['field_f1']}!={re['field_f1']:.4f}")
+    if "schema_valid_rate" in pub and not close(
+        pub["schema_valid_rate"], re["schema_valid_rate"]
+    ):
+        ok = False
+        reasons.append(f"schema {pub['schema_valid_rate']}!={re['schema_valid_rate']:.4f}")
+    if "anls_mean" in pub and not close(pub["anls_mean"], re["anls_mean"]):
+        ok = False
+        reasons.append(f"anls {pub['anls_mean']}!={re['anls_mean']:.4f}")
+    pub_hits = pub.get("per_field_hit_rate") or pub.get("field_hit_rates")
+    if isinstance(pub_hits, dict):
+        for field in FIELDS:
+            if field in pub_hits and not close(pub_hits[field], re["per_field_hit_rate"][field]):
+                ok = False
+                reasons.append(
+                    f"{field} {pub_hits[field]}!={re['per_field_hit_rate'][field]:.4f}"
+                )
+
+    status = "OK" if ok else "MISMATCH: " + "; ".join(reasons)
+    if not ok:
+        failures.append(f"{scores_name}: {status}")
+    print(
+        f"{preds_name:<56} {re['n']:>4} "
+        f"{pub.get('field_f1', float('nan')):>7} {re['field_f1']:>7.4f} {status}"
+    )
+
+
 def main() -> int:
     failures: list[str] = []
     print(f"{'pair':<56} {'n':>4} {'F1 pub':>7} {'F1 re':>7} {'status'}")
     print("-" * 90)
     for preds_name, scores_name in PAIRS:
-        p_path, s_path = RESULTS / preds_name, RESULTS / scores_name
-        if not p_path.exists() or not s_path.exists():
-            failures.append(f"{preds_name}: missing artifact")
-            print(f"{preds_name:<56} {'--':>4} {'--':>7} {'--':>7} MISSING")
-            continue
-        rows = [json.loads(l) for l in p_path.open() if l.strip()]
-        pub = json.loads(s_path.read_text())
-        re = recompute(rows)
+        audit_pair(preds_name, scores_name, failures)
 
-        ok = True
-        reasons = []
-        if int(pub.get("n_examples", re["n"])) != re["n"]:
-            ok = False
-            reasons.append(f"n {pub.get('n_examples')}!={re['n']}")
-        if "field_f1" in pub and not close(pub["field_f1"], re["field_f1"]):
-            ok = False
-            reasons.append(f"f1 {pub['field_f1']}!={re['field_f1']:.4f}")
-        if "schema_valid_rate" in pub and not close(pub["schema_valid_rate"], re["schema_valid_rate"]):
-            ok = False
-            reasons.append(f"schema {pub['schema_valid_rate']}!={re['schema_valid_rate']:.4f}")
-        if "anls_mean" in pub and not close(pub["anls_mean"], re["anls_mean"]):
-            ok = False
-            reasons.append(f"anls {pub['anls_mean']}!={re['anls_mean']:.4f}")
-        pub_hits = pub.get("per_field_hit_rate") or pub.get("field_hit_rates")
-        if isinstance(pub_hits, dict):
-            for f in FIELDS:
-                if f in pub_hits and not close(pub_hits[f], re["per_field_hit_rate"][f]):
-                    ok = False
-                    reasons.append(f"{f} {pub_hits[f]}!={re['per_field_hit_rate'][f]:.4f}")
-
-        status = "OK" if ok else "MISMATCH: " + "; ".join(reasons)
-        if not ok:
-            failures.append(f"{scores_name}: {status}")
-        print(
-            f"{preds_name:<56} {re['n']:>4} "
-            f"{pub.get('field_f1', float('nan')):>7} {re['field_f1']:>7.4f} {status}"
-        )
+    print("-" * 90)
+    print("2026-11-06 base bake-off (optional artifacts)")
+    for preds_name, scores_name in PILOT_PAIRS:
+        audit_pair(preds_name, scores_name, failures, missing_is_failure=False)
 
     # product-level claims that must hold across pairs
     print("-" * 90)
@@ -131,6 +175,55 @@ def main() -> int:
               f"{'PASS' if acc == 0.0 else 'FAIL (expected 0.0)'}")
         if acc != 0.0:
             failures.append(f"ocrbench artifact accuracy {acc} != 0.0")
+
+    # Paired hybrid-vs-base counts on the shipped product path. The earlier
+    # 31/8/61 came from the harness path and must not be quoted as shipped.
+    product = RESULTS / "preds_product_hybrid_clean.jsonl"
+    base = RESULTS / "preds_smolvlm2-2.2b_base_clean.jsonl"
+    decision = RESULTS / "v2_product_decision.json"
+    if product.exists() and base.exists():
+        try:
+            prod = {json.loads(line)["id"]: json.loads(line) for line in product.open() if line.strip()}
+            bas = {json.loads(line)["id"]: json.loads(line) for line in base.open() if line.strip()}
+            ids = sorted(set(prod) & set(bas))
+            aw = al = at = 0
+            fw = fl = ft = 0
+            for doc_id in ids:
+                pa = bool(prod[doc_id]["score"]["fields"]["address"]["hit"])
+                ba = bool(bas[doc_id]["score"]["fields"]["address"]["hit"])
+                if pa and not ba:
+                    aw += 1
+                elif ba and not pa:
+                    al += 1
+                else:
+                    at += 1
+                pf = float(prod[doc_id]["score"]["f1"])
+                bf = float(bas[doc_id]["score"]["f1"])
+                if pf > bf + 1e-9:
+                    fw += 1
+                elif bf > pf + 1e-9:
+                    fl += 1
+                else:
+                    ft += 1
+            n = aw + al
+            p = min(1.0, 2 * sum(comb(n, k) for k in range(min(aw, al) + 1)) / 2 ** n) if n else 1.0
+            ok = (aw, al, at) == (31, 7, 62) and (fw, fl, ft) == (32, 7, 61)
+            print(
+                f"claim: hybrid address paired {aw}/{al}/{at}, p={p:.6f}; "
+                f"per-doc F1 {fw}/{fl}/{ft} -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append(
+                    f"paired hybrid counts changed: address {aw}/{al}/{at}, F1 {fw}/{fl}/{ft}"
+                )
+            if decision.exists():
+                d = json.loads(decision.read_text())
+                if abs(float(d.get("address_sign_test_p", -1)) - p) > 1e-5:
+                    failures.append(
+                        f"v2_product_decision.json p={d.get('address_sign_test_p')} != recomputed {p:.6f}"
+                    )
+        except Exception as e:  # noqa: BLE001
+            failures.append(f"paired hybrid check errored: {e}")
 
     print("-" * 90)
     if failures:

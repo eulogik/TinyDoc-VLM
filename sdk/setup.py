@@ -1,8 +1,10 @@
+from pathlib import Path
+
 from setuptools import setup, find_packages
 
 setup(
     name="tinydoc",
-    version="0.1.3",
+    version="0.2.0",
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -43,14 +45,15 @@ setup(
         "Local-first grounded document extraction SDK — schema, evidence, "
         "confidence. Free Ollama/Qwen engine by default; no API key."
     ),
-    long_description=open("README.md").read() if __import__("os").path.exists("README.md") else "",
+    long_description=(Path(__file__).parent / "README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
     url="https://github.com/eulogik/TinyDoc-VLM",
     project_urls={
-        "HuggingFace Model": "https://huggingface.co/eulogik/TinyDoc-VLM-256M",
+        "Model status": "https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md",
         "HuggingFace Space": "https://huggingface.co/spaces/eulogik/TinyDoc-VLM",
         "Bug Tracker": "https://github.com/eulogik/TinyDoc-VLM/issues",
         "Documentation": "https://github.com/eulogik/TinyDoc-VLM#readme",
+        "Benchmarks": "https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md",
         "Website": "https://eulogik.github.io/TinyDoc-VLM/",
     },
     classifiers=[

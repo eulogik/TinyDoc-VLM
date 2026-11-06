@@ -1,14 +1,14 @@
 <div align="center">
-  <h1>TinyDoc-VLM</h1>
-  <p><b>256M-Parameter Document-Specialist Vision-Language Model</b></p>
-  <p>SigLIP-B/16 + PixelShuffle 3× + SmolLM2-135M · OCR, VQA, Form Extraction, Table Parsing</p>
-  <p>Apache 2.0 · Runs on CPU · <1GB VRAM · LoRA Fine-tuning</p>
+  <h1>TinyDoc</h1>
+  <p><b>Local-first grounded document extraction</b></p>
+  <p>Schema-valid JSON · per-field evidence · confidence · Apache 2.0</p>
+  <p>Measured <b>0.9475</b> field F1 on our hardest receipt set with Qwen2.5-VL-3B;<br>
+     <b>0.9200</b> with Qwen3-VL-2B-Instruct at <b>2× the speed</b>.</p>
 
 [![PyPI](https://img.shields.io/pypi/v/tinydoc?color=blue&label=tinydoc)](https://pypi.org/project/tinydoc/)
-[![HF Model](https://img.shields.io/badge/🤗-Model%20Hub-yellow)](https://huggingface.co/eulogik/TinyDoc-VLM-256M)
-[![HF LoRA](https://img.shields.io/badge/🤗-LoRA%20Adapter-yellow)](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA)
-[![HF Space](https://img.shields.io/badge/🤗-Live%20Demo-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 [![GitHub](https://img.shields.io/badge/GitHub-Source-181717?logo=github)](https://github.com/eulogik/TinyDoc-VLM)
+[![Model Status](https://img.shields.io/badge/Model%20status-v3%20plan-yellow)](docs/v3_plan.md)
+[![HF Space](https://img.shields.io/badge/🤗-Demo-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 
@@ -16,216 +16,193 @@
 
 **Built by [eulogik](https://eulogik.com)** — AI infrastructure for document intelligence.
 
-[PyPI](https://pypi.org/project/tinydoc/) · [Model Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · [LoRA Checkpoint](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) · [Live Demo](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
+[PyPI](https://pypi.org/project/tinydoc/) · [Source](https://github.com/eulogik/TinyDoc-VLM) · [Model status](docs/v3_plan.md) · [Benchmarks](docs/BENCHMARKS.md) · [Demo](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 </div>
 
-## What is TinyDoc-VLM?
+## What is TinyDoc?
 
-TinyDoc-VLM is an open-source **document understanding AI** that reads invoices, receipts, forms, tables, and charts. At just **256M parameters**, it runs on a MacBook, Raspberry Pi 5, or any CPU — no GPU required.
+TinyDoc is a Python SDK and CLI that turns document images into **schema-validated
+JSON**. It runs a local vision-language model through
+[Ollama](https://ollama.com), then adds JSON Schema validation, per-field
+OCR-span evidence, and confidence scoring. No API key, no cloud, no telemetry.
 
-**Use cases:** Invoice processing, receipt scanning, form data extraction, table parsing, document Q&A, OCR, visual question answering.
+The base model is third-party (Qwen2.5-VL / Qwen3-VL); the product is the
+grounded extraction layer around it. The first-party 256M checkpoint is retired
+(OCRBench 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over base).
+See [`docs/v3_plan.md`](docs/v3_plan.md) for the evidence.
 
-## Highlights
+## Measured results
 
-- **256M params** — SigLIP-B/16 vision encoder (93M) + PixelShuffle 3× compressor + SmolLM2-135M decoder
-- **<1GB VRAM** — Runs on MacBook Air, Raspberry Pi 5, or any CPU with ONNX
-- **Structured output** — JSON extraction, key-value pairs, table parsing, OCR, VQA
-- **LoRA fine-tuning** — Train on your own docs with 2.7M trainable params (0.93% of total)
-- **Apache 2.0** — Fully open-source, free for commercial use
-- **ONNX export** — Deploy anywhere with ONNX Runtime
+Same 100 receipts, same prompt, same scorer, same 8k context, Ollama Q4,
+temperature 0:
 
-## Quick Start
+| System | Field F1 | Address | Schema | Median latency | Errors |
+|---|---:|---:|---:|---:|---:|
+| **Qwen2.5-VL-3B** — quality default | **0.9475** | 0.86 | 1.00 | 14.1 s | 0 |
+| **Qwen3-VL-2B-Instruct** — fast tier | **0.9200** | 0.84 | 1.00 | **7.0 s** | 0 |
+| Hybrid v2 — first-party, shipped | 0.603 | 0.37 | 0.93 | ~8 s | — |
+| PP-OCR + heuristics | 0.376 | 0.03 | — | — | — |
+| Tesseract + regex | 0.227 | — | 0.60 | — | — |
 
-### Install
+> ⚠️ **These are not external benchmark numbers.** The 100-doc set is a
+> duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
+> it during pretraining. The original 100-doc set is 60% leaked. Use these numbers
+> for same-document engine comparisons, not as a generalization claim. The next
+> eval adds CORD/FUNSD/invoices and a private wild set. Every published number
+> must recompute from `evaluation/phase0/results/` via
+> `python3 evaluation/phase0/recompute_scores.py`.
+
+## Quick start
 
 ```bash
-pip install tinydoc
-```
+# 0.2.0 is currently a source install; PyPI 0.1.2 is the legacy 256M API.
+pip install "tinydoc @ git+https://github.com/eulogik/TinyDoc-VLM.git#subdirectory=sdk"
+# or, from a clone:
+pip install ./sdk
 
-### Python SDK
+# Default quality engine (free, local)
+ollama pull qwen2.5vl:3b
+# Fast tier (1.9 GB Q4, ~2x faster)
+ollama pull qwen3-vl:2b-instruct
+```
 
 ```python
-from PIL import Image
-from tinydoc import TinyDocExtractor
+from tinydoc import ReceiptPipeline
 
-extractor = TinyDocExtractor(device="cpu")
+pipe = ReceiptPipeline("ollama:qwen2.5vl:3b")   # or "ollama:qwen3-vl:2b-instruct"
+result = pipe.extract("receipt.jpg")
 
-# Ask a question about a document
-img = Image.open("invoice.png")
-result = extractor.ask(img, "What is the total?")
-print(result.answer)  # "$1,234.56"
-
-# Extract structured JSON
-result = extractor.extract(img, output_format="json")
-print(result.fields)  # {"total": "$1,234.56", "date": "2024-01-15", ...}
-
-# Extract tables
-result = extractor.extract_table(img)
-print(result.markdown)  # Markdown-formatted table
+print(result.fields)        # {"company": ..., "date": ..., "address": ..., "total": ...}
+print(result.schema_valid)  # True/False (JSON Schema)
+print(result.confidence)    # 0..1 aggregate
+for field in result.field_results:
+    print(field.name, field.value, field.confidence, field.evidence)
 ```
-
-### Direct Model Access
-
-```python
-from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
-
-model = TinyDocVLMForConditionalGeneration.from_pretrained("eulogik/TinyDoc-VLM-256M")
-processor = TinyDocVLMProcessor()
-```
-
-## Model Architecture
-
-```
-Image (768×768, default; 384×384 legacy)
-    ↓
-SigLIP Vision Encoder (93M)          ← 2304 patches × 768 dim
-    ↓
-Pixel-Shuffle Compressor (scale=3)   ← 9× compression → 256 tokens/tile
-    ↓
-Visual Position Embeddings (interpolated 384→768)
-    ↓
-SmolLM2 Decoder (135M)               ← 30 layers, GQA (9:3 heads), 8192 ctx
-    ↓
-LM Head (prompt-routed)              ← text / markdown / JSON / VQA
-```
-
-**Total: ~262M parameters** | Vision: 93M | Compressor: 3M | Decoder: 135M
-
-> **Architecture note:** the original multi-task output heads (`output_heads.py`) were
-> removed. The model now produces all outputs (markdown, text, JSON, VQA) through the
-> decoder's LM head, selected by the input prompt. A repetition-penalty / no-repeat-ngram
-> override is built into `generate()` to reduce verbose looping.
-
-## Model Versions & Status (2026-09-22)
-
-| Artifact | Type | Status | Notes |
-|----------|------|--------|-------|
-| [`eulogik/TinyDoc-VLM-256M`](https://huggingface.co/eulogik/TinyDoc-VLM-256M) | Base model | ⚠️ **Fails eval** | Measured **OCRBench 0.0%** (`docs/BENCHMARKS.md`). Legacy 384 architecture. |
-| [`eulogik/TinyDoc-VLM-LoRA`](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) | PEFT LoRA | ⚠️ Legacy | Same base limitations. |
-| TinyDoc-768 retrain | Full retrain | ❌ **Abandoned** | Vision tower dead at init (constant features for any input); decoder memorized text. |
-| SmolVLM2-2.2B + 46k real pairs (Kaggle QLoRA) | Adapter experiment | 🧪 **In progress / under review** | Infra works (~step 493 max before 12h timeout). Signals so far look like **memorization** (loss→0.06, eval entropy ≈0.065 vs grounding gate ≥1.0). **No completed adapter on the Hub.** See `docs/pivot_plan.md`. |
-| Phase-0 baselines | Eval harness | 🛠 **Active** | `evaluation/phase0/` — measured field F1 / ANLS / schema-valid on 100 held-out SROIE receipts. |
-
-**Honest summary:** no model in this repo currently demonstrates production-grade document extraction. Marketing/paper numbers that are not from `evaluation/` or `docs/BENCHMARKS.md` are **draft placeholders**. Product direction (grounded local extraction SDK) is specified in [`docs/pivot_plan.md`](docs/pivot_plan.md).
-
-## LoRA Fine-tuning
-
-Train TinyDoc-VLM on your own documents using LoRA. Only **2.7M params** (0.93%) are trained.
-
-### M4 Mac (overnight run)
 
 ```bash
-# Generate 3K synthetic documents
-python data/synthetic/generator.py --num-docs 3000 --output-dir data/synthetic/output
-
-# Train for 17K steps (~15 hours on M4)
-python training/fast_train.py \
-    --manifest data/synthetic/output/manifest.jsonl \
-    --data-root data/synthetic \
-    --steps 17000 --batch-size 1 --grad-accum 4 --device mps
-
-# Or use the one-liner
-bash training/m4_train.sh 17000
+tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \
+    --out results.jsonl --overlay overlays/
 ```
 
-### Colab Free T4
+Overlay PNGs draw OCR-span evidence boxes and field labels (`tinydoc.draw_overlay`).
+The local Gradio demo is `python demo/app.py --share` (requires Ollama).
 
-Open [training/colab_train.ipynb](training/colab_train.ipynb) — complete pipeline in one notebook (~1 hour for 5K steps).
+### Engines
 
-### Training Results
+| Engine id | What it does |
+|---|---|
+| `ollama` / `ollama:qwen2.5vl:3b` | Quality default; free, local |
+| `ollama:qwen3-vl:2b-instruct` | Fast tier; use the `-instruct` tag, not the thinking tag |
+| `auto` | Ollama if reachable; OCR floor if the schema would fail |
+| `ocr_regex` | Offline floor (Tesseract + rules) |
+| `mlx_2p2b` | First-party v2 edge engine (MLX SmolVLM2-2.2B 4-bit) |
+| `hybrid_2p2b` | v2 product path: MLX fields + frozen F3 OCR address |
 
-| Metric | Value |
-|--------|-------|
-| Best checkpoint | Step 14,000 (loss: 15.0) |
-| Training data | 3,000 synthetic docs (6,815 QA pairs) |
-| Training time | 15.1 hours on M4 |
-| LoRA rank | 16 (alpha: 32) |
+**Do not** set Ollama `format: "json"` — constrained decoding truncates long
+addresses and can drop `total`. The SDK uses unconstrained prompts, JSON salvage,
+and prompt-v1. `TINYDOC_OLLAMA_NUM_CTX` defaults to 8192; the old implicit 4096
+rejected 2481×3508 scans with HTTP 400.
 
-## Deployment
+## Model status
 
-### ONNX Export
+| Artifact | Status | Evidence |
+|---|---|---|
+| **TinyDoc 3.0 engine** (Qwen2.5-VL-3B / Qwen3-VL-2B + trust layer) | ✅ **Current** | 0.9475 / 0.9200 clean-100; zero errors; schema 1.00 |
+| Hybrid v2 (`hybrid_2p2b`, MLX + Tesseract F3) | 🚢 Shipped 2026-10-07, superseded | 0.603 clean-100; address 0.37; paired address 31/7/62 |
+| SmolVLM2-2.2B SFT / vision LoRA | ❌ Closed | Base 0.536; clean-100 LoRA 0.535–0.540; vision LoRA 0.0395 / 0.4277 |
+| TinyDoc-VLM-256M | ⚠️ Retired research checkpoint | OCRBench **0.0%** (n=999 scored); no performance claims |
+| TinyDoc-2B grounded LoRA (v3.1) | 🧪 Conditional | Only if v3.0 leaves a measured invoice/grounding residual |
+
+The honest one-liner: **the evaluation harness and product layer are real; the
+old first-party models are not competitive.** The current product is a strong
+third-party reader behind a grounded extraction layer. The v3.1 plan is the path
+to a first-party adapter.
+
+## How it works
+
+```
+Receipt / invoice image
+    ↓
+Engine (Ollama Qwen2.5-VL-3B, Qwen3-VL-2B, MLX v2, or OCR floor)
+    ↓
+Raw output → JSON extraction → repetition collapse → sanitize
+    ↓
+JSON Schema validation  ── schema_valid: true/false
+    ↓
+OCR-span evidence (word boxes → best quote + bbox per field)
+    ↓
+Confidence (evidence quality × schema × field rules)
+    ↓
+DocumentResult — fields + per-field {quote, bbox, score} + confidence
+```
+
+Evidence is **OCR-span**, not VLM-predicted boxes. Treat it as provenance, not
+as model grounding. The next eval measures VLM bbox IoU before claiming boxes.
+
+## Evaluation and honesty
+
+- **SROIE clean-100** is a duplicate-filtered split of the public SROIE train
+  pool (`source: sroie_public_train_clean`), not an external test set.
+- The original 100-doc SROIE set is **60% leaked** (61/100 also appear in the
+  public train split; perceptual match across two resamplers). Its 0.870 headline
+  is retained only as a historical, caveated number.
+- **FUNSD** is a transfer probe with nonstandard gold mapping; never cite it as a
+  leaderboard number.
+- **DocVQA / CORD / invoices** are not yet measured. No claims.
+- The claim audit recomputes every published pair from committed artifacts:
+  `python3 evaluation/phase0/recompute_scores.py` must exit 0.
+
+Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
+methodology and provenance are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+
+## Development
 
 ```bash
-python export/export_onnx.py --model-path eulogik/TinyDoc-VLM-256M --output model.onnx
+python3 -m pytest tests/ -q                 # 82 passed
+python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
+python3 evaluation/phase0/recompute_scores.py
+node scripts/verify-product.mjs audit
 ```
 
-ONNX models on [HF Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M):
-- `tinydoc-vlm-vision.onnx` — Vision encoder (33KB)
-- `tinydoc-vlm-compressor.onnx` — Token compressor (31KB)
-- `tinydoc-vlm-decoder.onnx` — Language decoder (59MB)
-
-### HuggingFace Spaces
-
-Live demo: [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-
-## Benchmarks (measured only)
-
-| Benchmark | Result | Source |
-|-----------|--------|--------|
-| SROIE field F1 — TinyDoc pipeline (free `ollama:qwen2.5vl:3b`, n=100) | **0.870** (schema 1.000; address 0.72) ⚠️ **not a clean held-out set — see caveat** | [`scores_ollama.json`](evaluation/phase0/results/scores_ollama.json) |
-| SROIE field F1 — first-party hybrid v2 product path (MLX SmolVLM2-2.2B + tesseract F3 address, **verified-clean 100**) | **0.603 — SHIPPED v2.0** (schema 0.93; address 0.37 beta; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc engineering track) | [`scores_product_hybrid_clean.json`](evaluation/phase0/results/scores_product_hybrid_clean.json) · decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json) |
-| SROIE field F1 — PP-OCR + heuristics baseline (same 100 docs, same scorer) | 0.376 | [`scores_ppocr_heuristics.json`](evaluation/phase0/results/scores_ppocr_heuristics.json) |
-| SROIE field F1 — Tesseract + regex baseline | 0.227 | [`scores_ocr_regex.json`](evaluation/phase0/results/scores_ocr_regex.json) |
-| SROIE field F1 — SmolVLM2-500M local baseline | 0.330 | [`scores_smolvlm2.json`](evaluation/phase0/results/scores_smolvlm2.json) |
-| Evidence anchoring (coverage / gold-in-quote, RapidOCR) | 0.798 / 0.535 | [`evidence_ab.json`](evaluation/phase0/results/evidence_ab.json) |
-| FUNSD transfer probe (n=50, form→receipt-shaped keys, **nonstandard gold mapping**) | 0.352 | [`scores_funsd_ollama.json`](evaluation/phase0/results/scores_funsd_ollama.json) |
-| OCRBench — TinyDoc-VLM-256M research checkpoint (n=1000) | **0.0%** — retired from claims | [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) |
-| DocVQA / CORD | **Not measured** | — |
-
-> ⚠️ **SROIE caveat (measured 2026-09-25, [`eval_leakage_audit.json`](evaluation/phase0/results/eval_leakage_audit.json)).**
-> Our 100-doc SROIE set was drawn from the image pool without respecting the official
-> train/test boundary: **60% of those receipts also appear in the public SROIE train split**
-> (verified by 64×64 perceptual correlation with two independent resamplers; exact file hashing
-> misses the re-encoded copies and reported 0). Any model trained on public SROIE — possibly including the evaluated 3B —
-> has therefore seen more than half this set, so the **absolute 0.870 is optimistically
-> biased**. Paired same-document comparisons (pipeline vs the 0.376/0.227 baselines) remain
-> internally valid; the absolute number is not a clean held-out score. A verified-clean
-> 100-doc set (`sroie_eval_clean.json`) is now the ship-bar for first-party models.
-
-Every number above recomputes from committed artifacts:
+Build the SDK:
 
 ```bash
-python3 evaluation/phase0/recompute_scores.py   # claim audit — must exit 0
+cd sdk && python3 -m build
 ```
 
-Ship status (v2.0, 2026-10-07): first-party hybrid `hybrid_2p2b` **shipped** on clean-100 F1 **0.603** (schema 0.93; address 0.37 disclosed beta; paired win vs VLM alone 31/8/61, p=0.0003; latency ~8s/doc on engineering track) — decision [`v2_product_decision.json`](evaluation/phase0/results/v2_product_decision.json), product code `sdk/tinydoc/pipeline.py` (`MlxVlmEngine`, `HybridAddressEngine`).
-Ship status (2026-09-25): SDK unit tests **69 passed** (incl. evidence, overlay, CLI) · engine ladder decided: **keep qwen2.5vl:3b** (7B paired pilot: identical F1, 4.5× slower, unstable on 16GB) · evidence engine = PP-OCR (measured A/B win over Tesseract: coverage 0.67→0.80, gold-in-quote 0.42→0.54) · competitive claim **measured**: 0.870 vs 0.376 for the free PP-OCR+heuristics competitor · local Gradio demo `demo/app.py --share` · training skipped. Estimated/target tables in older docs are **not** results (withdrawn: `docs/benchmark_results.json` `legacy_unverified`). Full analysis: [docs/BENCHMARKS.md](docs/BENCHMARKS.md) · decision record: [docs/pivot_plan.md](docs/pivot_plan.md).
+The release checklist is in [`docs/RELEASE.md`](docs/RELEASE.md).
 
-## Package Structure
+## Repository layout
 
-| Package | Location | Description |
-|---------|----------|-------------|
-| `tinydoc` | [PyPI](https://pypi.org/project/tinydoc/) | Python SDK — `TinyDocExtractor.ask()`, `.extract()`, `.extract_table()` |
-| `tinydoc-vlm` | [GitHub](https://github.com/eulogik/TinyDoc-VLM) | Full model code, training pipeline, synthetic data engine, evaluation suite |
-| `TinyDoc-VLM-256M` | [HF Hub](https://huggingface.co/eulogik/TinyDoc-VLM-256M) | Pre-trained weights — 1.1GB, loads via `from_pretrained()` |
-| `TinyDoc-VLM-LoRA` | [HF Hub](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) | LoRA adapter — 10MB, merge with base model |
+| Path | What it is |
+|---|---|
+| `sdk/tinydoc/` | Python SDK: engines, schema, evidence, confidence, CLI |
+| `evaluation/phase0/` | Measured SROIE/FUNSD/OCRBench harness + artifacts |
+| `training/` | QLoRA and Kaggle experiment code (historical; tracks closed) |
+| `tinydoc_vlm/` | From-scratch 256M model code (retired research artifact) |
+| `demo/` | Local Gradio demo + static HF Space card |
+| `docs/` | Benchmarks, pivot plan, v3 plan, release checklist |
 
-## Links
+## Research archive
 
-| Resource | URL |
-|----------|-----|
-| GitHub | [github.com/eulogik/TinyDoc-VLM](https://github.com/eulogik/TinyDoc-VLM) |
-| PyPI | [pypi.org/project/tinydoc](https://pypi.org/project/tinydoc/) |
-| Model Hub | [huggingface.co/eulogik/TinyDoc-VLM-256M](https://huggingface.co/eulogik/TinyDoc-VLM-256M) |
-| LoRA Checkpoint | [huggingface.co/eulogik/TinyDoc-VLM-LoRA](https://huggingface.co/eulogik/TinyDoc-VLM-LoRA) |
-| Live Demo | [huggingface.co/spaces/eulogik/TinyDoc-VLM](https://huggingface.co/spaces/eulogik/TinyDoc-VLM) |
-| Documentation | [eulogik.github.io/TinyDoc-VLM](https://eulogik.github.io/TinyDoc-VLM/) |
+The original TinyDoc-VLM was a 256M from-scratch model: SigLIP-B/16 vision
+encoder + PixelShuffle 3× compressor + SmolLM2-135M decoder. It measured
+**0.0% OCRBench** (n=999 scored, 962/999 unique outputs) and is retired from all
+performance claims. The 768 retrain had a dead vision tower.
 
-## Launch Assets
+The SmolVLM2-2.2B QLoRA track was also closed: base 0.5357 clean-100 F1, every
+clean-100 language-LoRA config 0.535–0.540, vision-LoRA 0.0395 at 5e-5 and
+0.4277 at 1e-6. The failure was perception, not JSON formatting.
 
-| Document | Description |
-|----------|-------------|
-| [HN Post](docs/launch_announcement.md) | Hacker News Show HN draft |
-| [Reddit Post](docs/reddit_post.md) | r/LocalLLaMA, r/MachineLearning |
-| [Twitter Thread](docs/twitter_thread.md) | 7-tweet launch thread |
-| [Pitch Deck](docs/pitch_deck.md) | Enterprise one-pager |
+Read the full evidence and the v3 plan in [`docs/v3_plan.md`](docs/v3_plan.md);
+the older decision record is [`docs/pivot_plan.md`](docs/pivot_plan.md).
 
 ## Citation
 
 ```bibtex
-@software{eulogik_tinydoc_vlm_2026,
+@software{eulogik_tinydoc_2026,
   author = {eulogik},
-  title = {TinyDoc-VLM: 256M-Param Document-Specialist Vision-Language Model},
+  title = {TinyDoc: Local-First Grounded Document Extraction},
   year = {2026},
   url = {https://github.com/eulogik/TinyDoc-VLM}
 }

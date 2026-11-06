@@ -6,10 +6,11 @@
   "paired_doc_wins_product": 32,
   "paired_doc_losses_product": 7,
   "paired_doc_ties": 61,
-  "address_sign_test_p": 0.0001,
+  "address_sign_test_p": 0.000116167,
   "address_discordants": {
     "product_only_hit": 31,
-    "base_only_hit": 7
+    "base_only_hit": 7,
+    "ties": 62
   },
   "address_product": {
     "hit_rate": 0.37,
@@ -39,5 +40,8 @@
       "f1_ge_0.60",
       "paired_win_vs_base"
     ]
-  }
+  },
+  "paired_doc_basis": "per-document macro field F1 (32 wins / 7 losses / 61 ties)",
+  "address_sign_test_p_note": "two-sided exact sign test on address hits, 31 product-only vs 7 base-only discordant pairs",
+  "paired_counts_note": "Shipped product path preds_product_hybrid_clean.jsonl: address 31/7/62 (p=0.000116); per-doc F1 32/7/61. The earlier 31/8/61 came from the harness path preds_hybrid-2.2b-tess_clean.jsonl, not the shipped path."
 }

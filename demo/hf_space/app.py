@@ -1,120 +1,82 @@
-import os, sys, torch, gradio as gr
-import traceback
-from PIL import Image
-from pathlib import Path
+"""Static TinyDoc project card for Hugging Face Spaces.
 
-sys.stdout.reconfigure(line_buffering=True)
-sys.stderr.reconfigure(line_buffering=True)
+This Space deliberately does NOT load the retired 256M checkpoint. Free CPU
+Spaces cannot serve the measured 2B/3B engines at usable latency, so the card
+explains how to run them locally and links to the artifact-backed results.
+"""
 
-sys.path.insert(0, str(Path(__file__).parent / "tinydoc_vlm"))
-from tinydoc_vlm import TinyDocVLMForConditionalGeneration, TinyDocVLMProcessor
+from __future__ import annotations
 
-MODEL_ID = "eulogik/TinyDoc-VLM-256M"
-device = "cuda" if torch.cuda.is_available() else "cpu"
+import os
 
-print(f"[TinyDoc] Starting on {device}...", flush=True)
+import gradio as gr
 
-try:
-    model = TinyDocVLMForConditionalGeneration.from_pretrained(
-        MODEL_ID,
-        trust_remote_code=True,
+CARD = """
+# 📄 TinyDoc — local-first grounded document extraction
+
+**Schema-valid JSON · per-field OCR evidence · confidence · Apache 2.0**
+
+This Space is a static project card. The working engines are local Ollama
+models; free CPU hardware cannot serve them at usable latency.
+
+## Measured (SROIE public-train-derived clean-100, n=100)
+
+| Engine | Field F1 | Address | Schema | Median |
+|---|---:|---:|---:|---:|
+| **Qwen2.5-VL-3B** — quality | **0.9475** | 0.86 | 1.00 | 14.1 s |
+| **Qwen3-VL-2B-Instruct** — fast | **0.9200** | 0.84 | 1.00 | **7.0 s** |
+| Hybrid v2 — first-party | 0.603 | 0.37 | 0.93 | ~8 s |
+| PP-OCR + heuristics | 0.376 | 0.03 | — | — |
+
+> ⚠️ **Not an external benchmark.** The 100-doc set is a duplicate-filtered
+> split of the public SROIE **train** pool; Qwen may have seen it during
+> pretraining. The original set is 60% leaked. These are same-document engine
+> comparisons, not generalization claims.
+
+## Run it locally
+
+```bash
+pip install "tinydoc @ git+https://github.com/eulogik/TinyDoc-VLM.git#subdirectory=sdk"
+ollama pull qwen2.5vl:3b            # quality
+ollama pull qwen3-vl:2b-instruct    # fast tier
+```
+
+```python
+from tinydoc import ReceiptPipeline
+
+pipe = ReceiptPipeline("ollama:qwen2.5vl:3b")
+result = pipe.extract("receipt.jpg")
+print(result.fields, result.schema_valid, result.confidence)
+for field in result.field_results:
+    print(field.name, field.value, field.evidence)
+```
+
+## Why this card, not a live demo?
+
+The previous Space loaded `eulogik/TinyDoc-VLM-256M`, which measured **0.0% on
+OCRBench (n=999 scored)** and is retired from all performance claims. Serving it
+as a live demo would misrepresent the project. The working 2B/3B engines need
+several GB of RAM and a local Ollama runtime; they are not suitable for this
+free CPU Space.
+
+## Links
+
+- [Source + install](https://github.com/eulogik/TinyDoc-VLM)
+- [v3 plan and evidence](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md)
+- [Benchmarks](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md)
+"""
+
+with gr.Blocks(title="TinyDoc — local-first document extraction") as demo:
+    gr.Markdown(CARD)
+    gr.Markdown(
+        "---\n**By** [eulogik](https://eulogik.com) · "
+        "[GitHub](https://github.com/eulogik/TinyDoc-VLM) · "
+        "[PyPI](https://pypi.org/project/tinydoc/)"
     )
-    model.to(device).eval()
-    processor = TinyDocVLMProcessor()
-    # Sync image token ID between processor and model
-    model.image_token_id = processor.image_token_id
-    print(f"[TinyDoc] Model loaded! image_token_id={processor.image_token_id}", flush=True)
-except Exception as e:
-    print(f"[TinyDoc] LOAD ERROR: {e}", flush=True)
-    traceback.print_exc()
-    raise
-
-def run(image, question, task):
-    try:
-        print(f"[TinyDoc] run() called: task={task}, question={question}, image_type={type(image)}", flush=True)
-        
-        if image is None:
-            return "Please upload a document image."
-        
-        # Handle different image types from Gradio
-        if isinstance(image, str):
-            image = Image.open(image).convert("RGB")
-        elif isinstance(image, dict):
-            if "path" in image:
-                image = Image.open(image["path"]).convert("RGB")
-            elif "url" in image:
-                import requests
-                from io import BytesIO
-                resp = requests.get(image["url"], timeout=10)
-                image = Image.open(BytesIO(resp.content)).convert("RGB")
-        elif hasattr(image, "convert"):
-            image = image.convert("RGB")
-        else:
-            print(f"[TinyDoc] Unknown image type: {type(image)}", flush=True)
-            return f"Error: Unknown image type {type(image)}"
-        
-        print(f"[TinyDoc] Image size: {image.size}", flush=True)
-        
-        if task == "Ask a question":
-            prompt = f"<image>\nAnswer: {question}"
-        elif task == "Extract JSON":
-            prompt = "<image>\nExtract JSON: "
-        else:
-            prompt = "<image>\nConvert table to Markdown: "
-        
-        print(f"[TinyDoc] Prompt: {prompt[:80]}...", flush=True)
-        
-        inputs = processor(prompt, images=image)
-        # Remove non-model kwargs before generate
-        inputs.pop("image_token_id", None)
-        inputs = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
-        
-        print(f"[TinyDoc] Running inference...", flush=True)
-        
-        with torch.no_grad():
-            out = model.generate(**inputs, max_new_tokens=512, do_sample=False)
-        
-        text = processor.tokenizer.decode(out[0], skip_special_tokens=True)
-        print(f"[TinyDoc] Output: {text[:100]}...", flush=True)
-        return text
-        
-    except Exception as e:
-        error_msg = f"Error: {e}\n{traceback.format_exc()}"
-        print(f"[TinyDoc] RUN ERROR: {error_msg}", flush=True)
-        return f"Error: {e}"
-
-with gr.Blocks(title="TinyDoc-VLM — Document Understanding", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("""
-    # 📄 TinyDoc-VLM
-    ### The World's Smallest Document Understanding Model
-    Upload a document image and ask questions or extract structured data.
-    """)
-    with gr.Row():
-        with gr.Column(scale=1):
-            image = gr.Image(type="pil", label="Document Image", height=400)
-            task = gr.Radio(["Ask a question", "Extract JSON", "Extract Table"], label="Task", value="Ask a question")
-            question = gr.Textbox(label="Question", value="What is the total?", lines=2, visible=True)
-            def update_question(task):
-                return gr.update(visible=task == "Ask a question")
-            task.change(fn=update_question, inputs=task, outputs=question)
-            with gr.Row():
-                submit = gr.Button("▶ Run", variant="primary", scale=2)
-                clear = gr.Button("🗑 Clear", scale=1)
-        with gr.Column(scale=1):
-            output = gr.Markdown(label="Result")
-    submit.click(fn=run, inputs=[image, question, task], outputs=output)
-    def clear_all():
-        return None, "Ask a question", "What is the total?", ""
-    clear.click(fn=clear_all, outputs=[image, task, question, output])
-    gr.Markdown("""
-    ---
-    **Model**: [eulogik/TinyDoc-VLM-256M](https://huggingface.co/eulogik/TinyDoc-VLM-256M) · 
-    **Code**: [github.com/eulogik/TinyDoc-VLM](https://github.com/eulogik/TinyDoc-VLM) · 
-    **By**: [eulogik](https://eulogik.com) · 
-    [🐍 PyPI](https://pypi.org/project/tinydoc/) · 
-    [🐦 @eulogik](https://twitter.com/eulogik)
-    """)
 
 if __name__ == "__main__":
-    print("[TinyDoc] Starting Gradio server...", flush=True)
-    demo.launch(server_name="0.0.0.0", server_port=7860, show_error=True)
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", "7860")),
+        show_error=True,
+    )

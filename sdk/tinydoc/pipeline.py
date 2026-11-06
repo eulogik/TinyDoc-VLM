@@ -356,6 +356,10 @@ class OllamaEngine(BaseEngine):
         # Client disconnects mid-generation leave the single-slot server wedged;
         # keep this generous (env-overridable) for slow local GPUs.
         timeout = float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "180"))
+        # Ollama defaults to a 4096-token context, which silently rejects
+        # full-page scans (a 2481x3508 receipt is ~4.2k visual tokens). That
+        # produced HTTP 400s counted as empty predictions in phase-0 runs.
+        num_ctx = int(os.environ.get("TINYDOC_OLLAMA_NUM_CTX", "8192"))
 
         def _call(p: str) -> Dict[str, str]:
             # NOTE: do NOT set format="json" — Ollama constrained decoding
@@ -364,7 +368,11 @@ class OllamaEngine(BaseEngine):
                 "model": self.model,
                 "messages": [{"role": "user", "content": p, "images": [b64]}],
                 "stream": False,
-                "options": {"temperature": 0, "num_predict": 512},
+                "options": {
+                    "temperature": 0,
+                    "num_predict": 512,
+                    "num_ctx": num_ctx,
+                },
             }
             req = urllib.request.Request(
                 f"{self.host}/api/chat",

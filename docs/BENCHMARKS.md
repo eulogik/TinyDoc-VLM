@@ -35,9 +35,9 @@ Gates: `node scripts/verify-ocrbench.mjs controls|vision|tokenid|pilot|full|reco
 **Conclusion:** the training run itself failed (insufficient data / broken loss), not the harness.
 The 256M weights remain on HuggingFace as a **research artifact**; they are not a product.
 
-*Note: `evaluation/evaluate.py` OCRBench/FUNSD/CORD scorers still return hardcoded `0.0`
-placeholders (marked in code) — the numbers in this file come from the dedicated runners below,
-not from `evaluate.py`.*
+*Note (2026-11-06): `evaluation/evaluate.py` is deprecated. Its OCRBench/FUNSD/CORD
+scorers now return `None` / `not_measured`, not zeros. The numbers in this file come
+from the dedicated runners below, never from `evaluate.py`.*
 
 ---
 
@@ -64,13 +64,21 @@ First-party edge track (verified-clean 100, `results/sroie_eval_clean.json`):
 
 | System | Field F1 | Notes / artifact |
 |---|---|---|
-| **Hybrid v2 product path (`hybrid_2p2b`: MLX SmolVLM2-2.2B 4-bit + tesseract F3 address)** | **0.603 — SHIPPED v2.0 (2026-10-07)** | `results/scores_product_hybrid_clean.json` — schema 0.93, address 0.37 (beta, bar amended 0.50→0.35 with sign-off), paired win vs VLM alone 31/8/61 (p=0.0003), ~8s/doc; decision `results/v2_product_decision.json` |
+| **Hybrid v2 product path (`hybrid_2p2b`: MLX SmolVLM2-2.2B 4-bit + tesseract F3 address)** | **0.603 — SHIPPED v2.0 (2026-10-07)** | `results/scores_product_hybrid_clean.json` — schema 0.93, address 0.37 (beta, bar amended 0.50→0.35 with sign-off), address paired 31/7/62 (p=0.00012), per-doc F1 32/7/61, ~8s/doc; decision `results/v2_product_decision.json` |
 | SmolVLM2-2.2B zero-shot (MLX 4-bit) | 0.536 | `results/scores_smolvlm2-2.2b_base_clean.json` — address 0.13 |
 | 2.2B LoRA SFT (gold / distill / r32 / 768px) | 0.535–0.540 | five configs, paired ≤5/5/90 vs base — SFT moves nothing; address 0.15–0.18 |
-| 3B re-measured on clean-100 (reference, not shippable first-party) | 0.928 | `results/scores_pipeline_ollama_qwen2.5vl_3b_clean.json` — address 0.83 |
+| 3B re-measured on clean-100 (reference, not shippable first-party) | 0.928 → **0.9475** | `results/scores_pipeline_ollama_qwen2.5vl_3b_clean.json` had 5 HTTP-400 context rejections; corrected 8k-context rerun `results/scores_pipeline_ollama_qwen2.5vl_3b_clean_ctx8k.json` — address 0.86, schema 1.00, 0 errors |
+| Qwen3-VL-2B-Instruct (fast tier, reference) | **0.9200** | `results/scores_pipeline_ollama_qwen3-vl_2b-instruct_clean_ctx8k.json` — address 0.84, schema 1.00, 0 errors, 2.0× faster than 3B |
 
 Per-field hit rates (pipeline vs PP-OCR+heuristics): company 0.85 vs 0.28, date 0.94 vs 0.52,
 address 0.72 vs 0.03, total 0.97 vs 0.60.
+
+> **2026-11-06 correction (pilot artifacts):** the earlier **0.928** 3B row was depressed by
+> five Ollama HTTP-400 context rejections on 2481×3508 scans (Ollama defaults to 4096 tokens).
+> With `TINYDOC_OLLAMA_NUM_CTX=8192`, the same 3B engine scores **0.9475** (address 0.86, schema
+> 1.00, 0 errors) and Qwen3-VL-2B-Instruct scores **0.9200** (address 0.84, 2.0× faster).
+> The pilot artifacts are committed and verified by `recompute_scores.py`; analysis in
+> `docs/v3_plan.md`.
 
 Supporting product metrics (n=100):
 
