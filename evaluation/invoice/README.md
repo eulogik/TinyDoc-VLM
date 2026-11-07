@@ -26,18 +26,24 @@ Caveats that must travel with every number:
 
 Qwen2.5-VL-3B, 181/181 parsed, no errors:
 
-| Metric | Result |
-|---|---:|
-| Key header field accuracy | 91.9% (1448/1576; 95% CI 89.8–93.9) |
-| Documents fully correct | 65.7% (119/181; 95% CI 58.6–72.4) |
-| Line-item F1, mean | 0.929 (179 docs) |
-| p50 / mean latency | 26.5 s / 28.7 s |
-| Inconsistent invoices flagged | 0/5 |
-| Multi-invoice files flagged | 0/2 |
-| Consistent docs falsely flagged | 2/172 |
+| Metric | 3B | 2B |
+|---|---:|---:|
+| Key header field accuracy | 91.9% (1448/1576) | **93.5%** (1474/1576) |
+| Documents fully correct | 65.7% (119/181) | **71.8%** (130/181) |
+| Line-item F1, mean | 0.929 | 0.904 |
+| p50 / mean latency | 26.5 s / 28.7 s | **16.1 s / 20.3 s** |
+| Inconsistent invoices flagged | 0/5 | 0/5 |
+| Multi-invoice files flagged | 0/2 | 0/2 |
+| Consistent docs falsely flagged | 2/172 | 0/172 |
+
+The 2B is at least as good on invoices and 40% faster; the paired per-document
+sign test is not significant (p=0.092), so this is “no evidence that 3B is
+better on invoices”, not a proof that 2B is. Do not generalize to receipts: the
+3B still leads clean-100 there (0.9475 vs 0.9200). See
+`results/compare_invoice_3b_vs_2b.json`.
 
 This clears the 0.80 field-accuracy bar on synthetic page-1 data, but **not**
-straight-through processing: a third of documents still have at least one
+straight-through processing: 28–34% of documents still have at least one
 key-field miss, flagging is unusable, and multipage is 0% fully correct. Real
 supplier invoices are still unmeasured.
 

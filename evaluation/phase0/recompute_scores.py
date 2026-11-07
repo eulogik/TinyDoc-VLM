@@ -295,6 +295,32 @@ def main() -> int:
         if not ok:
             failures.append("invoice probe numbers changed")
 
+    invoice_summary_2b = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_instruct.json"
+    invoice_compare = ROOT.parent / "invoice/results/compare_invoice_3b_vs_2b.json"
+    if not invoice_summary_2b.exists() or not invoice_compare.exists():
+        failures.append("2B invoice probe artifacts missing")
+    else:
+        inv2 = json.loads(invoice_summary_2b.read_text())
+        cmp_data = json.loads(invoice_compare.read_text())
+        ok = (
+            inv2.get("n_docs") == 181
+            and abs(float(inv2.get("key_header_accuracy", -1)) - 0.935279) <= 1e-5
+            and abs(float(inv2.get("fully_correct_rate", -1)) - 0.718232) <= 1e-5
+            and inv2.get("key_header_correct") == 1474
+            and inv2.get("fully_correct") == 130
+            and abs(cmp_data["key"]["diff"] - 0.016497) <= 1e-5
+            and abs(cmp_data["fully_correct"]["diff"] - 0.060773) <= 1e-5
+            and abs(cmp_data["key"]["sign_p"] - 0.091915) <= 1e-5
+        )
+        print(
+            f"claim: invoice 2B key-header {inv2.get('key_header_accuracy'):.4f}, "
+            f"fully correct {inv2.get('fully_correct_rate'):.4f}; paired diff "
+            f"{cmp_data['key']['diff']:+.4f} (p={cmp_data['key']['sign_p']:.3f}) "
+            f"-> {'PASS' if ok else 'FAIL'}"
+        )
+        if not ok:
+            failures.append("2B invoice probe or tier comparison changed")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

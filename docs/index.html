@@ -171,6 +171,7 @@ DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
           <tr><td>FUNSD transfer probe (form → receipt-shaped keys)</td><td>Field F1</td><td>0.352</td><td>✅ n=50, nonstandard gold mapping</td></tr>
           <tr><td>OCRBench — TinyDoc-VLM 256M research checkpoint</td><td>Accuracy</td><td>0.0%</td><td>⚠️ n=1000 — model retired from claims</td></tr>
           <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, Qwen2.5-VL-3B</td><td>Key-header accuracy</td><td><b>91.9%</b></td><td>⚠️ fully correct 65.7%; synthetic, vendor-made, not real invoices</td></tr>
+          <tr><td>Invoice benchmark v1 — page 1, Qwen3-VL-2B-Instruct</td><td>Key-header accuracy</td><td><b>93.5%</b></td><td>⚠️ fully correct 71.8%; 16.1 s/doc; paired diff not significant</td></tr>
           <tr><td>Invoice benchmark v1 — flags</td><td>Recall</td><td><b>0/7</b></td><td>❌ inconsistent/multi-invoice docs; 2/172 false alarms</td></tr>
           <tr><td>DocVQA / CORD</td><td>—</td><td>—</td><td>Not measured</td></tr>
         </tbody>

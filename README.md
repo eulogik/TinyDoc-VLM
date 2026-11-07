@@ -157,10 +157,12 @@ as model grounding. A 100-box probe measured VLM bbox hit@0.5 of **0.20** (2B) a
   document probability.
 - **Invoices are measured only on a synthetic public benchmark.** On Invoice
   Extraction Benchmark v1 (181 docs, page 1 only, vendor-made), Qwen2.5-VL-3B
-  reaches **91.9% key-header field accuracy** (95% CI 89.8–93.9) but only
-  **65.7% documents fully correct** (58.6–72.4); flagging is 0/7 and multipage is
-  0% fully correct. This is not real supplier-invoice accuracy. Real invoices
-  remain unmeasured.
+  reaches **91.9% key-header field accuracy** (95% CI 89.8–93.9) with **65.7%
+  documents fully correct** (58.6–72.4). Qwen3-VL-2B-Instruct reaches **93.5% /
+  71.8%** and is 40% faster; the paired difference is not significant (p=0.092),
+  so there is no evidence the 3B is better on invoices. Flagging is 0/7 and
+  multipage is 0% fully correct. This is not real supplier-invoice accuracy.
+  Real invoices remain unmeasured.
 - **DocVQA / CORD** are not yet measured. No claims.
 - The claim audit recomputes every published pair from committed artifacts:
   `python3 evaluation/phase0/recompute_scores.py` must exit 0.
@@ -174,7 +176,7 @@ Machine-readable provenance and SHA-256 hashes for every set are in
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 126 passed
+python3 -m pytest tests/ -q                 # 127 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit

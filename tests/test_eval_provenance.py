@@ -150,3 +150,33 @@ def test_invoice_probe_matches_artifacts():
     assert categories["multipage"]["n"] == 10
     assert categories["multipage"]["fully_correct_rate"] == 0.0
     assert categories["photo"]["n"] == 45
+
+
+def test_invoice_tier_comparison_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    invoice = data["probes"]["invoice_transfer"]
+    assert invoice["model"] == "qwen2.5vl:3b"
+
+    artifacts = invoice["artifacts"]
+    summary_2b = json.loads((ROOT / artifacts["summary_2b"]).read_text())
+    two_b = invoice["results_2b"]
+    for key in ("key_header_accuracy", "fully_correct_rate"):
+        assert abs(summary_2b[key] - two_b[key]) < 1e-5, key
+    assert summary_2b["key_header_correct"] == two_b["key_header_correct"]
+    assert summary_2b["fully_correct"] == two_b["fully_correct"]
+    assert summary_2b["parse_errors"] == 0
+    assert abs(summary_2b["line_items"]["f1_mean"] - two_b["line_f1_mean"]) < 1e-5
+
+    comparison = json.loads((ROOT / artifacts["comparison"]).read_text())
+    recorded = invoice["tier_comparison"]
+    assert abs(comparison["key"]["diff"] - recorded["key_header_accuracy"]["diff"]) < 1e-5
+    assert abs(comparison["fully_correct"]["diff"] - recorded["fully_correct_rate"]["diff"]) < 1e-5
+    assert abs(comparison["key"]["sign_p"] - recorded["key_header_accuracy"]["sign_p"]) < 1e-5
+    assert comparison["n_docs"] == 181
+    assert recorded["key_header_accuracy"]["b_better_docs"] == 32
+    assert recorded["key_header_accuracy"]["a_better_docs"] == 19
+
+    # The point estimate favors 2B, but the paired test is not significant.
+    assert recorded["key_header_accuracy"]["diff"] > 0
+    assert recorded["key_header_accuracy"]["sign_p"] > 0.05
+    assert recorded["fully_correct_rate"]["ci95"][0] <= 0.0

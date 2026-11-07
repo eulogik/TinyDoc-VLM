@@ -356,10 +356,281 @@
         "scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json",
         "preds": "evaluation/invoice/results/preds_invoice_qwen2.5vl_3b.json",
         "rows": "evaluation/invoice/results/rows_invoice_qwen2.5vl_3b.jsonl",
-        "superseded_scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b_v1_currency_symbols.json"
+        "superseded_scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b_v1_currency_symbols.json",
+        "summary_2b": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_instruct.json",
+        "scores_2b": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_instruct.json",
+        "preds_2b": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_instruct.json",
+        "rows_2b": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_instruct.jsonl",
+        "comparison": "evaluation/invoice/results/compare_invoice_3b_vs_2b.json"
       },
-      "decision": "field-level transfer passes 0.80 on synthetic page-1 data (91.9% key-header, 65.7% fully correct); do not claim real-invoice accuracy or straight-through processing; flags fail and multipage is page-1 only",
-      "normalization_note": "First pass scored currency symbols (N$, R, euro) as non-ISO; v2 maps symbols to ISO codes with raw outputs unchanged. Superseded artifacts use the *_v1_currency_symbols suffix."
+      "decision": "field-level transfer passes 0.80 on synthetic page-1 data (3B 91.9% / 65.7%, 2B 93.5% / 71.8%); 2B matches or beats 3B on invoices and is 40% faster, but the paired difference is not significant; 3B remains ahead on receipts; never claim real-invoice accuracy or straight-through processing; flags fail and multipage is page-1 only",
+      "normalization_note": "First pass scored currency symbols (N$, R, euro) as non-ISO; v2 maps symbols to ISO codes with raw outputs unchanged. Superseded artifacts use the *_v1_currency_symbols suffix.",
+      "model": "qwen2.5vl:3b",
+      "results_2b": {
+        "model": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+        "key_header_accuracy": 0.935279,
+        "key_header_correct": 1474,
+        "key_header_scored": 1576,
+        "key_header_accuracy_ci95": [
+          0.916452,
+          0.952502
+        ],
+        "fully_correct": 130,
+        "fully_correct_rate": 0.718232,
+        "fully_correct_rate_ci95": [
+          0.651934,
+          0.779006
+        ],
+        "line_f1_mean": 0.904,
+        "p50_latency_ms": 16087.7,
+        "mean_latency_ms": 20262.4,
+        "parse_errors": 0,
+        "flags": {
+          "inconsistent_invoices": {
+            "total": 5,
+            "flagged": 0
+          },
+          "multi_invoice_files": {
+            "total": 2,
+            "flagged": 0
+          },
+          "consistent_documents": {
+            "total": 172,
+            "flagged": 0
+          }
+        },
+        "per_field": {
+          "currency": {
+            "correct": 161,
+            "scored": 179
+          },
+          "document_type": {
+            "correct": 179,
+            "scored": 181
+          },
+          "due_date": {
+            "correct": 139,
+            "scored": 140
+          },
+          "invoice_date": {
+            "correct": 175,
+            "scored": 179
+          },
+          "invoice_number": {
+            "correct": 170,
+            "scored": 179
+          },
+          "subtotal": {
+            "correct": 153,
+            "scored": 179
+          },
+          "tax": {
+            "correct": 160,
+            "scored": 179
+          },
+          "total": {
+            "correct": 159,
+            "scored": 179
+          },
+          "vendor_name": {
+            "correct": 178,
+            "scored": 181
+          }
+        },
+        "per_category": {
+          "clean": {
+            "n": 31,
+            "key_header_accuracy": 0.9808,
+            "fully_correct_rate": 0.871
+          },
+          "credit": {
+            "n": 10,
+            "key_header_accuracy": 1.0,
+            "fully_correct_rate": 1.0
+          },
+          "currency": {
+            "n": 19,
+            "key_header_accuracy": 0.929,
+            "fully_correct_rate": 0.6842
+          },
+          "freight": {
+            "n": 16,
+            "key_header_accuracy": 0.9301,
+            "fully_correct_rate": 0.5625
+          },
+          "handwritten": {
+            "n": 8,
+            "key_header_accuracy": 0.9143,
+            "fully_correct_rate": 0.375
+          },
+          "hard": {
+            "n": 13,
+            "key_header_accuracy": 0.89,
+            "fully_correct_rate": 0.5385
+          },
+          "multipage": {
+            "n": 10,
+            "key_header_accuracy": 0.6333,
+            "fully_correct_rate": 0.0
+          },
+          "photo": {
+            "n": 45,
+            "key_header_accuracy": 0.9605,
+            "fully_correct_rate": 0.8444
+          },
+          "scan": {
+            "n": 15,
+            "key_header_accuracy": 1.0,
+            "fully_correct_rate": 1.0
+          },
+          "tax": {
+            "n": 14,
+            "key_header_accuracy": 0.9274,
+            "fully_correct_rate": 0.5714
+          }
+        }
+      },
+      "tier_comparison": {
+        "a": "qwen2.5vl_3b",
+        "b": "qwen3-vl_2b_instruct",
+        "diff": "B - A",
+        "key_header_accuracy": {
+          "a": 0.918782,
+          "b": 0.935279,
+          "diff": 0.016497,
+          "ci95": [
+            0.003788,
+            0.029449
+          ],
+          "sign_p": 0.091915,
+          "a_better_docs": 19,
+          "b_better_docs": 32,
+          "ties": 130
+        },
+        "fully_correct_rate": {
+          "a": 0.657459,
+          "b": 0.718232,
+          "diff": 0.060773,
+          "ci95": [
+            0.0,
+            0.116022
+          ],
+          "a_only": 11,
+          "b_only": 22,
+          "both": 108,
+          "neither": 40
+        },
+        "per_field": {
+          "vendor_name": {
+            "a": 0.900552,
+            "b": 0.983425,
+            "diff": 0.082873
+          },
+          "invoice_number": {
+            "a": 0.932961,
+            "b": 0.949721,
+            "diff": 0.01676
+          },
+          "invoice_date": {
+            "a": 0.949721,
+            "b": 0.977654,
+            "diff": 0.027933
+          },
+          "due_date": {
+            "a": 0.964286,
+            "b": 0.992857,
+            "diff": 0.028571
+          },
+          "currency": {
+            "a": 0.949721,
+            "b": 0.899441,
+            "diff": -0.050279
+          },
+          "subtotal": {
+            "a": 0.843575,
+            "b": 0.854749,
+            "diff": 0.011173
+          },
+          "tax": {
+            "a": 0.871508,
+            "b": 0.893855,
+            "diff": 0.022346
+          },
+          "total": {
+            "a": 0.877095,
+            "b": 0.888268,
+            "diff": 0.011173
+          },
+          "document_type": {
+            "a": 0.98895,
+            "b": 0.98895,
+            "diff": 0.0
+          }
+        },
+        "per_category": {
+          "clean": {
+            "n": 31,
+            "a": 0.9577,
+            "b": 0.9808,
+            "diff": 0.0231
+          },
+          "credit": {
+            "n": 10,
+            "a": 0.975,
+            "b": 1.0,
+            "diff": 0.025
+          },
+          "currency": {
+            "n": 19,
+            "a": 0.8935,
+            "b": 0.929,
+            "diff": 0.0355
+          },
+          "freight": {
+            "n": 16,
+            "a": 0.8881,
+            "b": 0.9301,
+            "diff": 0.042
+          },
+          "handwritten": {
+            "n": 8,
+            "a": 0.9571,
+            "b": 0.9143,
+            "diff": -0.0429
+          },
+          "hard": {
+            "n": 13,
+            "a": 0.87,
+            "b": 0.89,
+            "diff": 0.02
+          },
+          "multipage": {
+            "n": 10,
+            "a": 0.6111,
+            "b": 0.6333,
+            "diff": 0.0222
+          },
+          "photo": {
+            "n": 45,
+            "a": 0.9531,
+            "b": 0.9605,
+            "diff": 0.0074
+          },
+          "scan": {
+            "n": 15,
+            "a": 1.0,
+            "b": 1.0,
+            "diff": 0.0
+          },
+          "tax": {
+            "n": 14,
+            "a": 0.9113,
+            "b": 0.9274,
+            "diff": 0.0161
+          }
+        },
+        "reading": "2B is at least as good on invoices and 40% faster; the key-header and fully-correct differences are not significant at 0.05 (sign p=0.092; fully-correct CI touches 0). 3B remains ahead on receipts (0.9475 vs 0.9200) and on currency (0.950 vs 0.899). Do not generalize the invoice tier ranking to receipts."
+      }
     }
   }
 }

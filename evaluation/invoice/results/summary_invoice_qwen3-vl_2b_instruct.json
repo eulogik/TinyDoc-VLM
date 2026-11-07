@@ -1,0 +1,156 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-07",
+  "n_docs": 181,
+  "n_corpus": 181,
+  "key_header_accuracy": 0.9352791878172588,
+  "key_header_correct": 1474,
+  "key_header_scored": 1576,
+  "fully_correct": 130,
+  "fully_correct_rate": 0.7182320441988951,
+  "ci95": {
+    "key_header_accuracy": [
+      0.916452442159383,
+      0.9525015832805573
+    ],
+    "fully_correct_rate": [
+      0.6519337016574586,
+      0.7790055248618785
+    ]
+  },
+  "per_field": {
+    "currency": {
+      "correct": 161,
+      "scored": 179
+    },
+    "document_type": {
+      "correct": 179,
+      "scored": 181
+    },
+    "due_date": {
+      "correct": 139,
+      "scored": 140
+    },
+    "invoice_date": {
+      "correct": 175,
+      "scored": 179
+    },
+    "invoice_number": {
+      "correct": 170,
+      "scored": 179
+    },
+    "subtotal": {
+      "correct": 153,
+      "scored": 179
+    },
+    "tax": {
+      "correct": 160,
+      "scored": 179
+    },
+    "total": {
+      "correct": 159,
+      "scored": 179
+    },
+    "vendor_name": {
+      "correct": 178,
+      "scored": 181
+    }
+  },
+  "per_category": {
+    "clean": {
+      "docs": 31,
+      "key_correct": 255,
+      "key_scored": 260,
+      "fully_correct": 27,
+      "line_f1_mean": 0.964516129032258
+    },
+    "credit": {
+      "docs": 10,
+      "key_correct": 80,
+      "key_scored": 80,
+      "fully_correct": 10,
+      "line_f1_mean": 0.95
+    },
+    "currency": {
+      "docs": 19,
+      "key_correct": 157,
+      "key_scored": 169,
+      "fully_correct": 13,
+      "line_f1_mean": 0.9868421052631579
+    },
+    "freight": {
+      "docs": 16,
+      "key_correct": 133,
+      "key_scored": 143,
+      "fully_correct": 9,
+      "line_f1_mean": 0.989375
+    },
+    "handwritten": {
+      "docs": 8,
+      "key_correct": 64,
+      "key_scored": 70,
+      "fully_correct": 3,
+      "line_f1_mean": 0.70875
+    },
+    "hard": {
+      "docs": 13,
+      "key_correct": 89,
+      "key_scored": 100,
+      "fully_correct": 7,
+      "line_f1_mean": 0.8636363636363636
+    },
+    "multipage": {
+      "docs": 10,
+      "key_correct": 57,
+      "key_scored": 90,
+      "fully_correct": 0,
+      "line_f1_mean": 0.418
+    },
+    "photo": {
+      "docs": 45,
+      "key_correct": 389,
+      "key_scored": 405,
+      "fully_correct": 38,
+      "line_f1_mean": 0.9
+    },
+    "scan": {
+      "docs": 15,
+      "key_correct": 135,
+      "key_scored": 135,
+      "fully_correct": 15,
+      "line_f1_mean": 1.0
+    },
+    "tax": {
+      "docs": 14,
+      "key_correct": 115,
+      "key_scored": 124,
+      "fully_correct": 8,
+      "line_f1_mean": 0.9285714285714286
+    }
+  },
+  "flags": {
+    "inconsistent_invoices": {
+      "total": 5,
+      "flagged": 0
+    },
+    "multi_invoice_files": {
+      "total": 2,
+      "flagged": 0
+    },
+    "consistent_documents": {
+      "total": 172,
+      "flagged": 0
+    }
+  },
+  "line_items": {
+    "docs": 179,
+    "f1_sum": 161.83,
+    "f1_mean": 0.904,
+    "all_lines_right": 151
+  },
+  "latency_ms": {
+    "mean": 20262.403046887222,
+    "p50": 16087.652206420898
+  },
+  "parse_errors": 0
+}

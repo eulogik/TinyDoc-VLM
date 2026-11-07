@@ -127,18 +127,32 @@ invoices.** The prompt was fixed before the run and not tuned on the answers.
 | Multi-invoice files flagged | 0 of 2 |
 | Consistent documents falsely flagged | 2 of 172 |
 
-| Category | n | Key-header | Fully correct |
+Paired tier comparison on the same 181 documents (B − A, 95% CI):
+
+| Metric | Qwen2.5-VL-3B | Qwen3-VL-2B-Instruct | Difference |
 |---|---:|---:|---:|
-| scan | 15 | 100.0% | 100.0% |
-| credit | 10 | 97.5% | 80.0% |
-| clean | 31 | 95.8% | 74.2% |
-| handwritten | 8 | 95.7% | 75.0% |
-| photo | 45 | 95.3% | 86.7% |
-| tax | 14 | 91.1% | 50.0% |
-| currency | 19 | 89.3% | 52.6% |
-| freight | 16 | 88.8% | 43.8% |
-| hard | 13 | 87.0% | 30.8% |
-| multipage | 10 | 61.1% | 0.0% |
+| Key header accuracy | 91.9% | **93.5%** | +1.6 pts (+0.4 to +2.9) |
+| Documents fully correct | 65.7% | **71.8%** | +6.1 pts (0.0 to +11.6) |
+| Line-item F1, mean | 0.929 | 0.904 | −0.025 |
+| p50 latency | 26.5 s | **16.1 s** | −10.4 s |
+
+The 2B is at least as good on invoices and 40% faster; the point estimates
+favor it but the per-document sign test is not significant (p=0.092), so read
+this as “no evidence that 3B is better on invoices”. It does **not** transfer to
+receipts: the 3B still leads clean-100 (0.9475 vs 0.9200).
+
+| Category | n | Key-header (3B) | Fully correct (3B) | Fully correct (2B) |
+|---|---:|---:|---:|
+| scan | 15 | 100.0% | 100.0% | 100.0% |
+| credit | 10 | 97.5% | 80.0% | 100.0% |
+| clean | 31 | 95.8% | 74.2% | 87.1% |
+| handwritten | 8 | 95.7% | 75.0% | 37.5% |
+| photo | 45 | 95.3% | 86.7% | 84.4% |
+| tax | 14 | 91.1% | 50.0% | 57.1% |
+| currency | 19 | 89.3% | 52.6% | 68.4% |
+| freight | 16 | 88.8% | 43.8% | 56.2% |
+| hard | 13 | 87.0% | 30.8% | 53.8% |
+| multipage | 10 | 61.1% | 0.0% | 0.0% |
 
 Per field: document_type 98.9%, due_date 96.4%, invoice_date 95.0%,
 invoice_number 93.3%, currency 95.0%, vendor_name 90.1%, total 87.7%, tax 87.2%,
@@ -146,7 +160,7 @@ subtotal 84.4%. References (strict string match) are 1/25 and are not a headline
 claim.
 
 **Read this as:** the prompt/schema transfers to invoices at the field level (above
-the 0.80 bar), but **not** as straight-through processing: a third of documents
+the 0.80 bar), but **not** as straight-through processing: 28–34% of documents
 still have at least one key-field miss, flagging is unusable, and multipage is
 broken by the page-1 limit. Currency symbols were normalized to ISO after the
 first pass; the superseded run is archived as `*_v1_currency_symbols.*`. Do not
