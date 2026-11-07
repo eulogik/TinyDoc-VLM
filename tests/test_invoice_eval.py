@@ -9,7 +9,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "evaluation" / "invoice"))
 sys.path.insert(0, str(ROOT / "sdk"))
 
-from run_invoice_eval import _currency, _date, _doc_type, _num, normalize_prediction
+from run_invoice_eval import (
+    _currency,
+    _date,
+    _doc_type,
+    _load_resume_rows,
+    _num,
+    _read_image,
+    normalize_prediction,
+)
 from tinydoc.pipeline import _extract_json
 
 
@@ -101,3 +109,33 @@ def test_extract_json_from_fenced_response():
     parsed = _extract_json(raw)
     assert parsed == {"vendor_name": "Acme", "total": 12.5}
     assert _extract_json("no json") is None
+
+
+def test_load_resume_rows_drops_failures(tmp_path):
+    path = tmp_path / "rows.jsonl"
+    path.write_text(
+        '{"id": "a", "error": null, "latency_ms": 10}\n'
+        '{"id": "b", "error": "URLError: refused", "latency_ms": 3}\n'
+        '{"id": "c", "error": null, "latency_ms": 20}\n'
+    )
+    done, failed = _load_resume_rows(path)
+    assert [r["id"] for r in done] == ["a", "c"]
+    assert failed == 1
+    assert _load_resume_rows(tmp_path / "missing.jsonl") == ([], 0)
+
+
+def test_read_image_retries_transient_permission_error(tmp_path, monkeypatch):
+    path = tmp_path / "doc.jpg"
+    path.write_bytes(b"image")
+    calls = {"n": 0}
+    real = type(path).read_bytes
+
+    def flaky(self):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise PermissionError("Operation not permitted")
+        return real(self)
+
+    monkeypatch.setattr(type(path), "read_bytes", flaky)
+    assert _read_image(path, attempts=3, delay=0) == b"image"
+    assert calls["n"] == 3

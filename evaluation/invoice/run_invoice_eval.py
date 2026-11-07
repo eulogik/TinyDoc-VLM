@@ -235,6 +235,19 @@ def _check_host(host: str, timeout: float = 10.0) -> None:
         raise SystemExit(f"Ollama not reachable at {host}: {type(exc).__name__}: {exc}")
 
 
+def _load_resume_rows(path: Path) -> tuple[list[dict], int]:
+    """Read completed rows; failed rows are returned as a retry count, not kept."""
+    if not path.exists():
+        return [], 0
+    loaded: list[dict] = []
+    with path.open() as handle:
+        for line in handle:
+            if line.strip():
+                loaded.append(json.loads(line))
+    done = [r for r in loaded if not r.get("error")]
+    return done, len(loaded) - len(done)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", required=True)
@@ -273,13 +286,7 @@ def main() -> int:
     predictions: dict[str, dict] = {}
     latencies: list[float] = []
     if args.resume and out_path.exists():
-        loaded: list[dict] = []
-        with out_path.open() as handle:
-            for line in handle:
-                if line.strip():
-                    loaded.append(json.loads(line))
-        done_rows = [r for r in loaded if not r.get("error")]
-        failed = len(loaded) - len(done_rows)
+        done_rows, failed = _load_resume_rows(out_path)
         # Rewrite with only successful rows so failed attempts are retried
         # instead of being frozen into the run by an outage.
         with out_path.open("w") as handle:
