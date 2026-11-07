@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">What TinyDoc returns for every field</title>
+  <desc id="desc">A receipt with three annotated values is linked to a result table showing field name, value, exact evidence quote, and confidence. Low confidence routes the field to review.</desc>
+  <rect width="1200" height="620" fill="#F4F6F2"/>
+
+  <text x="64" y="58" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="30" font-weight="600" fill="#0E1A24">Every value is checkable</text>
+  <text x="64" y="84" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="13.5" fill="#4A5A64">A schema-valid result, the exact span it came from, and a score you can route on.</text>
+  <line x1="64" y1="104" x2="1136" y2="104" stroke="#C9D2CB"/>
+
+  <!-- receipt -->
+  <rect x="64" y="132" width="336" height="374" fill="#FBFAF6" stroke="#C9D2CB"/>
+  <text x="88" y="164" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#7A898F">page 1 · source image</text>
+  <rect x="104" y="182" width="256" height="292" fill="#FFFFFF" stroke="#D6DCD4"/>
+  <rect x="124" y="204" width="92" height="9" fill="#DDE3DC"/>
+  <rect x="124" y="222" width="150" height="6" fill="#E7EBE5"/>
+  <rect x="124" y="246" width="66" height="6" fill="#E7EBE5"/>
+  <rect x="124" y="274" width="146" height="14" fill="#F3D9A8"/>
+  <line x1="124" y1="288" x2="270" y2="288" stroke="#B07A22" stroke-width="1.5"/>
+  <text x="282" y="284" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#B07A22">A</text>
+  <rect x="124" y="312" width="120" height="6" fill="#E7EBE5"/>
+  <rect x="124" y="326" width="136" height="6" fill="#E7EBE5"/>
+  <rect x="124" y="352" width="96" height="14" fill="#F3D9A8"/>
+  <line x1="124" y1="366" x2="220" y2="366" stroke="#B07A22" stroke-width="1.5"/>
+  <text x="232" y="362" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#B07A22">B</text>
+  <rect x="124" y="390" width="160" height="6" fill="#E7EBE5"/>
+  <text x="124" y="424" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#0E1A24">TOTAL</text>
+  <rect x="236" y="410" width="94" height="16" fill="#F3D9A8"/>
+  <line x1="236" y1="426" x2="330" y2="426" stroke="#B07A22" stroke-width="1.5"/>
+  <text x="342" y="421" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#B07A22">C</text>
+  <text x="232" y="454" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">the values live in the image, not in a black box</text>
+
+  <!-- connector -->
+  <path d="M400 272 C 432 272, 432 214, 462 214" fill="none" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+  <path d="M400 358 C 432 358, 432 302, 462 302" fill="none" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+  <path d="M400 418 C 432 418, 432 390, 462 390" fill="none" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- table -->
+  <text x="470" y="150" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#7A898F">result.fields</text>
+  <line x1="470" y1="166" x2="1136" y2="166" stroke="#0E1A24" stroke-width="1.2"/>
+
+  <text x="470" y="190" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">field</text>
+  <text x="640" y="190" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">value</text>
+  <text x="840" y="190" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">evidence quote</text>
+  <text x="1084" y="190" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">confidence</text>
+
+  <!-- row A -->
+  <text x="470" y="226" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11.5" fill="#1E6F5C">vendor_name</text>
+  <text x="640" y="226" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">Nordhafen Workshop</text>
+  <text x="840" y="226" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">"Nordhafen Workshop"</text>
+  <text x="840" y="242" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#7A898F">page 1 · bbox [124, 268, 270, 288]</text>
+  <rect x="1084" y="216" width="52" height="6" fill="#DCEBE4"/>
+  <rect x="1084" y="216" width="50" height="6" fill="#1E6F5C"/>
+  <text x="1084" y="238" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#1E6F5C">0.96</text>
+
+  <!-- row B -->
+  <text x="470" y="314" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11.5" fill="#1E6F5C">invoice_date</text>
+  <text x="640" y="314" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">2026-04-30</text>
+  <text x="840" y="314" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">"30.04.2026"</text>
+  <text x="840" y="330" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#7A898F">page 1 · bbox [124, 346, 220, 366]</text>
+  <rect x="1084" y="304" width="52" height="6" fill="#DCEBE4"/>
+  <rect x="1084" y="304" width="48" height="6" fill="#1E6F5C"/>
+  <text x="1084" y="326" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#1E6F5C">0.93</text>
+
+  <!-- row C -->
+  <text x="470" y="402" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11.5" fill="#1E6F5C">total</text>
+  <text x="640" y="402" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">6702.90</text>
+  <text x="840" y="402" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">"6.702,90"</text>
+  <text x="840" y="418" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#7A898F">page 1 · bbox [236, 410, 330, 426]</text>
+  <rect x="1084" y="392" width="52" height="6" fill="#F3E6C8"/>
+  <rect x="1084" y="392" width="32" height="6" fill="#C58B2A"/>
+  <text x="1084" y="414" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#8A5E18">0.61</text>
+  <rect x="1064" y="424" width="72" height="18" fill="#F3E6C8"/>
+  <text x="1100" y="437" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="9.5" fill="#8A5E18">route to review</text>
+
+  <line x1="470" y1="462" x2="1136" y2="462" stroke="#DDE3DC"/>
+  <text x="470" y="486" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4A5A64">Schema: 1.00 valid on clean-100 · evidence coverage: 0.80 of non-empty fields · overlay PNG available</text>
+
+  <!-- bottom note -->
+  <rect x="64" y="524" width="1072" height="62" fill="#E7EFE9"/>
+  <text x="84" y="548" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#0E1A24">Confidence is for review routing, not a probability</text>
+  <text x="84" y="568" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">Field ECE 0.115–0.135 raw and 0.005–0.014 after document-grouped isotonic out-of-fold. Document-level confidence is not calibrated (ECE 0.09–0.10).</text>
+
+  <text x="64" y="606" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">Grounding is OCR-span evidence, not model-predicted boxes: VLM box hit@0.5 is 0.04–0.20 against a 0.70 gate.</text>
+  <text x="1136" y="606" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#7A898F">tinydoc 0.2.0</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">TinyDoc — cited document extraction that runs locally</title>
+  <desc id="desc">TinyDoc Engine 3.0: local receipt and invoice extraction with schema-validated JSON, OCR-span evidence, and field confidence. Receipt field F1 94.8 percent; pip install tinydoc.</desc>
+  <rect width="1200" height="630" fill="#F4F6F2"/>
+  <text x="80" y="72" font-family="SF Mono, Menlo, Consolas, monospace" font-size="13" fill="#1E6F5C">TinyDoc Engine 3.0 · v0.2.0</text>
+  <text x="1120" y="72" text-anchor="end" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#7A898F">open source · Apache 2.0</text>
+  <line x1="80" y1="96" x2="1120" y2="96" stroke="#C9D2CB"/>
+
+  <text x="76" y="250" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="118" font-weight="600" fill="#0E1A24">TinyDoc</text>
+  <text x="80" y="306" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="25" fill="#0E1A24">Cited document extraction</text>
+  <text x="80" y="338" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="25" fill="#0E1A24">that runs on your machine.</text>
+  <text x="80" y="378" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="15" fill="#4A5A64">Receipts and invoices become schema-valid JSON, exact evidence spans,</text>
+  <text x="80" y="400" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="15" fill="#4A5A64">and per-field confidence. No cloud, no API keys.</text>
+
+  <line x1="80" y1="444" x2="760" y2="444" stroke="#C9D2CB"/>
+  <text x="80" y="478" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#7A898F">Receipt field F1</text>
+  <text x="80" y="510" font-family="SF Mono, Menlo, Consolas, monospace" font-size="26" fill="#0E1A24">94.8%</text>
+  <text x="240" y="478" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#7A898F">Schema valid</text>
+  <text x="240" y="510" font-family="SF Mono, Menlo, Consolas, monospace" font-size="26" fill="#0E1A24">1.00</text>
+  <text x="400" y="478" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#7A898F">Runs on</text>
+  <text x="400" y="510" font-family="SF Mono, Menlo, Consolas, monospace" font-size="26" fill="#0E1A24">2B–3B</text>
+
+  <text x="80" y="580" font-family="SF Mono, Menlo, Consolas, monospace" font-size="13" fill="#1E6F5C">pip install tinydoc</text>
+  <text x="1120" y="580" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11.5" fill="#4A5A64">github.com/eulogik/TinyDoc-VLM</text>
+
+  <!-- receipt -->
+  <rect x="836" y="122" width="284" height="424" fill="#FBFAF6" stroke="#C9D2CB"/>
+  <rect x="864" y="152" width="228" height="364" fill="#FFFFFF" stroke="#D6DCD4"/>
+  <rect x="886" y="178" width="94" height="10" fill="#DDE3DC"/>
+  <rect x="886" y="196" width="152" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="222" width="64" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="252" width="150" height="16" fill="#F3D9A8"/>
+  <line x1="886" y1="268" x2="1036" y2="268" stroke="#B07A22" stroke-width="1.5"/>
+  <rect x="886" y="292" width="128" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="306" width="146" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="332" width="112" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="360" width="132" height="16" fill="#F3D9A8"/>
+  <line x1="886" y1="376" x2="1018" y2="376" stroke="#B07A22" stroke-width="1.5"/>
+  <rect x="886" y="400" width="144" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="422" width="70" height="6" fill="#E7EBE5"/>
+  <rect x="886" y="452" width="80" height="10" fill="#0E1A24"/>
+  <rect x="1010" y="446" width="58" height="20" fill="#F3D9A8"/>
+  <line x1="1010" y1="466" x2="1068" y2="466" stroke="#B07A22" stroke-width="1.5"/>
+
+  <circle cx="1046" cy="188" r="42" fill="none" stroke="#1E6F5C" stroke-width="1.5" stroke-dasharray="4 3" transform="rotate(-12 1046 188)"/>
+  <text x="1046" y="192" text-anchor="middle" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#1E6F5C">cited</text>
+
+  <text x="978" y="600" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">measured on SROIE clean-100 · not an external benchmark</text>
+</svg>

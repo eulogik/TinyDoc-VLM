@@ -3,233 +3,567 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TinyDoc-VLM — Grounded Document Extraction SDK</title>
-  <meta name="description" content="Local-first document extraction SDK — schema-valid JSON, evidence boxes, confidence scores. Free Ollama models, no API key. Apache 2.0.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>TinyDoc — local, cited receipt &amp; invoice extraction</title>
+  <meta name="description" content="TinyDoc turns receipts and invoices into schema-valid JSON with exact evidence spans and field confidence. Local Qwen VLMs. pip install tinydoc.">
+  <link rel="canonical" href="https://eulogik.github.io/TinyDoc-VLM/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="eulogik">
+  <meta name="theme-color" content="#F4F6F2">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="TinyDoc">
+  <meta property="og:title" content="TinyDoc — cited document extraction that runs locally">
+  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 0.2.0 on PyPI.">
+  <meta property="og:url" content="https://eulogik.github.io/TinyDoc-VLM/">
+  <meta property="og:image" content="https://eulogik.github.io/TinyDoc-VLM/assets/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TinyDoc — cited document extraction that runs on your machine">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TinyDoc — cited document extraction that runs locally">
+  <meta name="twitter:description" content="Schema-valid JSON, OCR-span evidence, field confidence. Local Qwen VLMs, Apache 2.0.">
+  <meta name="twitter:image" content="https://eulogik.github.io/TinyDoc-VLM/assets/og-card.png">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230E1A24'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' fill='%23F4F6F2' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="TinyDoc for AI answer engines">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', -apple-system, sans-serif; color: #1a1a2e; background: #f8f9fc; line-height: 1.6; }
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
-    nav { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
-    nav .logo { font-weight: 800; font-size: 1.3rem; color: #2563eb; text-decoration: none; }
-    nav .links a { margin-left: 24px; text-decoration: none; color: #64748b; font-weight: 500; font-size: 0.9rem; transition: color .2s; }
-    nav .links a:hover { color: #2563eb; }
-    header { text-align: center; padding: 80px 0 60px; }
-    header h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
-    header h1 span { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    header .subtitle { font-size: 1.25rem; color: #64748b; margin-top: 16px; max-width: 600px; margin-left: auto; margin-right: auto; }
-    header .badges { margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-    header .badges a { text-decoration: none; }
-    .hero-cta { margin-top: 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all .2s; }
-    .btn-primary { background: #2563eb; color: #fff; }
-    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
-    .btn-secondary { background: #fff; color: #2563eb; border: 2px solid #e2e8f0; }
-    .btn-secondary:hover { border-color: #2563eb; transform: translateY(-1px); }
-    section { padding: 60px 0; }
-    section h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 24px; }
-    section h2 .emoji { margin-right: 8px; }
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 32px; }
-    .feature { background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-    .feature h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
-    .feature p { color: #64748b; font-size: 0.95rem; }
-    .feature .icon { font-size: 2rem; margin-bottom: 12px; }
-    .code-block { background: #1e293b; color: #e2e8f0; border-radius: 12px; padding: 24px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.5; margin: 16px 0; }
-    .code-block .comment { color: #94a3b8; }
-    .code-block .keyword { color: #818cf8; }
-    .code-block .string { color: #34d399; }
-    .benchmarks table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-    .benchmarks th, .benchmarks td { padding: 14px 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
-    .benchmarks th { background: #f8fafc; font-weight: 600; color: #64748b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .benchmarks td:last-child { font-weight: 600; }
-    .arch-diagram { background: #fff; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin: 24px 0; }
-    .arch-diagram pre { font-size: 0.85rem; line-height: 1.8; color: #475569; }
-    footer { text-align: center; padding: 40px 0; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid #e2e8f0; }
-    footer a { color: #2563eb; text-decoration: none; }
-    @media (max-width: 640px) { header h1 { font-size: 2.2rem; } }
+    :root {
+      --ink: #0E1A24;
+      --ink-soft: #33424D;
+      --muted: #5F7078;
+      --paper: #F4F6F2;
+      --paper-raised: #FBFAF6;
+      --line: #C9D2CB;
+      --line-soft: #DDE3DC;
+      --green: #1E6F5C;
+      --green-soft: #DCEBE4;
+      --amber: #B07A22;
+      --amber-ink: #7A5314;
+      --amber-soft: #F3E6C8;
+      --red: #A6402F;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      --measure: 68ch;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: var(--green); text-underline-offset: 3px; }
+    a:hover { color: var(--ink); }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    img { max-width: 100%; height: auto; display: block; }
+    code, pre { font-family: var(--mono); }
+    .skip { position: absolute; left: -9999px; top: 0; background: var(--ink); color: var(--paper); padding: 10px 14px; z-index: 10; }
+    .skip:focus { left: 12px; top: 12px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+
+    /* nav */
+    .nav { border-bottom: 1px solid var(--line); background: var(--paper); background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 5; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 64px; }
+    .wordmark { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+    .nav-links { display: flex; align-items: center; gap: 22px; }
+    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14px; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta { border: 1px solid var(--ink); padding: 8px 14px; color: var(--ink) !important; font-size: 13px; }
+    .nav-cta:hover { background: var(--ink); color: var(--paper) !important; }
+    @media (max-width: 760px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+    /* type */
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.015em; line-height: 1.12; }
+    h1 { font-size: clamp(2.6rem, 6.2vw, 4.6rem); }
+    h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-bottom: 14px; }
+    h3 { font-size: 1.18rem; }
+    .lede { font-size: clamp(1.05rem, 1.8vw, 1.28rem); color: var(--ink-soft); max-width: var(--measure); }
+    .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; color: var(--green); }
+    .muted { color: var(--muted); }
+    .small { font-size: 13px; }
+
+    /* hero */
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+    .hero h1 { margin: 14px 0 20px; max-width: 15ch; }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn { display: inline-block; padding: 12px 20px; font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid var(--ink); }
+    .btn-primary { background: var(--ink); color: var(--paper); }
+    .btn-primary:hover { background: var(--green); border-color: var(--green); color: #fff; }
+    .btn-ghost { color: var(--ink); background: transparent; }
+    .btn-ghost:hover { background: var(--paper-raised); }
+    .install { margin-top: 18px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 13px; background: var(--paper-raised); border: 1px solid var(--line); padding: 9px 12px; color: var(--ink-soft); }
+    .install b { color: var(--green); font-weight: 500; }
+
+    /* receipt figure */
+    .receipt-figure { border: 1px solid var(--line); background: var(--paper-raised); padding: 18px; }
+    .receipt-figure svg { width: 100%; height: auto; display: block; }
+    .receipt-caption { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-top: 10px; }
+
+    /* fact strip */
+    .facts { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
+    .fact { padding: 22px 24px; border-right: 1px solid var(--line); }
+    .fact:last-child { border-right: 0; }
+    .fact .label { font-size: 12px; color: var(--muted); }
+    .fact .value { font-family: var(--mono); font-size: 26px; margin-top: 4px; color: var(--ink); }
+    .fact .note { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+    @media (max-width: 820px) { .facts { grid-template-columns: repeat(2, 1fr); } .fact:nth-child(2) { border-right: 0; } .fact:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+
+    /* answer block */
+    .answer { padding: 56px 0; border-bottom: 1px solid var(--line); }
+    .answer-box { border-left: 3px solid var(--green); padding: 4px 0 4px 24px; max-width: 78ch; }
+    .answer-box p { font-size: 1.08rem; color: var(--ink-soft); }
+    .answer-box strong { color: var(--ink); }
+    .answer-meta { margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+    /* sections */
+    section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+    .section-head p { color: var(--muted); font-size: 14px; max-width: 46ch; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media (max-width: 860px) { .grid-2, .hero-grid { grid-template-columns: 1fr; gap: 32px; } .hero { padding-top: 48px; } }
+
+    figure { margin: 0; }
+    figure img { border: 1px solid var(--line); }
+    figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; max-width: 76ch; }
+
+    /* steps */
+    .steps { list-style: none; counter-reset: step; }
+    .steps li { position: relative; padding: 16px 0 16px 44px; border-bottom: 1px solid var(--line-soft); }
+    .steps li:last-child { border-bottom: 0; }
+    .steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 18px; font-family: var(--mono); font-size: 12px; color: var(--green); border: 1px solid var(--green); width: 24px; height: 24px; display: grid; place-items: center; }
+    .steps b { display: block; font-size: 15px; }
+    .steps span { font-size: 13.5px; color: var(--muted); }
+
+    /* table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    caption { text-align: left; font-size: 13px; color: var(--muted); padding-bottom: 10px; }
+    th, td { padding: 11px 14px; border-bottom: 1px solid var(--line-soft); text-align: left; vertical-align: top; }
+    thead th { border-bottom: 1px solid var(--ink); font-size: 12px; color: var(--muted); font-weight: 500; }
+    tbody td.num, thead th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
+    tbody tr:hover { background: var(--paper-raised); }
+    .tag { font-family: var(--mono); font-size: 11px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+    .tag.ok { border-color: var(--green); color: var(--green); }
+    .tag.warn { border-color: var(--amber); color: var(--amber-ink); }
+    .tag.bad { border-color: var(--red); color: var(--red); }
+
+    /* caveat */
+    .caveat { margin-top: 24px; border: 1px solid var(--line); border-left: 3px solid var(--amber); background: var(--paper-raised); padding: 18px 20px; font-size: 13.5px; color: var(--ink-soft); }
+    .caveat b { color: var(--ink); }
+
+    /* code */
+    .code { background: var(--ink); color: #E9F1EC; padding: 22px 24px; overflow-x: auto; font-size: 12.8px; line-height: 1.7; border: 1px solid var(--ink); }
+    .code .c { color: #8FA8A4; }
+    .code .k { color: #9CC7B8; }
+    .code .s { color: #E8C27A; }
+    .code .p { color: #7FA99B; }
+
+    /* faq */
+    details { border-bottom: 1px solid var(--line-soft); padding: 16px 0; }
+    details summary { cursor: pointer; font-weight: 600; font-size: 15px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; font-family: var(--mono); color: var(--green); }
+    details[open] summary::after { content: "−"; }
+    details p { margin-top: 10px; font-size: 14px; color: var(--ink-soft); max-width: 78ch; }
+
+    /* links */
+    .doc-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); }
+    .doc-links a { padding: 18px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); }
+    .doc-links a:nth-child(3n) { border-right: 0; }
+    .doc-links a:hover { background: var(--paper-raised); }
+    .doc-links b { display: block; font-size: 14px; }
+    .doc-links span { font-size: 12.5px; color: var(--muted); }
+    @media (max-width: 760px) { .doc-links { grid-template-columns: 1fr; } .doc-links a { border-right: 0; } }
+
+    footer { padding: 36px 0 48px; font-size: 13px; color: var(--muted); }
+    .footer-grid { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    footer a { color: var(--ink-soft); }
+    .foot-note { margin-top: 18px; font-size: 11.5px; color: var(--muted); max-width: 84ch; }
+
+    .reveal { animation: rise .55s ease-out both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "TinyDoc",
+        "alternateName": "TinyDoc Engine 3.0",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "macOS, Linux",
+        "softwareVersion": "0.2.0",
+        "description": "Local-first receipt and invoice extraction: schema-valid JSON with OCR-span evidence and per-field confidence, powered by local Qwen VLMs.",
+        "url": "https://eulogik.github.io/TinyDoc-VLM/",
+        "downloadUrl": "https://pypi.org/project/tinydoc/",
+        "codeRepository": "https://github.com/eulogik/TinyDoc-VLM",
+        "license": "https://opensource.org/licenses/Apache-2.0",
+        "programmingLanguage": "Python",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "eulogik", "url": "https://eulogik.com" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is TinyDoc?",
+            "acceptedAnswer": { "@type": "Answer", "text": "TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice images into schema-validated JSON with exact OCR-span evidence and per-field confidence. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models through Ollama." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does TinyDoc ship its own model?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. TinyDoc uses third-party Qwen vision-language models and adds schema prompts, JSON validation, OCR-span evidence, confidence, and overlays. The first-party 256M and SmolVLM2 tracks were measured, failed to beat the free base model, and were closed." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does TinyDoc work on invoices?",
+            "acceptedAnswer": { "@type": "Answer", "text": "On a synthetic public benchmark of 181 invoices, page 1 only, TinyDoc reaches 91.9% key-header accuracy and 65.7% fully correct with Qwen2.5-VL-3B, and 93.5% and 71.8% with Qwen3-VL-2B-Instruct. It is not validated on real supplier invoices, flagging fails, and multipage is not shipped." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does my data leave my machine?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Inference runs against a local Ollama server. There is no hosted API, no telemetry, and no API key in the SDK." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is the confidence calibrated?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Field-level scores are usable for review routing after document-grouped isotonic out-of-fold calibration (ECE 0.005 to 0.014). Document-level confidence is not calibrated (ECE 0.09 to 0.10) and is not a probability." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can TinyDoc predict bounding boxes?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It returns OCR-span boxes as page-derived provenance. VLM-predicted boxes were measured at hit@0.5 of 0.04 to 0.20 against a 0.70 gate, so they are not claimed or shipped." }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate is TinyDoc on receipts?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Field F1 is 0.9475 with Qwen2.5-VL-3B and 0.9200 with Qwen3-VL-2B-Instruct on SROIE clean-100. That set is a duplicate-filtered split of the public SROIE train pool, not an external benchmark; the original 100-document set is 60% leaked, so the numbers are for same-document engine comparisons." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the license?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The TinyDoc SDK is Apache 2.0. The Qwen base models are Apache 2.0; check their model cards for terms." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
-  <div class="container">
-    <nav>
-      <a href="#" class="logo">TinyDoc-VLM</a>
-      <div class="links">
-        <a href="#features">Features</a>
-        <a href="#quickstart">Quick Start</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#benchmarks">Benchmarks</a>
-        <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a>
-      </div>
-    </nav>
+  <a class="skip" href="#main">Skip to content</a>
 
-    <header>
-      <h1><span>TinyDoc-VLM</span></h1>
-      <p class="subtitle">Grounded document extraction SDK — schema-valid JSON, evidence boxes, confidence scores. Runs locally on free models. No API key.</p>
-      <div class="badges">
-        <a href="https://github.com/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/github/stars/eulogik/TinyDoc-VLM?style=social" alt="GitHub stars"></a>
-        <a href="https://pypi.org/project/tinydoc/"><img src="https://img.shields.io/pypi/v/tinydoc?color=blue" alt="PyPI"></a>
-        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><img src="https://img.shields.io/badge/🤗-Space-yellow" alt="HF Space"></a>
-        <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md"><img src="https://img.shields.io/badge/Model%20status-v3%20plan-yellow" alt="Model status"></a>
-        <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-green" alt="License"></a>
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a class="wordmark" href="/TinyDoc-VLM/">TinyDoc</a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#results">Results</a>
+        <a href="#start">Quick start</a>
+        <a href="#questions">Questions</a>
+        <a class="nav-cta" href="https://pypi.org/project/tinydoc/">pip install tinydoc</a>
       </div>
-      <div class="hero-cta">
-        <a href="#quickstart" class="btn btn-primary">Get Started</a>
-        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM" class="btn btn-secondary">View Demo</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <div class="reveal">
+          <p class="kicker">TinyDoc Engine 3.0 · v0.2.0</p>
+          <h1>Document extraction you can <em>check</em>.</h1>
+          <p class="lede">Receipts and invoices become schema-valid JSON, with the exact OCR span and a confidence score behind every field. Local Qwen VLMs. No API key, no cloud, no telemetry.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#start">Install TinyDoc</a>
+            <a class="btn btn-ghost" href="https://github.com/eulogik/TinyDoc-VLM">Read the source</a>
+          </div>
+          <div class="install" aria-label="Install command"><b>$</b> pip install tinydoc</div>
+        </div>
+
+        <figure class="receipt-figure reveal" aria-labelledby="fig-receipt">
+          <svg viewBox="0 0 360 300" role="img" aria-label="A receipt with three annotated fields linked to a cited result row">
+            <rect x="0" y="0" width="360" height="300" fill="#FBFAF6"/>
+            <rect x="26" y="24" width="200" height="250" fill="#FFFFFF" stroke="#D6DCD4"/>
+            <rect x="46" y="46" width="76" height="8" fill="#DDE3DC"/>
+            <rect x="46" y="64" width="120" height="5" fill="#E7EBE5"/>
+            <rect x="46" y="88" width="58" height="5" fill="#E7EBE5"/>
+            <rect x="46" y="114" width="118" height="13" fill="#F3D9A8"/>
+            <line x1="46" y1="127" x2="164" y2="127" stroke="#B07A22" stroke-width="1.4"/>
+            <rect x="46" y="146" width="100" height="5" fill="#E7EBE5"/>
+            <rect x="46" y="160" width="112" height="5" fill="#E7EBE5"/>
+            <rect x="46" y="184" width="86" height="13" fill="#F3D9A8"/>
+            <line x1="46" y1="197" x2="132" y2="197" stroke="#B07A22" stroke-width="1.4"/>
+            <rect x="46" y="216" width="120" height="5" fill="#E7EBE5"/>
+            <rect x="46" y="238" width="54" height="8" fill="#0E1A24"/>
+            <rect x="126" y="234" width="52" height="16" fill="#F3D9A8"/>
+            <line x1="126" y1="250" x2="178" y2="250" stroke="#B07A22" stroke-width="1.4"/>
+
+            <line x1="226" y1="121" x2="252" y2="86" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="226" y1="191" x2="252" y2="164" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="226" y1="242" x2="252" y2="242" stroke="#C58B2A" stroke-width="1" stroke-dasharray="3 3"/>
+
+            <text x="258" y="78" font-family="SF Mono, Menlo, monospace" font-size="8" fill="#5F7078">vendor_name</text>
+            <text x="258" y="92" font-family="SF Mono, Menlo, monospace" font-size="9" fill="#0E1A24">0.96</text>
+            <rect x="258" y="98" width="44" height="4" fill="#DCEBE4"/>
+            <rect x="258" y="98" width="42" height="4" fill="#1E6F5C"/>
+
+            <text x="258" y="156" font-family="SF Mono, Menlo, monospace" font-size="8" fill="#5F7078">invoice_date</text>
+            <text x="258" y="170" font-family="SF Mono, Menlo, monospace" font-size="9" fill="#0E1A24">0.93</text>
+            <rect x="258" y="176" width="44" height="4" fill="#DCEBE4"/>
+            <rect x="258" y="176" width="41" height="4" fill="#1E6F5C"/>
+
+            <text x="258" y="234" font-family="SF Mono, Menlo, monospace" font-size="8" fill="#5F7078">total</text>
+            <text x="258" y="248" font-family="SF Mono, Menlo, monospace" font-size="9" fill="#8A5E18">0.61 · review</text>
+            <rect x="258" y="254" width="44" height="4" fill="#F3E6C8"/>
+            <rect x="258" y="254" width="27" height="4" fill="#B07A22"/>
+
+            <text x="26" y="292" font-family="SF Mono, Menlo, monospace" font-size="7.5" fill="#7A898F">the page is the source of truth</text>
+          </svg>
+          <figcaption id="fig-receipt" class="receipt-caption">Each value keeps its page, bbox, and score. Low scores route to review.</figcaption>
+        </figure>
       </div>
     </header>
 
-    <section id="features">
-      <h2><span class="emoji">🔥</span> Highlights</h2>
-      <div class="features">
-        <div class="feature">
-          <div class="icon">🧠</div>
-          <h3>Measured, Not Marketed</h3>
-          <p>Field F1 <b>0.9475</b> with Qwen2.5-VL-3B and <b>0.9200</b> with Qwen3-VL-2B-Instruct vs <b>0.376</b> for PP-OCR + heuristics — same 100 documents, same scorer. <a href="#benchmarks">Provenance caveat</a>.</p>
-        </div>
-        <div class="feature">
-          <div class="icon">🔍</div>
-          <h3>Evidence for Every Field</h3>
-          <p>Each extracted value ships with the OCR span and bounding box it came from — human-verifiable provenance, coverage 79.8%.</p>
-        </div>
-        <div class="feature">
-          <div class="icon">📋</div>
-          <h3>Schema-Valid Output</h3>
-          <p>JSON Schema validation + sanitization on every result (validity 1.000 on eval), plus a per-field confidence score. Field-level ECE is 0.115–0.135 raw and 0.005–0.014 after document-grouped calibration; document-level confidence is <b>not calibrated</b> (ECE 0.09–0.10). Use it for review routing, not as a probability.</p>
-        </div>
-        <div class="feature">
-          <div class="icon">⚙️</div>
-          <h3>Engine Ladder</h3>
-          <p>Free <code>ollama:qwen2.5vl:3b</code> quality default, <code>ollama:qwen3-vl:2b-instruct</code> fast tier, plus MLX, ONNX and OCR-fallback engines behind one interface.</p>
-        </div>
-        <div class="feature">
-          <div class="icon">📦</div>
-          <h3>One pip Install</h3>
-          <p><code>pip install tinydoc</code> — Python SDK with Pydantic-typed results, CLI, and a local Gradio demo.</p>
-        </div>
-        <div class="feature">
-          <div class="icon">🤗</div>
-          <h3>Open & Free</h3>
-          <p>Apache 2.0 license — free for commercial use. Local-first: no API key, no cloud, no telemetry.</p>
+    <div class="facts" aria-label="Key facts">
+      <div class="fact">
+        <div class="label">Receipt field F1</div>
+        <div class="value">0.9475</div>
+        <div class="note">Qwen2.5-VL-3B · clean-100</div>
+      </div>
+      <div class="fact">
+        <div class="label">Fast tier</div>
+        <div class="value">0.9200</div>
+        <div class="note">Qwen3-VL-2B · 7.0 s median</div>
+      </div>
+      <div class="fact">
+        <div class="label">Schema valid</div>
+        <div class="value">1.00</div>
+        <div class="note">clean-100 · zero errors</div>
+      </div>
+      <div class="fact">
+        <div class="label">Invoice fully correct</div>
+        <div class="value">71.8%</div>
+        <div class="note">2B · synthetic page 1</div>
+      </div>
+    </div>
+
+    <section class="answer" id="what">
+      <div class="wrap">
+        <div class="answer-box">
+          <p><strong>TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice images into schema-validated JSON, with the exact source span and a confidence score attached to every field.</strong> It runs a local vision-language model through Ollama and adds JSON Schema validation, OCR-span evidence, and review routing. It is not a fine-tuned TinyDoc checkpoint: the reader is a third-party Qwen model and the product is the trust layer around it.</p>
+          <p class="answer-meta">Install: <code>pip install tinydoc</code> · License: Apache 2.0 · Runtime: local Ollama · Python 3.9+</p>
         </div>
       </div>
     </section>
 
-    <section id="quickstart">
-      <h2><span class="emoji">🚀</span> Quick Start</h2>
-      <div class="code-block">
-        <span class="comment"># Install the SDK</span><br>
-        pip install tinydoc<br><br>
-        <span class="comment"># Requirements: Ollama + qwen2.5vl:3b (quality) or qwen3-vl:2b-instruct (fast)</span><br>
-        <span class="keyword">from</span> tinydoc.pipeline <span class="keyword">import</span> ReceiptPipeline<br><br>
-        pipe = ReceiptPipeline(<span class="string">"auto"</span>)<br>
-        doc = pipe.extract(<span class="string">"receipt.jpg"</span>)<br><br>
-        <span class="comment"># Schema-valid fields + confidence</span><br>
-        print(doc.fields, doc.schema_valid, doc.confidence)<br><br>
-        <span class="comment"># Evidence: OCR span + bbox behind every value</span><br>
-        <span class="keyword">for</span> fr <span class="keyword">in</span> doc.field_results:<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;print(fr.name, fr.value, fr.evidence[<span class="string">"quote"</span>], fr.evidence[<span class="string">"bbox"</span>])<br><br>
-        <span class="comment"># Or from the shell</span><br>
-        tinydoc extract ./receipts/ --out results.jsonl --overlay overlays/
-      </div>
-    </section>
-
-    <section id="architecture">
-      <h2><span class="emoji">🏗️</span> How it works</h2>
-      <div class="arch-diagram">
-        <pre>
-Receipt / invoice image
-    ↓
-Engine (ollama:qwen2.5vl:3b — quality; qwen3-vl:2b-instruct — fast; MLX / OCR fallback)
-    ↓
-Raw model output → JSON extraction → collapse repetition → sanitize
-    ↓
-JSON Schema validation  ── schema_valid: true/false
-    ↓
-Evidence anchoring (PP-OCR word boxes → best span + bbox per field)
-    ↓
-Confidence (evidence quality × schema × field rules)
-    ↓
-DocumentResult — fields + per-field {quote, bbox, score} + confidence</pre>
-      </div>
-    </section>
-
-    <section id="benchmarks" class="benchmarks">
-      <h2><span class="emoji">📊</span> Benchmarks (measured)</h2>
-      <table>
-        <thead>
-          <tr><th>Benchmark</th><th>Metric</th><th>Score</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>SROIE receipts — clean-100, Qwen2.5-VL-3B (quality)</td><td>Field F1</td><td><b>0.9475</b></td><td>✅ n=100, schema 1.00, 0 errors</td></tr>
-          <tr><td>SROIE receipts — clean-100, Qwen3-VL-2B-Instruct (fast)</td><td>Field F1</td><td><b>0.9200</b></td><td>✅ n=100, schema 1.00, 2× faster</td></tr>
-          <tr><td>SROIE receipts — clean-100, first-party hybrid v2</td><td>Field F1</td><td>0.603</td><td>✅ shipped v2, address 0.37</td></tr>
-          <tr><td>SROIE receipts — PP-OCR + heuristics baseline</td><td>Field F1</td><td>0.376</td><td>✅ same 100 docs, same scorer</td></tr>
-          <tr><td>SROIE receipts — Tesseract + regex baseline</td><td>Field F1</td><td>0.227</td><td>✅ same 100 docs, same scorer</td></tr>
-          <tr><td>Schema validity (Qwen 3B / 2B)</td><td>Rate</td><td>1.000</td><td>✅ n=100</td></tr>
-          <tr><td>Evidence coverage (RapidOCR, post A/B)</td><td>Rate</td><td>0.798</td><td>✅ legacy 3B run</td></tr>
-          <tr><td>FUNSD transfer probe (form → receipt-shaped keys)</td><td>Field F1</td><td>0.352</td><td>✅ n=50, nonstandard gold mapping</td></tr>
-          <tr><td>OCRBench — TinyDoc-VLM 256M research checkpoint</td><td>Accuracy</td><td>0.0%</td><td>⚠️ n=1000 — model retired from claims</td></tr>
-          <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, Qwen2.5-VL-3B</td><td>Key-header accuracy</td><td><b>91.9%</b></td><td>⚠️ fully correct 65.7%; synthetic, vendor-made, not real invoices</td></tr>
-          <tr><td>Invoice benchmark v1 — page 1, Qwen3-VL-2B-Instruct</td><td>Key-header accuracy</td><td><b>93.5%</b></td><td>⚠️ fully correct 71.8%; 16.1 s/doc; paired diff not significant</td></tr>
-          <tr><td>Invoice benchmark v1 — flags</td><td>Recall</td><td><b>0/7</b></td><td>❌ inconsistent/multi-invoice docs; 2/172 false alarms</td></tr>
-          <tr><td>DocVQA / CORD</td><td>—</td><td>—</td><td>Not measured</td></tr>
-        </tbody>
-      </table>
-      <p style="margin-top:16px; color:#64748b; font-size:0.9rem;">
-        <b>Provenance:</b> clean-100 is a duplicate-filtered split of the public
-        SROIE <b>train</b> pool, not an external test; Qwen may have seen it in
-        pretraining. The original 100-doc set is 60% leaked. These numbers are for
-        same-document engine comparisons, not generalization claims.
-        Every number recomputes from <code>evaluation/phase0/results/</code>;
-        see <code>docs/BENCHMARKS.md</code> and <code>docs/v3_plan.md</code>.
-        The 256M checkpoint's earlier benchmark figures were never measured and
-        have been withdrawn. The invoice numbers are a page-1 synthetic transfer
-        probe, not real supplier-invoice accuracy; flagging and multipage fail.
-      </p>
-    </section>
-
-    <section id="links">
-      <h2><span class="emoji">🔗</span> Ecosystem</h2>
-      <div class="features">
-        <div class="feature">
-          <h3>🐍 PyPI</h3>
-          <p><code>pip install tinydoc</code> (PyPI 0.1.2, legacy) — 0.2.0 is a <a href="https://github.com/eulogik/TinyDoc-VLM#quick-start">source install</a>.</p>
+    <section id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p>A local reader, then four checks that make the output usable.</p>
         </div>
-        <div class="feature">
-          <h3>🤗 Model Status</h3>
-          <p>The 256M checkpoint is an archived research artifact (OCRBench 0.0%), not the product — <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md">read the v3 plan</a>.</p>
-        </div>
-        <div class="feature">
-          <h3>🤗 Space Demo</h3>
-          <p>Static project card with local-run instructions — <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">eulogik/TinyDoc-VLM Space</a></p>
-        </div>
-        <div class="feature">
-          <h3>📖 Documentation</h3>
-          <p>Full docs — <a href="https://github.com/eulogik/TinyDoc-VLM#readme">GitHub README</a></p>
-        </div>
-        <div class="feature">
-          <h3>📄 Paper</h3>
-          <p>Technical report — coming soon</p>
-        </div>
-        <div class="feature">
-          <h3>🐦 Twitter</h3>
-          <p>Follow — <a href="https://twitter.com/eulogik">@eulogik</a></p>
+        <figure>
+          <img src="assets/architecture.svg" alt="TinyDoc architecture: document input, local tier router with Qwen3-VL 2B and Qwen2.5-VL 3B, schema prompt, trust layer, and cited JSON output" width="1200" height="640" loading="eager">
+          <figcaption>The tier router chooses a reader; the trust layer runs on every result. No document leaves the host.</figcaption>
+        </figure>
+        <div class="grid-2" style="margin-top:36px">
+          <ol class="steps">
+            <li><b>Schema validation</b><span>Reject or repair broken JSON before it reaches your code.</span></li>
+            <li><b>OCR-span evidence</b><span>Align RapidOCR word boxes to each field: quote, page, and bbox.</span></li>
+            <li><b>Field confidence</b><span>Calibrated for review routing, not for probability claims.</span></li>
+            <li><b>Review routing</b><span>Send low-confidence fields to a human instead of silently accepting them.</span></li>
+          </ol>
+          <div>
+            <h3 style="margin-bottom:10px">What ships in every result</h3>
+            <div class="table-wrap">
+              <table>
+                <caption class="small">DocumentResult on a clean receipt</caption>
+                <thead><tr><th>Field</th><th>Value</th><th class="num">Confidence</th></tr></thead>
+                <tbody>
+                  <tr><td><code>company</code></td><td>Nordhafen Workshop</td><td class="num">0.96</td></tr>
+                  <tr><td><code>date</code></td><td>2026-04-30</td><td class="num">0.93</td></tr>
+                  <tr><td><code>total</code></td><td>6702.90</td><td class="num" style="color:var(--amber-ink)">0.61</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small muted" style="margin-top:12px">Evidence coverage on clean-100 is 0.798 of non-empty fields. Bboxes are OCR spans, not model predictions.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <footer>
-      <p>
-        Built by <a href="https://eulogik.com">eulogik</a> —
-        <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> ·
-        <a href="https://pypi.org/project/tinydoc/">PyPI</a> ·
-        <a href="https://huggingface.co/eulogik/TinyDoc-VLM-256M">Research checkpoint</a> ·
-        <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md">Model status</a> ·
-        <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM">HF Space</a>
-      </p>
-      <p style="margin-top: 8px;">Apache 2.0 &mdash; Free for commercial use</p>
-    </footer>
-  </div>
+    <section id="results">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Measured results</h2>
+          <p>Two tiers, two verticals, one scorer. Every published number recomputes from committed artifacts.</p>
+        </div>
+        <figure>
+          <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
+          <figcaption>Receipts: SROIE clean-100. Invoices: public synthetic benchmark, page 1 only. Neither is an external benchmark.</figcaption>
+        </figure>
+
+        <div class="table-wrap" style="margin-top:34px">
+          <table>
+            <thead>
+              <tr><th>Benchmark</th><th>Metric</th><th class="num">Score</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SROIE receipts — clean-100, Qwen2.5-VL-3B</td><td>Field F1</td><td class="num"><b>0.9475</b></td><td><span class="tag ok">n=100 · schema 1.00</span></td></tr>
+              <tr><td>SROIE receipts — clean-100, Qwen3-VL-2B-Instruct</td><td>Field F1</td><td class="num"><b>0.9200</b></td><td><span class="tag ok">2× faster</span></td></tr>
+              <tr><td>SROIE receipts — first-party hybrid v2</td><td>Field F1</td><td class="num">0.603</td><td><span class="tag">superseded</span></td></tr>
+              <tr><td>SROIE receipts — PP-OCR + heuristics</td><td>Field F1</td><td class="num">0.376</td><td><span class="tag">baseline</span></td></tr>
+              <tr><td>SROIE receipts — Tesseract + regex</td><td>Field F1</td><td class="num">0.227</td><td><span class="tag">baseline</span></td></tr>
+              <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, 3B</td><td>Key-header</td><td class="num">91.9%</td><td><span class="tag warn">65.7% fully correct</span></td></tr>
+              <tr><td>Invoice benchmark v1 — page 1, 2B</td><td>Key-header</td><td class="num"><b>93.5%</b></td><td><span class="tag warn">71.8% fully correct</span></td></tr>
+              <tr><td>Invoice flags — inconsistent + multi-invoice</td><td>Recall</td><td class="num"><b>0/7</b></td><td><span class="tag bad">not usable</span></td></tr>
+              <tr><td>Evidence coverage — RapidOCR</td><td>Rate</td><td class="num">0.798</td><td><span class="tag warn">gate 0.90</span></td></tr>
+              <tr><td>VLM bbox grounding — hit@0.5</td><td>2B / 3B</td><td class="num">0.20 / 0.04</td><td><span class="tag bad">gate 0.70</span></td></tr>
+              <tr><td>DocVQA / CORD</td><td>—</td><td class="num">—</td><td><span class="tag">not measured</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="caveat">
+          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real supplier invoices are unmeasured, flagging fails, and multipage is not shipped. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
+        </div>
+      </div>
+    </section>
+
+    <section id="output">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What you get back</h2>
+          <p>Not just fields: the page, the span, and a score for every value.</p>
+        </div>
+        <figure>
+          <img src="assets/trust.svg" alt="TinyDoc result table showing field name, value, exact evidence quote with page and bbox, and confidence; a 0.61 total is routed to review" width="1200" height="620" loading="eager">
+          <figcaption>Evidence is OCR-span provenance. Confidence is for review routing; document-level scores are not calibrated.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="start">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Quick start</h2>
+          <p>One pip install, one local model, one call.</p>
+        </div>
+        <div class="grid-2">
+          <div>
+            <pre class="code"><code><span class="c"># 1. install</span>
+pip install tinydoc==0.2.0
+
+<span class="c"># 2. pull a local reader (choose one)</span>
+ollama pull qwen2.5vl:3b            <span class="c"># quality</span>
+ollama pull qwen3-vl:2b-instruct    <span class="c"># fast</span>
+
+<span class="c"># 3. extract</span>
+tinydoc extract ./receipts/ \
+  --engine ollama:qwen2.5vl:3b \
+  --out results.jsonl --overlay overlays/</code></pre>
+          </div>
+          <div>
+            <pre class="code"><code><span class="k">from</span> tinydoc <span class="k">import</span> ReceiptPipeline
+
+pipe = ReceiptPipeline(<span class="s">"ollama:qwen2.5vl:3b"</span>)
+result = pipe.extract(<span class="s">"receipt.jpg"</span>)
+
+<span class="k">print</span>(result.fields)
+<span class="k">print</span>(result.schema_valid)
+
+<span class="k">for</span> field <span class="k">in</span> result.field_results:
+    <span class="k">print</span>(field.name, field.value,
+          field.confidence)
+    <span class="k">print</span>(field.evidence.quote,
+          field.evidence.bbox)</code></pre>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:14px">Large scans: keep <code>TINYDOC_OLLAMA_NUM_CTX=8192</code> (default). Do not send Ollama <code>format:"json"</code>; constrained decoding truncates long addresses.</p>
+      </div>
+    </section>
+
+    <section id="questions">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Questions</h2>
+          <p>Short answers, with the caveats attached.</p>
+        </div>
+        <details open>
+          <summary>What is TinyDoc?</summary>
+          <p>TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice images into schema-validated JSON, with exact OCR-span evidence and per-field confidence. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models through Ollama. The SDK is Apache 2.0 and available as <code>pip install tinydoc</code>.</p>
+        </details>
+        <details>
+          <summary>Does TinyDoc ship its own model?</summary>
+          <p>No. The reader is a third-party Qwen vision-language model. TinyDoc adds schema prompts, JSON validation and salvage, OCR-span evidence, confidence, overlays, and the CLI/SDK. The first-party 256M and SmolVLM2 tracks were measured, failed to beat the free base model, and were closed.</p>
+        </details>
+        <details>
+          <summary>Does it work on invoices?</summary>
+          <p>On a synthetic public benchmark of 181 invoices (page 1 only), it reaches 91.9% key-header accuracy and 65.7% fully correct with the 3B, and 93.5% / 71.8% with the 2B. Real supplier invoices are unmeasured, flagging fails (0/7), and multipage is not shipped.</p>
+        </details>
+        <details>
+          <summary>Does my data leave my machine?</summary>
+          <p>No. Inference runs against a local Ollama server. There is no hosted API, no telemetry, and no API key in the SDK.</p>
+        </details>
+        <details>
+          <summary>Is the confidence calibrated?</summary>
+          <p>Field-level scores are usable for review routing after document-grouped isotonic out-of-fold calibration: ECE 0.005–0.014. Document-level confidence is not calibrated (ECE 0.09–0.10) and is not a probability. Treat every score as a routing signal, not a decision.</p>
+        </details>
+        <details>
+          <summary>Can it predict bounding boxes?</summary>
+          <p>It returns OCR-span boxes as page-derived provenance. VLM-predicted boxes were measured at hit@0.5 of 0.04–0.20 against a 0.70 gate, so they are not claimed or shipped.</p>
+        </details>
+        <details>
+          <summary>How fast is it?</summary>
+          <p>Median latency on an M4 through Ollama is 7.0 s (2B) and 14.1 s (3B) per receipt, and 16.1 s / 26.5 s per invoice. That is above the 4 s target; it is a batch tier until MLX or narrower prompts land.</p>
+        </details>
+        <details>
+          <summary>What is the license?</summary>
+          <p>The TinyDoc SDK is Apache 2.0. The Qwen base models are Apache 2.0; check their model cards for terms.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="docs">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Read more</h2>
+          <p>Source, evidence, and the path to a first-party adapter.</p>
+        </div>
+        <div class="doc-links">
+          <a href="https://github.com/eulogik/TinyDoc-VLM"><b>Source and issues</b><span>github.com/eulogik/TinyDoc-VLM</span></a>
+          <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md"><b>Benchmarks</b><span>Every measured number and caveat</span></a>
+          <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/MODEL_CARD.md"><b>System card</b><span>Intended use, limits, confidence</span></a>
+          <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md"><b>Plan and evidence ledger</b><span>What was tried, what failed, what is next</span></a>
+          <a href="https://pypi.org/project/tinydoc/"><b>PyPI</b><span>tinydoc 0.2.0</span></a>
+          <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><b>Evidence card</b><span>Hugging Face Space</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>Built by <a href="https://eulogik.com">eulogik</a> — AI infrastructure for document intelligence.</div>
+        <div><a href="llms.txt">llms.txt</a> · <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> · <a href="https://pypi.org/project/tinydoc/">PyPI</a> · Apache 2.0</div>
+      </div>
+      <p class="foot-note">Last updated 2026-11-07. TinyDoc is a developer preview: real supplier invoices and full multipage PDFs are unmeasured, and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
+    </div>
+  </footer>
 </body>
 </html>

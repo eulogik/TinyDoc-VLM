@@ -16,6 +16,8 @@ from run_invoice_eval import (
     _load_resume_rows,
     _num,
     _read_image,
+    _row_image_paths,
+    multipage_prompt,
     normalize_prediction,
 )
 from tinydoc.pipeline import _extract_json
@@ -139,3 +141,21 @@ def test_read_image_retries_transient_permission_error(tmp_path, monkeypatch):
     monkeypatch.setattr(type(path), "read_bytes", flaky)
     assert _read_image(path, attempts=3, delay=0) == b"image"
     assert calls["n"] == 3
+
+
+def test_row_image_paths_prefers_list():
+    assert _row_image_paths({"id": "a", "image_paths": ["p1.png", "p2.png"]}) == ["p1.png", "p2.png"]
+    assert _row_image_paths({"id": "b", "image_path": "one.png"}) == ["one.png"]
+    try:
+        _row_image_paths({"id": "c"})
+    except ValueError as exc:
+        assert "no image path" in str(exc)
+    else:
+        raise AssertionError("expected ValueError")
+
+
+def test_multipage_prompt_mentions_all_pages():
+    prompt = multipage_prompt()
+    assert "every page" in prompt
+    assert "document-wide totals" in prompt
+    assert "Read the invoice image" not in prompt

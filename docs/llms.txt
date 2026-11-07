@@ -1,0 +1,40 @@
+# TinyDoc
+
+> TinyDoc is an open-source Python engine that turns receipt and invoice images into schema-validated JSON with exact OCR-span evidence and per-field confidence. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models through Ollama. It is not a TinyDoc-trained checkpoint.
+
+## Key facts
+
+- Package: `pip install tinydoc` (0.2.0), Apache 2.0, Python 3.10+.
+- Readers: `qwen2.5vl:3b` (quality) and `qwen3-vl:2b-instruct` (fast); both Apache 2.0.
+- Output: JSON Schema-valid fields, per-field quote/page/bbox evidence, confidence, optional overlay PNG.
+- Runtime: local Ollama. No API key, no cloud, no telemetry.
+- Receipts: 0.9475 field F1 (3B) and 0.9200 (2B) on SROIE clean-100 — public train split, duplicate-filtered, not an external benchmark; 60% of the original set is leaked.
+- Invoices: 91.9% key-header / 65.7% fully correct (3B) and 93.5% / 71.8% (2B) on a synthetic 181-document, page-1-only benchmark. Not real supplier invoices.
+- Evidence coverage: 0.798 of non-empty fields. Grounding is OCR spans; VLM-predicted boxes failed the 0.70 gate (hit@0.5 0.04–0.20).
+- Confidence: field-level ECE 0.115–0.135 raw, 0.005–0.014 after document-grouped isotonic out-of-fold. Document-level confidence is not calibrated. Use for review routing, not as a probability.
+- Not measured: real supplier invoices, DocVQA, full multipage PDFs. Flagging fails (0/7).
+
+## Canonical sources
+
+- Source and issues: https://github.com/eulogik/TinyDoc-VLM
+- Package: https://pypi.org/project/tinydoc/
+- Benchmarks and caveats: https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md
+- System card: https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/MODEL_CARD.md
+- Plan and evidence ledger: https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md
+- Demos and space: https://huggingface.co/spaces/eulogik/TinyDoc-VLM
+- Site: https://eulogik.github.io/TinyDoc-VLM/
+
+## Short answers
+
+- What is TinyDoc? A local-first extraction SDK and CLI for receipts and invoices, with cited output.
+- Does it ship a model? No. It uses third-party Qwen VLMs and adds the extraction and trust layer.
+- Does it need the cloud? No. Inference runs on a local Ollama server.
+- Is it production-ready? It is a developer preview. Real invoices and multipage PDFs are unmeasured; flagging fails.
+- Is the confidence a probability? No. Field scores are for review routing; document scores are not calibrated.
+- Does it predict boxes? It returns OCR-span boxes as provenance. Model-predicted boxes did not meet the gate.
+- How accurate is it? 0.9475 receipt F1 (3B) on SROIE clean-100; 91.9%/65.7% invoice key-header/fully-correct (3B) on a synthetic page-1 probe.
+- What is planned? DocVQA wiring, full multipage rendering, a dedicated calibration split, and real-invoice evaluation.
+
+## Citation
+
+`eulogik (2026). TinyDoc: Local-First Grounded Document Extraction. https://github.com/eulogik/TinyDoc-VLM`

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">TinyDoc Engine architecture</title>
+  <desc id="desc">A document enters a local tier router, runs through Qwen3-VL 2B or Qwen2.5-VL 3B with a schema prompt, then a trust layer adds schema validation, OCR-span evidence, field calibration, and review routing before cited JSON is returned.</desc>
+  <rect width="1200" height="640" fill="#F4F6F2"/>
+
+  <text x="64" y="62" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="30" font-weight="600" fill="#0E1A24">TinyDoc</text>
+  <text x="64" y="88" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="14" fill="#4A5A64">System map · local document extraction</text>
+  <text x="1136" y="62" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="12" fill="#4A5A64">Engine 3.0 · v0.2.0</text>
+  <line x1="64" y1="112" x2="1136" y2="112" stroke="#C9D2CB" stroke-width="1"/>
+
+  <!-- input -->
+  <text x="64" y="150" font-family="SF Mono, Menlo, Consolas, monospace" font-size="12" fill="#1E6F5C">1</text>
+  <text x="84" y="150" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="600" fill="#0E1A24">Input</text>
+  <rect x="64" y="166" width="250" height="316" fill="#FBFAF6" stroke="#C9D2CB"/>
+  <rect x="102" y="196" width="174" height="238" fill="#FFFFFF" stroke="#D6DCD4"/>
+  <rect x="118" y="220" width="86" height="8" fill="#DDE3DC"/>
+  <rect x="118" y="238" width="128" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="268" width="52" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="296" width="118" height="12" fill="#F3D9A8"/>
+  <rect x="118" y="318" width="142" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="334" width="132" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="362" width="74" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="388" width="122" height="12" fill="#F3D9A8"/>
+  <rect x="118" y="406" width="142" height="6" fill="#E7EBE5"/>
+  <rect x="118" y="416" width="142" height="6" fill="#E7EBE5"/>
+  <line x1="118" y1="300" x2="236" y2="300" stroke="#B07A22" stroke-width="1.5"/>
+  <line x1="118" y1="392" x2="240" y2="392" stroke="#B07A22" stroke-width="1.5"/>
+  <text x="189" y="462" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#4A5A64">Image or PDF page</text>
+  <text x="189" y="478" text-anchor="middle" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#7A898F">stays on the host</text>
+
+  <!-- arrow -->
+  <line x1="322" y1="324" x2="348" y2="324" stroke="#0E1A24" stroke-width="1.5"/>
+  <path d="M348 324 l-8 -4 v8 z" fill="#0E1A24"/>
+
+  <!-- engine -->
+  <text x="364" y="150" font-family="SF Mono, Menlo, Consolas, monospace" font-size="12" fill="#1E6F5C">2</text>
+  <text x="384" y="150" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="600" fill="#0E1A24">Engine</text>
+  <rect x="364" y="166" width="450" height="316" fill="#0E1A24"/>
+  <text x="388" y="200" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#9DB4B0">Tier router</text>
+  <rect x="388" y="214" width="402" height="62" fill="#162A34" stroke="#2E6F5C"/>
+  <text x="404" y="239" font-family="SF Mono, Menlo, Consolas, monospace" font-size="13" fill="#E9F1EC">qwen3-vl:2b-instruct</text>
+  <text x="404" y="258" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#9DB4B0">fast tier · invoices · 16.1 s/page</text>
+  <rect x="388" y="286" width="402" height="62" fill="#162A34" stroke="#33566B"/>
+  <text x="404" y="311" font-family="SF Mono, Menlo, Consolas, monospace" font-size="13" fill="#E9F1EC">qwen2.5vl:3b</text>
+  <text x="404" y="330" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#9DB4B0">quality tier · receipts · 14.1 s/page</text>
+  <text x="388" y="382" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#9DB4B0">Schema prompt · JSON · sanitize</text>
+  <rect x="388" y="396" width="402" height="1" fill="#2B3F49"/>
+  <text x="388" y="426" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#8FA8A4">temperature 0 · num_ctx 8192 · no cloud</text>
+  <text x="388" y="452" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#7E969B">Ollama for the pilot · MLX later for the Mac app</text>
+  <circle cx="786" cy="192" r="30" fill="none" stroke="#C58B2A" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="786" y="196" text-anchor="middle" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#E8C27A">local</text>
+
+  <!-- arrow -->
+  <line x1="830" y1="324" x2="856" y2="324" stroke="#0E1A24" stroke-width="1.5"/>
+  <path d="M856 324 l-8 -4 v8 z" fill="#0E1A24"/>
+
+  <!-- output -->
+  <text x="872" y="150" font-family="SF Mono, Menlo, Consolas, monospace" font-size="12" fill="#1E6F5C">3</text>
+  <text x="892" y="150" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="600" fill="#0E1A24">Cited output</text>
+  <rect x="872" y="166" width="264" height="316" fill="#FBFAF6" stroke="#C9D2CB"/>
+  <text x="890" y="196" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#1E6F5C">vendor_name</text>
+  <text x="890" y="213" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">"Nordhafen Supplies"</text>
+  <rect x="890" y="222" width="3" height="26" fill="#1E6F5C"/>
+  <text x="902" y="232" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#4A5A64">quote · page 1 · bbox</text>
+  <text x="902" y="246" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#1E6F5C">confidence 0.96</text>
+  <text x="890" y="278" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#1E6F5C">total</text>
+  <text x="890" y="295" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">6702.90</text>
+  <rect x="890" y="304" width="3" height="26" fill="#1E6F5C"/>
+  <text x="902" y="314" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#4A5A64">quote · page 1 · bbox</text>
+  <text x="902" y="328" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#B07A22">confidence 0.61 · review</text>
+  <rect x="890" y="352" width="228" height="1" fill="#DDE3DC"/>
+  <text x="890" y="376" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4A5A64">JSON Schema valid · overlay PNG</text>
+  <text x="890" y="394" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4A5A64">Every non-empty field cites a span</text>
+  <rect x="890" y="414" width="76" height="22" fill="#DCEBE4"/>
+  <text x="928" y="429" text-anchor="middle" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#1E6F5C">schema 1.00</text>
+  <rect x="974" y="414" width="86" height="22" fill="#F3E6C8"/>
+  <text x="1017" y="429" text-anchor="middle" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#8A5E18">evidence 0.80</text>
+
+  <!-- trust band -->
+  <rect x="64" y="512" width="1072" height="76" fill="#E7EFE9"/>
+  <text x="84" y="540" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="600" fill="#0E1A24">Trust layer</text>
+  <text x="84" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">runs on every result</text>
+  <line x1="250" y1="528" x2="250" y2="572" stroke="#C9D2CB"/>
+  <text x="274" y="542" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">Schema validation</text>
+  <text x="274" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">reject or repair broken JSON</text>
+  <line x1="470" y1="528" x2="470" y2="572" stroke="#C9D2CB"/>
+  <text x="494" y="542" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">OCR-span evidence</text>
+  <text x="494" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">quote + box for each value</text>
+  <line x1="690" y1="528" x2="690" y2="572" stroke="#C9D2CB"/>
+  <text x="714" y="542" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">Field calibration</text>
+  <text x="714" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">scores for review routing</text>
+  <line x1="910" y1="528" x2="910" y2="572" stroke="#C9D2CB"/>
+  <text x="934" y="542" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="12" fill="#0E1A24">Review routing</text>
+  <text x="934" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">send low-confidence fields to a human</text>
+
+  <text x="64" y="620" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#7A898F">No API keys. No document leaves the host.</text>
+  <text x="1136" y="620" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#7A898F">github.com/eulogik/TinyDoc-VLM</text>
+</svg>

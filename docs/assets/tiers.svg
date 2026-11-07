@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">TinyDoc measured results by tier</title>
+  <desc id="desc">Receipt field F1: 3B 94.8 percent, 2B 92.0 percent, first-party hybrid 60.3 percent, OCR baseline 37.6 percent. Invoice key-header: 3B 91.9, 2B 93.5; fully correct: 3B 65.7, 2B 71.8. Latency per page: receipts 3B 14.1 seconds, 2B 7.0; invoices 3B 26.5, 2B 16.1.</desc>
+  <rect width="1200" height="620" fill="#F4F6F2"/>
+
+  <text x="64" y="58" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="30" font-weight="600" fill="#0E1A24">Measured, not marketed</text>
+  <text x="64" y="84" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="13.5" fill="#4A5A64">Two tiers, two verticals, one scorer. Every number recomputes from committed artifacts.</text>
+  <text x="1136" y="58" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#4A5A64">2026-11-06</text>
+  <line x1="64" y1="104" x2="1136" y2="104" stroke="#C9D2CB"/>
+
+  <!-- panel 1 -->
+  <text x="64" y="142" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="600" fill="#0E1A24">Receipts</text>
+  <text x="64" y="162" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#4A5A64">SROIE clean-100 · field F1 · higher is better</text>
+
+  <text x="64" y="204" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#0E1A24">Qwen2.5-VL-3B</text>
+  <rect x="204" y="192" width="170.6" height="18" fill="#0E1A24"/>
+  <text x="382" y="206" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#0E1A24">94.8%</text>
+
+  <text x="64" y="240" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#0E1A24">Qwen3-VL-2B</text>
+  <rect x="204" y="228" width="165.6" height="18" fill="#1E6F5C"/>
+  <text x="377" y="242" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#1E6F5C">92.0%</text>
+
+  <text x="64" y="286" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4A5A64">First-party hybrid</text>
+  <rect x="204" y="274" width="108.5" height="18" fill="#A9B5AE"/>
+  <text x="320" y="288" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#4A5A64">60.3%</text>
+
+  <text x="64" y="332" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4A5A64">OCR + rules</text>
+  <rect x="204" y="320" width="67.7" height="18" fill="#D6DCD4"/>
+  <text x="279" y="334" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#7A898F">37.6%</text>
+
+  <text x="64" y="392" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#1E6F5C">+34.5 points over the trained first-party stack</text>
+  <text x="64" y="410" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">same 100 documents, same scorer</text>
+
+  <line x1="414" y1="132" x2="414" y2="470" stroke="#DDE3DC"/>
+
+  <!-- panel 2 -->
+  <text x="442" y="142" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="600" fill="#0E1A24">Invoices</text>
+  <text x="442" y="162" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#4A5A64">synthetic benchmark · page 1 · n=181</text>
+
+  <rect x="442" y="184" width="10" height="10" fill="#0E1A24"/>
+  <text x="458" y="193" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">key header</text>
+  <rect x="532" y="184" width="10" height="10" fill="#7FA99B"/>
+  <text x="548" y="193" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">fully correct</text>
+
+  <text x="442" y="232" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#0E1A24">3B</text>
+  <rect x="478" y="218" width="153.4" height="16" fill="#0E1A24"/>
+  <text x="639" y="231" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">91.9%</text>
+  <rect x="478" y="240" width="109.6" height="16" fill="#7FA99B"/>
+  <text x="595" y="253" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#4A5A64">65.7%</text>
+
+  <text x="442" y="306" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#1E6F5C">2B</text>
+  <rect x="478" y="292" width="156.0" height="16" fill="#1E6F5C"/>
+  <text x="642" y="305" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#1E6F5C">93.5%</text>
+  <rect x="478" y="314" width="119.8" height="16" fill="#B7D0C6"/>
+  <text x="605" y="327" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#4A5A64">71.8%</text>
+
+  <text x="442" y="376" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#1E6F5C">2B is at least as good here, and 40% faster</text>
+  <text x="442" y="394" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">paired diff not significant (p=0.092)</text>
+  <text x="442" y="412" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#A6402F">not real supplier invoices</text>
+
+  <line x1="782" y1="132" x2="782" y2="470" stroke="#DDE3DC"/>
+
+  <!-- panel 3 -->
+  <text x="810" y="142" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="600" fill="#0E1A24">Latency</text>
+  <text x="810" y="162" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" fill="#4A5A64">seconds per page · p50 · lower is better</text>
+
+  <text x="810" y="204" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">receipts · 3B</text>
+  <rect x="930" y="192" width="75.2" height="16" fill="#0E1A24"/>
+  <text x="1013" y="205" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#0E1A24">14.1 s</text>
+
+  <text x="810" y="232" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">receipts · 2B</text>
+  <rect x="930" y="220" width="37.3" height="16" fill="#1E6F5C"/>
+  <text x="975" y="233" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#1E6F5C">7.0 s</text>
+
+  <text x="810" y="276" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">invoices · 3B</text>
+  <rect x="930" y="264" width="141.3" height="16" fill="#33566B"/>
+  <text x="1079" y="277" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#33566B">26.5 s</text>
+
+  <text x="810" y="304" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">invoices · 2B</text>
+  <rect x="930" y="292" width="85.9" height="16" fill="#4E9C82"/>
+  <text x="1023" y="305" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10.5" fill="#1E6F5C">16.1 s</text>
+
+  <text x="810" y="360" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11" fill="#A6402F">Above the 4 s/page product target.</text>
+  <text x="810" y="378" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">Batch tier until MLX or narrower prompts land.</text>
+
+  <!-- footnote -->
+  <rect x="64" y="500" width="1072" height="84" fill="#E7EFE9"/>
+  <text x="84" y="524" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#0E1A24">What these sets are</text>
+  <text x="84" y="544" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">Receipts: SROIE public train images, duplicate-filtered against our holdout. Not external; may be in pretraining. Invoices: synthetic, vendor-made, page 1 only,</text>
+  <text x="84" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">scored by the benchmark's own scorer. Real supplier invoices are unmeasured. Flagging fails (0/7) and multipage is page-1 only.</text>
+  <text x="84" y="576" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#7A898F">recompute: python3 evaluation/phase0/recompute_scores.py</text>
+
+  <text x="64" y="606" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">TinyDoc Engine 3.0 · Qwen base models, Apache 2.0 · no TinyDoc checkpoint is released</text>
+  <text x="1136" y="606" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="10" fill="#7A898F">github.com/eulogik/TinyDoc-VLM</text>
+</svg>

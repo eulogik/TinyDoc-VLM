@@ -54,6 +54,30 @@ Rules:
 - Amounts are numbers with a dot decimal and no currency symbols (e.g. 1234.56).
 - Credit notes keep the printed sign; document_type carries the decision.
 - JSON only, no markdown, no commentary."""
+
+MULTIPAGE_RULES = """
+- This request has several page images, in order. Read every page, not just the first.
+- The invoice may continue across pages. Use the document-wide totals from the
+  final/total page, not a page subtotal or a running subtotal.
+- If the file holds several invoices, set flagged true.
+"""
+
+
+def multipage_prompt() -> str:
+    return INVOICE_PROMPT.replace(
+        "Read the invoice image", "Read every page image of the invoice"
+    ) + MULTIPAGE_RULES
+
+
+def _row_image_paths(row: dict) -> list[str]:
+    paths = row.get("image_paths")
+    if paths:
+        return [str(path) for path in paths]
+    if row.get("image_path"):
+        return [str(row["image_path"])]
+    raise ValueError(f"manifest row {row.get('id')!r} has no image path")
+
+
 def _num(value):
     if value is None or isinstance(value, bool):
         return None
@@ -194,10 +218,17 @@ def normalize_prediction(obj: dict, doc_id: str = "") -> dict:
     }
 
 
-def ask_ollama(host: str, model: str, prompt: str, b64: str, num_ctx: int, timeout: float) -> str:
+def ask_ollama(
+    host: str,
+    model: str,
+    prompt: str,
+    images_b64: list[str],
+    num_ctx: int,
+    timeout: float,
+) -> str:
     payload = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt, "images": [b64]}],
+        "messages": [{"role": "user", "content": prompt, "images": images_b64}],
         "stream": False,
         "options": {"temperature": 0, "num_predict": 768, "num_ctx": num_ctx},
     }
@@ -309,14 +340,19 @@ def main() -> int:
     total_docs = len(out_rows) + len(rows)
     with out_path.open("a") as sink:
         for row in rows:
-            image_path = Path(row["image_path"])
-            b64 = base64.b64encode(_read_image(image_path)).decode()
+            image_paths = _row_image_paths(row)
+            images_b64 = [
+                base64.b64encode(_read_image(Path(path))).decode() for path in image_paths
+            ]
+            prompt = INVOICE_PROMPT if len(images_b64) == 1 else multipage_prompt()
             t0 = time.time()
             raw = ""
             error = None
             pred = None
             try:
-                raw = ask_ollama(host, args.model, INVOICE_PROMPT, b64, args.num_ctx, args.timeout)
+                raw = ask_ollama(
+                    host, args.model, prompt, images_b64, args.num_ctx, args.timeout
+                )
                 pred = _extract_json(raw)
                 if pred is None:
                     error = "no JSON object in response"
@@ -331,7 +367,8 @@ def main() -> int:
                 "id": row["id"],
                 "category": row.get("category"),
                 "difficulty": row.get("difficulty"),
-                "image_path": str(image_path),
+                "image_path": image_paths[0],
+                "image_paths": image_paths,
                 "raw": raw,
                 "pred": normalized,
                 "latency_ms": latency,

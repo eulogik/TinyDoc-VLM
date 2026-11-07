@@ -1,82 +1,73 @@
 <div align="center">
-  <h1>TinyDoc</h1>
-  <p><b>Local-first grounded document extraction</b></p>
-  <p>Schema-valid JSON · per-field evidence · confidence · Apache 2.0</p>
-  <p>Measured <b>0.9475</b> field F1 on our hardest receipt set with Qwen2.5-VL-3B;<br>
-     <b>0.9200</b> with Qwen3-VL-2B-Instruct at <b>2× the speed</b>.</p>
 
-[![PyPI](https://img.shields.io/pypi/v/tinydoc?color=blue&label=tinydoc)](https://pypi.org/project/tinydoc/)
-[![GitHub](https://img.shields.io/badge/GitHub-Source-181717?logo=github)](https://github.com/eulogik/TinyDoc-VLM)
-[![Model Status](https://img.shields.io/badge/Model%20status-v3%20plan-yellow)](docs/v3_plan.md)
-[![HF Space](https://img.shields.io/badge/🤗-Demo-yellow)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+<img src="docs/assets/og-card.png" alt="TinyDoc — cited document extraction that runs on your machine" width="900">
+
+<p><b>Local-first document extraction with evidence you can check.</b><br>
+Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2.0</p>
+
+[![PyPI](https://img.shields.io/pypi/v/tinydoc?color=1E6F5C&label=pypi)](https://pypi.org/project/tinydoc/)
+[![Python](https://img.shields.io/pypi/pyversions/tinydoc?color=1E6F5C)](https://pypi.org/project/tinydoc/)
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
+[![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
+[![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
+[![Tests](https://img.shields.io/badge/tests-129-1E6F5C.svg)](tests/)
 
----
-
-**Built by [eulogik](https://eulogik.com)** — AI infrastructure for document intelligence.
-
-[PyPI](https://pypi.org/project/tinydoc/) · [Source](https://github.com/eulogik/TinyDoc-VLM) · [Model status](docs/v3_plan.md) · [Benchmarks](docs/BENCHMARKS.md) · [Demo](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
 </div>
 
 ## What is TinyDoc?
 
-TinyDoc is a Python SDK and CLI that turns document images into **schema-validated
-JSON**. It runs a local vision-language model through
-[Ollama](https://ollama.com), then adds JSON Schema validation, per-field
-OCR-span evidence, and confidence scoring. No API key, no cloud, no telemetry.
+**TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice
+images into schema-validated JSON, with the exact source span and a confidence
+score attached to every field.** It runs a local vision-language model through
+[Ollama](https://ollama.com) — no API key, no cloud, no telemetry — then adds
+schema validation, OCR-span evidence, and field-level review routing.
 
-The base model is third-party (Qwen2.5-VL / Qwen3-VL); the product is the
+It is **not** a fine-tuned TinyDoc checkpoint. The reader is a third-party base
+model (Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct, Apache 2.0); the product is the
 grounded extraction layer around it. The first-party 256M checkpoint is retired
 (OCRBench 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over base).
-See [`docs/v3_plan.md`](docs/v3_plan.md) for the evidence.
 
-## Measured results
+**Measured today:** **0.9475** field F1 on SROIE clean-100 with Qwen2.5-VL-3B and
+**0.9200** with Qwen3-VL-2B-Instruct at 2× the speed. On a synthetic 181-page
+invoice probe, **65.7%** (3B) and **71.8%** (2B) of documents are fully correct.
+Real supplier invoices are still unmeasured. Full provenance and caveats are in
+[`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
-Same 100 receipts, same prompt, same scorer, same 8k context, Ollama Q4,
-temperature 0:
+<a id="at-a-glance"></a>
 
-| System | Field F1 | Address | Schema | Median latency | Errors |
-|---|---:|---:|---:|---:|---:|
-| **Qwen2.5-VL-3B** — quality default | **0.9475** | 0.86 | 1.00 | 14.1 s | 0 |
-| **Qwen3-VL-2B-Instruct** — fast tier | **0.9200** | 0.84 | 1.00 | **7.0 s** | 0 |
-| Hybrid v2 — first-party, shipped | 0.603 | 0.37 | 0.93 | ~8 s | — |
-| PP-OCR + heuristics | 0.376 | 0.03 | — | — | — |
-| Tesseract + regex | 0.227 | — | 0.60 | — | — |
-
-> ⚠️ **These are not external benchmark numbers.** The 100-doc set is a
-> duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
-> it during pretraining. The original 100-doc set is 60% leaked. Use these numbers
-> for same-document engine comparisons, not as a generalization claim. The next
-> eval adds CORD/FUNSD/invoices and a private wild set. Every published number
-> must recompute from `evaluation/phase0/results/` via
-> `python3 evaluation/phase0/recompute_scores.py`.
+| | |
+|---|---|
+| **Install** | `pip install tinydoc` (0.2.0) |
+| **Runtime** | Local Ollama; Python 3.9+; no API key |
+| **Readers** | `qwen2.5vl:3b` (quality) · `qwen3-vl:2b-instruct` (fast) |
+| **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
+| **Receipts** | 0.9475 / 0.9200 field F1 on SROIE clean-100 (not external) |
+| **Invoices** | 91.9% / 65.7% (3B) · 93.5% / 71.8% (2B) key-header / fully correct, synthetic page 1 |
+| **Not yet measured** | Real supplier invoices, DocVQA, full multipage PDFs |
+| **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
 
 ## Quick start
 
 ```bash
-# 0.2.0 is currently a source install; PyPI 0.1.2 is the legacy 256M API.
-pip install "tinydoc @ git+https://github.com/eulogik/TinyDoc-VLM.git#subdirectory=sdk"
-# or, from a clone:
-pip install ./sdk
+pip install tinydoc==0.2.0
 
-# Default quality engine (free, local)
-ollama pull qwen2.5vl:3b
-# Fast tier (1.9 GB Q4, ~2x faster)
-ollama pull qwen3-vl:2b-instruct
+# Pull one local reader (choose one or both)
+ollama pull qwen2.5vl:3b            # quality tier
+ollama pull qwen3-vl:2b-instruct    # fast tier — use the -instruct tag
 ```
 
 ```python
 from tinydoc import ReceiptPipeline
 
-pipe = ReceiptPipeline("ollama:qwen2.5vl:3b")   # or "ollama:qwen3-vl:2b-instruct"
+pipe = ReceiptPipeline("ollama:qwen2.5vl:3b")
 result = pipe.extract("receipt.jpg")
 
 print(result.fields)        # {"company": ..., "date": ..., "address": ..., "total": ...}
-print(result.schema_valid)  # True/False (JSON Schema)
-print(result.confidence)    # 0..1 aggregate
+print(result.schema_valid)  # True
+print(result.confidence)    # aggregate 0..1, for routing only
 for field in result.field_results:
-    print(field.name, field.value, field.confidence, field.evidence)
+    print(field.name, field.value, field.confidence)
+    print("  evidence:", field.evidence.quote, field.evidence.bbox)
 ```
 
 ```bash
@@ -84,24 +75,139 @@ tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \
     --out results.jsonl --overlay overlays/
 ```
 
-Overlay PNGs draw OCR-span evidence boxes and field labels (`tinydoc.draw_overlay`).
-The local Gradio demo is `python demo/app.py --share` (requires Ollama).
+A run returns a `DocumentResult`; `tinydoc.draw_overlay` renders the cited spans
+onto a PNG. The local Gradio demo is `python demo/app.py --share` (requires Ollama).
 
-### Engines
+> **Large scans:** keep `TINYDOC_OLLAMA_NUM_CTX=8192` (the default). The old
+> implicit 4096 rejected 2481×3508 scans with HTTP 400. Never send Ollama
+> `format: "json"`; constrained decoding truncates long addresses.
+
+## Architecture
+
+<img src="docs/assets/architecture.svg" alt="TinyDoc architecture: document input, local tier router with Qwen3-VL 2B or Qwen2.5-VL 3B, schema prompt, trust layer, and cited JSON output" width="100%">
+
+A document enters the **tier router**, runs through a local VLM with a
+schema-driven prompt, and is then passed through the **trust layer**:
+
+- **Schema validation** — reject or repair broken JSON before it reaches your code.
+- **OCR-span evidence** — RapidOCR word boxes are aligned to each field, producing
+  a quote and bounding box. This is provenance from the page, not a model-predicted box.
+- **Field confidence** — a calibrated score for review routing (see caveats below).
+- **Review routing** — low-confidence fields can be sent to a human instead of
+  silently accepted.
+
+The figure is available as [`SVG`](docs/assets/architecture.svg) and
+[`PNG`](docs/assets/architecture.png).
+
+## Measured results
+
+<img src="docs/assets/tiers.svg" alt="Measured TinyDoc results: receipt field F1 94.8% for 3B, 92.0% for 2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; latency 7 to 26.5 seconds" width="100%">
+
+Same 100 receipts, same prompt, same scorer, same 8k context, Ollama Q4,
+temperature 0:
+
+| System | Field F1 | Address | Schema | Median latency | Errors |
+|---|---:|---:|---:|---:|---:|
+| **Qwen2.5-VL-3B** — quality tier | **0.9475** | 0.86 | 1.00 | 14.1 s | 0 |
+| **Qwen3-VL-2B-Instruct** — fast tier | **0.9200** | 0.84 | 1.00 | **7.0 s** | 0 |
+| Hybrid v2 — first-party, shipped | 0.603 | 0.37 | 0.93 | ~8 s | — |
+| PP-OCR + heuristics | 0.376 | 0.03 | — | — | — |
+| Tesseract + regex | 0.227 | — | — | — | — |
+
+**Invoices** — public synthetic benchmark, page 1 only, 181 documents:
+
+| Tier | Key-header accuracy | Fully correct | p50 latency |
+|---|---:|---:|---:|
+| Qwen2.5-VL-3B | 91.9% | 65.7% | 26.5 s |
+| Qwen3-VL-2B-Instruct | **93.5%** | **71.8%** | **16.1 s** |
+
+The 2B is at least as good on this invoice probe and 40% faster; the paired
+difference is not significant (p=0.092), so this is *no evidence the 3B is
+better on invoices*, not proof that 2B is. It does not transfer to receipts,
+where the 3B still leads.
+
+> ⚠️ **These are not external benchmark numbers.** The 100-doc set is a
+> duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
+> it during pretraining. The original 100-doc set is **60% leaked** (61/100 also
+> appear in public train). Use these numbers for same-document engine comparisons,
+> not as a generalization claim. The invoice set is synthetic and vendor-made;
+> flagging is 0/7 and multipage is page-1 only. Every published number must
+> recompute from `evaluation/phase0/results/` via
+> `python3 evaluation/phase0/recompute_scores.py`.
+
+## What you get back
+
+<img src="docs/assets/trust.svg" alt="TinyDoc result: field name, value, exact evidence quote with page and bbox, and confidence; low confidence routes the field to review" width="100%">
+
+Every non-empty field carries `{quote, page, bbox, confidence}`. Evidence coverage
+is **0.798** of non-empty fields on clean-100. Confidence is for **review
+routing**, not a probability:
+
+- Evidence-on field ECE is **0.115–0.135** raw and **0.005–0.014** after
+  document-grouped isotonic out-of-fold calibration.
+- Document-level confidence is **not** calibrated (ECE 0.09–0.10). Do not present
+  it as a probability.
+- Boxes are OCR spans. VLM-predicted boxes failed the grounding gate
+  (hit@0.5 **0.04–0.20** vs **0.70**), so they are not shipped.
+
+## FAQ
+
+**What model does TinyDoc use?**
+Qwen2.5-VL-3B for quality and Qwen3-VL-2B-Instruct for speed, run locally through
+Ollama. Both are Apache 2.0. TinyDoc does not ship its own weights.
+
+**Is TinyDoc a fine-tuned model?**
+No. It is an extraction layer: schema prompts, JSON validation and salvage,
+OCR-span evidence, confidence, overlays, and a CLI/SDK. The first-party training
+tracks were measured, failed to beat the free base model, and were closed.
+
+**Does it work on invoices?**
+On a synthetic public benchmark (181 invoices, page 1) it reaches 91.9%/65.7%
+(3B) and 93.5%/71.8% (2B) key-header/fully-correct. It is not validated on real
+supplier invoices, flagging fails (0/7), and multipage is not shipped.
+
+**Does my data leave my machine?**
+No. Inference runs against a local Ollama server. There is no hosted API, no
+telemetry, and no API key in the SDK.
+
+**Is the confidence calibrated?**
+Field-level scores are usable for routing after out-of-fold calibration;
+document-level scores are not calibrated. Treat them as triage signals, not
+probabilities.
+
+**Does it predict bounding boxes?**
+It returns OCR-span boxes, which are page-derived provenance. Model-predicted
+boxes were measured and did not meet the 0.70 hit-rate gate, so they are not
+claimed or shipped.
+
+**What about multipage PDFs?**
+Not shipped yet. The invoice probe renders page 1 only, which is why multipage
+documents score 0% fully correct. A full-page path is the next measured milestone.
+
+**How does it compare with OCR + regex?**
+On the same 100 receipts, the 3B + trust layer scores 0.9475 field F1 versus
+0.376 for PP-OCR + heuristics and 0.227 for Tesseract + regex. The gain comes from
+reading the page, not from a bigger rulebook.
+
+**Why not release a TinyDoc model?**
+Because the measured first-party checkpoints were worse than the free base model.
+Releasing a relabeled Qwen checkpoint would misrepresent the work. The plan for a
+conditional first-party adapter is in [`docs/v3_plan.md`](docs/v3_plan.md).
+
+**What is the license?**
+Apache 2.0 for the SDK. The Qwen base models are Apache 2.0; check the model card
+for their terms.
+
+## Engines
 
 | Engine id | What it does |
 |---|---|
-| `ollama` / `ollama:qwen2.5vl:3b` | Quality default; free, local |
+| `ollama` / `ollama:qwen2.5vl:3b` | Quality tier; free, local |
 | `ollama:qwen3-vl:2b-instruct` | Fast tier; use the `-instruct` tag, not the thinking tag |
 | `auto` | Ollama if reachable; OCR floor if the schema would fail |
 | `ocr_regex` | Offline floor (Tesseract + rules) |
-| `mlx_2p2b` | First-party v2 edge engine (MLX SmolVLM2-2.2B 4-bit) |
-| `hybrid_2p2b` | v2 product path: MLX fields + frozen F3 OCR address |
-
-**Do not** set Ollama `format: "json"` — constrained decoding truncates long
-addresses and can drop `total`. The SDK uses unconstrained prompts, JSON salvage,
-and prompt-v1. `TINYDOC_OLLAMA_NUM_CTX` defaults to 8192; the old implicit 4096
-rejected 2481×3508 scans with HTTP 400.
+| `mlx_2p2b` | Legacy v2 edge engine (MLX SmolVLM2-2.2B 4-bit) |
+| `hybrid_2p2b` | Legacy v2 product path: MLX fields + frozen F3 OCR address |
 
 ## Model status
 
@@ -115,30 +221,7 @@ rejected 2481×3508 scans with HTTP 400.
 
 The honest one-liner: **the evaluation harness and product layer are real; the
 old first-party models are not competitive.** The current product is a strong
-third-party reader behind a grounded extraction layer. The v3.1 plan is the path
-to a first-party adapter.
-
-## How it works
-
-```
-Receipt / invoice image
-    ↓
-Engine (Ollama Qwen2.5-VL-3B, Qwen3-VL-2B, MLX v2, or OCR floor)
-    ↓
-Raw output → JSON extraction → repetition collapse → sanitize
-    ↓
-JSON Schema validation  ── schema_valid: true/false
-    ↓
-OCR-span evidence (word boxes → best quote + bbox per field)
-    ↓
-Confidence (evidence quality × schema × field rules)
-    ↓
-DocumentResult — fields + per-field {quote, bbox, score} + confidence
-```
-
-Evidence is **OCR-span**, not VLM-predicted boxes. Treat it as provenance, not
-as model grounding. A 100-box probe measured VLM bbox hit@0.5 of **0.20** (2B) and
-**0.04** (3B), below the 0.70 product gate, so OCR spans remain the shipped path.
+third-party reader behind a grounded extraction layer.
 
 ## Evaluation and honesty
 
@@ -149,37 +232,23 @@ as model grounding. A 100-box probe measured VLM bbox hit@0.5 of **0.20** (2B) a
   is retained only as a historical, caveated number.
 - **FUNSD** is a transfer probe with nonstandard gold mapping; never cite it as a
   leaderboard number.
-- **Confidence is only partly calibrated.** With evidence off (the fast eval path) the
-  score is a constant 0.4025 and field ECE is 0.52–0.55; the SDK default attaches
-  evidence, where field ECE is **0.115–0.135** raw and **0.005–0.014** after
-  document-grouped isotonic OOF. Document-level exact-4 confidence is **not**
-  reliable (ECE 0.09–0.10). Use field-level scores for review routing, not as a
-  document probability.
-- **Invoices are measured only on a synthetic public benchmark.** On Invoice
-  Extraction Benchmark v1 (181 docs, page 1 only, vendor-made), Qwen2.5-VL-3B
-  reaches **91.9% key-header field accuracy** (95% CI 89.8–93.9) with **65.7%
-  documents fully correct** (58.6–72.4). Qwen3-VL-2B-Instruct reaches **93.5% /
-  71.8%** and is 40% faster; the paired difference is not significant (p=0.092),
-  so there is no evidence the 3B is better on invoices. Flagging is 0/7 and
-  multipage is 0% fully correct. This is not real supplier-invoice accuracy.
-  Real invoices remain unmeasured.
-- **DocVQA / CORD** are not yet measured. No claims.
+- **DocVQA** is being wired as a reading probe; CORD images are absent. No claims
+  until measured.
+- Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
+  methodology and provenance are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+  Machine-readable provenance and SHA-256 hashes are in
+  [`eval_provenance.json`](evaluation/phase0/results/eval_provenance.json),
+  guarded by `tests/test_eval_provenance.py`.
 - The claim audit recomputes every published pair from committed artifacts:
   `python3 evaluation/phase0/recompute_scores.py` must exit 0.
-
-Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
-methodology and provenance are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
-Machine-readable provenance and SHA-256 hashes for every set are in
-[`eval_provenance.json`](evaluation/phase0/results/eval_provenance.json), guarded by
-`tests/test_eval_provenance.py`.
 
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 127 passed
+python3 -m pytest tests/ -q                 # 129 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
-node scripts/verify-product.mjs audit
+node scripts/verify-product.mjs claims
 ```
 
 Build the SDK:
@@ -188,7 +257,8 @@ Build the SDK:
 cd sdk && python3 -m build
 ```
 
-The release checklist is in [`docs/RELEASE.md`](docs/RELEASE.md).
+The release checklist is in [`docs/RELEASE.md`](docs/RELEASE.md). The system card
+is [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
 
 ## Repository layout
 
@@ -196,10 +266,12 @@ The release checklist is in [`docs/RELEASE.md`](docs/RELEASE.md).
 |---|---|
 | `sdk/tinydoc/` | Python SDK: engines, schema, evidence, confidence, CLI |
 | `evaluation/phase0/` | Measured SROIE/FUNSD/OCRBench harness + artifacts |
+| `evaluation/invoice/` | Synthetic invoice transfer probe + paired tier comparison |
+| `evaluation/docvqa/` | DocVQA reading probe (wiring in progress) |
 | `training/` | QLoRA and Kaggle experiment code (historical; tracks closed) |
 | `tinydoc_vlm/` | From-scratch 256M model code (retired research artifact) |
 | `demo/` | Local Gradio demo + static HF Space card |
-| `docs/` | Benchmarks, pivot plan, v3 plan, release checklist |
+| `docs/` | Benchmarks, system card, v3 plan, release checklist |
 
 ## Research archive
 
@@ -228,7 +300,7 @@ the older decision record is [`docs/pivot_plan.md`](docs/pivot_plan.md).
 
 ## Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
@@ -237,5 +309,5 @@ Apache 2.0. See [LICENSE](LICENSE) for details.
 ---
 
 <div align="center">
-  <b>Made with by <a href="https://eulogik.com">eulogik</a></b>
+  <b>Built by <a href="https://eulogik.com">eulogik</a></b> — AI infrastructure for document intelligence.
 </div>

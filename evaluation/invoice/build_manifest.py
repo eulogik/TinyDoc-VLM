@@ -41,6 +41,40 @@ def render_pdf_first_page(src: Path, out: Path, max_dim: int = MAX_DIM) -> dict:
     return {"rendered_pages": 1, "source_pages": pages, "width": image.width, "height": image.height}
 
 
+def render_pdf_pages(
+    src: Path,
+    out_dir: Path,
+    stem: str,
+    max_dim: int = MAX_DIM,
+    max_pages: int = 0,
+) -> dict:
+    """Render every PDF page (or the first `max_pages`) to `<stem>_pN.png`."""
+    import pypdfium2 as pdfium
+
+    pdf = pdfium.PdfDocument(str(src))
+    source_pages = len(pdf)
+    count = source_pages if max_pages <= 0 else min(source_pages, max_pages)
+    paths: list[str] = []
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for index in range(count):
+        page = pdf[index]
+        width, height = page.get_size()
+        scale = max_dim / max(width, height)
+        bitmap = page.render(scale=scale)
+        image = bitmap.to_pil().convert("RGB")
+        out = out_dir / f"{stem}_p{index + 1}.png"
+        image.save(out, format="PNG")
+        paths.append(str(out))
+        bitmap.close()
+        page.close()
+    pdf.close()
+    return {
+        "rendered_pages": len(paths),
+        "source_pages": source_pages,
+        "image_paths": paths,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--corpus", required=True)
@@ -49,6 +83,17 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--categories", nargs="*", default=None)
     ap.add_argument("--max-dim", type=int, default=MAX_DIM)
+    ap.add_argument(
+        "--all-pages",
+        action="store_true",
+        help="render every PDF page (for a real multipage run), not just page 1",
+    )
+    ap.add_argument(
+        "--max-pages",
+        type=int,
+        default=0,
+        help="with --all-pages, stop after N pages (0 = all)",
+    )
     args = ap.parse_args()
 
     corpus = Path(args.corpus)
@@ -71,15 +116,23 @@ def main() -> int:
             print(f"missing {src}")
             continue
         if doc["render"] == "pdf":
-            image_path = render_dir / f"{doc['doc_id']}.png"
-            info = render_pdf_first_page(src, image_path, args.max_dim)
+            if args.all_pages:
+                info = render_pdf_pages(src, render_dir, doc["doc_id"], args.max_dim, args.max_pages)
+                image_paths = info.pop("image_paths")
+                image_path = image_paths[0]
+            else:
+                image_path = render_dir / f"{doc['doc_id']}.png"
+                info = render_pdf_first_page(src, image_path, args.max_dim)
+                image_paths = [str(image_path)]
         else:
             image_path = src
+            image_paths = [str(src)]
             info = {"rendered_pages": 1, "source_pages": doc.get("pages", 1)}
         rows.append(
             {
                 "id": doc["doc_id"],
                 "image_path": str(image_path),
+                "image_paths": image_paths,
                 "source_path": str(src),
                 "category": doc["category"],
                 "difficulty": doc["difficulty"],
@@ -109,6 +162,8 @@ def main() -> int:
                 "n": len(rows),
                 "categories": dict(sorted(categories.items())),
                 "rendered_pdfs": sum(1 for r in rows if r["render"] == "pdf"),
+                "rendered_page_images": sum(len(r["image_paths"]) for r in rows),
+                "all_pages": args.all_pages,
             },
             indent=2,
         )

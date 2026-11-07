@@ -12,32 +12,58 @@ import os
 import gradio as gr
 
 CARD = """
-# 📄 TinyDoc — local-first grounded document extraction
+# TinyDoc — cited document extraction that runs locally
 
-**Schema-valid JSON · per-field OCR evidence · confidence · Apache 2.0**
+**Schema-valid JSON · exact OCR-span evidence · field confidence · Apache 2.0**
 
-This Space is a static project card. The working engines are local Ollama
-models; free CPU hardware cannot serve them at usable latency.
+TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice
+images into schema-validated JSON, with the page, span, and a confidence score
+behind every field. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models
+through Ollama. It is **not** a fine-tuned TinyDoc checkpoint; the reader is a
+third-party base model and the product is the trust layer around it.
 
-## Measured (SROIE public-train-derived clean-100, n=100)
+![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
 
-| Engine | Field F1 | Address | Schema | Median |
-|---|---:|---:|---:|---:|
-| **Qwen2.5-VL-3B** — quality | **0.9475** | 0.86 | 1.00 | 14.1 s |
-| **Qwen3-VL-2B-Instruct** — fast | **0.9200** | 0.84 | 1.00 | **7.0 s** |
-| Hybrid v2 — first-party | 0.603 | 0.37 | 0.93 | ~8 s |
-| PP-OCR + heuristics | 0.376 | 0.03 | — | — |
+## Measured results
 
-> ⚠️ **Not an external benchmark.** The 100-doc set is a duplicate-filtered
-> split of the public SROIE **train** pool; Qwen may have seen it during
-> pretraining. The original set is 60% leaked. These are same-document engine
+![Measured results by tier](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/tiers.png)
+
+| Benchmark | 3B | 2B |
+|---|---:|---:|
+| SROIE clean-100 — field F1 | **0.9475** | **0.9200** |
+| SROIE clean-100 — schema valid | 1.00 | 1.00 |
+| SROIE clean-100 — p50 latency | 14.1 s | **7.0 s** |
+| Invoice v1, page 1 — key header | 91.9% | **93.5%** |
+| Invoice v1, page 1 — fully correct | 65.7% | **71.8%** |
+| Invoice v1, page 1 — p50 latency | 26.5 s | **16.1 s** |
+
+> **Not an external benchmark.** SROIE clean-100 is a duplicate-filtered split of
+> the public SROIE **train** pool; Qwen may have seen it during pretraining.
+> The original 100-doc set is 60% leaked. The invoice set is synthetic,
+> vendor-made, and page 1 only; real supplier invoices are unmeasured, flagging
+> fails (0/7), and multipage is not shipped. These are same-document engine
 > comparisons, not generalization claims.
+
+## What you get back
+
+![TinyDoc result table with evidence and confidence](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/trust.png)
+
+Every non-empty field carries `{quote, page, bbox, confidence}`. Evidence
+coverage is 0.798 of non-empty fields. Confidence is for **review routing**, not
+a probability:
+
+- Field ECE is **0.115–0.135** raw and **0.005–0.014** after document-grouped
+  isotonic out-of-fold calibration.
+- Document-level confidence is **not** calibrated (ECE 0.09–0.10).
+- Boxes are OCR spans. VLM-predicted boxes measured hit@0.5 of **0.04–0.20**
+  against a 0.70 gate, so they are not claimed or shipped.
 
 ## Run it locally
 
 ```bash
-pip install "tinydoc @ git+https://github.com/eulogik/TinyDoc-VLM.git#subdirectory=sdk"
-ollama pull qwen2.5vl:3b            # quality
+pip install tinydoc==0.2.0
+
+ollama pull qwen2.5vl:3b            # quality tier
 ollama pull qwen3-vl:2b-instruct    # fast tier
 ```
 
@@ -46,29 +72,16 @@ from tinydoc import ReceiptPipeline
 
 pipe = ReceiptPipeline("ollama:qwen2.5vl:3b")
 result = pipe.extract("receipt.jpg")
-print(result.fields, result.schema_valid, result.confidence)
+
+print(result.fields, result.schema_valid)
 for field in result.field_results:
-    print(field.name, field.value, field.evidence)
+    print(field.name, field.value, field.confidence, field.evidence)
 ```
 
-## Trust layer status
-
-- **Evidence is OCR-span**, not VLM-predicted boxes. A 100-box probe measured
-  hit@0.5 of **0.04–0.20** against a 0.70 gate, so boxes are not claimed yet.
-- **Confidence is field-level calibrated only.** Evidence-on field ECE is
-  **0.115–0.135** raw and **0.005–0.014** after document-grouped isotonic
-  cross-validation. Document-level exact-4 confidence is **not** calibrated
-  (ECE 0.09–0.10); do not treat it as a probability.
-- Grounding and calibration artifacts are linked from the
-  [v3 plan](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
-
-## Invoice probe (synthetic, page 1)
-
-A public synthetic benchmark (Invoice Extraction Benchmark v1, 181 docs) measures
-**91.9% key-header field accuracy** but only **65.7% documents fully correct**.
-Flagging is **0/7** on inconsistent/multi-invoice files, and multipage is 0% fully
-correct because only page 1 is rendered. The set is synthetic and vendor-made;
-this is not real supplier-invoice accuracy.
+```bash
+tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \\
+    --out results.jsonl --overlay overlays/
+```
 
 ## Why this card, not a live demo?
 
@@ -78,19 +91,21 @@ as a live demo would misrepresent the project. The working 2B/3B engines need
 several GB of RAM and a local Ollama runtime; they are not suitable for this
 free CPU Space.
 
-## Links
+## Read more
 
-- [Source + install](https://github.com/eulogik/TinyDoc-VLM)
-- [v3 plan and evidence](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md)
-- [Benchmarks](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md)
+- [Source and install](https://github.com/eulogik/TinyDoc-VLM)
+- [System card](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/MODEL_CARD.md)
+- [Benchmarks and caveats](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md)
+- [Plan and evidence ledger](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md)
+- [Live site](https://eulogik.github.io/TinyDoc-VLM/)
 """
 
-with gr.Blocks(title="TinyDoc — local-first document extraction") as demo:
+with gr.Blocks(title="TinyDoc — cited document extraction") as demo:
     gr.Markdown(CARD)
     gr.Markdown(
         "---\n**By** [eulogik](https://eulogik.com) · "
         "[GitHub](https://github.com/eulogik/TinyDoc-VLM) · "
-        "[PyPI](https://pypi.org/project/tinydoc/)"
+        "[PyPI](https://pypi.org/project/tinydoc/) · Apache 2.0"
     )
 
 if __name__ == "__main__":
