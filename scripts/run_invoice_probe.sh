@@ -16,9 +16,14 @@ RESULTS="evaluation/invoice/results"
 mkdir -p "$RESULTS" logs
 
 echo "START $MODEL $(date '+%Y-%m-%d %H:%M:%S')"
+if ! curl -sf --max-time 10 "http://127.0.0.1:11434/api/tags" >/dev/null; then
+  echo "ERROR: Ollama is not running; start it before the probe" >&2
+  exit 3
+fi
 python3 evaluation/invoice/run_invoice_eval.py \
   --manifest evaluation/invoice/manifest_v1.jsonl \
   --model "$MODEL" \
+  --resume \
   --out "$RESULTS/rows_invoice_${TAG}.jsonl" \
   --preds "$RESULTS/preds_invoice_${TAG}.json" \
   >> "logs/invoice_${TAG}.log" 2>&1 &

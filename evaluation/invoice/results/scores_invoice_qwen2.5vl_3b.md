@@ -2,8 +2,8 @@
 
 | Measure | Result |
 |---|---|
-| Documents with every key header field right | 55.8% (101 of 181) |
-| Key header fields right | 90.6% (1428 of 1576) |
+| Documents with every key header field right | 65.7% (119 of 181) |
+| Key header fields right | 91.9% (1448 of 1576) |
 | Line items, mean F1 | 0.929 (179 documents; all lines right on 158) |
 | Invoices whose figures do not add up, flagged | 0 of 5 |
 | Files holding several invoices, flagged | 0 of 2 |
@@ -17,7 +17,7 @@
 | invoice_number | 167 | 179 | 93.3 |
 | invoice_date | 170 | 179 | 95 |
 | due_date | 135 | 140 | 96.4 |
-| currency | 150 | 179 | 83.8 |
+| currency | 170 | 179 | 95 |
 | subtotal | 151 | 179 | 84.4 |
 | tax | 156 | 179 | 87.2 |
 | total | 157 | 179 | 87.7 |
@@ -36,23 +36,23 @@
 | credit | 10 | 8 | 80 |
 | multipage | 10 | 0 | 0 |
 | freight | 16 | 7 | 43.8 |
-| scan | 15 | 11 | 73.3 |
-| photo | 45 | 26 | 57.8 |
-| handwritten | 8 | 5 | 62.5 |
+| scan | 15 | 15 | 100 |
+| photo | 45 | 39 | 86.7 |
+| handwritten | 8 | 6 | 75 |
 | hard | 13 | 4 | 30.8 |
 
 ## By difficulty
 
 | Difficulty | Documents | Fully correct | % |
 |---|---|---|---|
-| easy | 62 | 47 | 75.8 |
-| medium | 48 | 26 | 54.2 |
-| hard | 71 | 28 | 39.4 |
+| easy | 62 | 53 | 85.5 |
+| medium | 48 | 31 | 64.6 |
+| hard | 71 | 35 | 49.3 |
 
 ## By photo/scan severity
 
 | Photo/scan severity | Documents | Fully correct | % |
 |---|---|---|---|
-| mild | 20 | 14 | 70 |
-| moderate | 20 | 13 | 65 |
-| severe | 20 | 10 | 50 |
+| mild | 20 | 20 | 100 |
+| moderate | 20 | 18 | 90 |
+| severe | 20 | 16 | 80 |

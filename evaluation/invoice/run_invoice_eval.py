@@ -85,6 +85,33 @@ def _num(value):
     return -number if negative else number
 
 
+def _currency(value) -> str | None:
+    """Normalize ISO codes and common currency symbols without answer hints."""
+    if value is None:
+        return None
+    text = str(value).strip().upper().replace(" ", "")
+    if not text:
+        return None
+    iso = re.search(r"\b(USD|EUR|GBP|ZAR|NAD|ZMW)\b", text)
+    if iso:
+        return iso.group(1)
+    if text in ("N$", "NAD$", "N$D"):
+        return "NAD"
+    if text in ("R", "ZAR"):
+        return "ZAR"
+    if text in ("€", "EUR"):
+        return "EUR"
+    if text in ("£", "GBP"):
+        return "GBP"
+    if text in ("K", "ZK", "ZMW"):
+        return "ZMW"
+    if text in ("US$", "USD$"):
+        return "USD"
+    if "$" in text:
+        return "USD"
+    return text
+
+
 def _date(value, doc_id: str = "", currency: str | None = None):
     """Normalize common invoice dates to ISO, resolving day/month ambiguity.
 
@@ -150,7 +177,7 @@ def _lines(value) -> list[dict]:
 
 def normalize_prediction(obj: dict, doc_id: str = "") -> dict:
     obj = obj or {}
-    currency = str(obj.get("currency", "") or "").upper() or None
+    currency = _currency(obj.get("currency"))
     return {
         "vendor_name": str(obj.get("vendor_name", obj.get("vendor", "")) or ""),
         "invoice_number": str(obj.get("invoice_number", obj.get("invoice_no", "")) or ""),
@@ -185,6 +212,29 @@ def ask_ollama(host: str, model: str, prompt: str, b64: str, num_ctx: int, timeo
     return (body.get("message") or {}).get("content", "") or ""
 
 
+def _read_image(path: Path, attempts: int = 3, delay: float = 2.0) -> bytes:
+    """Read an image, retrying transient external-disk permission errors."""
+    last: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            return path.read_bytes()
+        except OSError as exc:
+            last = exc
+            if attempt + 1 < attempts:
+                time.sleep(delay * (attempt + 1))
+    assert last is not None
+    raise last
+
+
+def _check_host(host: str, timeout: float = 10.0) -> None:
+    """Fail loudly before a long run if Ollama is not answering."""
+    try:
+        with urllib.request.urlopen(f"{host}/api/tags", timeout=timeout) as resp:
+            resp.read(1024)
+    except Exception as exc:  # noqa: BLE001 - surface the reason and stop
+        raise SystemExit(f"Ollama not reachable at {host}: {type(exc).__name__}: {exc}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", required=True)
@@ -199,6 +249,11 @@ def main() -> int:
     )
     ap.add_argument("--out", required=True, help="per-document JSONL")
     ap.add_argument("--preds", required=True, help="benchmark predictions.json")
+    ap.add_argument(
+        "--resume",
+        action="store_true",
+        help="skip documents already present in --out and reuse their rows",
+    )
     args = ap.parse_args()
 
     manifest = Path(args.manifest)
@@ -211,30 +266,61 @@ def main() -> int:
         return 2
 
     host = args.host.rstrip("/")
-    out_rows = []
-    predictions = {}
-    latencies = []
-    for i, row in enumerate(rows, 1):
-        image_path = Path(row["image_path"])
-        b64 = base64.b64encode(image_path.read_bytes()).decode()
-        t0 = time.time()
-        raw = ""
-        error = None
-        pred = None
-        try:
-            raw = ask_ollama(host, args.model, INVOICE_PROMPT, b64, args.num_ctx, args.timeout)
-            pred = _extract_json(raw)
-            if pred is None:
-                error = "no JSON object in response"
-        except Exception as exc:  # noqa: BLE001 - keep the row, count it as missing
-            error = f"{type(exc).__name__}: {exc}"
-        latency = (time.time() - t0) * 1000
-        latencies.append(latency)
+    _check_host(host)
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_rows: list[dict] = []
+    predictions: dict[str, dict] = {}
+    latencies: list[float] = []
+    if args.resume and out_path.exists():
+        loaded: list[dict] = []
+        with out_path.open() as handle:
+            for line in handle:
+                if line.strip():
+                    loaded.append(json.loads(line))
+        done_rows = [r for r in loaded if not r.get("error")]
+        failed = len(loaded) - len(done_rows)
+        # Rewrite with only successful rows so failed attempts are retried
+        # instead of being frozen into the run by an outage.
+        with out_path.open("w") as handle:
+            for done in done_rows:
+                handle.write(json.dumps(done) + "\n")
+        out_rows.extend(done_rows)
+        for done in done_rows:
+            predictions[done["id"]] = done.get("pred") or {}
+            latencies.append(float(done.get("latency_ms", 0.0)))
+        done_ids = {r["id"] for r in done_rows}
+        rows = [r for r in rows if r["id"] not in done_ids]
+        print(
+            f"resume: {len(done_ids)} done, {failed} failed will retry, {len(rows)} remaining",
+            flush=True,
+        )
+        if not rows:
+            print("nothing to do", flush=True)
 
-        normalized = normalize_prediction(pred or {}, str(row["id"]))
-        predictions[row["id"]] = normalized
-        out_rows.append(
-            {
+    # Append as we go so a crash or disk hiccup never loses completed inference.
+    total_docs = len(out_rows) + len(rows)
+    with out_path.open("a") as sink:
+        for row in rows:
+            image_path = Path(row["image_path"])
+            b64 = base64.b64encode(_read_image(image_path)).decode()
+            t0 = time.time()
+            raw = ""
+            error = None
+            pred = None
+            try:
+                raw = ask_ollama(host, args.model, INVOICE_PROMPT, b64, args.num_ctx, args.timeout)
+                pred = _extract_json(raw)
+                if pred is None:
+                    error = "no JSON object in response"
+            except Exception as exc:  # noqa: BLE001 - keep the row, count it as missing
+                error = f"{type(exc).__name__}: {exc}"
+            latency = (time.time() - t0) * 1000
+            latencies.append(latency)
+
+            normalized = normalize_prediction(pred or {}, str(row["id"]))
+            predictions[row["id"]] = normalized
+            done_row = {
                 "id": row["id"],
                 "category": row.get("category"),
                 "difficulty": row.get("difficulty"),
@@ -244,20 +330,16 @@ def main() -> int:
                 "latency_ms": latency,
                 "error": error,
             }
-        )
-        if i % 10 == 0:
-            parsed = sum(1 for r in out_rows if r["error"] is None)
-            print(
-                f"[{i}/{len(rows)}] parsed={parsed}/{i} "
-                f"p50={statistics.median(latencies):.0f}ms",
-                flush=True,
-            )
-
-    out_path = Path(args.out)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with out_path.open("w") as handle:
-        for row in out_rows:
-            handle.write(json.dumps(row) + "\n")
+            out_rows.append(done_row)
+            sink.write(json.dumps(done_row) + "\n")
+            sink.flush()
+            if len(out_rows) % 10 == 0:
+                parsed = sum(1 for r in out_rows if r["error"] is None)
+                print(
+                    f"[{len(out_rows)}/{total_docs}] parsed={parsed}/{len(out_rows)} "
+                    f"p50={statistics.median(latencies):.0f}ms",
+                    flush=True,
+                )
 
     preds_path = Path(args.preds)
     preds_path.parent.mkdir(parents=True, exist_ok=True)

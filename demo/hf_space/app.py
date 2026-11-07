@@ -65,7 +65,7 @@ for field in result.field_results:
 ## Invoice probe (synthetic, page 1)
 
 A public synthetic benchmark (Invoice Extraction Benchmark v1, 181 docs) measures
-**90.6% key-header field accuracy** but only **55.8% documents fully correct**.
+**91.9% key-header field accuracy** but only **65.7% documents fully correct**.
 Flagging is **0/7** on inconsistent/multi-invoice files, and multipage is 0% fully
 correct because only page 1 is rendered. The set is synthetic and vendor-made;
 this is not real supplier-invoice accuracy.

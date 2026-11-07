@@ -119,8 +119,8 @@ invoices.** The prompt was fixed before the run and not tuned on the answers.
 
 | Metric | Result |
 |---|---:|
-| Key header field accuracy | **90.6%** (1428/1576; 95% CI 88.6–92.6) |
-| Documents with every key header field right | **55.8%** (101/181; 95% CI 48.6–63.0) |
+| Key header field accuracy | **91.9%** (1448/1576; 95% CI 89.8–93.9) |
+| Documents with every key header field right | **65.7%** (119/181; 95% CI 58.6–72.4) |
 | Line-item F1, mean | 0.929 (179 docs) |
 | p50 / mean latency | 26.5 s / 28.7 s |
 | Inconsistent invoices flagged | 0 of 5 |
@@ -129,26 +129,28 @@ invoices.** The prompt was fixed before the run and not tuned on the answers.
 
 | Category | n | Key-header | Fully correct |
 |---|---:|---:|---:|
-| clean | 31 | 95.4% | 74.2% |
+| scan | 15 | 100.0% | 100.0% |
 | credit | 10 | 97.5% | 80.0% |
-| scan | 15 | 97.0% | 73.3% |
-| handwritten | 8 | 94.3% | 62.5% |
-| photo | 45 | 92.1% | 57.8% |
-| tax | 14 | 90.3% | 50.0% |
+| clean | 31 | 95.8% | 74.2% |
+| handwritten | 8 | 95.7% | 75.0% |
+| photo | 45 | 95.3% | 86.7% |
+| tax | 14 | 91.1% | 50.0% |
 | currency | 19 | 89.3% | 52.6% |
 | freight | 16 | 88.8% | 43.8% |
 | hard | 13 | 87.0% | 30.8% |
 | multipage | 10 | 61.1% | 0.0% |
 
 Per field: document_type 98.9%, due_date 96.4%, invoice_date 95.0%,
-invoice_number 93.3%, vendor_name 90.1%, total 87.7%, tax 87.2%, subtotal 84.4%,
-currency 83.8%. References are 1/25 and are not a headline claim.
+invoice_number 93.3%, currency 95.0%, vendor_name 90.1%, total 87.7%, tax 87.2%,
+subtotal 84.4%. References (strict string match) are 1/25 and are not a headline
+claim.
 
 **Read this as:** the prompt/schema transfers to invoices at the field level (above
-the 0.80 bar), but **not** as straight-through processing: 44% of documents have at
-least one key-field miss, flagging is unusable, and multipage is broken by the
-page-1 limit. Do not cite it as real-invoice accuracy. Artifacts:
-`evaluation/invoice/results/`.
+the 0.80 bar), but **not** as straight-through processing: a third of documents
+still have at least one key-field miss, flagging is unusable, and multipage is
+broken by the page-1 limit. Currency symbols were normalized to ISO after the
+first pass; the superseded run is archived as `*_v1_currency_symbols.*`. Do not
+cite it as real-invoice accuracy. Artifacts: `evaluation/invoice/results/`.
 
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).

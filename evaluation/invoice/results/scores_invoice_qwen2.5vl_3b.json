@@ -2,15 +2,15 @@
  "meta": {
   "system": "TinyDoc engine eval (qwen2.5vl:3b)",
   "run_date": "2026-11-06",
-  "notes": "Page 1 only; synthetic benchmark; see evaluation/invoice/README.md"
+  "notes": "Re-normalized currency symbols to ISO; no new inference. Page 1 only."
  },
  "summary": {
   "documents": 181,
   "documents_in_corpus": 181,
   "documents_without_prediction": 0,
-  "fully_correct": 101,
+  "fully_correct": 119,
   "key_fields": {
-   "correct": 1428,
+   "correct": 1448,
    "scored": 1576
   },
   "fields": {
@@ -31,7 +31,7 @@
     "scored": 140
    },
    "currency": {
-    "correct": 150,
+    "correct": 170,
     "scored": 179
    },
    "subtotal": {
@@ -110,15 +110,15 @@
    },
    "scan": {
     "docs": 15,
-    "fully_correct": 11
+    "fully_correct": 15
    },
    "photo": {
     "docs": 45,
-    "fully_correct": 26
+    "fully_correct": 39
    },
    "handwritten": {
     "docs": 8,
-    "fully_correct": 5
+    "fully_correct": 6
    },
    "hard": {
     "docs": 13,
@@ -128,29 +128,29 @@
   "difficulty": {
    "easy": {
     "docs": 62,
-    "fully_correct": 47
+    "fully_correct": 53
    },
    "medium": {
     "docs": 48,
-    "fully_correct": 26
+    "fully_correct": 31
    },
    "hard": {
     "docs": 71,
-    "fully_correct": 28
+    "fully_correct": 35
    }
   },
   "severity": {
    "mild": {
     "docs": 20,
-    "fully_correct": 14
+    "fully_correct": 20
    },
    "moderate": {
     "docs": 20,
-    "fully_correct": 13
+    "fully_correct": 18
    },
    "severe": {
     "docs": 20,
-    "fully_correct": 10
+    "fully_correct": 16
    }
   }
  },
@@ -2442,9 +2442,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -6506,9 +6506,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -11043,9 +11043,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -11098,7 +11098,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 0.67
   },
   {
@@ -11653,9 +11653,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -11716,7 +11716,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -11757,9 +11757,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -11820,7 +11820,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -11861,9 +11861,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -11924,7 +11924,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -12592,9 +12592,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -12666,7 +12666,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -13571,9 +13571,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -13634,7 +13634,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -13675,9 +13675,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -13738,7 +13738,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -13779,9 +13779,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -13842,7 +13842,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -14510,9 +14510,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -14584,7 +14584,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -14628,9 +14628,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -14702,7 +14702,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -14746,9 +14746,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -14820,7 +14820,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -15485,9 +15485,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -15548,7 +15548,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -15589,9 +15589,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -15652,7 +15652,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -15693,9 +15693,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -15756,7 +15756,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -16424,9 +16424,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -16498,7 +16498,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -16542,9 +16542,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -16616,7 +16616,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -16660,9 +16660,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -16734,7 +16734,7 @@
      "detail": "missing ['TR52368', 'LD-826687']"
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {
@@ -17607,9 +17607,9 @@
     },
     "currency": {
      "field": "currency",
-     "correct": false,
+     "correct": true,
      "expected": "NAD",
-     "got": "N$",
+     "got": "NAD",
      "within_band": null,
      "detail": ""
     },
@@ -17670,7 +17670,7 @@
      "detail": ""
     }
    },
-   "fully_correct": false,
+   "fully_correct": true,
    "line_f1": 1.0
   },
   {

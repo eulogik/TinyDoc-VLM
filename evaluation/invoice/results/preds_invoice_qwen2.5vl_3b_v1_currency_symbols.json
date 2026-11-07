@@ -1,0 +1,6106 @@
+{
+  "system": "TinyDoc engine eval (qwen2.5vl:3b)",
+  "run_date": "2026-11-06",
+  "notes": "Page 1 only; synthetic benchmark; see evaluation/invoice/README.md",
+  "documents": {
+    "clean-us-clean-simple": {
+      "vendor_name": "Acme Industrial Supply Co",
+      "invoice_number": "ACM-100145",
+      "invoice_date": "2024-03-12",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 346.5,
+      "tax": 25.99,
+      "total_amount": 372.49,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Industrial grade bolts, 1/2-inch x 2-inch (pack of 100)",
+          "amount": 194.0
+        },
+        {
+          "description": "Heavy-duty steel washers (pack of 200)",
+          "amount": 64.0
+        },
+        {
+          "description": "Threadlocker adhesive, blue, 10ml",
+          "amount": 88.5
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-with-shipping": {
+      "vendor_name": "Northwind Logistics LLC",
+      "invoice_number": "NWL-20240318-002",
+      "invoice_date": "2024-03-18",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1422.0,
+      "tax": 92.43,
+      "total_amount": 1599.43,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet jack, 5500 lb capacity",
+          "amount": 978.0
+        },
+        {
+          "description": "Stretch wrap rolls, 18-inch x 1500 ft",
+          "amount": 294.0
+        },
+        {
+          "description": "Warehouse floor tape, yellow, 100 ft",
+          "amount": 150.0
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "reference": "PO-RB-00441"
+        }
+      ]
+    },
+    "clean-us-with-discount": {
+      "vendor_name": "Greenleaf Office Supply",
+      "invoice_number": "GLO-8842",
+      "invoice_date": "2024-02-27",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 4926.0,
+      "tax": 374.08,
+      "total_amount": 5050.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ergonomic mesh office chair, black",
+          "amount": 2450.0
+        },
+        {
+          "description": "Height-adjustable desk, 60-inch walnut",
+          "amount": 2476.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-shipping-and-discount": {
+      "vendor_name": "Foundry Metalworks",
+      "invoice_number": "FND-2024-03-0091",
+      "invoice_date": "2024-03-05",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 3275.0,
+      "tax": 164.0,
+      "total_amount": 3492.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Fabricated steel brackets, custom (lot of 50)",
+          "amount": 2850.0
+        },
+        {
+          "description": "Powder coat finish, gray",
+          "amount": 425.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-tax-only": {
+      "vendor_name": "Brightware Software Inc",
+      "invoice_number": "BW-2024-1142",
+      "invoice_date": "2024-03-31",
+      "due_date": "2024-04-30",
+      "currency": "USD",
+      "subtotal": 12000.0,
+      "tax": 1035.0,
+      "total_amount": 13035.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Senior engineering consulting (40 hrs @ $245)",
+          "amount": 9800.0
+        },
+        {
+          "description": "Architecture review and documentation",
+          "amount": 2200.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-freight-alias": {
+      "vendor_name": "Northwind Logistics LLC",
+      "invoice_number": "NWL-20240322-008",
+      "invoice_date": "2024-03-22",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 770.0,
+      "tax": 50.05,
+      "total_amount": 945.05,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Reinforced shipping pallets, 48x40",
+          "amount": 770.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-delivery-alias": {
+      "vendor_name": "Greenleaf Office Supply",
+      "invoice_number": "GLO-9015",
+      "invoice_date": "2024-03-14",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 747.0,
+      "tax": 59.76,
+      "total_amount": 841.76,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Whiteboard, 6ft x 4ft magnetic",
+          "amount": 567.0
+        },
+        {
+          "description": "Dry-erase marker set (12 colors)",
+          "amount": 180.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-sh-abbrev": {
+      "vendor_name": "Acme Industrial Supply Co",
+      "invoice_number": "ACM-10032",
+      "invoice_date": "2024-04-02",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 391.0,
+      "tax": 18.5,
+      "total_amount": 438.83,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Precision measuring calipers, digital",
+          "amount": 296.0
+        },
+        {
+          "description": "Calibration service, annual",
+          "amount": 95.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-handling-alias": {
+      "vendor_name": "Foundry Metalworks",
+      "invoice_number": "FND-2024-03-0134",
+      "invoice_date": "2024-03-28",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1280.0,
+      "tax": 42.0,
+      "total_amount": 1398.8,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Custom signage, powder-coated aluminum",
+          "amount": 1280.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-trade-discount": {
+      "vendor_name": "Acme Industrial Supply Co",
+      "invoice_number": "ACM-100355",
+      "invoice_date": "2024-04-08",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1268.0,
+      "tax": 90.35,
+      "total_amount": 1294.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Heavy-duty storage bins, 27-gal (case of 4)",
+          "amount": 410.0
+        },
+        {
+          "description": "Industrial shelving unit, 72-inch",
+          "amount": 858.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-promo-code": {
+      "vendor_name": "Greenleaf Office Supply",
+      "invoice_number": "GLO-9178",
+      "invoice_date": "2024-04-15",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 570.0,
+      "tax": 41.04,
+      "total_amount": 554.04,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Printer paper, 8.5x11 (case of 10 reams)",
+          "amount": 216.0
+        },
+        {
+          "description": "Toner cartridge, HP compatible",
+          "amount": 354.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-service-fee": {
+      "vendor_name": "Brightware Software Inc",
+      "invoice_number": "BW-2024-1205",
+      "invoice_date": "2024-04-18",
+      "due_date": "2024-05-03",
+      "currency": "USD",
+      "subtotal": 8400.0,
+      "tax": 724.5,
+      "total_amount": 9249.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Cloud infrastructure subscription, March",
+          "amount": 8400.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-fuel-surcharge": {
+      "vendor_name": "Northwind Logistics LLC",
+      "invoice_number": "NWL-20240410-012",
+      "invoice_date": "2024-04-10",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 2850.0,
+      "tax": 185.25,
+      "total_amount": 3552.25,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Freight transport, Seattle to Denver (48 ft dry van)",
+          "amount": 2850.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-many-line-items": {
+      "vendor_name": "Greenleaf Office Supply",
+      "invoice_number": "GLO-9301",
+      "invoice_date": "2024-04-22",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1629.25,
+      "tax": 130.34,
+      "total_amount": 1759.59,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ballpoint pens, blue (box of 60)",
+          "amount": 111.0
+        },
+        {
+          "description": "Legal pads, yellow, 8.5x14 (pack of 12)",
+          "amount": 192.0
+        },
+        {
+          "description": "Manila file folders, letter size (box of 100)",
+          "amount": 130.0
+        },
+        {
+          "description": "Hanging file folders (box of 25)",
+          "amount": 93.75
+        },
+        {
+          "description": "Three-ring binders, 2-inch (pack of 6)",
+          "amount": 126.0
+        },
+        {
+          "description": "Sticky notes, 3x3 (pack of 12 pads)",
+          "amount": 142.5
+        },
+        {
+          "description": "Stapler, heavy-duty, 25-sheet capacity",
+          "amount": 114.0
+        },
+        {
+          "description": "Staples, standard (box of 5000)",
+          "amount": 40.5
+        },
+        {
+          "description": "Paper clips, jumbo (box of 100)",
+          "amount": 28.0
+        },
+        {
+          "description": "Binder clips, assorted sizes",
+          "amount": 48.0
+        },
+        {
+          "description": "Scissors, 8-inch titanium-bonded",
+          "amount": 93.0
+        },
+        {
+          "description": "Tape dispensers with refills",
+          "amount": 88.0
+        },
+        {
+          "description": "Desk organizer, mesh metal",
+          "amount": 102.0
+        },
+        {
+          "description": "Label maker, electronic",
+          "amount": 178.0
+        },
+        {
+          "description": "Printer labels, address (pack of 3000)",
+          "amount": 142.5
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "PO-HM-8824"
+      ]
+    },
+    "clean-us-single-service": {
+      "vendor_name": "Brightware Software Inc",
+      "invoice_number": "BW-2024-1287",
+      "invoice_date": "2024-04-25",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 4500.0,
+      "tax": 388.13,
+      "total_amount": 4888.13,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Monthly security monitoring and incident response (April 2024)",
+          "amount": 4500.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-net30-terms": {
+      "vendor_name": "Acme Industrial Supply Co",
+      "invoice_number": "ACM-100401",
+      "invoice_date": "2024-04-01",
+      "due_date": "2024-05-01",
+      "currency": "USD",
+      "subtotal": 1516.0,
+      "tax": 113.7,
+      "total_amount": 1629.7,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety equipment bundle \u2014 hard hats, vests, gloves",
+          "amount": 1020.0
+        },
+        {
+          "description": "Lockout/tagout kit, industrial",
+          "amount": 496.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-zero-shipping-explicit": {
+      "vendor_name": "Greenleaf Office Supply",
+      "invoice_number": "GLO-9412",
+      "invoice_date": "2024-04-30",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 2225.0,
+      "tax": 178.0,
+      "total_amount": 2403.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Digital download - office productivity suite (per seat, annual)",
+          "amount": 2225.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-credit-applied": {
+      "vendor_name": "Foundry Metalworks",
+      "invoice_number": "FND-2024-04-0088",
+      "invoice_date": "2024-04-18",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 2598.0,
+      "tax": 146.88,
+      "total_amount": 2594.88,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Fabricated railing sections, 8 ft",
+          "amount": 2310.0
+        },
+        {
+          "description": "Installation hardware kit",
+          "amount": 288.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-two-tax-lines": {
+      "vendor_name": "Acme Industrial Supply Co",
+      "invoice_number": "ACM-100458",
+      "invoice_date": "2024-05-03",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1108.0,
+      "tax": 63.71,
+      "total_amount": 1191.1,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pneumatic impact wrench, 1/2-inch drive",
+          "amount": 940.0
+        },
+        {
+          "description": "Air compressor oil, 1 gallon",
+          "amount": 168.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-us-overpaid-invoice": {
+      "vendor_name": "Foundry Metalworks",
+      "invoice_number": "FND-2024-05-0044",
+      "invoice_date": "2024-05-09",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 2370.0,
+      "tax": 142.2,
+      "total_amount": 3100.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Custom steel gate, 10ft",
+          "amount": 1800.0
+        },
+        {
+          "description": "Installation labor (6 hrs)",
+          "amount": 570.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-gb-serif": {
+      "vendor_name": "Pennine Tyre & Parts Limited",
+      "invoice_number": "IN0049923",
+      "invoice_date": "2025-08-27",
+      "due_date": "2025-09-26",
+      "currency": "GBP",
+      "subtotal": 18011.58,
+      "tax": 3602.32,
+      "total_amount": 21613.9,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 2386.4
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 4513.6
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4764.18
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6347.4
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-56566"
+        }
+      ]
+    },
+    "clean-de-grid-eu-decimals": {
+      "vendor_name": "Nordhafen Workshop Supplies GmbH & Co. KG",
+      "invoice_number": "IN008926",
+      "invoice_date": "2026-04-30",
+      "due_date": "2026-06-29",
+      "currency": "EUR",
+      "subtotal": 5632.69,
+      "tax": 1070.21,
+      "total_amount": 6702.9,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 1151.18
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1269.0
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 2261.98
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 950.53
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-za-band-space-groups": {
+      "vendor_name": "Drakensig Tyre & Parts (Pty) Ltd",
+      "invoice_number": "INV-2026-29551",
+      "invoice_date": "2026-06-19",
+      "due_date": "2026-07-03",
+      "currency": "ZAR",
+      "subtotal": 37501.09,
+      "tax": 5625.16,
+      "total_amount": 43126.25,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1857.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1632.96
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 2724.89
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 31285.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-na-center-letterhead": {
+      "vendor_name": "Skeleton Bay Hardware (Pty) Ltd",
+      "invoice_number": "2026/1898",
+      "invoice_date": "2026-07-13",
+      "due_date": null,
+      "currency": "N$",
+      "subtotal": 11078.41,
+      "tax": 1661.76,
+      "total_amount": 12740.17,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 942.88
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3217.27
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 1469.96
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 5448.3
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-fr-right-header": {
+      "vendor_name": "Calanque Hardware SARL",
+      "invoice_number": "AC-87051",
+      "invoice_date": "2026-03-09",
+      "due_date": "2026-04-08",
+      "currency": "EUR",
+      "subtotal": 8672.1,
+      "tax": 1734.42,
+      "total_amount": 10406.52,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 4231.44
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 1978.2
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 800.64
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1661.82
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "AC-87051"
+      ]
+    },
+    "clean-nl-two-column": {
+      "vendor_name": "Waalhaven Office Supplies B.V.",
+      "invoice_number": "BS-3348",
+      "invoice_date": "2025-06-13",
+      "due_date": "2025-07-13",
+      "currency": "EUR",
+      "subtotal": 41.0184,
+      "tax": 8.6138,
+      "total_amount": 49.6326,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 27.1813
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1.3601
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 4.1941
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 8.2828
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-zm-banner": {
+      "vendor_name": "Luangwa Packaging Ltd",
+      "invoice_number": "KN-94439",
+      "invoice_date": "2025-03-18",
+      "due_date": "2025-04-17",
+      "currency": "ZMW",
+      "subtotal": 39582.4,
+      "tax": 6333.18,
+      "total_amount": 45915.58,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 5586.36
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 5215.12
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 8810.28
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 19970.64
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "TPIN",
+          "number": "1063481198"
+        },
+        {
+          "type": "TPIN",
+          "number": "1054446182"
+        }
+      ]
+    },
+    "clean-us-landscape": {
+      "vendor_name": "Prairie Office Supplies Co",
+      "invoice_number": "IN001757",
+      "invoice_date": "2026-07-30",
+      "due_date": "2026-08-29",
+      "currency": "USD",
+      "subtotal": 31690.58,
+      "tax": 1901.43,
+      "total_amount": 33592.01,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2639.28
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 17604.51
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 456.39
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3445.48
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1065.52
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 6479.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-gb-mono-plain": {
+      "vendor_name": "Mersey Office Supplies Ltd",
+      "invoice_number": "IN0003904",
+      "invoice_date": "2025-08-08",
+      "due_date": "2025-09-07",
+      "currency": "GBP",
+      "subtotal": 12491.95,
+      "tax": 2498.39,
+      "total_amount": 14990.34,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1618.11
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3134.32
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1545.9
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 6193.62
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-za-code-zebra": {
+      "vendor_name": "Highveld Tyre & Parts (Pty) Ltd",
+      "invoice_number": "013456",
+      "invoice_date": "2025-07-28",
+      "due_date": "2025-07-28",
+      "currency": "ZAR",
+      "subtotal": 10208.07,
+      "tax": 1531.21,
+      "total_amount": 11739.28,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 582.06
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 242.43
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1440.12
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3523.8
+        },
+        {
+          "description": "Pallet stripping kit",
+          "amount": 2540.86
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1878.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "clean-na-bulk-consumables": {
+      "vendor_name": "Kalahari Office Supplies (Pty) Ltd",
+      "invoice_number": "RF-95917",
+      "invoice_date": "2026-07-11",
+      "due_date": "2026-07-25",
+      "currency": "NAD",
+      "subtotal": 498.0,
+      "tax": 74.7,
+      "total_amount": 572.7,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Cable ties 200mm, black",
+          "amount": 60.0
+        },
+        {
+          "description": "Split pins 3mm",
+          "amount": 96.0
+        },
+        {
+          "description": "Hose clamps 32mm",
+          "amount": 342.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-usd-1": {
+      "vendor_name": "Ironbridge Tyre & Parts Co",
+      "invoice_number": "F-26-6054",
+      "invoice_date": "2025-11-11",
+      "due_date": "2025-11-11",
+      "currency": "USD",
+      "subtotal": 30850.98,
+      "tax": 1928.19,
+      "total_amount": 32779.17,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1787.06
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 5392.01
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 759.66
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 22912.25
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-usd-2": {
+      "vendor_name": "Ironbridge Packaging Corp",
+      "invoice_number": "KS-30440",
+      "invoice_date": "2026-05-02",
+      "due_date": "2026-06-01",
+      "currency": "USD",
+      "subtotal": 4062.72,
+      "tax": 360.57,
+      "total_amount": 4423.29,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 846.25
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1081.11
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1950.0
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 185.36
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-zar-1": {
+      "vendor_name": "Karoo Tyre & Parts (Pty) Ltd",
+      "invoice_number": "IN0091021",
+      "invoice_date": "2025-04-23",
+      "due_date": "2025-05-23",
+      "currency": "ZAR",
+      "subtotal": 22962.88,
+      "tax": 3444.43,
+      "total_amount": 26407.31,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 2805.18
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 8261.36
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3755.24
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 8141.1
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-zar-2": {
+      "vendor_name": "Highveld Workshop Supplies (Pty) Ltd",
+      "invoice_number": "TI072355",
+      "invoice_date": "2026-05-15",
+      "due_date": "2026-05-29",
+      "currency": "ZAR",
+      "subtotal": 30917.22,
+      "tax": 4637.58,
+      "total_amount": 35554.8,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 724.42
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2127.3
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 27133.1
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 932.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-nad-1": {
+      "vendor_name": "Okavango Packaging (Pty) Ltd",
+      "invoice_number": "INV-2026-71012",
+      "invoice_date": "2026-07-20",
+      "due_date": "2026-07-26",
+      "currency": "NAD",
+      "subtotal": 50240.32,
+      "tax": 7536.05,
+      "total_amount": 57776.37,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 5140.3
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 2000.94
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 4356.96
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 38742.12
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-nad-2": {
+      "vendor_name": "Namib Sands Workshop Supplies CC",
+      "invoice_number": "079582",
+      "invoice_date": "2026-02-15",
+      "due_date": "2026-03-17",
+      "currency": "NAD",
+      "subtotal": 10136.89,
+      "tax": 520.53,
+      "total_amount": 11657.42,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 2267.68
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2610.86
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 2510.1
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2748.25
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-eur-1": {
+      "vendor_name": "Nordhafen Workshop Supplies GmbH",
+      "invoice_number": "2026/4301",
+      "invoice_date": "2026-01-18",
+      "due_date": "2026-02-17",
+      "currency": "EUR",
+      "subtotal": 13947.32,
+      "tax": 2649.99,
+      "total_amount": 16597.31,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1923.32
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 6308.46
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1706.16
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 4009.38
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-eur-2": {
+      "vendor_name": "Waalhaven Industrial Supply B.V.",
+      "invoice_number": "BN-19064",
+      "invoice_date": "2025-06-06",
+      "due_date": "2025-08-05",
+      "currency": "EUR",
+      "subtotal": 8367.15,
+      "tax": 1757.1,
+      "total_amount": 10124.25,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 1810.24
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 2750.13
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2649.66
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1157.12
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "BTW",
+          "number": "NL984968439"
+        }
+      ]
+    },
+    "currency-gbp-1": {
+      "vendor_name": "Mersey Engineering Supplies Limited",
+      "invoice_number": "INV-2026-52362",
+      "invoice_date": "2025-08-27",
+      "due_date": "2025-09-10",
+      "currency": "GBP",
+      "subtotal": 20266.25,
+      "tax": 4053.25,
+      "total_amount": 24319.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 740.68
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 12916.76
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 3691.89
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2916.92
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "4500260053"
+      ]
+    },
+    "currency-gbp-2": {
+      "vendor_name": "Pennine Tyre & Parts plc",
+      "invoice_number": "T1055128",
+      "invoice_date": "2025-02-06",
+      "due_date": null,
+      "currency": "GBP",
+      "subtotal": 17884.04,
+      "tax": 3576.81,
+      "total_amount": 21460.85,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 4444.22
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 473.88
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2831.04
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 10134.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-zmw-1": {
+      "vendor_name": "Zambezi Reach Engineering Supplies Ltd",
+      "invoice_number": "2026/5565",
+      "invoice_date": "2025-01-25",
+      "due_date": "2025-02-08",
+      "currency": "ZMW",
+      "subtotal": 43637.88,
+      "tax": 6982.06,
+      "total_amount": 50619.94,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 7646.58
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 5129.64
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 24697.38
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6164.28
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-zmw-2": {
+      "vendor_name": "Chisamba Office Supplies Limited",
+      "invoice_number": "IN0009050",
+      "invoice_date": "2025-12-02",
+      "due_date": "2026-01-01",
+      "currency": "ZMW",
+      "subtotal": 62396.32,
+      "tax": 9983.41,
+      "total_amount": 72379.73,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6386.4
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 2476.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 47547.2
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 5986.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-nad-bare-dollar": {
+      "vendor_name": "Skeleton Bay Engineering Supplies (Pty) Ltd",
+      "invoice_number": "016850",
+      "invoice_date": "2025-04-02",
+      "due_date": "2025-05-02",
+      "currency": "USD",
+      "subtotal": 11070.82,
+      "tax": 1660.62,
+      "total_amount": 12731.44,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 2247.96
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 2061.25
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2033.52
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 4728.09
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-dual-usd-zar-1": {
+      "vendor_name": "Vaalrand Clearing & Forwarding (Pty) Ltd",
+      "invoice_number": "2026/8313",
+      "invoice_date": "2025-11-18",
+      "due_date": "2025-12-18",
+      "currency": "USD",
+      "subtotal": 179.62,
+      "tax": null,
+      "total_amount": 3314.2,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 52.94
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 105.04
+        },
+        {
+          "description": "Bill of entry preparation",
+          "amount": 21.64
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-dual-eur-nad-2": {
+      "vendor_name": "Erongo Forwarding (Pty) Ltd",
+      "invoice_number": "BA-19242",
+      "invoice_date": "2025-12-28",
+      "due_date": "2025-12-28",
+      "currency": "EUR",
+      "subtotal": 162.48,
+      "tax": null,
+      "total_amount": 3247.51,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Delivery order handling",
+          "amount": 37.09
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 58.39
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 67.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-dual-usd-zar-3": {
+      "vendor_name": "Kransberg Clearing & Forwarding (Pty) Ltd",
+      "invoice_number": "09852",
+      "invoice_date": "2026-06-02",
+      "due_date": "2026-08-03",
+      "currency": "USD",
+      "subtotal": 92.66,
+      "tax": 256.46,
+      "total_amount": 1966.16,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Documentation fee",
+          "amount": 27.56
+        },
+        {
+          "description": "Delivery order handling",
+          "amount": 39.31
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 25.79
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-dual-usd-nad-4": {
+      "vendor_name": "Kunene Clearing & Forwarding (Pty) Ltd",
+      "invoice_number": "F-26-9064",
+      "invoice_date": "2026-03-16",
+      "due_date": "2026-04-15",
+      "currency": "USD",
+      "subtotal": 194.71,
+      "tax": null,
+      "total_amount": 3581.1,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Documentation fee",
+          "amount": 26.02
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 136.39
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 32.3
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-multi-line-zar": {
+      "vendor_name": "Klipspruit Border Services CC",
+      "invoice_number": "KL-69497",
+      "invoice_date": "2026-01-21",
+      "due_date": "2026-02-04",
+      "currency": "ZAR",
+      "subtotal": 43054.8,
+      "tax": 6458.22,
+      "total_amount": 49513.02,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ocean freight Shanghai - Walvis Bay",
+          "amount": 1803.93
+        },
+        {
+          "description": "Origin handling",
+          "amount": 341.75
+        },
+        {
+          "description": "Port dues",
+          "amount": 2317.48
+        },
+        {
+          "description": "Cargo dues",
+          "amount": 616.39
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "currency-multi-line-nad": {
+      "vendor_name": "Namib Sands Maintenance CC",
+      "invoice_number": "AA-80309",
+      "invoice_date": "2026-08-15",
+      "due_date": "2026-09-14",
+      "currency": "NAD",
+      "subtotal": 51530.43,
+      "tax": 7729.56,
+      "total_amount": 59259.99,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Ocean freight Shanghai - Walvis Bay",
+          "amount": 41968.58
+        },
+        {
+          "description": "Origin handling",
+          "amount": 7424.51
+        },
+        {
+          "description": "Port dues",
+          "amount": 1069.8
+        },
+        {
+          "description": "Cargo dues",
+          "amount": 1067.54
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-exclusive-vat-column-za": {
+      "vendor_name": "Vaalrand Packaging (Pty) Ltd",
+      "invoice_number": "TN-6058",
+      "invoice_date": "2025-12-17",
+      "due_date": "2026-02-15",
+      "currency": "ZAR",
+      "subtotal": 13838.26,
+      "tax": 2075.74,
+      "total_amount": 15914.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 8466.39
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 189.77
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 1950.48
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 992.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 2239.38
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "ORD-1496",
+          "number": "60 days"
+        }
+      ]
+    },
+    "tax-exclusive-vat-column-gb": {
+      "vendor_name": "Severn Industrial Supply Ltd",
+      "invoice_number": "F-26-6724",
+      "invoice_date": "2025-09-09",
+      "due_date": "2025-10-09",
+      "currency": "GBP",
+      "subtotal": 16681.31,
+      "tax": 3336.26,
+      "total_amount": 20017.57,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 5306.22
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 4378.68
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 5125.59
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 754.02
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1116.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-inclusive-total-za": {
+      "vendor_name": "Highveld Hardware (Pty) Ltd",
+      "invoice_number": "IN0078338",
+      "invoice_date": "2026-08-26",
+      "due_date": "2026-09-25",
+      "currency": "ZAR",
+      "subtotal": 18041.94,
+      "tax": 2353.3,
+      "total_amount": 20395.24,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6466.45
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 8393.8
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 351.45
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 2830.24
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-inclusive-total-na": {
+      "vendor_name": "Brandkop Hardware CC",
+      "invoice_number": "051812",
+      "invoice_date": "2025-05-10",
+      "due_date": "2025-07-09",
+      "currency": "NAD",
+      "subtotal": 7319.67,
+      "tax": 954.74,
+      "total_amount": 8274.41,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 971.36
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 841.5
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 2883.37
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 2623.44
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "4500463188"
+      ]
+    },
+    "tax-inclusive-subtotal-na": {
+      "vendor_name": "Etosha Gate Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0044014",
+      "invoice_date": "2025-01-15",
+      "due_date": "2025-02-14",
+      "currency": "NAD",
+      "subtotal": 26755.13,
+      "tax": 3489.8,
+      "total_amount": 26755.13,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1887.08
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 23255.32
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 204.05
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1408.68
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-sage-subtotal-after-vat-1": {
+      "vendor_name": "Namib Sands Industrial Supply (Pty) Ltd",
+      "invoice_number": "T1080660",
+      "invoice_date": "2025-11-20",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 9088.78,
+      "tax": 1185.49,
+      "total_amount": 9088.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2269.32
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 819.24
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 647.01
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 4167.72
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-sage-subtotal-after-vat-2": {
+      "vendor_name": "Highveld Packaging (Pty) Ltd",
+      "invoice_number": "049181",
+      "invoice_date": "2026-02-28",
+      "due_date": "2026-03-30",
+      "currency": "ZAR",
+      "subtotal": 14770.24,
+      "tax": 1926.55,
+      "total_amount": 16696.79,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 2742.48
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4436.2
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2959.65
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2705.36
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-sage-subtotal-after-vat-3": {
+      "vendor_name": "Kunene Hardware CC",
+      "invoice_number": "MA-72956",
+      "invoice_date": "2026-07-30",
+      "due_date": "2026-09-28",
+      "currency": "NAD",
+      "subtotal": 34996.27,
+      "tax": 4564.73,
+      "total_amount": 34996.27,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1493.48
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 20571.27
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 5735.34
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 2722.97
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-zero-rated-na": {
+      "vendor_name": "Namib Sands Logistics CC",
+      "invoice_number": "IN0006855",
+      "invoice_date": "2025-03-27",
+      "due_date": "2025-04-10",
+      "currency": "NAD",
+      "subtotal": 25649.63,
+      "tax": 0.0,
+      "total_amount": 25649.63,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Export transport Dallas - Lusaka",
+          "amount": 25649.63
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-zero-rated-za": {
+      "vendor_name": "Karoo Cargo (Pty) Ltd",
+      "invoice_number": "TI099928",
+      "invoice_date": "2026-05-30",
+      "due_date": "2026-06-13",
+      "currency": "ZAR",
+      "subtotal": 40491.83,
+      "tax": 0.0,
+      "total_amount": 40491.83,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Export transport Walvis Bay - Lusaka",
+          "amount": 40491.83
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-percentage-line-1": {
+      "vendor_name": "Etosha Gate Shipping Agencies CC",
+      "invoice_number": "IN0001653",
+      "invoice_date": "2026-05-20",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 4353.39,
+      "tax": 653.01,
+      "total_amount": 5006.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Customs clearance fee",
+          "amount": 1725.96
+        },
+        {
+          "description": "Agency fee on customs value",
+          "amount": 2000.04
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 627.39
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-percentage-line-2": {
+      "vendor_name": "Suidkus Clearing & Forwarding CC",
+      "invoice_number": "IN0035632",
+      "invoice_date": "2025-02-18",
+      "due_date": "2025-03-20",
+      "currency": "ZAR",
+      "subtotal": 3582.26,
+      "tax": 537.34,
+      "total_amount": 4119.6,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Customs clearance fee",
+          "amount": 1829.67
+        },
+        {
+          "description": "Agency fee on customs value",
+          "amount": 1401.62
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 350.97
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "tax-withholding-zm": {
+      "vendor_name": "Zambezi Reach IT Services Ltd",
+      "invoice_number": "IN0024445",
+      "invoice_date": "2026-01-05",
+      "due_date": "2026-02-04",
+      "currency": "ZMW",
+      "subtotal": 15229.15,
+      "tax": 2436.66,
+      "total_amount": 17665.81,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Office cleaning, monthly contract",
+          "amount": 6804.32
+        },
+        {
+          "description": "Monthly IT support retainer",
+          "amount": 8424.83
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-91083",
+          "terms": "30 days"
+        }
+      ]
+    },
+    "tax-withholding-na": {
+      "vendor_name": "Kalahari Office Supplies CC",
+      "invoice_number": "2026/2421",
+      "invoice_date": "2026-05-16",
+      "due_date": "2026-06-15",
+      "currency": "N$",
+      "subtotal": 9061.27,
+      "tax": 1359.19,
+      "total_amount": 10420.46,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Network switch configuration",
+          "amount": 1192.45
+        },
+        {
+          "description": "Monthly IT support retainer",
+          "amount": 7868.82
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-note-minus-za": {
+      "vendor_name": "Suidkus Packaging (Pty) Ltd",
+      "invoice_number": "CN-2026-0933",
+      "invoice_date": "2026-02-28",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 7010.28,
+      "tax": 1051.54,
+      "total_amount": 8061.82,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": -5209.6
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": -1800.68
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-note-minus-gb": {
+      "vendor_name": "Severn Workshop Supplies plc",
+      "invoice_number": "CN060662",
+      "invoice_date": "2026-06-23",
+      "due_date": null,
+      "currency": "GBP",
+      "subtotal": 3154.44,
+      "tax": 630.89,
+      "total_amount": 3785.33,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 3154.44
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-ndc-na": {
+      "vendor_name": "Namib Sands Workshop Supplies (Pty) Ltd",
+      "invoice_number": "NdC22806",
+      "invoice_date": "2026-09-02",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 6372.69,
+      "tax": 955.9,
+      "total_amount": 7328.59,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": -2391.62
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": -3981.07
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-ndc-za-ref": {
+      "vendor_name": "Kransberg Tyre & Parts (Pty) Ltd",
+      "invoice_number": "NdC90426",
+      "invoice_date": "2026-03-17",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": -3397.84,
+      "tax": -509.68,
+      "total_amount": -3907.52,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": -3397.84
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-r-minus-1": {
+      "vendor_name": "Drakensig Security Services (Pty) Ltd",
+      "invoice_number": "CRN-42418",
+      "invoice_date": "2025-03-24",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 15227.77,
+      "tax": 2284.17,
+      "total_amount": 17511.94,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": -4820.48
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": -7685.76
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": -2721.53
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-r-minus-2": {
+      "vendor_name": "Blouberg Workshop Supplies (Pty) Ltd",
+      "invoice_number": "CRN-48277",
+      "invoice_date": "2026-06-21",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": -11227.33,
+      "tax": -1684.1,
+      "total_amount": -12911.43,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": -6519.66
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": -2304.01
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": -2403.66
+        }
+      ],
+      "flagged": true,
+      "references": []
+    },
+    "credit-brackets-us": {
+      "vendor_name": "Granite Workshop Supplies Inc",
+      "invoice_number": "CN-2026-0263",
+      "invoice_date": "2025-03-19",
+      "due_date": null,
+      "currency": "USD",
+      "subtotal": 1891.96,
+      "tax": 156.09,
+      "total_amount": 2048.05,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1891.96
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-brackets-gb": {
+      "vendor_name": "Wolds Packaging Limited",
+      "invoice_number": "CN082351",
+      "invoice_date": "2025-09-28",
+      "due_date": null,
+      "currency": "GBP",
+      "subtotal": 2265.45,
+      "tax": 453.09,
+      "total_amount": 2718.54,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 344.4
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1921.05
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-unsigned-na": {
+      "vendor_name": "Namib Sands Office Supplies (Pty) Ltd",
+      "invoice_number": "CN032229",
+      "invoice_date": "2026-04-27",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 1809.6,
+      "tax": 271.44,
+      "total_amount": 2081.04,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1809.6
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "credit-cr-suffix-za": {
+      "vendor_name": "Highveld Office Supplies (Pty) Ltd",
+      "invoice_number": "CN-2026-0974",
+      "invoice_date": "2025-04-24",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 5081.3,
+      "tax": 762.2,
+      "total_amount": 5843.5,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1442.0
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 2264.9
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1374.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-2p-za-1": {
+      "vendor_name": "Highveld Engineering Supplies (Pty) Ltd",
+      "invoice_number": "IN0021022",
+      "invoice_date": "2026-05-04",
+      "due_date": "2026-07-03",
+      "currency": "ZAR",
+      "subtotal": 11222.0,
+      "tax": 0.0,
+      "total_amount": 11222.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 370.53
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 813.11
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 1394.5
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 397.36
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 956.04
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 754.18
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 261.88
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 1723.23
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 729.0
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 336.27
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 335.04
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 170.88
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 131.2
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 694.16
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 310.03
+        },
+        {
+          "description": "Pallet strapping kit (batch 2)",
+          "amount": 441.3
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m (batch 2)",
+          "amount": 509.34
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum (batch 2)",
+          "amount": 186.5
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-2p-us-2": {
+      "vendor_name": "Redwood Packaging Co",
+      "invoice_number": "021419",
+      "invoice_date": "2026-05-11",
+      "due_date": "2026-07-10",
+      "currency": "USD",
+      "subtotal": 10929.0,
+      "tax": 0.0,
+      "total_amount": 10929.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 3545.1
+        },
+        {
+          "description": "Safety boots, steel toe, size 9 (batch 2)",
+          "amount": 3545.1
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 1636.04
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 528.4
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 707.4
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1121.5
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 14521.98
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 2754.36
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 1396.5
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 390.2
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 1736.73
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1679.68
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 257.4
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 2249.88
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1674.45
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 602.25
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "ORD-2715"
+      ]
+    },
+    "multipage-3p-na-3": {
+      "vendor_name": "Skeleton Bay Industrial Supply CC",
+      "invoice_number": "IN0005183",
+      "invoice_date": "2026-02-22",
+      "due_date": "2026-03-24",
+      "currency": "ZAR",
+      "subtotal": 25747.19,
+      "tax": 0.0,
+      "total_amount": 25747.19,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 231.74
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 157.45
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 617.24
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 9584.4
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 157.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1512.7
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 56.53
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 1452.11
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 870.9
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 943.76
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 411.04
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 134.9
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 269.2
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 1739.78
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 608.44
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-3p-gb-4": {
+      "vendor_name": "Wolds Engineering Supplies plc",
+      "invoice_number": "IN0012893",
+      "invoice_date": "2025-11-09",
+      "due_date": "2025-12-09",
+      "currency": "GBP",
+      "subtotal": 10222.0,
+      "tax": 1022.2,
+      "total_amount": 11244.2,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 1339.7
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 980.8
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1895.7
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 15271.3
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 1383.0
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 1969.6
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1619.37
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 349.76
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 304.68
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 115.83
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 588.04
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2439.2
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 697.17
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 779.67
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 460.89
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50) (batch 2)",
+          "amount": 1249.3
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-4p-za-5": {
+      "vendor_name": "Klipspruit Engineering Supplies (Pty) Ltd",
+      "invoice_number": "F-26-0992",
+      "invoice_date": "2026-03-13",
+      "due_date": "2026-04-12",
+      "currency": "ZAR",
+      "subtotal": 31803.93,
+      "tax": 0.0,
+      "total_amount": 31803.93,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 1229.76
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 368.49
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 4253.32
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 2228.4
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1568.28
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 283.36
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 2272.65
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1086.61
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 370.92
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 628.88
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 397.74
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 531.6
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1024.56
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 902.64
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1519.68
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50) (batch 2)",
+          "amount": 168.84
+        },
+        {
+          "description": "Safety boots, steel toe, size 9 (batch 2)",
+          "amount": 2009.0
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive (batch 2)",
+          "amount": 10959.2
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-5p-de-6": {
+      "vendor_name": "Ostwall Engineering Supplies GmbH",
+      "invoice_number": "IN0038658",
+      "invoice_date": "2025-08-24",
+      "due_date": "2025-09-23",
+      "currency": "EUR",
+      "subtotal": 10122.0,
+      "tax": 1012.2,
+      "total_amount": 11134.2,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 449.6
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 6170.49
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2554.2
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 762.9
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1705.38
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 657.92
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 734.69
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 3958.2
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 145.84
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 1381.41
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1444.08
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 1465.8
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 485.2
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 14307.51
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 482.49
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12) (batch 2)",
+          "amount": 766.8
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum (batch 2)",
+          "amount": 4664.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-5p-na-7": {
+      "vendor_name": "Kunene Office Supplies CC",
+      "invoice_number": "IN0070697",
+      "invoice_date": "2025-07-04",
+      "due_date": "2025-09-02",
+      "currency": "ZAR",
+      "subtotal": 12922.0,
+      "tax": 0.0,
+      "total_amount": 12922.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 2488.39
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1632.55
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2089.0
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 1273.95
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 489.72
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 353.43
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 476.82
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 565.81
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 633.32
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1295.46
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 3093.7
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1883.28
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 114.1
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 4135.28
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-6p-za-8": {
+      "vendor_name": "Suidkus Tyre & Parts (Pty) Ltd",
+      "invoice_number": "2026/7016",
+      "invoice_date": "2026-05-16",
+      "due_date": "2026-06-15",
+      "currency": "ZAR",
+      "subtotal": 34350.47,
+      "tax": 0.0,
+      "total_amount": 34350.47,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 510.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 4072.28
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 332.63
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1642.1
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 769.97
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 294.84
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3297.42
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 4319.64
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 142.38
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 399.08
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 1814.8
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 1432.26
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 409.78
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 236.16
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 613.92
+        },
+        {
+          "description": "Air filter element, heavy duty (batch 2)",
+          "amount": 1943.82
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive (batch 2)",
+          "amount": 11271.8
+        },
+        {
+          "description": "Safety boots, steel toe, size 9 (batch 2)",
+          "amount": 846.87
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-8p-us-9": {
+      "vendor_name": "Redwood Office Supplies Corp",
+      "invoice_number": "TN-12080",
+      "invoice_date": "2025-04-07",
+      "due_date": "2025-05-07",
+      "currency": "USD",
+      "subtotal": 12829.0,
+      "tax": 0.0,
+      "total_amount": 12829.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 2130.48
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 8896.7
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 567.6
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 1381.76
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 464.94
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 710.4
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 838.24
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 182.52
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1404.48
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 867.86
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 946.16
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 1265.76
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 780.81
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 4767.21
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 1512.9
+        },
+        {
+          "description": "Brake pads, trailer axle set (batch 2)",
+          "amount": 2425.16
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-56598"
+        }
+      ]
+    },
+    "multipage-8p-na-10": {
+      "vendor_name": "Erongo Office Supplies CC",
+      "invoice_number": "2026/9667",
+      "invoice_date": "2025-10-03",
+      "due_date": "2025-09-04",
+      "currency": "ZAR",
+      "subtotal": 11072.0,
+      "tax": 0.0,
+      "total_amount": 11072.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1107.2
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1241.9
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 8960.16
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 446.68
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 777.7
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 972.27
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 885.27
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 619.95
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 172.28
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 2882.72
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 1645.4
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 603.76
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 6318.9
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2434.15
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 390.6
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "freight-carrier-us-1": {
+      "vendor_name": "Redwood Line Haul Co",
+      "invoice_number": "2026/4214",
+      "invoice_date": "2026-05-01",
+      "due_date": "2026-05-31",
+      "currency": "USD",
+      "subtotal": 1376.99,
+      "tax": 122.21,
+      "total_amount": 1499.2,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Felixstowe - Leeds",
+          "amount": 940.08
+        },
+        {
+          "description": "Fuel surcharge 18%",
+          "amount": 169.21
+        },
+        {
+          "description": "Tarping fee",
+          "amount": 28.65
+        },
+        {
+          "description": "Toll fees recovered",
+          "amount": 118.07
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 120.98
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "number": "TR78656"
+        },
+        {
+          "type": "load",
+          "number": "LD-241822"
+        },
+        {
+          "type": "container",
+          "number": "N 57369 WB"
+        }
+      ]
+    },
+    "freight-carrier-us-2": {
+      "vendor_name": "Summit Cargo LLC",
+      "invoice_number": "INV-2026-11954",
+      "invoice_date": "2025-05-31",
+      "due_date": "2025-06-30",
+      "currency": "USD",
+      "subtotal": 3181.61,
+      "tax": 282.37,
+      "total_amount": 3463.98,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Durban - Ndola",
+          "amount": 2390.27
+        },
+        {
+          "description": "Fuel surcharge 22.5%",
+          "amount": 537.81
+        },
+        {
+          "description": "Tarping fee",
+          "amount": 37.97
+        },
+        {
+          "description": "Toll fees recovered",
+          "amount": 122.17
+        },
+        {
+          "description": "Lumber / offloading fee",
+          "amount": 93.39
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "number": "TR90151"
+        },
+        {
+          "type": "load",
+          "number": "LD-878533"
+        },
+        {
+          "type": "container",
+          "number": "N 75964 WH"
+        }
+      ]
+    },
+    "freight-carrier-za-3": {
+      "vendor_name": "Karoo Carriers (Pty) Ltd",
+      "invoice_number": "INV-2026-15508",
+      "invoice_date": "2026-04-07",
+      "due_date": "2026-05-07",
+      "currency": "ZAR",
+      "subtotal": 34334.94,
+      "tax": 6501.59,
+      "total_amount": 40836.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Kitwe - Walvis Bay",
+          "amount": 34978.05
+        },
+        {
+          "description": "Fuel surcharge 22.5%",
+          "amount": 7870.06
+        },
+        {
+          "description": "Tarping fee",
+          "amount": 495.83
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "freight-carrier-za-4": {
+      "vendor_name": "Drakensig Cleaning Services (Pty) Ltd",
+      "invoice_number": "2026/2251",
+      "invoice_date": "2026-01-18",
+      "due_date": "2026-02-17",
+      "currency": "ZAR",
+      "subtotal": 21279.25,
+      "tax": 3191.89,
+      "total_amount": 24471.14,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Durban - Ndola",
+          "amount": 15898.47
+        },
+        {
+          "description": "Fuel surcharge 22.5%",
+          "amount": 3577.16
+        },
+        {
+          "description": "Toll fees recovered",
+          "amount": 593.1
+        },
+        {
+          "description": "Redelivery charge",
+          "amount": 1210.52
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "freight-carrier-na-5": {
+      "vendor_name": "Namib Sands Transport (Pty) Ltd",
+      "invoice_number": "AS-903",
+      "invoice_date": "2025-03-16",
+      "due_date": "2025-04-15",
+      "currency": "NAD",
+      "subtotal": 28943.29,
+      "tax": 4341.49,
+      "total_amount": 33284.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Windhoek - Lusaka",
+          "amount": 23026.23
+        },
+        {
+          "description": "Fuel surcharge 18%",
+          "amount": 4144.72
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 974.58
+        },
+        {
+          "description": "Tarping fee",
+          "amount": 797.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "Trip",
+          "reference": "TR27001"
+        },
+        {
+          "type": "Load",
+          "reference": "LD-744129"
+        },
+        {
+          "type": "Truck",
+          "reference": "N 74745 WK"
+        }
+      ]
+    },
+    "freight-carrier-na-6": {
+      "vendor_name": "Brandkop Trucking (Pty) Ltd",
+      "invoice_number": "BC-65643",
+      "invoice_date": "2026-04-05",
+      "due_date": "2026-05-05",
+      "currency": "NAD",
+      "subtotal": 18841.11,
+      "tax": 2826.17,
+      "total_amount": 21667.28,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Rotterdam - Duisburg",
+          "amount": 12936.86
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 1940.53
+        },
+        {
+          "description": "Toll fees recovered",
+          "amount": 1428.18
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1809.74
+        },
+        {
+          "description": "Tarping fee",
+          "amount": 725.8
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "trip": "TR84048",
+          "load": "LD-860180",
+          "truck": "N 89892 WK"
+        }
+      ]
+    },
+    "freight-clearing-na-1": {
+      "vendor_name": "Okavango Tyre & Parts CC",
+      "invoice_number": "KN-71210",
+      "invoice_date": "2026-08-02",
+      "due_date": "2026-08-09",
+      "currency": "NAD",
+      "subtotal": 16655.5,
+      "tax": 619.17,
+      "total_amount": 17274.67,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Import VAT paid on behalf (disbursement)",
+          "amount": 4279.34
+        },
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 2505.39
+        },
+        {
+          "description": "Port charges - wharfage (disbursement)",
+          "amount": 5742.94
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 2674.82
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 965.29
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 487.72
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "freight-clearing-na-2": {
+      "vendor_name": "Kunene Line Haul (Pty) Ltd",
+      "invoice_number": "2026/4896",
+      "invoice_date": "2026-05-20",
+      "due_date": "2026-05-27",
+      "currency": "NAD",
+      "subtotal": 19795.95,
+      "tax": 247.4,
+      "total_amount": 20043.35,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Customs duty (disbursement)",
+          "amount": 6205.79
+        },
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 2676.45
+        },
+        {
+          "description": "Import VAT paid on behalf (disbursement)",
+          "amount": 9264.4
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 716.72
+        },
+        {
+          "description": "Delivery order handling",
+          "amount": 449.55
+        },
+        {
+          "description": "Bill of entry preparation",
+          "amount": 483.04
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "freight-clearing-na-3": {
+      "vendor_name": "Kalahari Industrial Supply (Pty) Ltd",
+      "invoice_number": "BS-25746",
+      "invoice_date": "2025-10-31",
+      "due_date": "2025-11-07",
+      "currency": "NAD",
+      "subtotal": 53625.87,
+      "tax": 457.53,
+      "total_amount": 54083.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Shipping line release fee (disbursement)",
+          "amount": 3435.15
+        },
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 3210.98
+        },
+        {
+          "description": "Customs duty (disbursement)",
+          "amount": 43929.56
+        },
+        {
+          "description": "Delivery order handling",
+          "amount": 393.71
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 2234.01
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 422.46
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "CF6606/26",
+        "SI556501",
+        "IPP4962012"
+      ]
+    },
+    "freight-clearing-za-4": {
+      "vendor_name": "Suidkus Shipping Agencies CC",
+      "invoice_number": "INV-2026-86335",
+      "invoice_date": "2025-01-22",
+      "due_date": "2025-01-29",
+      "currency": "ZAR",
+      "subtotal": 45020.98,
+      "tax": 599.98,
+      "total_amount": 45620.96,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Shipping line release fee (disbursement)",
+          "amount": 42468.0
+        },
+        {
+          "description": "Import VAT paid on behalf (disbursement)",
+          "amount": 34537.65
+        },
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 5058.76
+        },
+        {
+          "description": "Customs clearance fee",
+          "amount": 2543.31
+        },
+        {
+          "description": "Bill of entry preparation",
+          "amount": 830.15
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 626.43
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "CF7459/26",
+        "SI836333",
+        "IPPU6337290"
+      ]
+    },
+    "freight-clearing-za-5": {
+      "vendor_name": "Karoos Hardware CC",
+      "invoice_number": "2026/5129",
+      "invoice_date": "2026-08-22",
+      "due_date": "2026-08-29",
+      "currency": "ZAR",
+      "subtotal": 545.85,
+      "tax": 240.62,
+      "total_amount": 786.47,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Shipping line release fee (disbursement)",
+          "amount": 2012.67
+        },
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 2669.0
+        },
+        {
+          "description": "Import VAT paid on behalf (disbursement)",
+          "amount": 3260.05
+        },
+        {
+          "description": "Delivery order handling",
+          "amount": 525.78
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 414.34
+        },
+        {
+          "description": "Bill of entry preparation",
+          "amount": 664.01
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "reference": "CF1548/26"
+        },
+        {
+          "type": "load",
+          "reference": "SI484795"
+        },
+        {
+          "type": "container",
+          "reference": "IPPU1635269"
+        }
+      ]
+    },
+    "freight-clearing-za-6": {
+      "vendor_name": "Drakensig Border Services (Pty) Ltd",
+      "invoice_number": "F-26-5037",
+      "invoice_date": "2025-09-04",
+      "due_date": "2025-09-11",
+      "currency": "ZAR",
+      "subtotal": 1013.54,
+      "tax": 290.32,
+      "total_amount": 1303.86,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Container storage, 4 days (disbursement)",
+          "amount": 254.09
+        },
+        {
+          "description": "Port charges - wharfage (disbursement)",
+          "amount": 358.48
+        },
+        {
+          "description": "Shipping line release fee (disbursement)",
+          "amount": 465.48
+        },
+        {
+          "description": "Cargo inspection attendance",
+          "amount": 488.71
+        },
+        {
+          "description": "Documentation fee",
+          "amount": 646.15
+        },
+        {
+          "description": "Bill of entry preparation",
+          "amount": 800.63
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "reference": "CF1447/26"
+        },
+        {
+          "type": "load",
+          "reference": "SI754643"
+        },
+        {
+          "type": "container",
+          "reference": "IPPU5811968"
+        }
+      ]
+    },
+    "freight-trip-reference-1": {
+      "vendor_name": "Okavango Cleaning Services (Pty) Ltd",
+      "invoice_number": "INV-2026-96480",
+      "invoice_date": "2025-04-25",
+      "due_date": "2025-05-25",
+      "currency": "NAD",
+      "subtotal": 52752.33,
+      "tax": 7912.85,
+      "total_amount": 60651.8,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Container haulage 40ft {a} depot",
+          "amount": 23571.74
+        },
+        {
+          "description": "Linehaul {a} - {b}",
+          "amount": 29180.59
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "Trip",
+          "reference": "TR53231"
+        },
+        {
+          "type": "Load",
+          "reference": "LD-510339"
+        },
+        {
+          "type": "Container",
+          "reference": "N 76319 WB"
+        }
+      ]
+    },
+    "freight-trip-reference-2": {
+      "vendor_name": "Drakensig Transport (Pty) Ltd",
+      "invoice_number": "TL-96821",
+      "invoice_date": "2025-08-19",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 49181.56,
+      "tax": 7377.23,
+      "total_amount": 56558.79,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Cross-border transit {a} - {b}",
+          "amount": 45076.41
+        },
+        {
+          "description": "Abnormal load escort",
+          "amount": 4105.15
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "reference": "TR15611"
+        },
+        {
+          "type": "load",
+          "reference": "LD-525205"
+        },
+        {
+          "type": "container",
+          "reference": "N 16491 WB"
+        }
+      ]
+    },
+    "freight-trip-reference-3": {
+      "vendor_name": "Zambezi Reach Transport Limited",
+      "invoice_number": "INV-2026-94104",
+      "invoice_date": "2025-07-03",
+      "due_date": "2025-09-01",
+      "currency": "ZMW",
+      "subtotal": 15769.2,
+      "tax": 2523.07,
+      "total_amount": 18292.27,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Abnormal load escort",
+          "amount": 6272.36
+        },
+        {
+          "description": "Local delivery, 8t rigid",
+          "amount": 9496.84
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "trip": "TR45899",
+          "load": "LD-248097",
+          "truck": "N 55415 WB"
+        }
+      ]
+    },
+    "freight-trip-reference-4": {
+      "vendor_name": "Etosha Gate Industrial Supply (Pty) Ltd",
+      "invoice_number": "2026/6798",
+      "invoice_date": "2026-04-28",
+      "due_date": "2026-05-28",
+      "currency": "NAD",
+      "subtotal": 22402.07,
+      "tax": 3360.31,
+      "total_amount": 25762.38,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Abnormal load escort",
+          "amount": 5721.05
+        },
+        {
+          "description": "Container haulage 40ft {a} depot",
+          "amount": 16681.02
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-neat-1": {
+      "vendor_name": "Etosha Gate Office Supplies (Pty) Ltd",
+      "invoice_number": "2431",
+      "invoice_date": "2025-07-24",
+      "due_date": "2025-09-22",
+      "currency": "NAD",
+      "subtotal": 24476.08,
+      "tax": 3671.41,
+      "total_amount": 28147.49,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1006.58
+        },
+        {
+          "description": "LED worklamp 24V",
+          "amount": 3239.39
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 20230.11
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-neat-2": {
+      "vendor_name": "Suidkus Workshop Supplies CC",
+      "invoice_number": "4678",
+      "invoice_date": "2025-07-04",
+      "due_date": "2025-09-02",
+      "currency": "ZAR",
+      "subtotal": 287.6,
+      "tax": 943.14,
+      "total_amount": 2230.74,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1959.18
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 282.7
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 1966.68
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 2079.04
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-average-3": {
+      "vendor_name": "Kafue Office Supplies Limited",
+      "invoice_number": "3738",
+      "invoice_date": "2025-10-20",
+      "due_date": "2025-11-28",
+      "currency": "ZMW",
+      "subtotal": 3658.63,
+      "tax": 585.38,
+      "total_amount": 4244.01,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 2875.11
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 783.52
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-average-4": {
+      "vendor_name": "Brandkop Office Supplies (Pty) Ltd",
+      "invoice_number": "1168",
+      "invoice_date": "2026-05-16",
+      "due_date": "2026-05-30",
+      "currency": "NAD",
+      "subtotal": 16252.05,
+      "tax": 2437.81,
+      "total_amount": 18689.86,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 1113.93
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 11436.8
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 613.74
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 3087.58
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-average-5": {
+      "vendor_name": "Vaalrand Hardware (Pty) Ltd",
+      "invoice_number": "2347",
+      "invoice_date": "2025-08-27",
+      "due_date": "2025-09-10",
+      "currency": "ZAR",
+      "subtotal": 6693.54,
+      "tax": 1004.03,
+      "total_amount": 7697.57,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 3479.46
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 3214.08
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-poor-6": {
+      "vendor_name": "Erongo Workshop Supplies (Pty) Ltd",
+      "invoice_number": "9518",
+      "invoice_date": "2025-04-17",
+      "due_date": null,
+      "currency": "N$",
+      "subtotal": 6284.61,
+      "tax": 942.69,
+      "total_amount": 7227.3,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 1392.65
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 3243.04
+        },
+        {
+          "description": "LED Work lamp 24V",
+          "amount": 1648.02
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-poor-7": {
+      "vendor_name": "Mukuba Workshop Supplies Ltd",
+      "invoice_number": "6755",
+      "invoice_date": "2025-02-21",
+      "due_date": "2025-03-23",
+      "currency": "ZMW",
+      "subtotal": 5396.13,
+      "tax": 863.38,
+      "total_amount": 6259.51,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 968.41
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 1538.76
+        },
+        {
+          "description": "Ratchet straps 50mm x 9mm (A)",
+          "amount": 2880.96
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "handwritten-invoice-book-poor-8": {
+      "vendor_name": "Karoopackaging CC",
+      "invoice_number": "9268",
+      "invoice_date": "2026-08-21",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 13361.61,
+      "tax": 2004.24,
+      "total_amount": 15365.85,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Brake Pads, trailer axle set",
+          "amount": 6726.25
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 6435.36
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-perspective-mild": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-perspective-moderate": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-41258"
+        }
+      ]
+    },
+    "photo-perspective-severe": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-41258"
+        }
+      ]
+    },
+    "photo-rotate-small-mild": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-rotate-small-moderate": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-rotate-small-severe": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-orientation-mild": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-orientation-moderate": {
+      "vendor_name": "Redwood Catering Inc",
+      "invoice_number": "12/06/2025",
+      "invoice_date": null,
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 15598.0
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 12595.0
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 15057.0
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 30313.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-orientation-severe": {
+      "vendor_name": "Redwood Catering Inc",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-motion-blur-mild": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-motion-blur-moderate": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14955.29,
+      "tax": 2900.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-motion-blur-severe": {
+      "vendor_name": "Wolds Workshop Supplies ple",
+      "invoice_number": "080150",
+      "invoice_date": "2023-08-03",
+      "due_date": "2023-09-01",
+      "currency": "GBP",
+      "subtotal": 14933.3,
+      "tax": 800.88,
+      "total_amount": 15734.18,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Power cartridge, black, high yield",
+          "amount": 347.4
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 0.0
+        },
+        {
+          "description": "Ratchet straps 80mm x 9m (9)",
+          "amount": 443.0
+        },
+        {
+          "description": "Braided wrap film 400mm x 300m",
+          "amount": 105.07
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-defocus-blur-mild": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-defocus-blur-moderate": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "NAD",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-defocus-blur-severe": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "199-2020-44554",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "ZAR",
+      "subtotal": 11124.16,
+      "tax": 111.42,
+      "total_amount": 11235.58,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Lombard Malvia Bay - Lobabast",
+          "amount": 26912.72
+        },
+        {
+          "description": "Port surcharge 1%",
+          "amount": 26912.72
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1450.54
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 115.48
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "trip",
+          "ref": "T812148"
+        },
+        {
+          "type": "load",
+          "ref": "LD-424447"
+        },
+        {
+          "type": "container",
+          "ref": "M 11100 00"
+        }
+      ]
+    },
+    "photo-low-light-mild": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-low-light-moderate": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-low-light-severe": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-shadow-mild": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-shadow-moderate": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-shadow-severe": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-jpeg-mild": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-jpeg-moderate": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-jpeg-severe": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-low-res-mild": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-low-res-moderate": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-low-res-severe": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-crumple-mild": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-crumple-moderate": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-crumple-severe": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-coffee-stain-mild": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-coffee-stain-moderate": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-coffee-stain-severe": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-annotations-mild": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-annotations-moderate": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-annotations-severe": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": true,
+      "references": []
+    },
+    "photo-crop-edges-mild": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-41258"
+        }
+      ]
+    },
+    "photo-crop-edges-moderate": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-crop-edges-severe": {
+      "vendor_name": "rakensig Industrial Supply (Pty) Ltd",
+      "invoice_number": "IN0004776",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "PO-41258"
+      ]
+    },
+    "photo-screen-photo-mild": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-screen-photo-moderate": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-screen-photo-severe": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-combo-mild": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-combo-moderate": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "photo-combo-severe": {
+      "vendor_name": "Prairie Workshop Supplies LLC",
+      "invoice_number": "IN0099973",
+      "invoice_date": "2025-12-06",
+      "due_date": "2025-12-20",
+      "currency": "USD",
+      "subtotal": 13873.38,
+      "tax": 1231.26,
+      "total_amount": 15104.64,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3899.5
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 629.75
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7525.35
+        },
+        {
+          "description": "Copy paper A4 80gsm, box of 5 reams",
+          "amount": 1818.78
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-grayscale-scan-mild": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-grayscale-scan-moderate": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-grayscale-scan-severe": {
+      "vendor_name": "Wolds Workshop Supplies plc",
+      "invoice_number": "050179",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-09-01",
+      "currency": "GBP",
+      "subtotal": 14953.29,
+      "tax": 2990.66,
+      "total_amount": 17943.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 3737.0
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 4002.84
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3536.0
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3677.45
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-noise-mild": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-noise-moderate": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-noise-severe": {
+      "vendor_name": "Skeleton Bay Logistics (Pty) Ltd",
+      "invoice_number": "INV-2026-44556",
+      "invoice_date": "2025-09-29",
+      "due_date": "2025-10-29",
+      "currency": "N$",
+      "subtotal": 33324.16,
+      "tax": 4998.62,
+      "total_amount": 38322.78,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Linehaul Walvis Bay - Lubumbashi",
+          "amount": 26912.73
+        },
+        {
+          "description": "Fuel surcharge 15%",
+          "amount": 4036.91
+        },
+        {
+          "description": "Border crossing fee",
+          "amount": 1459.04
+        },
+        {
+          "description": "Waiting time at consignee",
+          "amount": 915.48
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-fax-mild": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R 22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "F-26-8395",
+        "1079386899",
+        "1017143361"
+      ]
+    },
+    "scan-fax-moderate": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R 22.5 drive",
+          "amount": 42186.24
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 1835.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20L drum",
+          "amount": 3596.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "Zambezi Reach Hardware Ltd",
+        "784 Great East Road",
+        "Livingstone, 10101",
+        "TPIN: 1079386899",
+        "TPIN: 1017143361"
+      ]
+    },
+    "scan-fax-severe": {
+      "vendor_name": "Copperline Workshop Supplies Ltd",
+      "invoice_number": "F-26-8395",
+      "invoice_date": "2025-04-11",
+      "due_date": "2025-05-11",
+      "currency": "ZMW",
+      "subtotal": 48021.62,
+      "tax": 7683.46,
+      "total_amount": 55705.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 402.72
+        },
+        {
+          "description": "Truck tyre 315/80R 22.5 drive",
+          "amount": 5273.28
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 166.9
+        },
+        {
+          "description": "Engine oil 15W-40, 20L drum",
+          "amount": 1198.92
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "Zambezi Reach Hardware Ltd",
+        "784 Great East Road",
+        "Livingstone, 10101",
+        "TPIN: 1079386899",
+        "TPIN: 1017143361"
+      ]
+    },
+    "scan-punch-holes-mild": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-41258"
+        }
+      ]
+    },
+    "scan-punch-holes-moderate": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "PO",
+          "number": "PO-41258",
+          "terms": "14 days"
+        }
+      ]
+    },
+    "scan-punch-holes-severe": {
+      "vendor_name": "Suidkus Workshop Supplies (Pty) Ltd",
+      "invoice_number": "IN0084778",
+      "invoice_date": "2025-08-02",
+      "due_date": "2025-08-16",
+      "currency": "ZAR",
+      "subtotal": 11332.71,
+      "tax": 1699.91,
+      "total_amount": 13032.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 2539.08
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3835.25
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2167.62
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 2790.76
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "PO-41258"
+      ]
+    },
+    "scan-stamp-mild": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "NAD",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-stamp-moderate": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "NAD",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "scan-stamp-severe": {
+      "vendor_name": "Okavango Hardware (Pty) Ltd",
+      "invoice_number": "INV-2026-70022",
+      "invoice_date": "2025-09-23",
+      "due_date": "2025-11-22",
+      "currency": "N$",
+      "subtotal": 38696.11,
+      "tax": 5804.42,
+      "total_amount": 44500.53,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 7604.94
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 4451.44
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 547.58
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 26092.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-multiple-invoices-2": {
+      "vendor_name": "Klipspruit Industrial Supply CC",
+      "invoice_number": "IN0096554",
+      "invoice_date": "2025-06-12",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 27650.77,
+      "tax": 147.62,
+      "total_amount": 31798.39,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 22170.15
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 939.96
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 2324.98
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 2215.68
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-multiple-invoices-3": {
+      "vendor_name": "Karoo Engineering Supplies (Pty) Ltd",
+      "invoice_number": "INV-2026-19520",
+      "invoice_date": "2026-07-11",
+      "due_date": "2026-08-10",
+      "currency": "ZAR",
+      "subtotal": 16162.28,
+      "tax": 2424.34,
+      "total_amount": 18586.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 563.9
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6855.42
+        },
+        {
+          "description": "Angle grinder discs 115mm (10)",
+          "amount": 569.16
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 8173.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-statement-na": {
+      "vendor_name": "Namib Sands Industrial Supply CC",
+      "invoice_number": "IN0055059",
+      "invoice_date": "2026-04-28",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 7312.91,
+      "tax": 0.0,
+      "total_amount": 17532.77,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Invoice",
+          "amount": 7312.91
+        },
+        {
+          "description": "Invoice",
+          "amount": 1582.97
+        },
+        {
+          "description": "Invoice",
+          "amount": 5741.35
+        },
+        {
+          "description": "Payment received - thank you",
+          "amount": 6746.16
+        },
+        {
+          "description": "Invoice",
+          "amount": 9641.7
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "IN0055059",
+        "TF-94675",
+        "IN0069278",
+        "PMT9919",
+        "2026/1518"
+      ]
+    },
+    "hard-statement-za": {
+      "vendor_name": "Klipspruit Industrial Supply (Pty) Ltd",
+      "invoice_number": "ACC1534",
+      "invoice_date": "2025-04-23",
+      "due_date": "2025-05-23",
+      "currency": "ZAR",
+      "subtotal": 13673.62,
+      "tax": 7458.34,
+      "total_amount": 21132.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Invoice",
+          "amount": 4268.78
+        },
+        {
+          "description": "Invoice",
+          "amount": 11275.87
+        },
+        {
+          "description": "Invoice",
+          "amount": 6810.75
+        },
+        {
+          "description": "Payment received - thank you",
+          "amount": 3776.31
+        },
+        {
+          "description": "Invoice",
+          "amount": 6282.04
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "068119",
+        "IN0083522",
+        "TI096007",
+        "PMT8499",
+        "TI069455"
+      ]
+    },
+    "hard-po-beside-invoice-number-1": {
+      "vendor_name": "Suidkus Industrial Supply (Pty) Ltd",
+      "invoice_number": "TWSINV564620",
+      "invoice_date": "2026-06-20",
+      "due_date": "2026-06-20",
+      "currency": "ZAR",
+      "subtotal": 34700.13,
+      "tax": 205.02,
+      "total_amount": 39905.15,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 6762.7
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 5588.96
+        },
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 3790.92
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 18557.55
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "TWSDEL390848"
+      ]
+    },
+    "hard-po-beside-invoice-number-2": {
+      "vendor_name": "Vaalrand Tyre & Parts (Pty) Ltd",
+      "invoice_number": "TWSINV439966",
+      "invoice_date": "2025-09-26",
+      "due_date": null,
+      "currency": "ZAR",
+      "subtotal": 11656.87,
+      "tax": 1748.53,
+      "total_amount": 13405.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 3300.52
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 4919.87
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 652.33
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2784.15
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "TWSO370463",
+        "TWDEL49374"
+      ]
+    },
+    "hard-po-beside-invoice-number-3": {
+      "vendor_name": "Blouberg Engineering Supplies (Pty) Ltd",
+      "invoice_number": "ABCINV832356",
+      "invoice_date": "2026-05-14",
+      "due_date": "2026-06-13",
+      "currency": "ZAR",
+      "subtotal": 15093.58,
+      "tax": 2264.04,
+      "total_amount": 17357.62,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hex bolts M12 x 50 galvanised (box 50)",
+          "amount": 180.24
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 7703.12
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 6519.8
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 690.42
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "ABCOSO228950",
+        "ABCDEL970840"
+      ]
+    },
+    "hard-missing-invoice-number-1": {
+      "vendor_name": "Brandkop Industrial Supply (Pty) Ltd",
+      "invoice_number": "4500961010",
+      "invoice_date": "2026-04-06",
+      "due_date": null,
+      "currency": "NAD",
+      "subtotal": 11726.98,
+      "tax": 1759.05,
+      "total_amount": 13486.03,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Pallet strapping kit",
+          "amount": 2347.32
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 4837.2
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 261.19
+        },
+        {
+          "description": "Toner cartridge, black, high yield",
+          "amount": 4281.27
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-missing-invoice-number-2": {
+      "vendor_name": "Kransberg Hardware (Pty) Ltd",
+      "invoice_number": "4500129226",
+      "invoice_date": "2025-10-17",
+      "due_date": "2025-10-31",
+      "currency": "ZAR",
+      "subtotal": 51102.25,
+      "tax": 7665.34,
+      "total_amount": 58767.59,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 2967.8
+        },
+        {
+          "description": "Truck tyre 315/80R22.5 drive",
+          "amount": 43093.76
+        },
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 2172.96
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 2867.73
+        }
+      ],
+      "flagged": false,
+      "references": [
+        "DN6616"
+      ]
+    },
+    "hard-total-inflated": {
+      "vendor_name": "Blouberg Industrial Supply CC",
+      "invoice_number": "RA-81392",
+      "invoice_date": "2025-01-16",
+      "due_date": "2025-01-30",
+      "currency": "ZAR",
+      "subtotal": 15659.82,
+      "tax": 2348.97,
+      "total_amount": 17998.79,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "LED work lamp 24V",
+          "amount": 2187.45
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 2438.59
+        },
+        {
+          "description": "Air filter element, heavy duty",
+          "amount": 3867.1
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 7166.68
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-lines-vs-subtotal": {
+      "vendor_name": "Blouberg Tyre & Parts (Pty) Ltd",
+      "invoice_number": "IN0009065",
+      "invoice_date": "2026-03-14",
+      "due_date": "2026-04-13",
+      "currency": "ZAR",
+      "subtotal": 10661.48,
+      "tax": 494.6,
+      "total_amount": 12156.08,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 304.24
+        },
+        {
+          "description": "Safety boots, steel toe, size 9",
+          "amount": 1695.66
+        },
+        {
+          "description": "Ratchet straps 50mm x 9m (4)",
+          "amount": 3961.98
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 4002.12
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "hard-total-small-residual": {
+      "vendor_name": "Erongo Engineering Supplies (Pty) Ltd",
+      "invoice_number": "2026/9165",
+      "invoice_date": "2025-09-08",
+      "due_date": "2025-10-08",
+      "currency": "NAD",
+      "subtotal": 8732.29,
+      "tax": 309.84,
+      "total_amount": 10443.82,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Stretch wrap film 500mm x 300m",
+          "amount": 828.35
+        },
+        {
+          "description": "Pallet strapping kit",
+          "amount": 1168.71
+        },
+        {
+          "description": "Brake pads, trailer axle set",
+          "amount": 1358.99
+        },
+        {
+          "description": "Engine oil 15W-40, 20 L drum",
+          "amount": 5376.24
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "load",
+          "name": "201 Nickel Street",
+          "number": "4500300992"
+        }
+      ]
+    },
+    "hard-wrong-vat-amount": {
+      "vendor_name": "Klipspruit Hardware (Pty) Ltd",
+      "invoice_number": "2026/8616",
+      "invoice_date": "2026-01-24",
+      "due_date": "2026-02-23",
+      "currency": "ZAR",
+      "subtotal": 5966.37,
+      "tax": 596.64,
+      "total_amount": 6563.01,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Nitrile work gloves, size L (pack 12)",
+          "amount": 769.36
+        },
+        {
+          "description": "Hydraulic hose 1/2in, per metre",
+          "amount": 1295.8
+        },
+        {
+          "description": "LED work lamp 24V",
+          "amount": 1681.3
+        },
+        {
+          "description": "Hex bolts M12 x 50 galvanized (box 50)",
+          "amount": 2219.91
+        }
+      ],
+      "flagged": false,
+      "references": [
+        {
+          "type": "ORD-8622"
+        }
+      ]
+    }
+  }
+}

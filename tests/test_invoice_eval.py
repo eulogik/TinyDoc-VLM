@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "evaluation" / "invoice"))
 sys.path.insert(0, str(ROOT / "sdk"))
 
-from run_invoice_eval import _date, _doc_type, _num, normalize_prediction
+from run_invoice_eval import _currency, _date, _doc_type, _num, normalize_prediction
 from tinydoc.pipeline import _extract_json
 
 
@@ -40,6 +40,20 @@ def test_doc_type_mapping():
     assert _doc_type("statement") == "other"
     assert _doc_type("INVOICE") == "invoice"
     assert _doc_type(None) == "invoice"
+
+
+def test_currency_normalization():
+    assert _currency("NAD") == "NAD"
+    assert _currency("N$") == "NAD"
+    assert _currency("R") == "ZAR"
+    assert _currency("€") == "EUR"
+    assert _currency("£") == "GBP"
+    assert _currency("K") == "ZMW"
+    assert _currency("US$") == "USD"
+    assert _currency("$") == "USD"
+    assert _currency("R (ZAR)") == "ZAR"
+    assert _currency("") is None
+    assert _currency(None) is None
 
 
 def test_date_normalization_resolves_ambiguity():

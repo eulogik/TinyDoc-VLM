@@ -22,14 +22,14 @@ Caveats that must travel with every number:
 - **Line items and flags are secondary.** The plan's invoice gate is the key
   header field rate; line-item F1 and flag behavior are reported separately.
 
-## Current result (2026-11-06)
+## Current result (2026-11-06, re-normalized 2026-11-07)
 
 Qwen2.5-VL-3B, 181/181 parsed, no errors:
 
 | Metric | Result |
 |---|---:|
-| Key header field accuracy | 90.6% (1428/1576) |
-| Documents fully correct | 55.8% (101/181) |
+| Key header field accuracy | 91.9% (1448/1576; 95% CI 89.8–93.9) |
+| Documents fully correct | 65.7% (119/181; 95% CI 58.6–72.4) |
 | Line-item F1, mean | 0.929 (179 docs) |
 | p50 / mean latency | 26.5 s / 28.7 s |
 | Inconsistent invoices flagged | 0/5 |
@@ -37,9 +37,14 @@ Qwen2.5-VL-3B, 181/181 parsed, no errors:
 | Consistent docs falsely flagged | 2/172 |
 
 This clears the 0.80 field-accuracy bar on synthetic page-1 data, but **not**
-straight-through processing: 44% of documents have at least one key-field miss,
-flagging is unusable, and multipage is 0% fully correct. Real supplier invoices
-are still unmeasured. Artifacts: `results/`.
+straight-through processing: a third of documents still have at least one
+key-field miss, flagging is unusable, and multipage is 0% fully correct. Real
+supplier invoices are still unmeasured.
+
+The first pass scored valid currency symbols (`N$`, `R`, `€`) as non-ISO and
+understated accuracy (90.6% / 55.8%). Raw model outputs are unchanged; the
+normalizer now maps symbols to ISO codes and the superseded pass is archived as
+`results/*_v1_currency_symbols.*`. Artifacts: `results/`.
 
 ## Files
 

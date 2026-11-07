@@ -40,7 +40,7 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 120 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 121 passed)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`
@@ -62,5 +62,5 @@ memory watchdog when they are model inference.
   0.09–0.10 and does not reliably improve. Never present doc confidence as a
   probability; field-level scores are for review routing only.
 - Invoices are measured only on the synthetic, vendor-made Invoice Extraction
-  Benchmark v1 (page 1): 90.6% key-header accuracy, 55.8% fully correct, flags
+  Benchmark v1 (page 1): 91.9% key-header accuracy, 65.7% fully correct, flags
   0/7. Never cite as real-invoice performance; real invoices are unmeasured.

@@ -3,24 +3,24 @@
   "run_date": "2026-11-06",
   "n_docs": 181,
   "n_corpus": 181,
-  "key_header_accuracy": 0.9060913705583756,
-  "key_header_correct": 1428,
+  "key_header_accuracy": 0.9187817258883249,
+  "key_header_correct": 1448,
   "key_header_scored": 1576,
-  "fully_correct": 101,
-  "fully_correct_rate": 0.5580110497237569,
+  "fully_correct": 119,
+  "fully_correct_rate": 0.6574585635359116,
   "ci95": {
     "key_header_accuracy": [
-      0.8855305466237942,
-      0.9257142857142857
+      0.898422712933754,
+      0.9387755102040817
     ],
     "fully_correct_rate": [
-      0.4861878453038674,
-      0.6298342541436464
+      0.585635359116022,
+      0.7237569060773481
     ]
   },
   "per_field": {
     "currency": {
-      "correct": 150,
+      "correct": 170,
       "scored": 179
     },
     "document_type": {
@@ -59,7 +59,7 @@
   "per_category": {
     "clean": {
       "docs": 31,
-      "key_correct": 248,
+      "key_correct": 249,
       "key_scored": 260,
       "fully_correct": 23,
       "line_f1_mean": 0.967741935483871
@@ -87,9 +87,9 @@
     },
     "handwritten": {
       "docs": 8,
-      "key_correct": 66,
+      "key_correct": 67,
       "key_scored": 70,
-      "fully_correct": 5,
+      "fully_correct": 6,
       "line_f1_mean": 0.855
     },
     "hard": {
@@ -108,21 +108,21 @@
     },
     "photo": {
       "docs": 45,
-      "key_correct": 373,
+      "key_correct": 386,
       "key_scored": 405,
-      "fully_correct": 26,
+      "fully_correct": 39,
       "line_f1_mean": 0.9333333333333333
     },
     "scan": {
       "docs": 15,
-      "key_correct": 131,
+      "key_correct": 135,
       "key_scored": 135,
-      "fully_correct": 11,
+      "fully_correct": 15,
       "line_f1_mean": 0.95
     },
     "tax": {
       "docs": 14,
-      "key_correct": 112,
+      "key_correct": 113,
       "key_scored": 124,
       "fully_correct": 7,
       "line_f1_mean": 1.0

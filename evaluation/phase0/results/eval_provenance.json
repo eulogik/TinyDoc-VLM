@@ -229,11 +229,11 @@
       "scorer": "benchmark scorer (python -m scorer.evaluate)",
       "prompt": "evaluation/invoice/run_invoice_eval.py INVOICE_PROMPT (fixed before run)",
       "results": {
-        "key_header_accuracy": 0.906091,
-        "key_header_correct": 1428,
+        "key_header_accuracy": 0.918782,
+        "key_header_correct": 1448,
         "key_header_scored": 1576,
-        "fully_correct": 101,
-        "fully_correct_rate": 0.558011,
+        "fully_correct": 119,
+        "fully_correct_rate": 0.657459,
         "line_f1_mean": 0.929,
         "p50_latency_ms": 26464.0,
         "mean_latency_ms": 28735.2,
@@ -254,7 +254,7 @@
         },
         "per_field": {
           "currency": {
-            "correct": 150,
+            "correct": 170,
             "scored": 179
           },
           "document_type": {
@@ -293,7 +293,7 @@
         "per_category": {
           "clean": {
             "n": 31,
-            "key_header_accuracy": 0.9538,
+            "key_header_accuracy": 0.9577,
             "fully_correct_rate": 0.7419
           },
           "credit": {
@@ -313,8 +313,8 @@
           },
           "handwritten": {
             "n": 8,
-            "key_header_accuracy": 0.9429,
-            "fully_correct_rate": 0.625
+            "key_header_accuracy": 0.9571,
+            "fully_correct_rate": 0.75
           },
           "hard": {
             "n": 13,
@@ -328,36 +328,38 @@
           },
           "photo": {
             "n": 45,
-            "key_header_accuracy": 0.921,
-            "fully_correct_rate": 0.5778
+            "key_header_accuracy": 0.9531,
+            "fully_correct_rate": 0.8667
           },
           "scan": {
             "n": 15,
-            "key_header_accuracy": 0.9704,
-            "fully_correct_rate": 0.7333
+            "key_header_accuracy": 1.0,
+            "fully_correct_rate": 1.0
           },
           "tax": {
             "n": 14,
-            "key_header_accuracy": 0.9032,
+            "key_header_accuracy": 0.9113,
             "fully_correct_rate": 0.5
           }
         },
         "key_header_accuracy_ci95": [
-          0.885531,
-          0.925714
+          0.898423,
+          0.938776
         ],
         "fully_correct_rate_ci95": [
-          0.486188,
-          0.629834
+          0.585635,
+          0.723757
         ]
       },
       "artifacts": {
         "summary": "evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json",
         "scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json",
         "preds": "evaluation/invoice/results/preds_invoice_qwen2.5vl_3b.json",
-        "rows": "evaluation/invoice/results/rows_invoice_qwen2.5vl_3b.jsonl"
+        "rows": "evaluation/invoice/results/rows_invoice_qwen2.5vl_3b.jsonl",
+        "superseded_scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b_v1_currency_symbols.json"
       },
-      "decision": "field-level transfer passes 0.80 on synthetic page-1 data; do not claim real-invoice accuracy or straight-through processing; flags and multipage fail"
+      "decision": "field-level transfer passes 0.80 on synthetic page-1 data (91.9% key-header, 65.7% fully correct); do not claim real-invoice accuracy or straight-through processing; flags fail and multipage is page-1 only",
+      "normalization_note": "First pass scored currency symbols (N$, R, euro) as non-ISO; v2 maps symbols to ISO codes with raw outputs unchanged. Superseded artifacts use the *_v1_currency_symbols suffix."
     }
   }
 }

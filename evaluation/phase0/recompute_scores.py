@@ -282,9 +282,9 @@ def main() -> int:
         key = inv_scores_data.get("summary", {}).get("key_fields", {})
         ok = (
             inv.get("n_docs") == 181
-            and abs(float(inv.get("key_header_accuracy", -1)) - 0.906091) <= 1e-5
-            and abs(float(inv.get("fully_correct_rate", -1)) - 0.558011) <= 1e-5
-            and key.get("correct") == 1428
+            and abs(float(inv.get("key_header_accuracy", -1)) - 0.918782) <= 1e-5
+            and abs(float(inv.get("fully_correct_rate", -1)) - 0.657459) <= 1e-5
+            and key.get("correct") == 1448
             and key.get("scored") == 1576
         )
         print(
