@@ -249,6 +249,24 @@ invoice_number 93.3%, currency 95.0%, vendor_name 90.1%, total 87.7%, tax
   Invoice number/date/currency are 93–95%, so a v3.1 LoRA should target the
   arithmetic/consistency residual, not re-teach layout.
 
+Residual taxonomy from the 3B run (field misses, not documents):
+
+| Failure mode | Misses | Fix |
+|---|---:|---|
+| Multipage totals on page 1 | 30 (10 subtotal + 10 tax + 10 total) | Render all pages; sum or read the final page |
+| Tax-inclusive layouts (gross used as subtotal) | 6 subtotal + 3 total | Prompt for net vs gross explicitly; check `subtotal + tax = total` |
+| Dual-currency invoices (wrong column) | 4 subtotal + 3 currency | Prompt for the settlement currency and the matching column |
+| Shipping/discount changes the tax base | 5 tax | Ask for adjustments separately; do not infer tax from merchandise |
+| Multi-invoice files (one invoice's tax) | 4 tax | Detect multiple invoice numbers; per-invoice schema |
+| Freight totals | 4 total + 3 subtotal | Same arithmetic check; freight rows mix charges |
+| Photo blur/rotation digit errors | 3 subtotal + 3 tax + 2 total | Higher-resolution tiles or OCR-span cross-check |
+| Two-column EU decimal shift | 1 subtotal + 1 total | Locale-aware decimal parsing in post-processing |
+
+A naive `sum(lines) == subtotal` checker fails badly on this corpus (47 false
+flags on 172 consistent documents) because the benchmark's `subtotal` excludes
+shipping/discount adjustments. A product consistency checker needs explicit
+adjustment lines before it can be trusted.
+
 Artifacts: `evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json`,
 `scores_invoice_qwen2.5vl_3b.json`, `preds_invoice_qwen2.5vl_3b.json`,
 `rows_invoice_qwen2.5vl_3b.jsonl`; superseded pass under
