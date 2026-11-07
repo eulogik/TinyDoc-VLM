@@ -1,0 +1,140 @@
+{
+  "scores": "evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json",
+  "preds": "evaluation/invoice/results/preds_invoice_qwen2.5vl_3b.json",
+  "manifest": "evaluation/invoice/manifest_v1.jsonl",
+  "groups": {
+    "multipage": {
+      "label": "page-1-only totals",
+      "docs": 10,
+      "field_misses": {
+        "currency": 3,
+        "subtotal": 10,
+        "tax": 10,
+        "total": 10
+      }
+    },
+    "tax_inclusive": {
+      "label": "gross used as subtotal",
+      "docs": 3,
+      "field_misses": {
+        "subtotal": 3,
+        "total": 2
+      }
+    },
+    "dual_currency": {
+      "label": "wrong currency column",
+      "docs": 4,
+      "field_misses": {
+        "currency": 4,
+        "subtotal": 4
+      }
+    },
+    "shipping_discount": {
+      "label": "tax base with shipping/discount",
+      "docs": 5,
+      "field_misses": {
+        "tax": 1
+      }
+    },
+    "multi_invoice": {
+      "label": "one invoice's tax",
+      "docs": 2,
+      "field_misses": {
+        "tax": 1
+      }
+    },
+    "freight": {
+      "label": "freight totals",
+      "docs": 16,
+      "field_misses": {
+        "subtotal": 3,
+        "total": 4
+      }
+    },
+    "photo": {
+      "label": "photo blur/rotation digits",
+      "docs": 45,
+      "field_misses": {
+        "currency": 1,
+        "subtotal": 3,
+        "tax": 3,
+        "total": 2
+      }
+    },
+    "eu_decimal": {
+      "label": "two-column decimal shift",
+      "docs": 1,
+      "field_misses": {
+        "subtotal": 1,
+        "tax": 1,
+        "total": 1
+      }
+    }
+  },
+  "ungrouped_field_misses": {
+    "currency": 1,
+    "subtotal": 4,
+    "tax": 7,
+    "total": 3
+  },
+  "naive_consistency_check": {
+    "tp": 4,
+    "fp": 47,
+    "fn": 3,
+    "tn": 127,
+    "false_positives": [
+      "clean-us-with-shipping",
+      "clean-us-with-discount",
+      "clean-us-shipping-and-discount",
+      "clean-us-freight-alias",
+      "clean-us-delivery-alias",
+      "clean-us-sh-abbrev",
+      "clean-us-handling-alias",
+      "clean-us-trade-discount",
+      "clean-us-promo-code",
+      "clean-us-service-fee",
+      "clean-us-fuel-surcharge",
+      "clean-us-credit-applied",
+      "clean-us-two-tax-lines",
+      "currency-nad-2",
+      "currency-dual-usd-zar-1",
+      "currency-dual-eur-nad-2",
+      "currency-dual-usd-zar-3",
+      "currency-dual-usd-nad-4",
+      "currency-multi-line-zar",
+      "tax-inclusive-subtotal-na",
+      "tax-sage-subtotal-after-vat-1",
+      "tax-sage-subtotal-after-vat-2",
+      "tax-sage-subtotal-after-vat-3",
+      "credit-note-minus-za",
+      "credit-ndc-na",
+      "credit-r-minus-1",
+      "multipage-2p-za-1",
+      "multipage-2p-us-2",
+      "multipage-3p-na-3",
+      "multipage-3p-gb-4",
+      "multipage-5p-de-6",
+      "multipage-5p-na-7",
+      "multipage-8p-us-9",
+      "multipage-8p-na-10",
+      "freight-carrier-za-3",
+      "freight-clearing-za-4",
+      "freight-clearing-za-5",
+      "freight-clearing-za-6",
+      "handwritten-invoice-book-neat-2",
+      "handwritten-invoice-book-poor-8",
+      "photo-orientation-moderate",
+      "photo-motion-blur-severe",
+      "photo-defocus-blur-severe",
+      "scan-fax-severe",
+      "hard-statement-na",
+      "hard-statement-za",
+      "hard-po-beside-invoice-number-1"
+    ],
+    "missed_flagged_docs": [
+      "hard-multiple-invoices-3",
+      "hard-total-inflated",
+      "hard-wrong-vat-amount"
+    ]
+  }
+}

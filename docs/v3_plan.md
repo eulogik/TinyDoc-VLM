@@ -105,7 +105,7 @@ The repo says v2 is “shipped,” but the public surface still ships v1:
 - **Leakage audit methodology** (`build_stage1_manifest.py`): perceptual dedupe across two resamplers, union-find on duplicate components, explicit integrity checks. This is better than most published doc-AI repos.
 - **Claim audit** (`recompute_scores.py`): 9 required pairs + 4 optional bake-off pairs recompute; exits 0. Extend it, don’t replace it.
 - **Eval harness** (`evaluation/phase0/`): field P/R/F1, ANLS, schema-valid, exact-4/4, per-field hit, paired decisions. Reusable.
-- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 123 tests passing, CI-scope ruff clean.
+- **Product layer**: schema validation, `sanitize_fields`, `_extract_json` salvage, evidence spans, overlay, CLI, confidence. Real code, 126 tests passing, CI-scope ruff clean.
 - **Docs honesty**: `BENCHMARKS.md`, model card, and pivot plan explicitly retire false numbers. Rare and valuable.
 
 **The project’s problem is not lack of rigor. It is that rigor has been applied to a base model that cannot read, while the public surface still advertises the dead model.**
@@ -249,27 +249,30 @@ invoice_number 93.3%, currency 95.0%, vendor_name 90.1%, total 87.7%, tax
   Invoice number/date/currency are 93–95%, so a v3.1 LoRA should target the
   arithmetic/consistency residual, not re-teach layout.
 
-Residual taxonomy from the 3B run (field misses, not documents):
+Residual taxonomy from the 3B run (field misses, not documents; recomputed by
+`evaluation/invoice/residual_report.py`):
 
 | Failure mode | Misses | Fix |
 |---|---:|---|
-| Multipage totals on page 1 | 30 (10 subtotal + 10 tax + 10 total) | Render all pages; sum or read the final page |
-| Tax-inclusive layouts (gross used as subtotal) | 6 subtotal + 3 total | Prompt for net vs gross explicitly; check `subtotal + tax = total` |
-| Dual-currency invoices (wrong column) | 4 subtotal + 3 currency | Prompt for the settlement currency and the matching column |
-| Shipping/discount changes the tax base | 5 tax | Ask for adjustments separately; do not infer tax from merchandise |
-| Multi-invoice files (one invoice's tax) | 4 tax | Detect multiple invoice numbers; per-invoice schema |
-| Freight totals | 4 total + 3 subtotal | Same arithmetic check; freight rows mix charges |
+| Multipage totals on page 1 | 30 arithmetic (10 subtotal + 10 tax + 10 total) | Render all pages; sum or read the final page |
+| Tax-inclusive layouts (gross used as subtotal) | 3 subtotal + 2 total | Prompt for net vs gross explicitly; check `subtotal + tax = total` |
+| Dual-currency invoices (wrong column) | 4 subtotal + 4 currency | Prompt for the settlement currency and the matching column |
+| Shipping/discount changes the tax base | 1 tax | Ask for adjustments separately; do not infer tax from merchandise |
+| Multi-invoice files (one invoice's tax) | 1 tax | Detect multiple invoice numbers; per-invoice schema |
+| Freight totals | 3 subtotal + 4 total | Same arithmetic check; freight rows mix charges |
 | Photo blur/rotation digit errors | 3 subtotal + 3 tax + 2 total | Higher-resolution tiles or OCR-span cross-check |
-| Two-column EU decimal shift | 1 subtotal + 1 total | Locale-aware decimal parsing in post-processing |
+| Two-column EU decimal shift | 1 subtotal + 1 tax + 1 total | Locale-aware decimal parsing in post-processing |
+| Other single-document misses | 14 arithmetic + 1 currency | Case-by-case; not a repeated mode |
 
-A naive `sum(lines) == subtotal` checker fails badly on this corpus (47 false
-flags on 172 consistent documents) because the benchmark's `subtotal` excludes
-shipping/discount adjustments. A product consistency checker needs explicit
-adjustment lines before it can be trusted.
+A naive `sum(lines) == subtotal` checker fails badly on this corpus (4 true
+positives, 47 false positives, 3 misses on 172 consistent documents) because the
+benchmark's `subtotal` excludes shipping/discount adjustments. A product
+consistency checker needs explicit adjustment lines before it can be trusted.
 
 Artifacts: `evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json`,
 `scores_invoice_qwen2.5vl_3b.json`, `preds_invoice_qwen2.5vl_3b.json`,
-`rows_invoice_qwen2.5vl_3b.jsonl`; superseded pass under
+`rows_invoice_qwen2.5vl_3b.jsonl`,
+`residual_invoice_qwen2.5vl_3b.json`; superseded pass under
 `*_v1_currency_symbols.*`.
 
 ---
