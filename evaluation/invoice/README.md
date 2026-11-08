@@ -17,6 +17,9 @@ Caveats that must travel with every number:
   English. It says nothing about a particular company's real invoices.
 - **Page 1 only.** PDFs are rendered at longest edge 1800 px; multi-page totals
   may be missed. This is a first-page probe.
+- **Output budget.** The page-1 runs used `num_predict=768`. One non-multipage
+  row (2B) hit the cap but was fully correct on every key field; the multipage
+  page-1 rows were cut off, and they score 0% fully correct regardless.
 - **Not tuned.** The prompt and normalization were written before the run and
   were not adjusted against the answer keys.
 - **Line items and flags are secondary.** The plan's invoice gate is the key
@@ -71,7 +74,20 @@ python3 evaluation/invoice/build_manifest.py \
 This renders all 46 pages at longest edge 1400 px and emits `image_paths` per
 document. `run_invoice_eval.py` sends every page image in one request and uses
 `multipage_prompt()`, which asks for document-wide totals and tells the model to
-read every page. Use `TINYDOC_OLLAMA_NUM_CTX=16384` for 5–8 page files.
+read every page. Run it with a larger output budget and context:
+
+```bash
+INVOICE_MANIFEST=evaluation/invoice/manifest_multipage.jsonl \
+INVOICE_ALLOW_MISSING=1 INVOICE_NUM_PREDICT=5120 \
+TINYDOC_OLLAMA_NUM_CTX=16384 TINYDOC_OLLAMA_TIMEOUT=600 \
+scripts/run_invoice_probe.sh qwen3-vl:2b-instruct qwen3-vl_2b_mp
+```
+
+The 6- and 8-page invoices have **98–117 line items**; the page-1 default
+`num_predict=768` cuts them off mid-JSON. A first pass with 768 is archived as
+`results/archive/*_num768_truncated.jsonl` — it is not a result and must not be
+cited. The rerun records `prompt_eval_count`, `eval_count`, and `done_reason` per
+row so a context or output cut is visible instead of silent.
 
 **No multipage inference result exists yet.** Running it needs explicit approval
 under `AGENTS.md`. Do not claim multipage accuracy until rows, scores, and the

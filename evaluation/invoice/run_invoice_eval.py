@@ -69,6 +69,10 @@ def multipage_prompt() -> str:
     ) + MULTIPAGE_RULES
 
 
+def manifest_is_multipage(rows: list[dict]) -> bool:
+    return any(len(row.get("image_paths") or []) > 1 for row in rows)
+
+
 def _row_image_paths(row: dict) -> list[str]:
     paths = row.get("image_paths")
     if paths:
@@ -225,12 +229,13 @@ def ask_ollama(
     images_b64: list[str],
     num_ctx: int,
     timeout: float,
-) -> str:
+    num_predict: int = 768,
+) -> dict:
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt, "images": images_b64}],
         "stream": False,
-        "options": {"temperature": 0, "num_predict": 768, "num_ctx": num_ctx},
+        "options": {"temperature": 0, "num_predict": num_predict, "num_ctx": num_ctx},
     }
     req = urllib.request.Request(
         f"{host}/api/chat",
@@ -240,7 +245,12 @@ def ask_ollama(
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         body = json.loads(resp.read().decode())
-    return (body.get("message") or {}).get("content", "") or ""
+    return {
+        "content": (body.get("message") or {}).get("content", "") or "",
+        "prompt_eval_count": body.get("prompt_eval_count"),
+        "eval_count": body.get("eval_count"),
+        "done_reason": body.get("done_reason"),
+    }
 
 
 def _read_image(path: Path, attempts: int = 3, delay: float = 2.0) -> bytes:
@@ -290,6 +300,12 @@ def main() -> int:
     )
     ap.add_argument(
         "--timeout", type=float, default=float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "600"))
+    )
+    ap.add_argument(
+        "--num-predict",
+        type=int,
+        default=int(os.environ.get("TINYDOC_OLLAMA_NUM_PREDICT", "768")),
+        help="max output tokens; raise for invoices with many line items (5120 for multipage)",
     )
     ap.add_argument("--out", required=True, help="per-document JSONL")
     ap.add_argument("--preds", required=True, help="benchmark predictions.json")
@@ -349,10 +365,23 @@ def main() -> int:
             raw = ""
             error = None
             pred = None
+            response_meta = {}
             try:
-                raw = ask_ollama(
-                    host, args.model, prompt, images_b64, args.num_ctx, args.timeout
+                response = ask_ollama(
+                    host,
+                    args.model,
+                    prompt,
+                    images_b64,
+                    args.num_ctx,
+                    args.timeout,
+                    args.num_predict,
                 )
+                raw = response["content"]
+                response_meta = {
+                    "prompt_eval_count": response.get("prompt_eval_count"),
+                    "eval_count": response.get("eval_count"),
+                    "done_reason": response.get("done_reason"),
+                }
                 pred = _extract_json(raw)
                 if pred is None:
                     error = "no JSON object in response"
@@ -373,6 +402,7 @@ def main() -> int:
                 "pred": normalized,
                 "latency_ms": latency,
                 "error": error,
+                **response_meta,
             }
             out_rows.append(done_row)
             sink.write(json.dumps(done_row) + "\n")
@@ -385,6 +415,7 @@ def main() -> int:
                     flush=True,
                 )
 
+    multipage = manifest_is_multipage(out_rows)
     preds_path = Path(args.preds)
     preds_path.parent.mkdir(parents=True, exist_ok=True)
     preds_path.write_text(
@@ -392,7 +423,12 @@ def main() -> int:
             {
                 "system": f"TinyDoc engine eval ({args.model})",
                 "run_date": time.strftime("%Y-%m-%d"),
-                "notes": "Page 1 only; synthetic benchmark; see evaluation/invoice/README.md",
+                "page_mode": "all_pages" if multipage else "first_page",
+                "notes": (
+                    "All pages; synthetic benchmark; see evaluation/invoice/README.md"
+                    if multipage
+                    else "Page 1 only; synthetic benchmark; see evaluation/invoice/README.md"
+                ),
                 "documents": predictions,
             },
             indent=2,

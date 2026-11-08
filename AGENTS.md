@@ -40,7 +40,7 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 137 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 146 passed)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`

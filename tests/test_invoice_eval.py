@@ -17,6 +17,7 @@ from run_invoice_eval import (
     _num,
     _read_image,
     _row_image_paths,
+    manifest_is_multipage,
     multipage_prompt,
     normalize_prediction,
 )
@@ -159,3 +160,9 @@ def test_multipage_prompt_mentions_all_pages():
     assert "every page" in prompt
     assert "document-wide totals" in prompt
     assert "Read the invoice image" not in prompt
+
+
+def test_manifest_is_multipage():
+    assert manifest_is_multipage([{"id": "a", "image_paths": ["p1.png"]}]) is False
+    assert manifest_is_multipage([{"id": "a", "image_paths": ["p1.png", "p2.png"]}]) is True
+    assert manifest_is_multipage([{"id": "a", "image_path": "one.png"}]) is False

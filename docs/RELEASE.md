@@ -6,7 +6,7 @@
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 137 passed
+python3 -m pytest tests/ -q                 # expect 146 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -110,8 +110,10 @@ Check the Space reaches `RUNNING` and renders the card.
 - **0.2.0 is published on PyPI**; `https://pypi.org/pypi/tinydoc/json` reports
   0.2.0 with both files.
 - Clean-venv install + Ollama extraction passed against the built wheel before
-  upload. The PyPI clean-venv re-check was blocked by transient index network
-  errors; rerun §3 and §5 when `https://pypi.org/simple` is reachable.
+  upload. On 2026-11-08, a fresh venv installed `tinydoc==0.2.0` from
+  `https://pypi.org/simple`, imported version 0.2.0, and the `tinydoc` CLI
+  started. (An earlier attempt failed on transient index network errors, not on
+  the package.)
 - The upload token appeared in a chat transcript: **rotate it** in PyPI account
   settings and delete any local copy.
 - Space updated to the static card and verified **RUNNING**.

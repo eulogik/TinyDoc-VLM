@@ -32,7 +32,11 @@ python3 evaluation/docvqa/run_docvqa_probe.py \
   --resume \
   --out "$RESULTS/rows_docvqa_${TAG}.jsonl" \
   --scores "$RESULTS/scores_docvqa_${TAG}.json" \
-  >> "logs/docvqa_${TAG}.log" 2>&1
-rc=$?
+  >> "logs/docvqa_${TAG}.log" 2>&1 &
+pid=$!
+scripts/watch_mem.sh "$pid" 6 10 &
+wpid=$!
+wait "$pid"; rc=$?
+kill "$wpid" 2>/dev/null || true
 echo "END rc=$rc $(date '+%Y-%m-%d %H:%M:%S')"
 exit "$rc"

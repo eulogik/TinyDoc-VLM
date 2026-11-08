@@ -128,7 +128,7 @@ def ask_ollama(host: str, model: str, prompt: str, b64: str, num_ctx: int, timeo
         "model": model,
         "messages": [{"role": "user", "content": prompt, "images": [b64]}],
         "stream": False,
-        "options": {"temperature": 0, "num_predict": 64, "num_ctx": num_ctx},
+        "options": {"temperature": 0, "num_predict": 128, "num_ctx": num_ctx},
     }
     req = urllib.request.Request(
         f"{host}/api/chat",
@@ -261,7 +261,12 @@ def main() -> int:
             "model": args.model,
             "manifest": str(manifest_path),
             "set": "docvqa_public_mirror",
-            "caveat": "public DocVQA questions; may be in pretraining; reading probe, not extraction",
+            "single_reference": True,
+            "sampling": "one question per image, seed 42",
+            "caveat": (
+                "public DocVQA questions; may be in pretraining; reading probe, not extraction; "
+                "single-reference ANLS, not comparable to leaderboard numbers"
+            ),
             "rows": str(out_path),
         }
     )

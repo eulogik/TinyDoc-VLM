@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-137-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-146-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -150,6 +150,28 @@ routing**, not a probability:
 - Boxes are OCR spans. VLM-predicted boxes failed the grounding gate
   (hit@0.5 **0.04–0.20** vs **0.70**), so they are not shipped.
 
+## Production notes
+
+TinyDoc is a developer preview, not a straight-through accounts-payable system.
+If you deploy it:
+
+- **Route by field.** Send low-confidence fields to a human. Field scores are for
+  routing; document scores are not calibrated.
+- **Pick a tier per vertical.** 3B for receipts (0.9475 vs 0.9200 field F1); 2B
+  for invoice throughput (93.5% vs 91.9% key-header, 16.1 s vs 26.5 s). The
+  invoice tier gap is not statistically significant.
+- **Do not trust flags.** Inconsistent and multi-invoice files were flagged 0/7
+  times. Run your own arithmetic and duplicate checks.
+- **Render every page.** Page-1-only rendering loses document-wide totals on
+  multipage invoices. The evaluation harness reads all pages; the SDK extraction
+  path is still single-image.
+- **Budget latency.** 7–26 s per page at p50 on an M4 through Ollama, above the
+  4 s target. Batch work, or wait for an MLX path.
+- **Set context.** 8192 tokens by default; 16384 for 5–8 page invoices. Never
+  send Ollama `format: "json"`.
+- **Measure on your own documents.** Public sets are not your supplier mix; real
+  invoices remain unmeasured here.
+
 ## FAQ
 
 **What model does TinyDoc use?**
@@ -245,7 +267,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 137 passed
+python3 -m pytest tests/ -q                 # 146 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims

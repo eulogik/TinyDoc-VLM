@@ -16,6 +16,12 @@ seen it during pretraining. Label every reported number that way.
 One question per image is sampled deterministically (seed 42) so the probe stays
 CPU-affordable and the manifest is reproducible.
 
+**Single-reference caveat.** The mirror carries one target per question, while
+official DocVQA scoring takes the best ANLS over up to 10 human answers. This
+probe's ANLS is therefore a **single-reference** reading signal and is **not
+comparable to DocVQA leaderboard numbers**. Report it as an internal reading
+probe on a public subset, nothing more.
+
 ## Build the manifest
 
 ```bash

@@ -186,6 +186,13 @@ Machine-readable provenance and SHA-256 hashes for every eval set:
 - **Engine latency (M4, Ollama Q4, warm, per doc, clean-100):** 3B ≈ 14.1 s; 2B ≈ 7.0 s.
   The v2 hybrid is ≈8 s/doc on the MLX engineering track. A 7B pilot was rejected (identical
   F1, 4.5× slower, unstable on the 16 GB host).
+- **Output budget:** invoice page-1 runs used `num_predict=768`, the multipage run uses
+  `5120`, and the DocVQA probe uses `128`. The invoice runner records
+  `prompt_eval_count`, `eval_count`, and `done_reason`; a `length` stop is a failed
+  generation, not a result. Multipage documents carry 98–117 line items, so the
+  page-1 budget truncates them.
+- **DocVQA:** 200 public images, one question per image (seed 42), **one reference
+  answer**. Single-reference ANLS is not comparable to DocVQA leaderboard numbers.
 
 ---
 
