@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-153-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-165-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -306,7 +306,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 153 passed
+python3 -m pytest tests/ -q                 # 165 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims

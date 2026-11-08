@@ -55,7 +55,7 @@ understated accuracy (90.6% / 55.8%). Raw model outputs are unchanged; the
 normalizer now maps symbols to ISO codes and the superseded pass is archived as
 `results/*_v1_currency_symbols.*`. Artifacts: `results/`.
 
-## Multipage path (wired, not yet measured)
+## Multipage path (measured 2026-11-08)
 
 The published probe above is page 1 only. A real multipage path is now wired so
 the 10 `multipage` documents (46 pages total) can be measured as full documents:
@@ -93,11 +93,51 @@ The 6- and 8-page invoices have **98–117 line items**; the page-1 default
 cited. The rerun records `prompt_eval_count`, `eval_count`, and `done_reason` per
 row so a context or output cut is visible instead of silent.
 
-**No multipage inference result exists yet.** Running it needs explicit approval
-under `AGENTS.md`. Do not claim multipage accuracy until rows, scores, and the
-claim audit exist. The 0% fully-correct result for multipage documents in the
-table above is an artifact of page-1-only rendering, not a measurement of the
-multipage path.
+### Result (2B, n=10, 46 pages)
+
+| Metric | Page 1 | All pages |
+|---|---:|---:|
+| Key-header accuracy | 63.3% (57/90) | **71.1%** (64/90) |
+| Documents fully correct | 0/10 | **4/10** |
+| Mean line-item F1 | 0.418 | 0.322 |
+| p50 latency per document | 22.4 s | 34.7 s |
+
+The paired sign tests are not significant (key p=0.289; fully correct p=0.125;
+n=10). Two 8-page invoices (110–117 expected line items) failed with **runaway
+line-item generation**: 213 and 212 descriptions, repeated “(batch N)” rows, no
+valid JSON. They remain counted in the 71.1% / 4/10 headline. Among the 8
+documents that parsed, key-header is 62/72 (86.1%) and 4/8 are fully correct.
+Line-item F1 fell because the multipage render is 1400 px (page 1 is 1800 px) and
+some invoices read unit price instead of line amount. This is descriptive, not a
+production multipage claim. Artifacts:
+`results/summary_invoice_qwen3-vl_2b_mp.json`,
+`results/compare_invoice_page1_vs_multipage_2b.json`,
+`results/rows_invoice_qwen3-vl_2b_mp.jsonl`.
+
+### Page-by-page variant (implemented, not yet measured)
+
+`run_invoice_pagewise.py` sends **one page per request**, asks for that page's
+line items and header fields, drops carried/brought-forward and total rows in
+code, then merges: first non-empty header, concatenated line items, final-page
+totals with a line-sum/arithmetic fallback. It is designed to avoid the 8-page
+context and runaway problem. Run it with approval:
+
+```bash
+python3 evaluation/invoice/run_invoice_pagewise.py   --manifest evaluation/invoice/manifest_multipage.jsonl   --model qwen3-vl:2b-instruct   --out evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl   --preds evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise.json   --resume
+```
+
+Then score with `python -m scorer.evaluate ... --allow-missing`. **No pagewise
+result exists yet.** It is a method probe, not a claim.
+
+### Deterministic arithmetic review checks
+
+`arithmetic_checks.py` flags a prediction when `subtotal + tax` disagrees with
+`total`, or when the line items do not sum to `subtotal`. It uses a fixed
+tolerance, never changes values, and never reads gold answers. It is a review
+signal, not the benchmark's model-predicted `flag` field. On the existing
+predictions it catches most arithmetic-inconsistent documents but also routes
+documents whose extracted numbers do not reconcile; measure it on your own mix
+before using it as a gate.
 
 ## Files
 
@@ -109,8 +149,19 @@ multipage path.
   command below.
 - `manifest_multipage.jsonl` — local all-pages manifest for the 10 multipage
   documents (46 pages, ≤1400 px; not committed for the same reason).
-- `run_invoice_eval.py` — Ollama runner; writes per-document rows and a
-  benchmark-format `predictions.json`.
+- `run_invoice_eval.py` — all-pages Ollama runner; writes per-document rows and
+  a benchmark-format `predictions.json`. Records `prompt_eval_count`,
+  `eval_count`, and `done_reason` so a context or output cut is visible.
+- `run_invoice_pagewise.py` — one-page-per-request runner with deterministic merge
+  (implemented; no result yet).
+- `audit_multipage_rows.py` — fails on a missing page, a non-`stop` completion, a
+  context overflow, or an unaccounted failure; `--allow-failed N` keeps visible
+  failures in the denominator.
+- `compare_multipage.py` — page-1 vs all-pages paired comparison with latency and
+  exact sign tests.
+- `arithmetic_checks.py` — deterministic subtotal/tax/total and line-sum review
+  flags; no model, no gold.
+- `merge_multipage_runs.py` — splice a targeted retry into canonical rows.
 - `../../scripts/run_invoice_probe.sh` — runner + memory guard + scorer.
 
 ## Reproduce
