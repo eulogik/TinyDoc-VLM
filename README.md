@@ -43,7 +43,8 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
 | **Receipts** | 0.9475 / 0.9200 field F1 on SROIE clean-100 (not external) |
 | **Invoices** | 91.9% / 65.7% (3B) · 93.5% / 71.8% (2B) key-header / fully correct, synthetic page 1 |
-| **Not yet measured** | Real supplier invoices, DocVQA, full multipage PDFs |
+| **Multipage** | 4/10 fully correct vs 0/10 page-1 · 46 pages · 2B · n=10, descriptive |
+| **Not yet measured** | Real supplier invoices, SDK multipage path |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
 
 ## Quick start
@@ -126,12 +127,23 @@ difference is not significant (p=0.092), so this is *no evidence the 3B is
 better on invoices*, not proof that 2B is. It does not transfer to receipts,
 where the 3B still leads.
 
+**Multipage** — 10 synthetic invoices, 46 pages, 2B, all pages sent in one
+request. Fully-correct documents rise from **0/10** (page 1 only) to **4/10**;
+key-header accuracy rises from **63.3%** (57/90) to **71.1%** (64/90). The paired
+sign tests are not significant (key p=0.29, fully correct p=0.13) and n=10, so
+this is descriptive. Two 8-page invoices with 110–117 line items failed with
+runaway line-item generation (212–213 fabricated rows), and mean line-item F1
+*fell* from 0.418 to 0.322 at the 1400 px multipage render. Multipage is not a
+straight-through path.
+
 > ⚠️ **These are not external benchmark numbers.** The 100-doc set is a
 > duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
 > it during pretraining. The original 100-doc set is **60% leaked** (61/100 also
 > appear in public train). Use these numbers for same-document engine comparisons,
 > not as a generalization claim. The invoice set is synthetic and vendor-made;
-> flagging is 0/7 and multipage is page-1 only. Every published number must
+> flagging is 0/7. The separate multipage probe is 10 synthetic documents at
+> 1400 px and is descriptive only; two 8-page files failed. Every published
+> number must
 > recompute from `evaluation/phase0/results/` via
 > `python3 evaluation/phase0/recompute_scores.py`.
 
@@ -162,9 +174,10 @@ If you deploy it:
   invoice tier gap is not statistically significant.
 - **Do not trust flags.** Inconsistent and multi-invoice files were flagged 0/7
   times. Run your own arithmetic and duplicate checks.
-- **Render every page.** Page-1-only rendering loses document-wide totals on
-  multipage invoices. The evaluation harness reads all pages; the SDK extraction
-  path is still single-image.
+- **Render every page.** On 10 synthetic multipage invoices, sending every page
+  raised fully-correct documents from 0/10 to 4/10. Two 8-page, 110–117-line
+  files failed with runaway generation, and line items remain weak. The SDK
+  extraction path is still single-image.
 - **Budget latency.** 7–26 s per page at p50 on an M4 through Ollama, above the
   4 s target. Batch work, or wait for an MLX path.
 - **Set context.** 8192 tokens by default; 16384 for 5–8 page invoices. Never
@@ -186,7 +199,8 @@ tracks were measured, failed to beat the free base model, and were closed.
 **Does it work on invoices?**
 On a synthetic public benchmark (181 invoices, page 1) it reaches 91.9%/65.7%
 (3B) and 93.5%/71.8% (2B) key-header/fully-correct. It is not validated on real
-supplier invoices, flagging fails (0/7), and multipage is not shipped.
+supplier invoices, flagging fails (0/7), and multipage is a 10-document probe,
+not a shipped SDK path.
 
 **Does my data leave my machine?**
 No. Inference runs against a local Ollama server. There is no hosted API, no
@@ -203,8 +217,12 @@ boxes were measured and did not meet the 0.70 hit-rate gate, so they are not
 claimed or shipped.
 
 **What about multipage PDFs?**
-Not shipped yet. The invoice probe renders page 1 only, which is why multipage
-documents score 0% fully correct. A full-page path is the next measured milestone.
+The evaluation harness now sends every page. On 10 synthetic multipage invoices
+(46 pages), 4/10 are fully correct on key headers versus 0/10 with page 1 only;
+the paired tests are not significant (n=10). Two 8-page invoices with 110–117
+line items failed with runaway line-item generation (212–213 fabricated rows),
+and mean line-item F1 fell from 0.418 to 0.322. The SDK extraction path is still
+single-image, so multipage is not shipped as a straight-through product path.
 
 **How does it compare with OCR + regex?**
 On the same 100 receipts, the 3B + trust layer scores 0.9475 field F1 versus
@@ -239,6 +257,7 @@ for their terms.
 | Hybrid v2 (`hybrid_2p2b`, MLX + Tesseract F3) | 🚢 Shipped 2026-10-07, superseded | 0.603 clean-100; address 0.37; paired address 31/7/62 |
 | SmolVLM2-2.2B SFT / vision LoRA | ❌ Closed | Base 0.536; clean-100 LoRA 0.535–0.540; vision LoRA 0.0395 / 0.4277 |
 | TinyDoc-VLM-256M | ⚠️ Retired research checkpoint | OCRBench **0.0%** (n=999 scored); no performance claims |
+| Multipage invoice path (eval harness) | 🧪 Probe | 4/10 fully correct vs 0/10 page 1; 2 eight-page failures; SDK path still single-image |
 | TinyDoc-2B grounded LoRA (v3.1) | 🧪 Conditional | Only if v3.0 leaves a measured invoice/grounding residual |
 
 The honest one-liner: **the evaluation harness and product layer are real; the
@@ -254,6 +273,9 @@ third-party reader behind a grounded extraction layer.
   is retained only as a historical, caveated number.
 - **FUNSD** is a transfer probe with nonstandard gold mapping; never cite it as a
   leaderboard number.
+- **Multipage** is a 10-document synthetic probe at 1400 px, 2B only. It is
+  descriptive, two 8-page files failed, and line-item F1 is not comparable to
+  the 1800 px page-1 run. Do not call it a production multipage claim.
 - **DocVQA** is being wired as a reading probe; CORD images are absent. No claims
   until measured.
 - Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
@@ -289,7 +311,7 @@ is [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
 | `sdk/tinydoc/` | Python SDK: engines, schema, evidence, confidence, CLI |
 | `evaluation/phase0/` | Measured SROIE/FUNSD/OCRBench harness + artifacts |
 | `evaluation/invoice/` | Synthetic invoice transfer probe + paired tier comparison |
-| `evaluation/docvqa/` | DocVQA reading probe (wiring in progress) |
+| `evaluation/docvqa/` | DocVQA reading probe (manifest, runner, tests) |
 | `training/` | QLoRA and Kaggle experiment code (historical; tracks closed) |
 | `tinydoc_vlm/` | From-scratch 256M model code (retired research artifact) |
 | `demo/` | Local Gradio demo + static HF Space card |

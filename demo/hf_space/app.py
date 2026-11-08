@@ -36,13 +36,17 @@ third-party base model and the product is the trust layer around it.
 | Invoice v1, page 1 — key header | 91.9% | **93.5%** |
 | Invoice v1, page 1 — fully correct | 65.7% | **71.8%** |
 | Invoice v1, page 1 — p50 latency | 26.5 s | **16.1 s** |
+| Invoice multipage — fully correct (n=10, 46 pages) | — | **4/10** vs 0/10 page 1 |
+| Invoice multipage — key-header (n=10) | — | **71.1%** vs 63.3% page 1 |
 
 > **Not an external benchmark.** SROIE clean-100 is a duplicate-filtered split of
 > the public SROIE **train** pool; Qwen may have seen it during pretraining.
 > The original 100-doc set is 60% leaked. The invoice set is synthetic,
-> vendor-made, and page 1 only; real supplier invoices are unmeasured, flagging
-> fails (0/7), and multipage is not shipped. These are same-document engine
-> comparisons, not generalization claims.
+> vendor-made, and page 1 only; real supplier invoices are unmeasured and
+> flagging fails (0/7). The multipage probe is 10 synthetic documents at 1400 px,
+> 2B only; two 8-page files failed with runaway line-item generation, and
+> line-item F1 fell from 0.418 to 0.322. The SDK path remains single-image. These
+> are same-document engine comparisons, not generalization claims.
 
 ## What you get back
 

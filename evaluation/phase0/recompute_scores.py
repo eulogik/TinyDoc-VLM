@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from metrics import macro_prf  # noqa: E402
+from metrics import macro_prf
 
 RESULTS = ROOT / "results"
 
@@ -320,6 +320,82 @@ def main() -> int:
         )
         if not ok:
             failures.append("2B invoice probe or tier comparison changed")
+
+    multipage_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp.json"
+    multipage_scores = ROOT.parent / "invoice/results/scores_invoice_qwen3-vl_2b_mp.json"
+    multipage_compare = ROOT.parent / "invoice/results/compare_invoice_page1_vs_multipage_2b.json"
+    multipage_rows = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp.jsonl"
+    multipage_missing = [
+        path.name
+        for path in (multipage_summary, multipage_scores, multipage_compare, multipage_rows)
+        if not path.exists()
+    ]
+    if multipage_missing:
+        failures.append(f"multipage artifacts missing: {multipage_missing}")
+    else:
+        try:
+            msum = json.loads(multipage_summary.read_text())
+            msc = json.loads(multipage_scores.read_text())
+            mcmp = json.loads(multipage_compare.read_text())
+            mrows = [json.loads(line) for line in multipage_rows.open() if line.strip()]
+            invoice_key_fields = (
+                "vendor_name", "invoice_number", "invoice_date", "due_date",
+                "currency", "subtotal", "tax", "total", "document_type",
+            )
+            key_correct = sum(
+                1
+                for doc in msc["documents"]
+                for name in invoice_key_fields
+                if (doc.get("fields", {}).get(name) or {}).get("correct") is True
+            )
+            key_scored = sum(
+                1
+                for doc in msc["documents"]
+                for name in invoice_key_fields
+                if name in (doc.get("fields") or {})
+            )
+            fully = sum(1 for doc in msc["documents"] if doc.get("fully_correct") is True)
+            failed_ids = {row["id"] for row in mrows if row.get("error")}
+            silent_cuts = [
+                row["id"]
+                for row in mrows
+                if not row.get("error") and row.get("done_reason") != "stop"
+            ]
+            overflow = [
+                row["id"]
+                for row in mrows
+                if not row.get("error")
+                and (row.get("prompt_eval_count") or 0) + (row.get("eval_count") or 0)
+                > (row.get("num_ctx") or 16384)
+            ]
+            expected_failures = {"multipage-8p-us-9", "multipage-8p-na-10"}
+            ok = (
+                msum.get("n_docs") == 10
+                and abs(float(msum.get("key_header_accuracy", -1)) - 0.711111) <= 1e-5
+                and abs(float(msum.get("fully_correct_rate", -1)) - 0.4) <= 1e-5
+                and msum.get("parse_errors") == 2
+                and (key_correct, key_scored, fully) == (64, 90, 4)
+                and (msc["summary"]["key_fields"]["correct"], msc["summary"]["key_fields"]["scored"]) == (64, 90)
+                and failed_ids == expected_failures
+                and not silent_cuts
+                and not overflow
+                and mcmp["page1"]["key_correct"] == 57
+                and mcmp["page1"]["fully_correct"] == 0
+                and mcmp["all_pages"]["key_correct"] == 64
+                and mcmp["all_pages"]["fully_correct"] == 4
+                and abs(float(mcmp["transitions"]["key_sign_p"]) - 0.2890625) <= 1e-9
+                and abs(float(mcmp["transitions"]["fully_correct_sign_p"]) - 0.125) <= 1e-9
+            )
+            print(
+                f"claim: multipage 2B all pages key-header {key_correct}/{key_scored} "
+                f"({msum.get('key_header_accuracy'):.4f}), fully correct {fully}/10; "
+                f"page 1 {mcmp['page1']['key_correct']}/90, {mcmp['page1']['fully_correct']}/10; "
+                f"failed rows {sorted(failed_ids)} -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("multipage probe numbers or failure accounting changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"multipage check errored: {exc}")
 
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.

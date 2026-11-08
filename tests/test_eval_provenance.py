@@ -180,3 +180,60 @@ def test_invoice_tier_comparison_matches_artifacts():
     assert recorded["key_header_accuracy"]["diff"] > 0
     assert recorded["key_header_accuracy"]["sign_p"] > 0.05
     assert recorded["fully_correct_rate"]["ci95"][0] <= 0.0
+
+
+def test_multipage_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    mp = data["probes"]["multipage"]
+    assert mp["n_docs"] == 10
+    assert mp["pages"] == 46
+    assert mp["page_render_px"] == 1400
+    assert mp["model"] == "qwen3-vl:2b-instruct"
+    assert "descriptive" in mp["caveat"]
+
+    artifacts = mp["artifacts"]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+    assert len(scores["documents"]) == 10
+    assert scores["summary"]["key_fields"] == {"correct": 64, "scored": 90}
+    rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows"]).read_text().splitlines()
+        if line.strip()
+    ]
+    comparison = json.loads((ROOT / artifacts["compare"]).read_text())
+
+    assert summary["n_docs"] == 10
+    assert summary["parse_errors"] == 2
+    for source, expected in ((summary, mp["results"]["all_pages"]),):
+        for key in ("key_header_accuracy", "fully_correct_rate"):
+            assert abs(source[key] - expected[key]) < 1e-5, key
+        assert source["key_header_correct"] == expected["key_header_correct"]
+        assert source["fully_correct"] == expected["fully_correct"]
+        assert abs(source["line_items"]["f1_mean"] - expected["line_f1_mean"]) < 1e-5
+
+    expected_failures = {"multipage-8p-us-9", "multipage-8p-na-10"}
+    failed = {row["id"] for row in rows if row.get("error")}
+    assert failed == expected_failures
+    for row in rows:
+        if row.get("error"):
+            assert row["done_reason"] == "length"
+        else:
+            assert row["done_reason"] == "stop"
+            assert (row["prompt_eval_count"] + row["eval_count"]) <= 16384
+
+    assert comparison["n_docs"] == 10
+    assert comparison["page1"]["key_correct"] == 57
+    assert comparison["page1"]["fully_correct"] == 0
+    assert comparison["all_pages"]["key_correct"] == 64
+    assert comparison["all_pages"]["fully_correct"] == 4
+    assert comparison["transitions"]["key_sign_p"] > 0.05
+    assert comparison["transitions"]["fully_correct_sign_p"] > 0.05
+    # Line-item F1 gets worse when every page is sent at 1400 px; do not hide it.
+    assert comparison["all_pages"]["mean_line_f1"] < comparison["page1"]["mean_line_f1"]
+    assert comparison["all_pages"]["key_accuracy"] > comparison["page1"]["key_accuracy"]
+
+    valid = mp["results"]["valid_only"]
+    assert valid["n_docs"] == 8
+    assert valid["key_header_correct"] == 62
+    assert valid["fully_correct"] == 4

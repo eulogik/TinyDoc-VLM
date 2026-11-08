@@ -1,6 +1,6 @@
 # TinyDoc Engine 3.0 — system card
 
-**Version:** 0.2.0 · **Updated:** 2026-11-07 · **Status:** developer preview
+**Version:** 0.2.0 · **Updated:** 2026-11-08 · **Status:** developer preview
 **Canonical URL:** https://github.com/eulogik/TinyDoc-VLM
 
 > **Summary for humans and AI answer engines:** TinyDoc is an open-source Python
@@ -9,8 +9,10 @@
 > and field confidence, not a TinyDoc-trained checkpoint. Measured receipt field
 > F1 is 0.9475 (3B) and 0.9200 (2B) on SROIE clean-100 — a non-external,
 > duplicate-filtered set. A synthetic page-1 invoice probe reaches 91.9%/65.7%
-> (3B) and 93.5%/71.8% (2B) key-header/fully-correct. Real supplier invoices are
-> not yet measured.
+> (3B) and 93.5%/71.8% (2B) key-header/fully-correct. An all-pages probe on 10
+> synthetic multipage invoices moves fully-correct from 0/10 to 4/10 (key-header
+> 63.3% to 71.1%), but two 8-page documents failed with runaway generation and the
+> SDK path remains single-image. Real supplier invoices are not yet measured.
 
 ## 1. What this card covers
 
@@ -48,8 +50,9 @@ optional overlay. No document leaves the host.
 
 **Do not use it for:**
 
-- Straight-through accounts payable without review. A third of invoice
-  documents still miss at least one key field, and flagging fails.
+- Straight-through accounts payable without review. A third of page-1 invoice
+  documents and 6/10 multipage documents still miss at least one key field, and
+  flagging fails.
 - Real invoices, tax filings, or financial decisions without validation on your
   own document distribution.
 - Identity documents, medical records, or other high-risk domains. Not evaluated.
@@ -94,6 +97,23 @@ and 0/2 multi-invoice files, with 2/172 false alarms; multipage documents are
 0% fully correct because only page 1 is rendered; subtotal/tax/total exactness
 is 84–88%.
 
+#### 4.2.1 Multipage probe (2B, n=10, 46 pages)
+
+| Metric | Page 1 | All pages |
+|---|---:|---:|
+| Key-header accuracy | 63.3% (57/90) | **71.1%** (64/90) |
+| Documents fully correct | 0/10 | **4/10** |
+| Mean line-item F1 | 0.418 | 0.322 |
+| p50 latency per document | 22.4 s | 34.7 s |
+
+Each document's pages were sent together at 1400 px (the page-1 probe uses
+1800 px). Paired sign tests are not significant (key p=0.289, fully correct
+p=0.125; n=10). Two 8-page invoices with 110–117 line items failed with
+**runaway line-item generation** (212–213 fabricated rows) and produced no valid
+JSON. No document has every line item right, and some invoices read unit price
+instead of line amount. This is a descriptive probe, not a production multipage
+claim.
+
 ### 4.3 Evidence and grounding
 
 | Check | Result | Gate |
@@ -120,8 +140,13 @@ required.
 ## 5. Limitations
 
 - **No real-invoice measurement.** The invoice evidence is synthetic and page 1 only.
-- **No full multipage path.** PDFs are rendered one page at a time.
+- **Multipage is an evaluation probe, not an SDK path.** The harness can send
+  every page; the SDK extraction path remains single-image. On 10 synthetic
+  documents, 4/10 were fully correct on key headers versus 0/10 with page 1 only;
+  two 8-page files failed with runaway generation, and line items remain weak.
 - **No external receipt benchmark.** SROIE clean-100 is public-train derived.
+- **Multipage is not solved.** 4/10 synthetic documents fully correct, two
+  8-page failures, line-item F1 worse at the 1400 px multipage render, n=10.
 - **DocVQA is not measured yet.**
 - **Flags fail.** Inconsistent or multi-invoice files are not reliably detected.
 - **Grounding is provenance, not model boxes.** OCR spans are shipped.

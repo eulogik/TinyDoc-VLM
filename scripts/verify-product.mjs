@@ -80,6 +80,8 @@ function gateClaims() {
   if (!index.includes("0.9200")) bad.push("index.html missing measured 0.9200");
   if (!index.includes("0.376")) bad.push("index.html missing baseline 0.376");
   if (!/not an external|60%|leaked/i.test(index)) bad.push("index.html missing the clean-100 provenance caveat");
+  if (!/71\.1/.test(index) || !/4\/10/.test(index)) bad.push("index.html missing the multipage result (71.1%, 4/10)");
+  if (!/8-page|runaway/i.test(index)) bad.push("index.html missing the multipage failure caveat");
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
@@ -106,6 +108,12 @@ function gateClaims() {
   }
   if (!/not a clean held-out|not a clean/i.test(bench)) {
     bad.push("BENCHMARKS.md missing the SROIE leakage caveat");
+  }
+  if (!/Multipage/i.test(bench) || !/runaway/i.test(bench) || !/71\.1/.test(bench)) {
+    bad.push("BENCHMARKS.md missing the multipage result or its failure caveat");
+  }
+  if (!/71\.1/.test(readme) || !/4\/10/.test(readme) || !/8-page|runaway/i.test(readme)) {
+    bad.push("README missing the multipage result or its failure caveat");
   }
 
   if (bad.length) return fail(`PUBLIC_CLAIMS_CLEAN: ${bad.join("; ")}`);

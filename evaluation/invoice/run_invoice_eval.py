@@ -402,6 +402,8 @@ def main() -> int:
                 "pred": normalized,
                 "latency_ms": latency,
                 "error": error,
+                "num_ctx": args.num_ctx,
+                "num_predict": args.num_predict,
                 **response_meta,
             }
             out_rows.append(done_row)

@@ -42,13 +42,13 @@ def test_multipage_gain_and_regression_are_paired():
     assert report["page1"]["key_correct"] == 3
     assert report["all_pages"]["key_correct"] == 3
     assert report["delta"]["key_accuracy"] == 0.0
-    assert report["transitions"] == {
-        "key_improved": 1,
-        "key_regressed": 1,
-        "key_unchanged": 0,
-        "fully_correct_gained": 1,
-        "fully_correct_lost": 1,
-    }
+    assert report["transitions"]["key_improved"] == 1
+    assert report["transitions"]["key_regressed"] == 1
+    assert report["transitions"]["key_unchanged"] == 0
+    assert report["transitions"]["key_sign_p"] == 1.0
+    assert report["transitions"]["fully_correct_gained"] == 1
+    assert report["transitions"]["fully_correct_lost"] == 1
+    assert report["transitions"]["fully_correct_sign_p"] == 1.0
     assert report["per_field"]["total"]["page1_correct"] == 1
     assert report["per_field"]["total"]["all_pages_correct"] == 2
     assert report["per_field"]["vendor_name"]["delta"] == -0.5

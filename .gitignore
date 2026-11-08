@@ -164,3 +164,4 @@ data/datasets/
 evaluation/invoice/manifest_v1.jsonl
 evaluation/invoice/manifest_multipage.jsonl
 evaluation/invoice/rendered/
+evaluation/invoice/manifest_multipage_8p.jsonl

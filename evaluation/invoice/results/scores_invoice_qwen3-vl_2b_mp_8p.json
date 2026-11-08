@@ -1,0 +1,308 @@
+{
+ "meta": {
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-08",
+  "notes": "All pages; synthetic benchmark; see evaluation/invoice/README.md"
+ },
+ "summary": {
+  "documents": 2,
+  "documents_in_corpus": 181,
+  "documents_without_prediction": 0,
+  "fully_correct": 0,
+  "key_fields": {
+   "correct": 2,
+   "scored": 18
+  },
+  "fields": {
+   "vendor_name": {
+    "correct": 0,
+    "scored": 2
+   },
+   "invoice_number": {
+    "correct": 0,
+    "scored": 2
+   },
+   "invoice_date": {
+    "correct": 0,
+    "scored": 2
+   },
+   "due_date": {
+    "correct": 0,
+    "scored": 2
+   },
+   "currency": {
+    "correct": 0,
+    "scored": 2
+   },
+   "subtotal": {
+    "correct": 0,
+    "scored": 2
+   },
+   "tax": {
+    "correct": 0,
+    "scored": 2
+   },
+   "total": {
+    "correct": 0,
+    "scored": 2
+   },
+   "document_type": {
+    "correct": 2,
+    "scored": 2
+   },
+   "line_items": {
+    "correct": 0,
+    "scored": 2
+   },
+   "flag": {
+    "correct": 2,
+    "scored": 2
+   }
+  },
+  "line_items": {
+   "docs": 2,
+   "f1_sum": 0.0,
+   "f1_mean": 0.0,
+   "all_lines_right": 0
+  },
+  "flags": {
+   "inconsistent_invoices": {
+    "total": 0,
+    "flagged": 0
+   },
+   "multi_invoice_files": {
+    "total": 0,
+    "flagged": 0
+   },
+   "consistent_documents": {
+    "total": 2,
+    "flagged": 0
+   }
+  },
+  "categories": {
+   "multipage": {
+    "docs": 2,
+    "fully_correct": 0
+   }
+  },
+  "difficulty": {
+   "hard": {
+    "docs": 2,
+    "fully_correct": 0
+   }
+  },
+  "severity": {}
+ },
+ "documents": [
+  {
+   "doc_id": "multipage-8p-us-9",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_8"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": false,
+     "expected": "Redwood Office Supplies Corp",
+     "got": "",
+     "within_band": null,
+     "detail": "similarity 0.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": false,
+     "expected": "TN-12080",
+     "got": "",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": false,
+     "expected": "2025-04-07",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "USD",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 209524.65,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 14666.73,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 224191.38,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 117,
+     "got": 0,
+     "within_band": null,
+     "detail": "F1 0.00 (0 of 117 matched, 0 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": false,
+     "expected": "2025-05-07",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.0
+  },
+  {
+   "doc_id": "multipage-8p-na-10",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_8"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": false,
+     "expected": "Erongo Office Supplies CC",
+     "got": "",
+     "within_band": null,
+     "detail": "similarity 0.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": false,
+     "expected": "2026/9667",
+     "got": "",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": false,
+     "expected": "2025-03-10",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "NAD",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 188667.92,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 28300.19,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 216968.11,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 110,
+     "got": 0,
+     "within_band": null,
+     "detail": "F1 0.00 (0 of 110 matched, 0 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": false,
+     "expected": "2025-04-09",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.0
+  }
+ ]
+}

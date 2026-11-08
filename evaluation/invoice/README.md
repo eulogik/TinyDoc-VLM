@@ -71,8 +71,12 @@ python3 evaluation/invoice/build_manifest.py \
   --all-pages --max-dim 1400
 ```
 
-This renders all 46 pages at longest edge 1400 px and emits `image_paths` per
-document. `run_invoice_eval.py` sends every page image in one request and uses
+This renders all 46 pages at longest edge **1400 px** and emits `image_paths` per
+document. The page-1 probe uses **1800 px**, so multipage line-item F1 is **not
+directly comparable** to the page-1 line-item F1: small table text is harder to
+read at 1400 px. Key header fields are large and much less resolution-sensitive.
+
+`run_invoice_eval.py` sends every page image in one request and uses
 `multipage_prompt()`, which asks for document-wide totals and tells the model to
 read every page. Run it with a larger output budget and context:
 

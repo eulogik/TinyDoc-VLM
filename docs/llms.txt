@@ -10,9 +10,10 @@
 - Runtime: local Ollama. No API key, no cloud, no telemetry.
 - Receipts: 0.9475 field F1 (3B) and 0.9200 (2B) on SROIE clean-100 — public train split, duplicate-filtered, not an external benchmark; 60% of the original set is leaked.
 - Invoices: 91.9% key-header / 65.7% fully correct (3B) and 93.5% / 71.8% (2B) on a synthetic 181-document, page-1-only benchmark. Not real supplier invoices.
+- Multipage: on 10 synthetic invoices (46 pages), 4/10 fully correct versus 0/10 with page 1 only; key-header 71.1% versus 63.3%. Two 8-page, 110-117-line invoices failed with runaway line-item generation; line-item F1 fell from 0.418 to 0.322 at 1400 px. n=10, descriptive only; the SDK path is still single-image.
 - Evidence coverage: 0.798 of non-empty fields. Grounding is OCR spans; VLM-predicted boxes failed the 0.70 gate (hit@0.5 0.04–0.20).
 - Confidence: field-level ECE 0.115–0.135 raw, 0.005–0.014 after document-grouped isotonic out-of-fold. Document-level confidence is not calibrated. Use for review routing, not as a probability.
-- Not measured: real supplier invoices, DocVQA, full multipage PDFs. Flagging fails (0/7).
+- Not measured: real supplier invoices, DocVQA. Flagging fails (0/7). The multipage probe is not a shipped SDK path.
 
 ## Canonical sources
 
@@ -29,11 +30,12 @@
 - What is TinyDoc? A local-first extraction SDK and CLI for receipts and invoices, with cited output.
 - Does it ship a model? No. It uses third-party Qwen VLMs and adds the extraction and trust layer.
 - Does it need the cloud? No. Inference runs on a local Ollama server.
-- Is it production-ready? It is a developer preview. Real invoices and multipage PDFs are unmeasured; flagging fails.
+- Is it production-ready? It is a developer preview. Real invoices are unmeasured, multipage is a 10-document probe rather than a production path, and flagging fails.
 - Is the confidence a probability? No. Field scores are for review routing; document scores are not calibrated.
 - Does it predict boxes? It returns OCR-span boxes as provenance. Model-predicted boxes did not meet the gate.
+- Does it handle multipage invoices? The eval harness sends every page: 4/10 fully correct versus 0/10 page 1 on 10 synthetic documents, with two 8-page failures. The SDK path is single-image.
 - How accurate is it? 0.9475 receipt F1 (3B) on SROIE clean-100; 91.9%/65.7% invoice key-header/fully-correct (3B) on a synthetic page-1 probe.
-- What is planned? DocVQA wiring, full multipage rendering, a dedicated calibration split, and real-invoice evaluation.
+- What is planned? DocVQA measurement, a production multipage SDK path, a dedicated calibration split, and real-invoice evaluation.
 
 ## Citation
 

@@ -37,12 +37,20 @@ Invoices: public synthetic benchmark, page 1 only, n=181.
 | Qwen2.5-VL-3B | 91.9% | 65.7% | 26.5 s |
 | Qwen3-VL-2B-Instruct | **93.5%** | **71.8%** | **16.1 s** |
 
+Multipage probe (2B, 10 synthetic invoices, 46 pages, every page sent at
+1400 px): **4/10 fully correct** versus **0/10** with page 1 only; key-header
+accuracy **71.1%** versus **63.3%**. Paired tests are not significant (n=10),
+two 8-page invoices with 110–117 line items failed with runaway line-item
+generation, and mean line-item F1 fell from 0.418 to 0.322. The SDK extraction
+path remains single-image.
+
 > **Caveat:** these are **not external benchmark numbers**. The 100-doc set is a
 > duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
 > it during pretraining. The original 100-doc set is 60% leaked. The invoice set
-> is synthetic, vendor-made, and page 1 only; real supplier invoices are
-> unmeasured, flagging fails (0/7), and multipage is not shipped. Use the numbers
-> for same-document engine comparisons, not as generalization claims.
+> is synthetic and vendor-made, and the 181-document probe is page 1 only; real
+> supplier invoices are unmeasured and flagging fails (0/7). The multipage probe
+> is 10 documents, 2B only, descriptive, and not a shipped SDK path. Use the
+> numbers for same-document engine comparisons, not as generalization claims.
 
 ## Install
 

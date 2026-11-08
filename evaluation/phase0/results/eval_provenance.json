@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-06",
+  "generated": "2026-11-08",
   "policy": "Every published number must name its eval set and provenance. Clean-100 is not an external test set.",
   "datasets": {
     "sroie_eval": {
@@ -85,10 +85,12 @@
       "status": "synthetic_probe",
       "set": "invoice_extraction_benchmark_v1",
       "n": 181,
-      "page": "first page only",
+      "page": "first page for the 181-doc probe; all pages for a separate 10-doc multipage probe",
       "caveat": "synthetic, vendor-made, not independent, not real supplier invoices",
       "real_invoices": "missing",
-      "probe": "probes.invoice_transfer"
+      "probe": "probes.invoice_transfer",
+      "multipage": "measured_separately",
+      "multipage_probe": "probes.multipage"
     },
     "docvqa": {
       "status": "not_measured",
@@ -630,6 +632,110 @@
           }
         },
         "reading": "2B is at least as good on invoices and 40% faster; the key-header and fully-correct differences are not significant at 0.05 (sign p=0.092; fully-correct CI touches 0). 3B remains ahead on receipts (0.9475 vs 0.9200) and on currency (0.950 vs 0.899). Do not generalize the invoice tier ranking to receipts."
+      }
+    },
+    "multipage": {
+      "date": "2026-11-08",
+      "set": "invoice_extraction_benchmark_v1",
+      "source": "drew-ipp/invoice-extraction-benchmark (CC BY 4.0)",
+      "model": "qwen3-vl:2b-instruct",
+      "n_docs": 10,
+      "pages": 46,
+      "page_render_px": 1400,
+      "caveat": "synthetic, vendor-made, n=10 descriptive only; pages rendered at 1400 px (page-1 probe uses 1800 px), so line-item F1 is not directly comparable; two 8-page documents failed with runaway line-item generation; no real-invoice transfer",
+      "prompt": "evaluation/invoice/run_invoice_eval.py multipage_prompt() (fixed before run)",
+      "context": {
+        "default": 16384,
+        "eight_page_retry": 24576
+      },
+      "output_budget": {
+        "default": 5120,
+        "eight_page_retry": 8192
+      },
+      "results": {
+        "page1": {
+          "key_header_accuracy": 0.633333,
+          "key_header_correct": 57,
+          "key_header_scored": 90,
+          "fully_correct": 0,
+          "fully_correct_rate": 0.0,
+          "line_f1_mean": 0.418,
+          "p50_latency_ms": 22351.5
+        },
+        "all_pages": {
+          "key_header_accuracy": 0.711111,
+          "key_header_correct": 64,
+          "key_header_scored": 90,
+          "fully_correct": 4,
+          "fully_correct_rate": 0.4,
+          "line_f1_mean": 0.322,
+          "p50_latency_ms": 34685.6,
+          "mean_latency_ms": 64286.9,
+          "p50_latency_ms_per_page": 8900.7,
+          "key_header_accuracy_ci95": [
+            0.4888888888888889,
+            0.9
+          ],
+          "fully_correct_rate_ci95": [
+            0.1,
+            0.7
+          ],
+          "parse_errors": 2
+        },
+        "delta": {
+          "key_header_accuracy": 0.077778,
+          "fully_correct_rate": 0.4,
+          "line_f1_mean": -0.096
+        },
+        "transitions": {
+          "key_improved": 6,
+          "key_regressed": 2,
+          "key_unchanged": 2,
+          "key_sign_p": 0.2890625,
+          "fully_correct_gained": 4,
+          "fully_correct_lost": 0,
+          "fully_correct_sign_p": 0.125
+        },
+        "valid_only": {
+          "n_docs": 8,
+          "key_header_correct": 62,
+          "key_header_scored": 72,
+          "key_header_accuracy": 0.861111,
+          "fully_correct": 4,
+          "fully_correct_rate": 0.5
+        }
+      },
+      "failures": [
+        {
+          "id": "multipage-8p-us-9",
+          "pages": 8,
+          "expected_lines": 117,
+          "generated_descriptions": 213,
+          "done_reason": "length",
+          "eval_count_at_16k": 4014,
+          "retry_eval_count_at_8k": 8192,
+          "note": "runaway repeated line items; no valid JSON"
+        },
+        {
+          "id": "multipage-8p-na-10",
+          "pages": 8,
+          "expected_lines": 110,
+          "generated_descriptions": 212,
+          "done_reason": "length",
+          "eval_count_at_16k": 5070,
+          "retry_eval_count_at_8k": 8192,
+          "note": "runaway repeated line items; no valid JSON"
+        }
+      ],
+      "artifacts": {
+        "summary": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp.json",
+        "scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp.json",
+        "preds": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp.json",
+        "rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp.jsonl",
+        "compare": "evaluation/invoice/results/compare_invoice_page1_vs_multipage_2b.json",
+        "eight_page_retry_rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_8p.jsonl",
+        "eight_page_retry_scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_8p.json",
+        "truncated_first_pass": "evaluation/invoice/results/archive/rows_invoice_qwen3-vl_2b_mp_num768_truncated.jsonl"
       }
     }
   }

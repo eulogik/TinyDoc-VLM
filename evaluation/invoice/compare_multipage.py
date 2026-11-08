@@ -16,6 +16,7 @@ import argparse
 import json
 import statistics
 from collections.abc import Sequence
+from math import comb
 from pathlib import Path
 from typing import Any
 
@@ -66,6 +67,15 @@ def _tally(documents: Sequence[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def sign_test(improved: int, regressed: int) -> float:
+    """Two-sided exact sign test for paired wins/losses."""
+    n = improved + regressed
+    if n == 0:
+        return 1.0
+    tail = sum(comb(n, i) for i in range(min(improved, regressed) + 1))
+    return min(1.0, 2 * tail / 2**n)
+
+
 def latency_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
     pairs = [
         (float(row["latency_ms"]) / 1000.0, len(row.get("image_paths") or []) or 1)
@@ -114,7 +124,7 @@ def compare(
             "all_pages_correct": b_correct,
         }
 
-    rows = []
+    document_rows = []
     improved = regressed = same = 0
     for doc, b, a in zip(paired, before, after):
         key_delta = a["key_correct"] - b["key_correct"]
@@ -126,7 +136,7 @@ def compare(
             regressed += 1
         else:
             same += 1
-        rows.append(
+        document_rows.append(
             {
                 "doc_id": doc["doc_id"],
                 "page1_key_correct": b["key_correct"],
@@ -160,16 +170,21 @@ def compare(
             "key_improved": improved,
             "key_regressed": regressed,
             "key_unchanged": same,
+            "key_sign_p": sign_test(improved, regressed),
             "fully_correct_gained": sum(
                 1 for b, a in zip(before, after) if a["fully_correct"] and not b["fully_correct"]
             ),
             "fully_correct_lost": sum(
                 1 for b, a in zip(before, after) if b["fully_correct"] and not a["fully_correct"]
             ),
+            "fully_correct_sign_p": sign_test(
+                sum(1 for b, a in zip(before, after) if a["fully_correct"] and not b["fully_correct"]),
+                sum(1 for b, a in zip(before, after) if b["fully_correct"] and not a["fully_correct"]),
+            ),
         },
         "per_field": per_field,
         "latency": latency_summary(rows) if rows is not None else None,
-        "documents": rows,
+        "documents": document_rows,
         "caveat": (
             "Descriptive only: 10 synthetic multipage documents, page 1 vs all pages. "
             "No significance claim, no real-invoice transfer."

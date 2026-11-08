@@ -589,6 +589,7 @@ python evaluation/phase0/run_grounding_probe.py \
 3. **Build the 200-doc multi-vertical val + private 150-doc test** (CORD/FUNSD + synthetic invoices + wild docs). Freeze them; hash them; never train.
 4. **Run the grounding/confidence probes** on the 3B and 2B. If boxes work, v3.0 ships with real bbox evidence; if not, keep OCR-span evidence honest.
 5. **Only then** decide v3.1: if the residual is invoice/forms/grounding — not receipts — train the 10k–20k LoRA on one paid GPU burst. If the residual is small, skip training and ship v3.0.
+6. **Multipage measured (2026-11-08).** Sending every page raises fully-correct documents from **0/10 to 4/10** and key-header accuracy from **63.3% to 71.1%** on 10 synthetic invoices (46 pages, 2B, 1400 px). The paired tests are not significant (key p=0.29, fully correct p=0.13). Two 8-page, 110–117-line invoices failed with runaway line-item generation (212–213 fabricated rows); line-item F1 fell 0.418 → 0.322. The residual is **output control and line-item amount selection**, not page coverage. The SDK path remains single-image; do not market multipage as solved.
 
 **The one-sentence version:** *Stop trying to make a weak 2.2B read; put a perception-strong 2B/3B behind the trust layer you already built, prove it on a clean multi-vertical benchmark, and train only the residual that the proof reveals.*
 
@@ -617,6 +618,8 @@ python evaluation/phase0/run_grounding_probe.py \
 - `evaluation/invoice/results/summary_invoice_qwen2.5vl_3b.json` — invoice probe 3B: 91.9% key-header, 65.7% fully correct, p50 26.5 s
 - `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_instruct.json` — invoice probe 2B: 93.5% key-header, 71.8% fully correct, p50 16.1 s
 - `evaluation/invoice/results/compare_invoice_3b_vs_2b.json` — paired tier comparison (diff not significant, p=0.092)
+- `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp.json` — multipage 2B: 71.1% key-header, 4/10 fully correct, 2 parse errors
+- `evaluation/invoice/results/compare_invoice_page1_vs_multipage_2b.json` — paired page-1 vs all-pages comparison (n=10, descriptive)
 - `evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json` — scorer output, 181 docs
 - `evaluation/invoice/results/preds_invoice_qwen2.5vl_3b.json` — predictions in benchmark format
 - `evaluation/invoice/results/rows_invoice_qwen2.5vl_3b.jsonl` — raw outputs, errors, latency

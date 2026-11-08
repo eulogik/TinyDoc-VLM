@@ -1,0 +1,93 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-08",
+  "n_docs": 10,
+  "n_corpus": 181,
+  "key_header_accuracy": 0.7111111111111111,
+  "key_header_correct": 64,
+  "key_header_scored": 90,
+  "fully_correct": 4,
+  "fully_correct_rate": 0.4,
+  "ci95": {
+    "key_header_accuracy": [
+      0.4888888888888889,
+      0.9
+    ],
+    "fully_correct_rate": [
+      0.1,
+      0.7
+    ]
+  },
+  "per_field": {
+    "currency": {
+      "correct": 6,
+      "scored": 10
+    },
+    "document_type": {
+      "correct": 10,
+      "scored": 10
+    },
+    "due_date": {
+      "correct": 8,
+      "scored": 10
+    },
+    "invoice_date": {
+      "correct": 8,
+      "scored": 10
+    },
+    "invoice_number": {
+      "correct": 8,
+      "scored": 10
+    },
+    "subtotal": {
+      "correct": 5,
+      "scored": 10
+    },
+    "tax": {
+      "correct": 6,
+      "scored": 10
+    },
+    "total": {
+      "correct": 5,
+      "scored": 10
+    },
+    "vendor_name": {
+      "correct": 8,
+      "scored": 10
+    }
+  },
+  "per_category": {
+    "multipage": {
+      "docs": 10,
+      "key_correct": 64,
+      "key_scored": 90,
+      "fully_correct": 4,
+      "line_f1_mean": 0.322
+    }
+  },
+  "flags": {
+    "inconsistent_invoices": {
+      "total": 0,
+      "flagged": 0
+    },
+    "multi_invoice_files": {
+      "total": 0,
+      "flagged": 0
+    },
+    "consistent_documents": {
+      "total": 10,
+      "flagged": 0
+    }
+  },
+  "line_items": {
+    "docs": 10,
+    "f1_sum": 3.22,
+    "f1_mean": 0.322,
+    "all_lines_right": 0
+  },
+  "latency_ms": {
+    "mean": 64286.91453933716,
+    "p50": 34685.58466434479
+  },
+  "parse_errors": 2
+}

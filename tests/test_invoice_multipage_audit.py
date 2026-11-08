@@ -53,3 +53,28 @@ def test_missing_and_extra_rows_are_flagged():
     joined = " ".join(report["issues"])
     assert "doc-1: missing row" in joined
     assert "doc-9: row not in manifest" in joined
+
+
+def test_per_row_context_overrides_default():
+    rows = [_row("doc-0", 2, prompt=12000, generated=6000, reason="stop")]
+    for row in rows:
+        row["num_ctx"] = 24576
+        row["num_predict"] = 8192
+    report = audit_rows(_manifest(2), rows, num_ctx=8192, num_predict=4096)
+    assert report["ok"] is True
+    assert report["num_ctx_values"] == [24576]
+
+
+def test_visible_failed_rows_can_be_allowed():
+    rows = [
+        _row("doc-0", 2),
+        _row("doc-1", 2, prompt=12000, generated=8192, reason="length", error="no JSON"),
+    ]
+    blocked = audit_rows(_manifest(2, 2), rows, num_ctx=16384, num_predict=8192)
+    allowed = audit_rows(
+        _manifest(2, 2), rows, num_ctx=16384, num_predict=8192, allowed_failures=1
+    )
+    assert blocked["ok"] is False
+    assert blocked["failed_rows"][0]["id"] == "doc-1"
+    assert blocked["issues"] == []
+    assert allowed["ok"] is True

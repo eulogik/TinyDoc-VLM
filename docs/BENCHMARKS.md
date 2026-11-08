@@ -159,12 +159,56 @@ invoice_number 93.3%, currency 95.0%, vendor_name 90.1%, total 87.7%, tax 87.2%,
 subtotal 84.4%. References (strict string match) are 1/25 and are not a headline
 claim.
 
-**Read this as:** the prompt/schema transfers to invoices at the field level (above
-the 0.80 bar), but **not** as straight-through processing: 28–34% of documents
-still have at least one key-field miss, flagging is unusable, and multipage is
-broken by the page-1 limit. Currency symbols were normalized to ISO after the
-first pass; the superseded run is archived as `*_v1_currency_symbols.*`. Do not
-cite it as real-invoice accuracy. Artifacts: `evaluation/invoice/results/`.
+**Read this as:** the prompt/schema transfers to invoices at the field level
+(above the 0.80 bar), but **not** as straight-through processing: 28–34% of
+documents still have at least one key-field miss, flagging is unusable (0/7),
+and the multipage row is **page-1 only**. Currency symbols were normalized to ISO
+after the first pass; the superseded run is archived as
+`*_v1_currency_symbols.*`. Do not cite this as real-invoice accuracy. The
+separate all-pages probe below replaces the page-1 0% for the same 10 documents.
+
+### Multipage invoices — page 1 vs all pages (2B, n=10)
+
+| Metric | Page 1 | All pages | Delta |
+|---|---:|---:|---:|
+| Key-header accuracy | 63.3% (57/90) | **71.1%** (64/90) | +7.8 pts |
+| Documents fully correct | 0/10 | **4/10** | +4 docs |
+| Mean line-item F1 | 0.418 | 0.322 | −0.096 |
+| p50 latency per document | 22.4 s | 34.7 s | +12.3 s |
+| p50 latency per page | — | 8.9 s | — |
+
+Each document's pages were sent together in one request (2–8 images; 46 pages
+total) at 1400 px; the 8-page retry used a 24,576-token context and an
+8,192-token output budget. The paired sign tests are
+**not significant**: key header p=0.289 (6 improved, 2 regressed, 2 unchanged),
+fully correct p=0.125 (4 gained, 0 lost). Treat this as a 10-document
+descriptive probe, not proof that multipage is solved. Among the **8 documents
+that produced valid JSON**, key-header is 62/72 (86.1%) and 4/8 are fully
+correct; the two 8-page failures are counted in the 71.1% / 4/10 headline.
+
+**The failures travel with the number:**
+
+- **Two 8-page documents failed.** Against 117 and 110 expected line items, the
+  model emitted **213 and 212** descriptions, fabricating repeated “(batch N)”
+  line items until it hit the output limit; neither produced valid JSON. This is
+  runaway generation, not a token-budget artifact — a larger budget made it
+  worse.
+- **Line items are not fixed.** Mean F1 falls from 0.418 to 0.322, no document
+  has every line item right, and the 8-page documents fail outright. On some
+  invoices the model reads **unit price instead of line amount**; on others it
+  misses later pages’ items.
+- **Totals still fail in specific ways.** One 3-page invoice read 70,390.50 as
+  390.50 (digit truncation); 4-page and 6-page invoices used a page subtotal
+  instead of the document total.
+- **Resolution is a confound.** Page-1 renders at 1800 px, multipage at 1400 px;
+  small table text is harder to read at 1400 px, so line-item F1 is not directly
+  comparable across the two columns.
+
+**Read this as:** reading every page fixes document-wide key headers on 4 of 10
+synthetic invoices and moves fully-correct from 0/10 to 4/10, but it does **not**
+make multipage invoices straight-through: two 8-page files fail, line items are
+unreliable, and 6/10 still miss at least one key header field. The SDK path
+remains single-image. Artifacts: `evaluation/invoice/results/`.
 
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).

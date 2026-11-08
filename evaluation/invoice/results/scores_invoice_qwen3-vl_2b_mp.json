@@ -1,0 +1,1155 @@
+{
+ "meta": {
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-08",
+  "notes": "All pages; synthetic benchmark; see evaluation/invoice/README.md"
+ },
+ "summary": {
+  "documents": 10,
+  "documents_in_corpus": 181,
+  "documents_without_prediction": 0,
+  "fully_correct": 4,
+  "key_fields": {
+   "correct": 64,
+   "scored": 90
+  },
+  "fields": {
+   "vendor_name": {
+    "correct": 8,
+    "scored": 10
+   },
+   "invoice_number": {
+    "correct": 8,
+    "scored": 10
+   },
+   "invoice_date": {
+    "correct": 8,
+    "scored": 10
+   },
+   "due_date": {
+    "correct": 8,
+    "scored": 10
+   },
+   "currency": {
+    "correct": 6,
+    "scored": 10
+   },
+   "subtotal": {
+    "correct": 5,
+    "scored": 10
+   },
+   "tax": {
+    "correct": 6,
+    "scored": 10
+   },
+   "total": {
+    "correct": 5,
+    "scored": 10
+   },
+   "document_type": {
+    "correct": 10,
+    "scored": 10
+   },
+   "line_items": {
+    "correct": 0,
+    "scored": 10
+   },
+   "flag": {
+    "correct": 10,
+    "scored": 10
+   }
+  },
+  "line_items": {
+   "docs": 10,
+   "f1_sum": 3.22,
+   "f1_mean": 0.322,
+   "all_lines_right": 0
+  },
+  "flags": {
+   "inconsistent_invoices": {
+    "total": 0,
+    "flagged": 0
+   },
+   "multi_invoice_files": {
+    "total": 0,
+    "flagged": 0
+   },
+   "consistent_documents": {
+    "total": 10,
+    "flagged": 0
+   }
+  },
+  "categories": {
+   "multipage": {
+    "docs": 10,
+    "fully_correct": 4
+   }
+  },
+  "difficulty": {
+   "medium": {
+    "docs": 4,
+    "fully_correct": 3
+   },
+   "hard": {
+    "docs": 6,
+    "fully_correct": 1
+   }
+  },
+  "severity": {}
+ },
+ "documents": [
+  {
+   "doc_id": "multipage-2p-za-1",
+   "category": "multipage",
+   "difficulty": "medium",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_2"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Highveld Engineering Supplies (Pty) Ltd",
+     "got": "Highveld Engineering Supplies (Pty) Ltd",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "IN0021022",
+     "got": "IN0021022",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2026-05-04",
+     "got": "2026-05-04",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "ZAR",
+     "got": "ZAR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": true,
+     "expected": 25083.76,
+     "got": 25083.76,
+     "within_band": true,
+     "detail": ""
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 3762.56,
+     "got": 3762.56,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": true,
+     "expected": 28846.32,
+     "got": 28846.32,
+     "within_band": true,
+     "detail": ""
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 20,
+     "got": 17,
+     "within_band": null,
+     "detail": "F1 0.76 (14 of 20 matched, 17 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2026-07-03",
+     "got": "2026-07-03",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": true,
+   "line_f1": 0.76
+  },
+  {
+   "doc_id": "multipage-2p-us-2",
+   "category": "multipage",
+   "difficulty": "medium",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_2"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Redwood Packaging Co",
+     "got": "Redwood Packaging Co",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "021419",
+     "got": "021419",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2026-05-11",
+     "got": "2026-05-11",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "USD",
+     "got": "USD",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": true,
+     "expected": 66768.29,
+     "got": 66768.29,
+     "within_band": true,
+     "detail": ""
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 4006.1,
+     "got": 4006.1,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": true,
+     "expected": 70774.39,
+     "got": 70774.39,
+     "within_band": true,
+     "detail": ""
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 24,
+     "got": 16,
+     "within_band": null,
+     "detail": "F1 0.80 (16 of 24 matched, 16 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2026-07-10",
+     "got": "2026-07-10",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": true,
+   "line_f1": 0.8
+  },
+  {
+   "doc_id": "multipage-3p-na-3",
+   "category": "multipage",
+   "difficulty": "medium",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_3",
+    "carried_forward"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Skeleton Bay Industrial Supply CC",
+     "got": "Skeleton Bay Industrial Supply CC",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "IN0005183",
+     "got": "IN0005183",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2026-02-22",
+     "got": "2026-02-22",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "NAD",
+     "got": "ZAR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 61209.13,
+     "got": 209.13,
+     "within_band": false,
+     "detail": "off by 61,000.00"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 9181.37,
+     "got": 9.18137,
+     "within_band": false,
+     "detail": "off by 9,172.19"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 70390.5,
+     "got": 390.5,
+     "within_band": false,
+     "detail": "off by 70,000.00"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 35,
+     "got": 15,
+     "within_band": null,
+     "detail": "F1 0.28 (7 of 35 matched, 15 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2026-03-24",
+     "got": "2026-03-24",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.28
+  },
+  {
+   "doc_id": "multipage-3p-gb-4",
+   "category": "multipage",
+   "difficulty": "medium",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_3"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Wolds Engineering Supplies plc",
+     "got": "Wolds Engineering Supplies plc",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "IN0012893",
+     "got": "IN0012893",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2025-11-09",
+     "got": "2025-11-09",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "GBP",
+     "got": "GBP",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": true,
+     "expected": 66699.93,
+     "got": 66699.93,
+     "within_band": true,
+     "detail": ""
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 13339.99,
+     "got": 13339.99,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": true,
+     "expected": 80039.92,
+     "got": 80039.92,
+     "within_band": true,
+     "detail": ""
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 36,
+     "got": 36,
+     "within_band": null,
+     "detail": "F1 0.14 (5 of 36 matched, 36 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2025-12-09",
+     "got": "2025-12-09",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": true,
+   "line_f1": 0.14
+  },
+  {
+   "doc_id": "multipage-4p-za-5",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_4",
+    "carried_forward"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Klipspruit Engineering Supplies (Pty) Ltd",
+     "got": "Klipspruit Engineering Supplies (Pty) Ltd",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "F-26-0992",
+     "got": "F-26-0992",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2026-03-13",
+     "got": "2026-03-13",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "ZAR",
+     "got": "ZAR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 91660.06,
+     "got": 89202.81,
+     "within_band": false,
+     "detail": "off by 2,457.25"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 13749.01,
+     "got": 13749.01,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 105409.07,
+     "got": 102951.82,
+     "within_band": false,
+     "detail": "off by 2,457.25"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 58,
+     "got": 18,
+     "within_band": null,
+     "detail": "F1 0.45 (17 of 58 matched, 18 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2026-04-12",
+     "got": "2026-04-12",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.45
+  },
+  {
+   "doc_id": "multipage-5p-de-6",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_5"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Ostwall Engineering Supplies GmbH",
+     "got": "Ostwall Engineering Supplies GmbH",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "IN0038658",
+     "got": "IN0038658",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2025-08-24",
+     "got": "2025-08-24",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "EUR",
+     "got": "EUR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": true,
+     "expected": 144203.59,
+     "got": 144203.59,
+     "within_band": true,
+     "detail": ""
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 27398.68,
+     "got": 27398.68,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": true,
+     "expected": 171602.27,
+     "got": 171602.27,
+     "within_band": true,
+     "detail": ""
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 72,
+     "got": 57,
+     "within_band": null,
+     "detail": "F1 0.08 (5 of 72 matched, 57 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2025-09-23",
+     "got": "2025-09-23",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": true,
+   "line_f1": 0.08
+  },
+  {
+   "doc_id": "multipage-5p-na-7",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_5"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Kunene Office Supplies CC",
+     "got": "Kunene Office Supplies CC",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "IN0070697",
+     "got": "IN0070697",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2025-07-04",
+     "got": "2025-07-04",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "NAD",
+     "got": "ZAR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": true,
+     "expected": 105354.65,
+     "got": 105354.65,
+     "within_band": true,
+     "detail": ""
+    },
+    "tax": {
+     "field": "tax",
+     "correct": true,
+     "expected": 15803.2,
+     "got": 15803.2,
+     "within_band": true,
+     "detail": ""
+    },
+    "total": {
+     "field": "total",
+     "correct": true,
+     "expected": 121157.85,
+     "got": 121157.85,
+     "within_band": true,
+     "detail": ""
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 61,
+     "got": 42,
+     "within_band": null,
+     "detail": "F1 0.06 (3 of 61 matched, 42 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2025-09-02",
+     "got": "2025-09-02",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.06
+  },
+  {
+   "doc_id": "multipage-6p-za-8",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_6",
+    "carried_forward"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": true,
+     "expected": "Suidkus Tyre & Parts (Pty) Ltd",
+     "got": "Suidkus Tyre & Parts (Pty) Ltd",
+     "within_band": null,
+     "detail": "similarity 1.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": true,
+     "expected": "2026/7016",
+     "got": "2026/7016",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": true,
+     "expected": "2026-05-16",
+     "got": "2026-05-16",
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": true,
+     "expected": "ZAR",
+     "got": "ZAR",
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 175129.13,
+     "got": 160972.34,
+     "within_band": false,
+     "detail": "off by 14,156.79"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 26269.37,
+     "got": 2697.37,
+     "within_band": false,
+     "detail": "off by 23,572.00"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 201398.5,
+     "got": 187969.71,
+     "within_band": false,
+     "detail": "off by 13,428.79"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 98,
+     "got": 81,
+     "within_band": null,
+     "detail": "F1 0.65 (58 of 98 matched, 81 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": true,
+     "expected": "2026-06-15",
+     "got": "2026-06-15",
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.65
+  },
+  {
+   "doc_id": "multipage-8p-us-9",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_8"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": false,
+     "expected": "Redwood Office Supplies Corp",
+     "got": "",
+     "within_band": null,
+     "detail": "similarity 0.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": false,
+     "expected": "TN-12080",
+     "got": "",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": false,
+     "expected": "2025-04-07",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "USD",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 209524.65,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 14666.73,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 224191.38,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 117,
+     "got": 0,
+     "within_band": null,
+     "detail": "F1 0.00 (0 of 117 matched, 0 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": false,
+     "expected": "2025-05-07",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.0
+  },
+  {
+   "doc_id": "multipage-8p-na-10",
+   "category": "multipage",
+   "difficulty": "hard",
+   "severity": null,
+   "kind": "invoice",
+   "tags": [
+    "multipage",
+    "pages_8"
+   ],
+   "should_flag": false,
+   "predicted": true,
+   "fields": {
+    "vendor_name": {
+     "field": "vendor_name",
+     "correct": false,
+     "expected": "Erongo Office Supplies CC",
+     "got": "",
+     "within_band": null,
+     "detail": "similarity 0.0"
+    },
+    "invoice_number": {
+     "field": "invoice_number",
+     "correct": false,
+     "expected": "2026/9667",
+     "got": "",
+     "within_band": null,
+     "detail": ""
+    },
+    "invoice_date": {
+     "field": "invoice_date",
+     "correct": false,
+     "expected": "2025-03-10",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "currency": {
+     "field": "currency",
+     "correct": false,
+     "expected": "NAD",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    },
+    "subtotal": {
+     "field": "subtotal",
+     "correct": false,
+     "expected": 188667.92,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "tax": {
+     "field": "tax",
+     "correct": false,
+     "expected": 28300.19,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "total": {
+     "field": "total",
+     "correct": false,
+     "expected": 216968.11,
+     "got": null,
+     "within_band": false,
+     "detail": "missing"
+    },
+    "document_type": {
+     "field": "document_type",
+     "correct": true,
+     "expected": "invoice",
+     "got": "invoice",
+     "within_band": null,
+     "detail": ""
+    },
+    "line_items": {
+     "field": "line_items",
+     "correct": false,
+     "expected": 110,
+     "got": 0,
+     "within_band": null,
+     "detail": "F1 0.00 (0 of 110 matched, 0 read)"
+    },
+    "flag": {
+     "field": "flag",
+     "correct": true,
+     "expected": false,
+     "got": false,
+     "within_band": null,
+     "detail": ""
+    },
+    "due_date": {
+     "field": "due_date",
+     "correct": false,
+     "expected": "2025-04-09",
+     "got": null,
+     "within_band": null,
+     "detail": ""
+    }
+   },
+   "fully_correct": false,
+   "line_f1": 0.0
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-08",
+  "page_mode": "all_pages",
+  "notes": "All pages; synthetic benchmark; see evaluation/invoice/README.md",
+  "documents": {
+    "multipage-8p-us-9": {
+      "vendor_name": "",
+      "invoice_number": "",
+      "invoice_date": null,
+      "due_date": null,
+      "currency": null,
+      "subtotal": null,
+      "tax": null,
+      "total_amount": null,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    },
+    "multipage-8p-na-10": {
+      "vendor_name": "",
+      "invoice_number": "",
+      "invoice_date": null,
+      "due_date": null,
+      "currency": null,
+      "subtotal": null,
+      "tax": null,
+      "total_amount": null,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    }
+  }
+}
