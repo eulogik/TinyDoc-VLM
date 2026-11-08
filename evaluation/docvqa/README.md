@@ -61,6 +61,23 @@ The runner checks Ollama first, appends one row per question (so a crash does
 not lose completed work), and writes a compact scores JSON. Keep
 `TINYDOC_OLLAMA_NUM_CTX=8192` and `TINYDOC_OLLAMA_TIMEOUT=600` for full pages.
 
+## Result (2026-11-08)
+
+Qwen3-VL-2B-Instruct, 200/200 parsed, 0 errors:
+
+| Metric | Result |
+|---|---:|
+| ANLS (single reference, threshold 0.5) | **0.829** |
+| Normalized exact match | **0.765** |
+| p50 / mean latency | 3.36 s / 3.43 s |
+
+The set is public and may be in pretraining, the images are a 768 px mirror, and
+official DocVQA uses up to 10 references. **This is not a leaderboard number.**
+Artifacts: `results/rows_docvqa_qwen3-vl_2b_instruct.jsonl`,
+`results/scores_docvqa_qwen3-vl_2b_instruct.json`,
+`results/summary_docvqa_qwen3-vl_2b_instruct.json`. Recompute with
+`evaluation/docvqa/summarize_probe.py` or the claim audit.
+
 ## Report it honestly
 
 - Say **DocVQA reading probe**, never “DocVQA score” as a leaderboard claim.

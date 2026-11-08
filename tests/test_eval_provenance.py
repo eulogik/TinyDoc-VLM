@@ -9,10 +9,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PROVENANCE = ROOT / "evaluation/phase0/results/eval_provenance.json"
+sys.path.insert(0, str(ROOT / "evaluation" / "docvqa"))
+
+from run_docvqa_probe import anls_score, normalize_answer
 
 
 def test_provenance_hashes_and_labels():
@@ -237,3 +241,52 @@ def test_multipage_probe_matches_artifacts():
     assert valid["n_docs"] == 8
     assert valid["key_header_correct"] == 62
     assert valid["fully_correct"] == 4
+
+
+def test_docvqa_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    docvqa = data["multi_vertical"]["docvqa"]
+    assert docvqa["status"] == "measured_probe"
+    assert docvqa["n"] == 200
+    assert docvqa["single_reference"] is True
+    assert "not comparable" in docvqa["caveat"]
+
+    probe = data["probes"]["docvqa_reading"]
+    assert probe["model"] == "qwen3-vl:2b-instruct"
+    assert probe["image_max_edge_px"] == 768
+
+    artifacts = probe["artifacts"]
+    manifest = [
+        json.loads(line)
+        for line in (ROOT / artifacts["manifest"]).read_text().splitlines()
+        if line.strip()
+    ]
+    rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows"]).read_text().splitlines()
+        if line.strip()
+    ]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+
+    assert len(manifest) == 200
+    assert len({item["image"] for item in manifest}) == 200
+    assert all(item["question"].strip() and item["target"].strip() for item in manifest)
+    assert len(rows) == 200
+    assert sum(1 for row in rows if row.get("error")) == 0
+
+    anls = sum(anls_score(row["answer"], row["target"]) for row in rows) / len(rows)
+    exact = sum(
+        1 for row in rows
+        if normalize_answer(row["answer"]) == normalize_answer(row["target"])
+    ) / len(rows)
+    assert abs(anls - 0.829397) < 1e-6
+    assert abs(exact - 0.765) < 1e-9
+    assert abs(summary["anls_mean"] - anls) < 1e-9
+    assert abs(summary["exact_rate"] - exact) < 1e-9
+    assert summary["errors"] == 0
+    assert summary["stored_anls_mismatches"] == 0
+    assert summary["single_reference"] is True
+    assert abs(scores["anls_mean"] - summary["anls_mean"]) < 1e-9
+    assert abs(scores["exact_rate"] - summary["exact_rate"]) < 1e-9
+    assert "not comparable" in probe["caveat"]

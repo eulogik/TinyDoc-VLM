@@ -17,8 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT.parent / "docvqa"))
 
 from metrics import macro_prf
+from run_docvqa_probe import anls_score, normalize_answer
 
 RESULTS = ROOT / "results"
 
@@ -396,6 +398,40 @@ def main() -> int:
                 failures.append("multipage probe numbers or failure accounting changed")
         except Exception as exc:  # noqa: BLE001
             failures.append(f"multipage check errored: {exc}")
+
+    docvqa_rows = ROOT.parent / "docvqa/results/rows_docvqa_qwen3-vl_2b_instruct.jsonl"
+    docvqa_summary = ROOT.parent / "docvqa/results/summary_docvqa_qwen3-vl_2b_instruct.json"
+    if not docvqa_rows.exists() or not docvqa_summary.exists():
+        failures.append("DocVQA probe artifacts missing")
+    else:
+        try:
+            rows = [json.loads(line) for line in docvqa_rows.open() if line.strip()]
+            summary = json.loads(docvqa_summary.read_text())
+            anls = sum(anls_score(row["answer"], row["target"]) for row in rows) / len(rows)
+            exact = sum(
+                1
+                for row in rows
+                if normalize_answer(row["answer"]) == normalize_answer(row["target"])
+            ) / len(rows)
+            ok = (
+                summary.get("n") == 200
+                and abs(float(summary.get("anls_mean", -1)) - 0.829397) <= 1e-5
+                and abs(float(summary.get("exact_rate", -1)) - 0.765) <= 1e-9
+                and summary.get("errors") == 0
+                and summary.get("stored_anls_mismatches") == 0
+                and summary.get("single_reference") is True
+                and abs(anls - 0.8293969454993905) <= 1e-9
+                and abs(exact - 0.765) <= 1e-9
+            )
+            print(
+                f"claim: DocVQA reading probe (single-reference, n={len(rows)}) "
+                f"ANLS {anls:.4f}, exact {exact:.4f}, errors {summary.get('errors')} "
+                f"-> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("DocVQA probe numbers changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"DocVQA check errored: {exc}")
 
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.

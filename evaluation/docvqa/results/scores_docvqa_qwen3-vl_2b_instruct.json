@@ -1,0 +1,15 @@
+{
+  "n": 200,
+  "anls_mean": 0.8293969454993905,
+  "exact_rate": 0.765,
+  "errors": 0,
+  "p50_latency_ms": 3356.9129705429077,
+  "mean_latency_ms": 3430.583710670471,
+  "model": "qwen3-vl:2b-instruct",
+  "manifest": "evaluation/docvqa/manifest_docvqa_200.jsonl",
+  "set": "docvqa_public_mirror",
+  "single_reference": true,
+  "sampling": "one question per image, seed 42",
+  "caveat": "public DocVQA questions; may be in pretraining; reading probe, not extraction; single-reference ANLS, not comparable to leaderboard numbers",
+  "rows": "evaluation/docvqa/results/rows_docvqa_qwen3-vl_2b_instruct.jsonl"
+}

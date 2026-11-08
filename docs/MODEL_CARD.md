@@ -12,7 +12,9 @@
 > (3B) and 93.5%/71.8% (2B) key-header/fully-correct. An all-pages probe on 10
 > synthetic multipage invoices moves fully-correct from 0/10 to 4/10 (key-header
 > 63.3% to 71.1%), but two 8-page documents failed with runaway generation and the
-> SDK path remains single-image. Real supplier invoices are not yet measured.
+> SDK path remains single-image. A 200-image public DocVQA reading probe scores
+> 0.829 single-reference ANLS and 0.765 exact match (2B); it is not comparable to
+> leaderboard numbers. Real supplier invoices are not yet measured.
 
 ## 1. What this card covers
 
@@ -47,6 +49,7 @@ optional overlay. No document leaves the host.
 - Human-in-the-loop review queues that can act on field-level confidence.
 - Prototypes and internal tools that need cited JSON, not just text.
 - Research on extraction, evidence alignment, and calibration.
+- A rough reading check on public document images, with the DocVQA caveats above.
 
 **Do not use it for:**
 
@@ -137,6 +140,20 @@ Document-level scores are not calibrated and are not a probability. The current
 map is fit on clean-100; a dedicated production calibration split is still
 required.
 
+### 4.5 DocVQA reading probe
+
+| Metric | Qwen3-VL-2B-Instruct |
+|---|---:|
+| ANLS (single reference, threshold 0.5) | **0.829** |
+| Normalized exact match | **0.765** |
+| Errors | 0 / 200 |
+| p50 latency | 3.36 s |
+
+200 public DocVQA images, one question per image (seed 42), 768 px mirror. Official
+DocVQA uses up to 10 references per question, so this single-reference result is
+**not comparable to leaderboard numbers**. The set is public and may be in
+pretraining. It measures reading, not field extraction.
+
 ## 5. Limitations
 
 - **No real-invoice measurement.** The invoice evidence is synthetic and page 1 only.
@@ -147,7 +164,9 @@ required.
 - **No external receipt benchmark.** SROIE clean-100 is public-train derived.
 - **Multipage is not solved.** 4/10 synthetic documents fully correct, two
   8-page failures, line-item F1 worse at the 1400 px multipage render, n=10.
-- **DocVQA is not measured yet.**
+- **DocVQA is a single-reference reading probe, not a leaderboard result.**
+  The 768 px mirror, one-question sampling, and public/pretraining exposure break
+  comparability; 0.829 ANLS is not a product accuracy claim.
 - **Flags fail.** Inconsistent or multi-invoice files are not reliably detected.
 - **Grounding is provenance, not model boxes.** OCR spans are shipped.
 - **Latency is 7–26 s/page on an M4 through Ollama**, above the 4 s target.

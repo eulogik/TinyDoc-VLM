@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-146-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-153-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -44,6 +44,7 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 | **Receipts** | 0.9475 / 0.9200 field F1 on SROIE clean-100 (not external) |
 | **Invoices** | 91.9% / 65.7% (3B) · 93.5% / 71.8% (2B) key-header / fully correct, synthetic page 1 |
 | **Multipage** | 4/10 fully correct vs 0/10 page-1 · 46 pages · 2B · n=10, descriptive |
+| **DocVQA (reading)** | 0.829 ANLS / 0.765 exact · 200 public images · single-reference |
 | **Not yet measured** | Real supplier invoices, SDK multipage path |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
 
@@ -136,6 +137,13 @@ runaway line-item generation (212–213 fabricated rows), and mean line-item F1
 *fell* from 0.418 to 0.322 at the 1400 px multipage render. Multipage is not a
 straight-through path.
 
+**DocVQA reading probe** — 200 public images, one question per image, 768 px
+mirror, one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS** and
+**0.765 exact match**, 0 errors, p50 3.36 s. This measures document reading, not
+field extraction. The set is public and may be in pretraining; official DocVQA
+uses up to 10 references, so this single-reference number is **not comparable to
+leaderboard scores**.
+
 > ⚠️ **These are not external benchmark numbers.** The 100-doc set is a
 > duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
 > it during pretraining. The original 100-doc set is **60% leaked** (61/100 also
@@ -216,6 +224,13 @@ It returns OCR-span boxes, which are page-derived provenance. Model-predicted
 boxes were measured and did not meet the 0.70 hit-rate gate, so they are not
 claimed or shipped.
 
+**How well does it read documents?**
+On a 200-image public DocVQA subset (one question per image, 768 px mirror,
+single reference), Qwen3-VL-2B-Instruct scores **0.829 ANLS** and **0.765 exact
+match**. The set is public and may be in pretraining, and official DocVQA uses up
+to 10 references, so this is a single-reference reading probe, not a leaderboard
+number.
+
 **What about multipage PDFs?**
 The evaluation harness now sends every page. On 10 synthetic multipage invoices
 (46 pages), 4/10 are fully correct on key headers versus 0/10 with page 1 only;
@@ -276,8 +291,10 @@ third-party reader behind a grounded extraction layer.
 - **Multipage** is a 10-document synthetic probe at 1400 px, 2B only. It is
   descriptive, two 8-page files failed, and line-item F1 is not comparable to
   the 1800 px page-1 run. Do not call it a production multipage claim.
-- **DocVQA** is being wired as a reading probe; CORD images are absent. No claims
-  until measured.
+- **DocVQA** is a 200-image public reading probe with a single reference answer
+  per question. The set may be in pretraining and the 768 px mirror is not the
+  official pipeline; 0.829 ANLS is not comparable to leaderboard numbers.
+  CORD images are absent.
 - Measured artifacts live in [`evaluation/phase0/results/`](evaluation/phase0/results/);
   methodology and provenance are in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
   Machine-readable provenance and SHA-256 hashes are in
@@ -289,7 +306,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 146 passed
+python3 -m pytest tests/ -q                 # 153 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims
@@ -311,7 +328,7 @@ is [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
 | `sdk/tinydoc/` | Python SDK: engines, schema, evidence, confidence, CLI |
 | `evaluation/phase0/` | Measured SROIE/FUNSD/OCRBench harness + artifacts |
 | `evaluation/invoice/` | Synthetic invoice transfer probe + paired tier comparison |
-| `evaluation/docvqa/` | DocVQA reading probe (manifest, runner, tests) |
+| `evaluation/docvqa/` | DocVQA reading probe (measured; single-reference) |
 | `training/` | QLoRA and Kaggle experiment code (historical; tracks closed) |
 | `tinydoc_vlm/` | From-scratch 256M model code (retired research artifact) |
 | `demo/` | Local Gradio demo + static HF Space card |

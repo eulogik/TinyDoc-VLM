@@ -4,7 +4,9 @@
 > Earlier versions of this file (and `docs/paper.md`, `docs/benchmark_results.json`,  
 > the pitch/reddit/twitter/launch drafts) carried **unmeasured estimates**  
 > (DocVQA ~55%, FUNSD ~70%, …) presented as results. They are withdrawn.  
-> Every number below recomputes from a committed artifact.
+> Every number below recomputes from a committed artifact. The measured DocVQA
+> reading probe (0.829 single-reference ANLS) is a separate, caveated result — it
+> is not the withdrawn estimate and is not a leaderboard number.
 
 ---
 
@@ -209,6 +211,27 @@ synthetic invoices and moves fully-correct from 0/10 to 4/10, but it does **not*
 make multipage invoices straight-through: two 8-page files fail, line items are
 unreliable, and 6/10 still miss at least one key header field. The SDK path
 remains single-image. Artifacts: `evaluation/invoice/results/`.
+
+### DocVQA reading probe (2B, 200 questions, single reference)
+
+**Set:** 200 public DocVQA images from the lmms-lab mirror, one question per
+image (seed 42), images capped at 768 px. Each question has **one** target
+answer; official DocVQA scoring takes the best ANLS over up to 10 human answers.
+This is a reading probe, not field extraction, and the set may be in pretraining.
+
+| Metric | Qwen3-VL-2B-Instruct |
+|---|---:|
+| ANLS (threshold 0.5, single reference) | **0.829** |
+| Normalized exact match | **0.765** |
+| Errors | 0 / 200 |
+| p50 / mean latency | 3.36 s / 3.43 s |
+
+The model reads most document text and numbers: high-confidence examples include
+table values, names, and dates; misses are wrong-row selection (e.g. net block
+vs a number) rather than empty output. **Do not cite 0.829 as a DocVQA
+leaderboard score.** The single-reference metric, 768 px mirror, one-question
+sampling, and public/pretraining exposure all break comparability. The number is
+useful only as an internal reading signal for this engine and this mirror.
 
 Recompute: `python3 evaluation/phase0/recompute_scores.py` (or open the JSONs — `macro_prf` over
 the committed preds/scores rows).

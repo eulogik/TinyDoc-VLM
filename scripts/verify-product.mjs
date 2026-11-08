@@ -82,6 +82,7 @@ function gateClaims() {
   if (!/not an external|60%|leaked/i.test(index)) bad.push("index.html missing the clean-100 provenance caveat");
   if (!/71\.1/.test(index) || !/4\/10/.test(index)) bad.push("index.html missing the multipage result (71.1%, 4/10)");
   if (!/8-page|runaway/i.test(index)) bad.push("index.html missing the multipage failure caveat");
+  if (!/0\.829/.test(index) || !/single-reference/i.test(index)) bad.push("index.html missing the DocVQA single-reference result");
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
@@ -114,6 +115,12 @@ function gateClaims() {
   }
   if (!/71\.1/.test(readme) || !/4\/10/.test(readme) || !/8-page|runaway/i.test(readme)) {
     bad.push("README missing the multipage result or its failure caveat");
+  }
+  if (!/0\.829/.test(readme) || !/single-reference/i.test(readme) || !/not comparable/i.test(readme)) {
+    bad.push("README missing the DocVQA single-reference result or caveat");
+  }
+  if (!/DocVQA/i.test(bench) || !/not comparable/i.test(bench) || !/0\.829/.test(bench)) {
+    bad.push("BENCHMARKS.md missing the DocVQA result or caveat");
   }
 
   if (bad.length) return fail(`PUBLIC_CLAIMS_CLEAN: ${bad.join("; ")}`);

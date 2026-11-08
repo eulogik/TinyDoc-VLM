@@ -44,6 +44,11 @@ two 8-page invoices with 110–117 line items failed with runaway line-item
 generation, and mean line-item F1 fell from 0.418 to 0.322. The SDK extraction
 path remains single-image.
 
+DocVQA reading probe (2B, 200 public images, one question per image, 768 px
+mirror, single reference): **0.829 ANLS / 0.765 exact**, 0 errors, 3.36 s p50.
+The set may be in pretraining and official DocVQA uses up to 10 references, so
+this is not a leaderboard number.
+
 > **Caveat:** these are **not external benchmark numbers**. The 100-doc set is a
 > duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
 > it during pretraining. The original 100-doc set is 60% leaked. The invoice set

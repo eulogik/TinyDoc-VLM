@@ -240,6 +240,11 @@
           },
           {
             "@type": "Question",
+            "name": "What is TinyDoc's DocVQA score?",
+            "acceptedAnswer": { "@type": "Answer", "text": "On 200 public DocVQA images, one question per image and a single reference answer, Qwen3-VL-2B-Instruct scores 0.829 ANLS and 0.765 exact match with zero errors. Official DocVQA uses up to 10 references, the images are a 768 px mirror, and the set may be in pretraining, so this is a single-reference reading probe and not comparable to leaderboard numbers." }
+          },
+          {
+            "@type": "Question",
             "name": "Does my data leave my machine?",
             "acceptedAnswer": { "@type": "Answer", "text": "No. Inference runs against a local Ollama server. There is no hosted API, no telemetry, and no API key in the SDK." }
           },
@@ -419,7 +424,7 @@
         </div>
         <figure>
           <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
-          <figcaption>Receipts: SROIE clean-100. Invoices: public synthetic benchmark, page 1 only. Neither is an external benchmark.</figcaption>
+          <figcaption>Receipts: SROIE clean-100. Invoices: public synthetic benchmark, page 1 only. Neither is an external benchmark. DocVQA is a separate single-reference reading probe, not a leaderboard score.</figcaption>
         </figure>
 
         <div class="table-wrap" style="margin-top:34px">
@@ -436,6 +441,7 @@
               <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, 3B</td><td>Key-header</td><td class="num">91.9%</td><td><span class="tag warn">65.7% fully correct</span></td></tr>
               <tr><td>Invoice benchmark v1 — page 1, 2B</td><td>Key-header</td><td class="num"><b>93.5%</b></td><td><span class="tag warn">71.8% fully correct</span></td></tr>
               <tr><td>Invoice multipage — 10 synthetic docs, 46 pages, 2B</td><td>Fully correct</td><td class="num"><b>4/10</b></td><td><span class="tag warn">0/10 page 1 · 71.1% vs 63.3% key-header</span></td></tr>
+              <tr><td>DocVQA reading probe — 200 public images, 2B</td><td>ANLS</td><td class="num"><b>0.829</b></td><td><span class="tag warn">single-reference · not a leaderboard number</span></td></tr>
               <tr><td>Invoice flags — inconsistent + multi-invoice</td><td>Recall</td><td class="num"><b>0/7</b></td><td><span class="tag bad">not usable</span></td></tr>
               <tr><td>Evidence coverage — RapidOCR</td><td>Rate</td><td class="num">0.798</td><td><span class="tag warn">gate 0.90</span></td></tr>
               <tr><td>VLM bbox grounding — hit@0.5</td><td>2B / 3B</td><td class="num">0.20 / 0.04</td><td><span class="tag bad">gate 0.70</span></td></tr>
@@ -445,7 +451,7 @@
         </div>
 
         <div class="caveat">
-          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real supplier invoices are unmeasured, and flagging fails (0/7). The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive; two 8-page files failed with runaway line-item generation. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
+          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real supplier invoices are unmeasured, and flagging fails (0/7). The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive; two 8-page files failed with runaway line-item generation. DocVQA is a 200-image public reading probe with one reference answer per question; it is not comparable to leaderboard numbers. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
         </div>
       </div>
     </section>
@@ -522,6 +528,10 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
           <p>On a synthetic public benchmark of 181 invoices (page 1 only), it reaches 91.9% key-header accuracy and 65.7% fully correct with the 3B, and 93.5% / 71.8% with the 2B. Real supplier invoices are unmeasured and flagging fails (0/7); multipage is a separate 10-document probe, not a shipped SDK path.</p>
         </details>
         <details>
+          <summary>How well does it read documents?</summary>
+          <p>On a 200-image public DocVQA subset (one question per image, 768 px mirror, one reference answer), Qwen3-VL-2B-Instruct scores 0.829 ANLS and 0.765 exact match with zero errors. Official DocVQA uses up to 10 references, so this single-reference number is not comparable to leaderboard scores; the set is public and may be in pretraining.</p>
+        </details>
+        <details>
           <summary>Does it handle multipage invoices?</summary>
           <p>The evaluation harness sends every page. On 10 synthetic multipage invoices (46 pages), 4/10 are fully correct on key headers versus 0/10 with page 1 only; key-header accuracy rises from 63.3% to 71.1%. The paired tests are not significant (n=10). Two 8-page invoices with 110–117 line items failed with runaway line-item generation, and mean line-item F1 fell from 0.418 to 0.322 at the 1400 px render. The SDK extraction path is still single-image.</p>
         </details>
@@ -572,7 +582,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         <div>Built by <a href="https://eulogik.com">eulogik</a> — AI infrastructure for document intelligence.</div>
         <div><a href="llms.txt">llms.txt</a> · <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> · <a href="https://pypi.org/project/tinydoc/">PyPI</a> · Apache 2.0</div>
       </div>
-      <p class="foot-note">Last updated 2026-11-08. TinyDoc is a developer preview: real supplier invoices are unmeasured, the multipage probe is 10 synthetic documents with two 8-page failures, and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
+      <p class="foot-note">Last updated 2026-11-08. TinyDoc is a developer preview: real supplier invoices are unmeasured, the multipage probe is 10 synthetic documents with two 8-page failures, DocVQA is a single-reference reading probe rather than a leaderboard score, and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
     </div>
   </footer>
 </body>

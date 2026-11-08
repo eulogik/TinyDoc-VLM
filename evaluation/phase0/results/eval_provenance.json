@@ -93,8 +93,13 @@
       "multipage_probe": "probes.multipage"
     },
     "docvqa": {
-      "status": "not_measured",
-      "blocker": "images exist, but no manifest/runner is wired into the phase-0 harness"
+      "status": "measured_probe",
+      "set": "docvqa_public_mirror_200",
+      "n": 200,
+      "sampling": "one question per image, seed 42",
+      "single_reference": true,
+      "caveat": "public set, may be in pretraining; 768 px image mirror; single-reference ANLS; not comparable to DocVQA leaderboard numbers",
+      "probe": "probes.docvqa_reading"
     }
   },
   "claim_audit": "evaluation/phase0/recompute_scores.py",
@@ -736,6 +741,30 @@
         "eight_page_retry_rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_8p.jsonl",
         "eight_page_retry_scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_8p.json",
         "truncated_first_pass": "evaluation/invoice/results/archive/rows_invoice_qwen3-vl_2b_mp_num768_truncated.jsonl"
+      }
+    },
+    "docvqa_reading": {
+      "date": "2026-11-08",
+      "set": "docvqa_public_mirror_200",
+      "source": "lmms-lab DocVQA mirror in data/datasets/docvqa (public)",
+      "model": "qwen3-vl:2b-instruct",
+      "n": 200,
+      "sampling": "one question per image, seed 42",
+      "image_max_edge_px": 768,
+      "single_reference": true,
+      "caveat": "public DocVQA questions; may be in pretraining; one question per image; single-reference ANLS is not comparable to leaderboard numbers; reading probe, not extraction",
+      "results": {
+        "anls_mean": 0.829397,
+        "exact_rate": 0.765,
+        "errors": 0,
+        "p50_latency_ms": 3356.9,
+        "mean_latency_ms": 3430.6
+      },
+      "artifacts": {
+        "manifest": "evaluation/docvqa/manifest_docvqa_200.jsonl",
+        "rows": "evaluation/docvqa/results/rows_docvqa_qwen3-vl_2b_instruct.jsonl",
+        "scores": "evaluation/docvqa/results/scores_docvqa_qwen3-vl_2b_instruct.json",
+        "summary": "evaluation/docvqa/results/summary_docvqa_qwen3-vl_2b_instruct.json"
       }
     }
   }
