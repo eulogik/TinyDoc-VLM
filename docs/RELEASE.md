@@ -6,7 +6,7 @@
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 129 passed
+python3 -m pytest tests/ -q                 # expect 137 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -91,7 +91,9 @@ Check the Space reaches `RUNNING` and renders the card.
 
 ## 7. Post-release
 
-- Tag `v0.2.0` and create a GitHub release with the wheel/sdist.
+- Tag **`sdk-v0.2.0`** at the release commit and create a GitHub release with the
+  wheel/sdist. Do **not** reuse `v0.2.0`: that tag already points at an older
+  model-era commit, and published tags should not be moved.
 - Update the README install line from source to PyPI once 0.2.0 is live.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
@@ -102,9 +104,15 @@ Check the Space reaches `RUNNING` and renders the card.
 - The HF Space can be reverted with `git revert` on the Space repo (or re-upload
   the previous `app.py`).
 
-## Current status (2026-11-06)
+## Current status (2026-11-07)
 
-- 0.2.0 wheel and sdist build successfully.
-- Clean-venv install + Ollama extraction verified.
-- PyPI upload **not done** — no token in the environment.
-- Space updated to the static card and verified **RUNNING** (`/config` serves the new card).
+- 0.2.0 wheel and sdist built in `sdk/dist/`; `twine check` passed.
+- **0.2.0 is published on PyPI**; `https://pypi.org/pypi/tinydoc/json` reports
+  0.2.0 with both files.
+- Clean-venv install + Ollama extraction passed against the built wheel before
+  upload. The PyPI clean-venv re-check was blocked by transient index network
+  errors; rerun §3 and §5 when `https://pypi.org/simple` is reachable.
+- The upload token appeared in a chat transcript: **rotate it** in PyPI account
+  settings and delete any local copy.
+- Space updated to the static card and verified **RUNNING**.
+- Use tag `sdk-v0.2.0` for this release; the existing `v0.2.0` tag is older.

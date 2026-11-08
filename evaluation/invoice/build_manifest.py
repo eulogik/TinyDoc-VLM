@@ -82,6 +82,7 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--categories", nargs="*", default=None)
+    ap.add_argument("--ids", nargs="*", default=None, help="only render these doc ids")
     ap.add_argument("--max-dim", type=int, default=MAX_DIM)
     ap.add_argument(
         "--all-pages",
@@ -102,6 +103,9 @@ def main() -> int:
     if args.categories:
         wanted = set(args.categories)
         docs = [d for d in docs if d["category"] in wanted]
+    if args.ids:
+        wanted_ids = set(args.ids)
+        docs = [d for d in docs if d["doc_id"] in wanted_ids]
     if args.limit:
         docs = docs[: args.limit]
     if not docs:

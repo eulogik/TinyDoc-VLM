@@ -162,4 +162,5 @@ data/datasets/
 
 # Invoice probe: local corpus images/manifest live on the external disk
 evaluation/invoice/manifest_v1.jsonl
+evaluation/invoice/manifest_multipage.jsonl
 evaluation/invoice/rendered/

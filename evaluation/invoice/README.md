@@ -52,13 +52,43 @@ understated accuracy (90.6% / 55.8%). Raw model outputs are unchanged; the
 normalizer now maps symbols to ISO codes and the superseded pass is archived as
 `results/*_v1_currency_symbols.*`. Artifacts: `results/`.
 
+## Multipage path (wired, not yet measured)
+
+The published probe above is page 1 only. A real multipage path is now wired so
+the 10 `multipage` documents (46 pages total) can be measured as full documents:
+
+```bash
+python3 evaluation/invoice/build_manifest.py \
+  --corpus "/Volumes/KIOXIA 1TB/tinydoc/invoice_benchmark_v1/corpus/v1" \
+  --render-dir "/Volumes/KIOXIA 1TB/tinydoc/invoice_benchmark_v1/rendered_mp1400" \
+  --out evaluation/invoice/manifest_multipage.jsonl \
+  --ids multipage-2p-za-1 multipage-2p-us-2 multipage-3p-na-3 multipage-3p-gb-4 \
+        multipage-4p-za-5 multipage-5p-de-6 multipage-5p-na-7 multipage-6p-za-8 \
+        multipage-8p-us-9 multipage-8p-na-10 \
+  --all-pages --max-dim 1400
+```
+
+This renders all 46 pages at longest edge 1400 px and emits `image_paths` per
+document. `run_invoice_eval.py` sends every page image in one request and uses
+`multipage_prompt()`, which asks for document-wide totals and tells the model to
+read every page. Use `TINYDOC_OLLAMA_NUM_CTX=16384` for 5–8 page files.
+
+**No multipage inference result exists yet.** Running it needs explicit approval
+under `AGENTS.md`. Do not claim multipage accuracy until rows, scores, and the
+claim audit exist. The 0% fully-correct result for multipage documents in the
+table above is an artifact of page-1-only rendering, not a measurement of the
+multipage path.
+
 ## Files
 
-- `build_manifest.py` — render page 1 of PDFs with pypdfium2, emit JSONL with
-  the benchmark's expected values. Requires the OCR venv (pypdfium2).
-- `manifest_v1.jsonl` — local manifest (absolute image paths; not committed
-  because the corpus lives on the external disk). Rebuild with the command
-  below.
+- `build_manifest.py` — render page 1 of PDFs with pypdfium2 (or every page with
+  `--all-pages`), emit JSONL with the benchmark's expected values and
+  `image_paths`. Requires pypdfium2.
+- `manifest_v1.jsonl` — local page-1 manifest (absolute image paths; not
+  committed because the corpus lives on the external disk). Rebuild with the
+  command below.
+- `manifest_multipage.jsonl` — local all-pages manifest for the 10 multipage
+  documents (46 pages, ≤1400 px; not committed for the same reason).
 - `run_invoice_eval.py` — Ollama runner; writes per-document rows and a
   benchmark-format `predictions.json`.
 - `../../scripts/run_invoice_probe.sh` — runner + memory guard + scorer.
@@ -72,9 +102,9 @@ git clone --depth 1 https://github.com/DrewKraken/invoice-extraction-benchmark \
 git clone --depth 1 https://huggingface.co/datasets/drew-ipp/invoice-extraction-benchmark \
   "/Volumes/KIOXIA 1TB/tinydoc/invoice_benchmark_v1"
 
-# 2. Render page 1 and build the manifest (OCR venv has pypdfium2)
-/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/ocr_venv/bin/python \
-  evaluation/invoice/build_manifest.py \
+# 2. Render page 1 and build the manifest (needs pypdfium2; a venv is cleanest)
+#    python3 -m venv .venv && .venv/bin/pip install pypdfium2 pillow
+python3 evaluation/invoice/build_manifest.py \
   --corpus "/Volumes/KIOXIA 1TB/tinydoc/invoice_benchmark_v1/corpus/v1" \
   --render-dir "/Volumes/KIOXIA 1TB/tinydoc/invoice_benchmark_v1/rendered" \
   --out evaluation/invoice/manifest_v1.jsonl
