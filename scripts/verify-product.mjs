@@ -83,6 +83,10 @@ function gateClaims() {
   if (!/71\.1/.test(index) || !/4\/10/.test(index)) bad.push("index.html missing the multipage result (71.1%, 4/10)");
   if (!/8-page|runaway/i.test(index)) bad.push("index.html missing the multipage failure caveat");
   if (!/0\.829/.test(index) || !/single-reference/i.test(index)) bad.push("index.html missing the DocVQA single-reference result");
+  if (!/6\/10/.test(index) || !/93\.3/.test(index) || !/page-wise/i.test(index)) {
+    bad.push("index.html missing the page-wise multipage result (6/10, 93.3%)");
+  }
+  if (!/2×|2x/i.test(index)) bad.push("index.html missing the page-wise latency caveat");
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
@@ -113,12 +117,19 @@ function gateClaims() {
   if (!/Multipage/i.test(bench) || !/runaway/i.test(bench) || !/71\.1/.test(bench)) {
     bad.push("BENCHMARKS.md missing the multipage result or its failure caveat");
   }
+  if (!/Page-wise/i.test(bench) || !/6\/10/.test(bench) || !/93\.3/.test(bench) || !/0\.848/.test(bench)) {
+    bad.push("BENCHMARKS.md missing the page-wise multipage result");
+  }
   if (!/71\.1/.test(readme) || !/4\/10/.test(readme) || !/8-page|runaway/i.test(readme)) {
     bad.push("README missing the multipage result or its failure caveat");
   }
   if (!/0\.829/.test(readme) || !/single-reference/i.test(readme) || !/not comparable/i.test(readme)) {
     bad.push("README missing the DocVQA single-reference result or caveat");
   }
+  if (!/6\/10/.test(readme) || !/93\.3/.test(readme) || !/0\.848/.test(readme)) {
+    bad.push("README missing the page-wise multipage result");
+  }
+  if (!/2×|2x/i.test(readme)) bad.push("README missing the page-wise latency caveat");
   if (!/DocVQA/i.test(bench) || !/not comparable/i.test(bench) || !/0\.829/.test(bench)) {
     bad.push("BENCHMARKS.md missing the DocVQA result or caveat");
   }

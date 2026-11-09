@@ -18,3 +18,14 @@ but the cause was **runaway generation**: the raw output contains 213 and 212
 descriptions with fabricated repeated “(batch N)” items, not a truncated valid
 JSON. A larger budget would make it worse. These rows remain visible failures in
 the canonical 10-document result; they were not merged or hidden.
+
+## Superseded page-wise merge (2026-11-09)
+
+The first page-wise pass wrote `*_pagewise_raw.*` with the initial merge. It was
+valid inference but the merge used printed totals without the disclosed
+internal-consistency repairs. The canonical `*_pagewise.*` artifacts were rebuilt
+from the saved page raws with `rebuild_pagewise.py` (no model calls) and score
+**6/10 fully correct, 84/90 key-header, 0.848 line F1**. The raw merge scored
+**5/10, 82/90, 0.848**. The difference is the subtotal/tax repairs documented in
+provenance; the raw artifacts stay for audit and must not be cited as the
+canonical result.

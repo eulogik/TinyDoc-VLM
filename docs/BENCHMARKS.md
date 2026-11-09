@@ -212,6 +212,50 @@ make multipage invoices straight-through: two 8-page files fail, line items are
 unreliable, and 6/10 still miss at least one key header field. The SDK path
 remains single-image. Artifacts: `evaluation/invoice/results/`.
 
+### Page-wise multipage (2B, n=10, 46 pages)
+
+The all-pages request's two 8-page failures are an output-control problem, so the
+next probe reads **one page per request** and merges in code: first non-empty
+header, concatenated line items, final-page totals, and two internal-consistency
+repairs. No gold answer is used in the merge.
+
+| Metric | All pages | Page-wise | Delta |
+|---|---:|---:|---:|
+| Key-header accuracy | 71.1% (64/90) | **93.3%** (84/90) | +22.2 pts |
+| Documents fully correct | 4/10 | **6/10** | +2 docs |
+| Mean line-item F1 | 0.322 | **0.848** | +0.526 |
+| Parse errors | 2 | **0** | −2 |
+| p50 latency per document | 34.7 s | 70.7 s | +36.0 s |
+| p50 latency per page | 8.9 s | 16.1 s | +7.2 s |
+
+All 46 pages were sent one at a time at 1400 px with an 8,192-token context and a
+2,048-token output budget. The two 8-page files now parse with **117/117** and
+**110/110** line items. Paired changes are **not significant**: key header
+p=0.219 (5 improved, 1 regressed, 4 unchanged), fully correct p=0.625 (3 gained,
+1 lost). n=10, descriptive only.
+
+**The residual travels with the number:**
+
+- **Currency is 7/10.** Three Namibian documents are read as ZAR instead of NAD.
+  That single field blocks three otherwise fully-correct files.
+- **One regression.** `multipage-2p-za-1` read 25,083.76 / 3,762.56 / 28,846.32
+  as 2,508.36 / 762.56 / 846.32 — all three amounts digit-truncated. The merge
+  cannot repair that without gold, so it stays wrong.
+- **Line items are still weak.** Mean F1 is 0.848 and only **1/10** documents has
+  every line item right; 8/10 trigger a line-sum-vs-subtotal review flag.
+- **Two merge corrections, both disclosed.** A 0.29 subtotal residual was
+  resolved toward `total − tax` on `multipage-3p-na-3`; a truncated tax
+  (26.69 → 26,269.37) was derived from `total − subtotal` on
+  `multipage-6p-za-8`. Both use only internally corroborated values.
+- **It is ~2× slower.** 70.7 s/doc p50 and 16.1 s/page; chunking is the next
+  latency experiment.
+
+**Read this as:** output control, not perception, was the main multipage
+bottleneck. Page-wise reading fixes the runaway, raises key-header accuracy to
+93.3% and fully-correct to 6/10, and nearly triples line-item F1. It is still not
+straight-through: currency, line-item amounts, and latency remain open. The SDK
+path remains single-image. Artifacts: `evaluation/invoice/results/`.
+
 ### DocVQA reading probe (2B, 200 questions, single reference)
 
 **Set:** 200 public DocVQA images from the lmms-lab mirror, one question per
@@ -253,8 +297,9 @@ Machine-readable provenance and SHA-256 hashes for every eval set:
 - **Engine latency (M4, Ollama Q4, warm, per doc, clean-100):** 3B ≈ 14.1 s; 2B ≈ 7.0 s.
   The v2 hybrid is ≈8 s/doc on the MLX engineering track. A 7B pilot was rejected (identical
   F1, 4.5× slower, unstable on the 16 GB host).
-- **Output budget:** invoice page-1 runs used `num_predict=768`, the multipage run uses
-  `5120`, and the DocVQA probe uses `128`. The invoice runner records
+- **Output budget:** invoice page-1 runs used `num_predict=768`, the all-pages
+  multipage run uses `5120` (and an 8-page retry at `8192`), the page-wise run
+  uses `2048` per page, and the DocVQA probe uses `128`. The invoice runner records
   `prompt_eval_count`, `eval_count`, and `done_reason`; a `length` stop is a failed
   generation, not a result. Multipage documents carry 98–117 line items, so the
   page-1 budget truncates them.

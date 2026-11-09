@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08",
+  "generated": "2026-11-09",
   "policy": "Every published number must name its eval set and provenance. Clean-100 is not an external test set.",
   "datasets": {
     "sroie_eval": {
@@ -90,7 +90,9 @@
       "real_invoices": "missing",
       "probe": "probes.invoice_transfer",
       "multipage": "measured_separately",
-      "multipage_probe": "probes.multipage"
+      "multipage_probe": "probes.multipage",
+      "multipage_pagewise": "measured_separately",
+      "multipage_pagewise_probe": "probes.multipage_pagewise"
     },
     "docvqa": {
       "status": "measured_probe",
@@ -765,6 +767,100 @@
         "rows": "evaluation/docvqa/results/rows_docvqa_qwen3-vl_2b_instruct.jsonl",
         "scores": "evaluation/docvqa/results/scores_docvqa_qwen3-vl_2b_instruct.json",
         "summary": "evaluation/docvqa/results/summary_docvqa_qwen3-vl_2b_instruct.json"
+      }
+    },
+    "multipage_pagewise": {
+      "date": "2026-11-09",
+      "set": "invoice_extraction_benchmark_v1",
+      "source": "drew-ipp/invoice-extraction-benchmark (CC BY 4.0)",
+      "model": "qwen3-vl:2b-instruct",
+      "n_docs": 10,
+      "pages": 46,
+      "page_render_px": 1400,
+      "method": "one page per request; deterministic merge (headers first non-empty, line items concatenated, final-page totals, internal-consistency repairs); no gold in the merge",
+      "caveat": "synthetic, vendor-made, n=10 descriptive only; page-wise is ~2x slower than all-pages; line items remain unreliable; no real-invoice transfer",
+      "prompt": "evaluation/invoice/run_invoice_pagewise.py PAGE_PROMPT (fixed before run)",
+      "context": 8192,
+      "output_budget": 2048,
+      "results": {
+        "key_header_accuracy": 0.933333,
+        "key_header_correct": 84,
+        "key_header_scored": 90,
+        "fully_correct": 6,
+        "fully_correct_rate": 0.6,
+        "mean_line_f1": 0.848,
+        "all_lines_right": 1,
+        "parse_errors": 0,
+        "p50_latency_ms": 70665.8,
+        "mean_latency_ms": 75353.5,
+        "p50_latency_ms_per_page": 16115.6,
+        "key_header_accuracy_ci95": [
+          0.8666666666666667,
+          0.9888888888888889
+        ],
+        "fully_correct_rate_ci95": [
+          0.3,
+          0.9
+        ]
+      },
+      "comparison_to_all_pages": {
+        "baseline": {
+          "key_header_accuracy": 0.711111,
+          "key_header_correct": 64,
+          "key_header_scored": 90,
+          "fully_correct": 4,
+          "fully_correct_rate": 0.4,
+          "mean_line_f1": 0.322,
+          "p50_latency_ms": 34685.6
+        },
+        "delta": {
+          "key_header_accuracy": 0.222222,
+          "fully_correct_rate": 0.2,
+          "mean_line_f1": 0.526
+        },
+        "transitions": {
+          "key_improved": 5,
+          "key_regressed": 1,
+          "key_unchanged": 4,
+          "key_sign_p": 0.21875,
+          "fully_correct_gained": 3,
+          "fully_correct_lost": 1,
+          "fully_correct_sign_p": 0.625
+        }
+      },
+      "merge_corrections": {
+        "count": 2,
+        "documents": {
+          "multipage-3p-na-3": [
+            "subtotal_from_total_tax_residual"
+          ],
+          "multipage-6p-za-8": [
+            "tax_from_total_subtotal_truncated"
+          ]
+        },
+        "note": "repairs use only internally corroborated values; no gold"
+      },
+      "review_flags": {
+        "count": 8,
+        "reason": "line_sum_subtotal mismatch; line-item amounts remain unreliable"
+      },
+      "residuals": [
+        "currency 7/10: three NAD documents read as ZAR",
+        "multipage-2p-za-1 subtotal/tax/total digit-truncated; the only fully-correct regression from all-pages",
+        "line items all correct on 1/10; mean F1 0.848",
+        "pagewise p50 70.7 s/doc (16.1 s/page) vs all-pages 34.7 s/doc (8.9 s/page)"
+      ],
+      "artifacts": {
+        "rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl",
+        "rows_raw": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_raw.jsonl",
+        "preds": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise.json",
+        "preds_raw": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise_raw.json",
+        "scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise.json",
+        "scores_raw": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise_raw.json",
+        "summary": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise.json",
+        "compare": "evaluation/invoice/results/compare_invoice_mp_allpages_vs_pagewise_2b.json",
+        "audit": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise.json",
+        "rebuild": "evaluation/invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise.json"
       }
     }
   }

@@ -114,20 +114,50 @@ production multipage claim. Artifacts:
 `results/compare_invoice_page1_vs_multipage_2b.json`,
 `results/rows_invoice_qwen3-vl_2b_mp.jsonl`.
 
-### Page-by-page variant (implemented, not yet measured)
+### Page-by-page variant (measured 2026-11-09)
 
 `run_invoice_pagewise.py` sends **one page per request**, asks for that page's
 line items and header fields, drops carried/brought-forward and total rows in
 code, then merges: first non-empty header, concatenated line items, final-page
-totals with a line-sum/arithmetic fallback. It is designed to avoid the 8-page
-context and runaway problem. Run it with approval:
+totals with a line-sum/arithmetic fallback. It also makes three narrow,
+internal-consistency repairs and records each one: a total from
+`subtotal + tax` when the line items corroborate the subtotal; a small subtotal
+residual resolved toward `total - tax`; and a nonzero tax below 0.1% of the total
+derived from `total - subtotal` (a leading-digit truncation). No repair reads
+gold. It is designed to avoid the 8-page context and runaway problem. Run it
+with approval:
 
 ```bash
 python3 evaluation/invoice/run_invoice_pagewise.py   --manifest evaluation/invoice/manifest_multipage.jsonl   --model qwen3-vl:2b-instruct   --out evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl   --preds evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise.json   --resume
 ```
 
-Then score with `python -m scorer.evaluate ... --allow-missing`. **No pagewise
-result exists yet.** It is a method probe, not a claim.
+Then score with `python -m scorer.evaluate ... --allow-missing`.
+
+| Metric | All pages | Page-wise |
+|---|---:|---:|
+| Key-header accuracy | 71.1% (64/90) | **93.3%** (84/90) |
+| Documents fully correct | 4/10 | **6/10** |
+| Mean line-item F1 | 0.322 | **0.848** |
+| Parse errors | 2 | **0** |
+| p50 latency per document | 34.7 s | 70.7 s |
+| p50 latency per page | 8.9 s | 16.1 s |
+
+All 46 pages parse; the 8-page files now have 117/117 and 110/110 line items.
+Paired tests are not significant (key p=0.219, fully correct p=0.625; n=10).
+Two merge corrections are recorded: a 0.29 subtotal residual on
+`multipage-3p-na-3`, and a truncated tax (26.69 → 26,269.37) on
+`multipage-6p-za-8`. Residuals: currency 7/10 (three NAD invoices read as ZAR),
+`multipage-2p-za-1` has all three amounts digit-truncated, line items are all
+correct on 1/10, and 8/10 trigger a line-sum review flag. Page-wise is ~2× slower.
+This is a method probe, not a shipped SDK path. Artifacts:
+`results/summary_invoice_qwen3-vl_2b_mp_pagewise.json`,
+`results/compare_invoice_mp_allpages_vs_pagewise_2b.json`,
+`results/audit_invoice_qwen3-vl_2b_mp_pagewise.json`.
+
+`rebuild_pagewise.py` re-parses the saved page raws and applies the current merge
+without model calls, so a merge change does not require re-running inference.
+`audit_pagewise_rows.py` fails on a missing page, a non-`stop` page, an output
+budget hit, or a context overflow.
 
 ### Deterministic arithmetic review checks
 

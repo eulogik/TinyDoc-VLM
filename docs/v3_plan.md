@@ -361,7 +361,7 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 - **Fallback if both miss a new vertical: Qwen3-VL-4B** (vendor-reported DocVQA 95.3) — check peak memory on the 16 GB host before enabling it.
 - **Default by vertical:** 3B for receipts (clean-100 0.9475 vs 0.9200), 2B for invoices (93.5% vs 91.9% key-header, 71.8% vs 65.7% fully correct, 16.1 s vs 26.5 s). The invoice tier difference is not significant, so treat this as “no evidence 3B is better on invoices” and revisit on real invoices.
 - Runtime: Ollama Q4 for the pilot; MLX 4-bit for the Mac product; GGUF/llama.cpp for CPU later.
-- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated). The evaluation harness measures all-pages invoices (4/10 fully correct vs 0/10 page 1, n=10); the SDK extraction path remains **single-image**, so PDF/multi-page is not shipped as a product path.
+- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated). The evaluation harness measures all-pages invoices (4/10 fully correct vs 0/10 page 1) and page-wise invoices (6/10, 93.3% key-header; n=10); the SDK extraction path remains **single-image**, so PDF/multi-page is not shipped as a product path.
 - **No model training.** The base is the model; the product is the trust layer.
 
 **Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today. The invoice probe now shows the residual is **document consistency, flags, amount exactness, and multipage**, not basic layout transfer.
@@ -375,11 +375,11 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 | Invoice key-header accuracy | 91.9% (3B) / **93.5%** (2B) — gate met |
 | Invoice fully correct | **65.7%** (3B) / **71.8%** (2B) — 28–34% need review |
 | Invoice flags | **0/7** inconsistent/multi-invoice; 2/172 false alarms |
-| Invoice multipage | page 1: 63.3% key-header, **0/10 fully correct**; all pages: **71.1%**, **4/10**; 2 eight-page runaway failures (n=10) |
+| Invoice multipage | page 1: 63.3% key-header, **0/10 fully correct**; all pages: **71.1%**, **4/10**; page-wise: **93.3%**, **6/10**, 0.848 line F1, ~2× slower (n=10) |
 | Invoice amount exactness | currency 83.8%, subtotal 84.4%, tax 87.2%, total 87.7% |
 | VLM boxes | hit@0.5 0.04–0.20 vs 0.70 gate |
 
-So the v3.1 target is **document consistency + output control + amount exactness + boxes**, not re-teaching receipt layout. The page-wise runner is the first output-control test; the two 8-page failures show why a longer context alone is not enough. Do not train on the benchmark answers; build a separate 10k–20k grounded set and a 200-doc multi-vertical val. If only synthetic invoices are available (CORD images absent, DocILE gated), run a **small** synthetic-only adapter as a controlled experiment and kill it if it does not transfer to a held-out real/synthetic mix.
+So the v3.1 target is **document consistency + output control + amount exactness + boxes**, not re-teaching receipt layout. The page-wise runner is the first output-control test: it fixes the two 8-page runaway failures and lifts key-header to 93.3%, but currency (NAD→ZAR) and line-item amounts remain. A longer context alone is not enough. Do not train on the benchmark answers; build a separate 10k–20k grounded set and a 200-doc multi-vertical val. If only synthetic invoices are available (CORD images absent, DocILE gated), run a **small** synthetic-only adapter as a controlled experiment and kill it if it does not transfer to a held-out real/synthetic mix.
 
 **Definition:** Qwen3-VL-2B + LoRA on ~10k–20k grounded extraction examples, released as an adapter. This is the “our model” artifact: same base, but specialized to output schema’d fields with boxes and abstention.
 
@@ -591,8 +591,9 @@ python evaluation/phase0/run_grounding_probe.py \
 5. **Only then** decide v3.1: if the residual is invoice/forms/grounding — not receipts — train the 10k–20k LoRA on one paid GPU burst. If the residual is small, skip training and ship v3.0.
 6. **Multipage measured (2026-11-08).** Sending every page raises fully-correct documents from **0/10 to 4/10** and key-header accuracy from **63.3% to 71.1%** on 10 synthetic invoices (46 pages, 2B, 1400 px). The paired tests are not significant (key p=0.29, fully correct p=0.13). Two 8-page, 110–117-line invoices failed with runaway line-item generation (212–213 fabricated rows); line-item F1 fell 0.418 → 0.322. The residual is **output control and line-item amount selection**, not page coverage. The SDK path remains single-image; do not market multipage as solved.
 7. **DocVQA measured (2026-11-08).** 2B scores **0.829 ANLS / 0.765 exact** on 200 public images, one question per image, 768 px mirror, single reference, 0 errors, p50 3.36 s. Reading is not the extraction bottleneck. The number is **not comparable to DocVQA leaderboard results** (single reference, public/pretraining exposure); use it only as an internal reading signal.
+8. **Page-wise multipage measured (2026-11-09).** One page per request plus a deterministic merge reaches **6/10 fully correct**, **93.3% key-header** (84/90), and **0.848 line-item F1**, versus 4/10, 71.1%, and 0.322 for all-pages. All 46 pages parse; the two 8-page files now have 117/117 and 110/110 line items. Paired tests are not significant (key p=0.219, fully p=0.625; n=10), latency is ~2× worse (70.7 s/doc, 16.1 s/page), three NAD invoices are read as ZAR, and line items are all correct on 1/10. Two merge corrections are disclosed in provenance. This is the strongest evidence yet that the residual is output control and field conventions, not page coverage.
 
-**The one-sentence version:** *Stop trying to make a weak 2.2B read; put a perception-strong 2B/3B behind the trust layer you already built, prove it on a clean multi-vertical benchmark, and train only the residual that the proof reveals.*
+**The one-sentence version:** *Stop trying to make a weak 2.2B read; put a perception-strong 2B/3B behind the trust layer you already built, fix output control and field conventions before training, and train only the residual that survives.*
 
 ---
 
@@ -621,6 +622,8 @@ python evaluation/phase0/run_grounding_probe.py \
 - `evaluation/invoice/results/compare_invoice_3b_vs_2b.json` — paired tier comparison (diff not significant, p=0.092)
 - `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp.json` — multipage 2B: 71.1% key-header, 4/10 fully correct, 2 parse errors
 - `evaluation/invoice/results/compare_invoice_page1_vs_multipage_2b.json` — paired page-1 vs all-pages comparison (n=10, descriptive)
+- `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise.json` — page-wise 2B: 93.3% key-header, 6/10 fully correct, 0.848 line F1, 0 parse errors
+- `evaluation/invoice/results/compare_invoice_mp_allpages_vs_pagewise_2b.json` — paired all-pages vs page-wise (n=10, descriptive, sign tests not significant)
 - `evaluation/docvqa/results/summary_docvqa_qwen3-vl_2b_instruct.json` — DocVQA reading probe: 0.829 single-reference ANLS, 0.765 exact, 200 questions
 - `evaluation/docvqa/manifest_docvqa_200.jsonl` — deterministic 200-image DocVQA manifest (seed 42)
 - `evaluation/invoice/results/scores_invoice_qwen2.5vl_3b.json` — scorer output, 181 docs

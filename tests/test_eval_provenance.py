@@ -290,3 +290,75 @@ def test_docvqa_probe_matches_artifacts():
     assert abs(scores["anls_mean"] - summary["anls_mean"]) < 1e-9
     assert abs(scores["exact_rate"] - summary["exact_rate"]) < 1e-9
     assert "not comparable" in probe["caveat"]
+
+
+def test_pagewise_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    assert data["multi_vertical"]["invoices"]["multipage_pagewise"] == "measured_separately"
+    probe = data["probes"]["multipage_pagewise"]
+    assert probe["n_docs"] == 10
+    assert probe["pages"] == 46
+    assert probe["model"] == "qwen3-vl:2b-instruct"
+    assert probe["context"] == 8192
+    assert probe["output_budget"] == 2048
+    assert "no gold" in probe["method"]
+    assert "descriptive" in probe["caveat"]
+
+    artifacts = probe["artifacts"]
+    rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows"]).read_text().splitlines()
+        if line.strip()
+    ]
+    raw_rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows_raw"]).read_text().splitlines()
+        if line.strip()
+    ]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+    comparison = json.loads((ROOT / artifacts["compare"]).read_text())
+    audit = json.loads((ROOT / artifacts["audit"]).read_text())
+    rebuild = json.loads((ROOT / artifacts["rebuild"]).read_text())
+
+    assert len(rows) == 10
+    assert len(raw_rows) == 10
+    assert sum(len(row["pages"]) for row in rows) == 46
+    assert all(row.get("error") is None for row in rows)
+    assert all(row.get("error") is None for row in raw_rows)
+    for row in rows:
+        for page in row["pages"]:
+            assert page["done_reason"] == "stop"
+            assert page["prompt_eval_count"] + page["eval_count"] <= 8192
+
+    assert summary["n_docs"] == 10
+    assert summary["parse_errors"] == 0
+    assert summary["key_header_correct"] == 84
+    assert summary["key_header_scored"] == 90
+    assert abs(summary["key_header_accuracy"] - 0.933333) < 1e-6
+    assert summary["fully_correct"] == 6
+    assert abs(summary["line_items"]["f1_mean"] - 0.848) < 1e-9
+    assert summary["per_field"]["currency"] == {"correct": 7, "scored": 10}
+    assert scores["summary"]["key_fields"] == {"correct": 84, "scored": 90}
+    assert scores["summary"]["fully_correct"] == 6
+
+    assert comparison["before"]["all_pages"]["key_correct"] == 64
+    assert comparison["before"]["all_pages"]["fully_correct"] == 4
+    assert comparison["after"]["pagewise"]["key_correct"] == 84
+    assert comparison["after"]["pagewise"]["fully_correct"] == 6
+    assert abs(comparison["after"]["pagewise"]["mean_line_f1"] - 0.848) < 1e-9
+    assert comparison["transitions"]["key_sign_p"] > 0.05
+    assert comparison["transitions"]["fully_correct_sign_p"] > 0.05
+
+    assert audit["ok"] is True
+    assert rebuild["corrections"] == 2
+    assert rebuild["review_flags"] == 8
+    corrections = {
+        row["id"]: row["pred"].get("corrections")
+        for row in rows
+        if (row.get("pred") or {}).get("corrections")
+    }
+    assert corrections == {
+        "multipage-3p-na-3": ["subtotal_from_total_tax_residual"],
+        "multipage-6p-za-8": ["tax_from_total_subtotal_truncated"],
+    }

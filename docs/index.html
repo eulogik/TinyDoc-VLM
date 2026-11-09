@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TinyDoc">
   <meta property="og:title" content="TinyDoc — cited document extraction that runs locally">
-  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 0.2.0 on PyPI.">
+  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 93.3% multipage key-header; 0.2.0 on PyPI.">
   <meta property="og:url" content="https://eulogik.github.io/TinyDoc-VLM/">
   <meta property="og:image" content="https://eulogik.github.io/TinyDoc-VLM/assets/og-card.png">
   <meta property="og:image:width" content="1200">
@@ -236,7 +236,7 @@
           {
             "@type": "Question",
             "name": "Does TinyDoc handle multipage invoices?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The evaluation harness sends every page. On 10 synthetic multipage invoices (46 pages), 4 of 10 are fully correct on key headers versus 0 of 10 with page 1 only; key-header accuracy rises from 63.3% to 71.1%. The paired tests are not significant at n=10. Two 8-page invoices with 110-117 line items failed with runaway line-item generation, and mean line-item F1 fell from 0.418 to 0.322 at the 1400 px render. The SDK extraction path remains single-image." }
+            "acceptedAnswer": { "@type": "Answer", "text": "The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4 of 10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise gets 6 of 10 fully correct, 93.3% key-header, and 0.848 line-item F1, with zero parse errors. The paired changes are not significant at n=10, page-wise is about 2x slower, three NAD invoices are still read as ZAR, and line items remain weak. The SDK extraction path remains single-image." }
           },
           {
             "@type": "Question",
@@ -365,9 +365,9 @@
         <div class="note">clean-100 · zero errors</div>
       </div>
       <div class="fact">
-        <div class="label">Invoice fully correct</div>
-        <div class="value">71.8%</div>
-        <div class="note">2B · synthetic page 1</div>
+        <div class="label">Multipage fully correct</div>
+        <div class="value">6/10</div>
+        <div class="note">2B · page-wise, n=10</div>
       </div>
     </div>
 
@@ -423,7 +423,7 @@
           <p>Two tiers, two verticals, one scorer. Every published number recomputes from committed artifacts.</p>
         </div>
         <figure>
-          <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 4/10 fully correct vs 0/10 page 1; DocVQA 0.829 single-reference ANLS; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
+          <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 6/10 fully correct page-wise vs 4/10 all pages; DocVQA 0.829 single-reference ANLS; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
           <figcaption>Receipts: SROIE clean-100. Invoices: public synthetic benchmark, page 1 only. Neither is an external benchmark. DocVQA is a separate single-reference reading probe, not a leaderboard score.</figcaption>
         </figure>
 
@@ -440,7 +440,8 @@
               <tr><td>SROIE receipts — Tesseract + regex</td><td>Field F1</td><td class="num">0.227</td><td><span class="tag">baseline</span></td></tr>
               <tr><td>Invoice benchmark v1 — 181 synthetic invoices, page 1, 3B</td><td>Key-header</td><td class="num">91.9%</td><td><span class="tag warn">65.7% fully correct</span></td></tr>
               <tr><td>Invoice benchmark v1 — page 1, 2B</td><td>Key-header</td><td class="num"><b>93.5%</b></td><td><span class="tag warn">71.8% fully correct</span></td></tr>
-              <tr><td>Invoice multipage — 10 synthetic docs, 46 pages, 2B</td><td>Fully correct</td><td class="num"><b>4/10</b></td><td><span class="tag warn">0/10 page 1 · 71.1% vs 63.3% key-header</span></td></tr>
+              <tr><td>Invoice multipage, all pages — 10 synthetic docs, 46 pages, 2B</td><td>Fully correct</td><td class="num">4/10</td><td><span class="tag warn">0/10 page 1 · 71.1% vs 63.3% key-header</span></td></tr>
+              <tr><td>Invoice multipage, page-wise — same 10 docs, 2B</td><td>Fully correct</td><td class="num"><b>6/10</b></td><td><span class="tag warn">93.3% key-header · 0.848 line F1 · ~2× slower</span></td></tr>
               <tr><td>DocVQA reading probe — 200 public images, 2B</td><td>ANLS</td><td class="num"><b>0.829</b></td><td><span class="tag warn">single-reference · not a leaderboard number</span></td></tr>
               <tr><td>Invoice flags — inconsistent + multi-invoice</td><td>Recall</td><td class="num"><b>0/7</b></td><td><span class="tag bad">not usable</span></td></tr>
               <tr><td>Evidence coverage — RapidOCR</td><td>Rate</td><td class="num">0.798</td><td><span class="tag warn">gate 0.90</span></td></tr>
@@ -451,7 +452,7 @@
         </div>
 
         <div class="caveat">
-          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real supplier invoices are unmeasured, and flagging fails (0/7). The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive; two 8-page files failed with runaway line-item generation. DocVQA is a 200-image public reading probe with one reference answer per question; it is not comparable to leaderboard numbers. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
+          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real supplier invoices are unmeasured, and flagging fails (0/7). The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive: all-pages gets 4/10 fully correct and page-wise gets 6/10, but page-wise is ~2× slower, three NAD invoices are read as ZAR, and line items remain weak. DocVQA is a 200-image public reading probe with one reference answer per question; it is not comparable to leaderboard numbers. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
         </div>
       </div>
     </section>
@@ -533,7 +534,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         </details>
         <details>
           <summary>Does it handle multipage invoices?</summary>
-          <p>The evaluation harness sends every page. On 10 synthetic multipage invoices (46 pages), 4/10 are fully correct on key headers versus 0/10 with page 1 only; key-header accuracy rises from 63.3% to 71.1%. The paired tests are not significant (n=10). Two 8-page invoices with 110–117 line items failed with runaway line-item generation, and mean line-item F1 fell from 0.418 to 0.322 at the 1400 px render. The SDK extraction path is still single-image.</p>
+          <p>The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4/10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise gets <b>6/10 fully correct</b>, <b>93.3% key-header</b>, and <b>0.848 line F1</b>, with zero parse errors. The paired changes are not significant (n=10), page-wise is ~2× slower, three NAD invoices are still read as ZAR, and line items remain weak. The SDK extraction path is still single-image.</p>
         </details>
         <details>
           <summary>Does my data leave my machine?</summary>
@@ -582,7 +583,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         <div>Built by <a href="https://eulogik.com">eulogik</a> — AI infrastructure for document intelligence.</div>
         <div><a href="llms.txt">llms.txt</a> · <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> · <a href="https://pypi.org/project/tinydoc/">PyPI</a> · Apache 2.0</div>
       </div>
-      <p class="foot-note">Last updated 2026-11-08. TinyDoc is a developer preview: real supplier invoices are unmeasured, the multipage probe is 10 synthetic documents with two 8-page failures, DocVQA is a single-reference reading probe rather than a leaderboard score, and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
+      <p class="foot-note">Last updated 2026-11-09. TinyDoc is a developer preview: real supplier invoices are unmeasured, multipage is a 10-document probe (page-wise 6/10, ~2× slower), DocVQA is a single-reference reading probe rather than a leaderboard score, and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
     </div>
   </footer>
 </body>

@@ -37,12 +37,13 @@ Invoices: public synthetic benchmark, page 1 only, n=181.
 | Qwen2.5-VL-3B | 91.9% | 65.7% | 26.5 s |
 | Qwen3-VL-2B-Instruct | **93.5%** | **71.8%** | **16.1 s** |
 
-Multipage probe (2B, 10 synthetic invoices, 46 pages, every page sent at
-1400 px): **4/10 fully correct** versus **0/10** with page 1 only; key-header
-accuracy **71.1%** versus **63.3%**. Paired tests are not significant (n=10),
-two 8-page invoices with 110–117 line items failed with runaway line-item
-generation, and mean line-item F1 fell from 0.418 to 0.322. The SDK extraction
-path remains single-image.
+Multipage probe (2B, 10 synthetic invoices, 46 pages, 1400 px). Sending every
+page gets **4/10 fully correct** and **71.1%** key-header, with two 8-page
+runaway failures. Reading one page per request and merging deterministically
+gets **6/10 fully correct**, **93.3%** key-header, and **0.848** line-item F1,
+with zero parse errors. Page-wise is ~2× slower (70.7 s/doc, 16.1 s/page), three
+NAD invoices are read as ZAR, and line items remain weak. Paired tests are not
+significant (n=10). The SDK extraction path remains single-image.
 
 DocVQA reading probe (2B, 200 public images, one question per image, 768 px
 mirror, single reference): **0.829 ANLS / 0.765 exact**, 0 errors, 3.36 s p50.
@@ -53,9 +54,10 @@ this is not a leaderboard number.
 > duplicate-filtered split of the public SROIE **train** pool; Qwen may have seen
 > it during pretraining. The original 100-doc set is 60% leaked. The invoice set
 > is synthetic and vendor-made, and the 181-document probe is page 1 only; real
-> supplier invoices are unmeasured and flagging fails (0/7). The multipage probe
-> is 10 documents, 2B only, descriptive, and not a shipped SDK path. Use the
-> numbers for same-document engine comparisons, not as generalization claims.
+> supplier invoices are unmeasured and flagging fails (0/7). The multipage probes
+> are 10 documents, 2B only, descriptive, and not a shipped SDK path. Page-wise
+> is ~2× slower and line items remain unreliable. Use the numbers for
+> same-document engine comparisons, not as generalization claims.
 
 ## Install
 

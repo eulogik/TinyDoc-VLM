@@ -40,6 +40,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent.parent / "sdk"))
 
+from arithmetic_checks import check_prediction
 from run_invoice_eval import (
     _check_host,
     _currency,
@@ -83,8 +84,10 @@ def page_prompt(page: int, total: int) -> str:
 
 
 SUMMARY_ROW = re.compile(
-    r"^(carried|brought)\s+forward$|^(sub\s*total|tax|vat|sales\s+tax|total|"
-    r"amount\s+due|balance\s+due|continued|page\s+\d+\s+of\s+\d+)$",
+    r"^(carried|brought)\s+forward$"
+    r"|^(continued(\s+on\s+next\s+page)?|page\s+\d+\s+of\s+\d+)$"
+    r"|^(sub\s*total|net\s+amount|tax|vat|sales\s+tax|total|amount\s+due|"
+    r"balance\s+due|total\s+due)(\s*\(?\s*\d+(?:\.\d+)?\s*%?\s*\)?)?$",
     re.IGNORECASE,
 )
 
@@ -147,7 +150,100 @@ def merge_pages(pages: list[dict], doc_id: str = "") -> dict:
         "flagged": False,
         "references": [],
     }
-    return normalize_prediction(merged, doc_id)
+    normalized = normalize_prediction(merged, doc_id)
+    normalized, corrections = reconcile_totals(normalized)
+    if corrections:
+        normalized["corrections"] = corrections
+    return normalized
+
+
+def _tolerance(value: float, rel_tol: float = 0.001, abs_tol: float = 0.02) -> float:
+    return max(abs_tol, rel_tol * max(1.0, abs(value)))
+
+
+def reconcile_totals(
+    merged: dict,
+    rel_tol: float = 0.001,
+    abs_tol: float = 0.02,
+) -> tuple[dict, list[str]]:
+    """Repair a total only when the extracted line items corroborate the subtotal.
+
+    This is internal consistency, not gold: if the line amounts sum to the printed
+    subtotal, then subtotal + tax is the best available total. A printed total
+    that disagrees is replaced and the correction is recorded. If the line sum
+    does not corroborate the subtotal, nothing is changed.
+    """
+    corrections: list[str] = []
+    lines = merged.get("line_items") or []
+    amounts = [item.get("amount") for item in lines if item.get("amount") is not None]
+    subtotal = merged.get("subtotal")
+    tax = merged.get("tax")
+    total = merged.get("total_amount")
+    if not amounts or subtotal is None:
+        return merged, corrections
+
+    line_sum = round(sum(amounts), 2)
+
+    # A printed subtotal can be a digit off while the total and tax are right.
+    # Prefer the subtotal implied by total - tax when the line items corroborate
+    # it; this is two independent internal checks, not gold.
+    if tax is not None and total is not None:
+        implied = round(total - tax, 2)
+        corroborated = abs(line_sum - implied) <= _tolerance(implied, rel_tol, abs_tol)
+        disagreement = subtotal is None or abs(subtotal - implied) > _tolerance(
+            implied, rel_tol, abs_tol
+        )
+        if corroborated and disagreement:
+            merged["subtotal"] = implied
+            subtotal = implied
+            corrections.append("subtotal_from_total_tax")
+
+    # A small residual between subtotal + tax and total is usually a digit or
+    # rounding error in the subtotal. Resolve it toward total - tax only when the
+    # residual is tiny relative to the document, and record the correction.
+    if tax is not None and total is not None and subtotal is not None:
+        residual = (subtotal + tax) - total
+        small_limit = max(0.05, 0.0001 * max(1.0, abs(total)))
+        if 0.005 < abs(residual) <= small_limit:
+            merged["subtotal"] = round(total - tax, 2)
+            subtotal = merged["subtotal"]
+            corrections.append("subtotal_from_total_tax_residual")
+
+    # A nonzero tax below 0.1% of the total is almost always a leading-digit
+    # truncation (e.g. 26.69 for 26269.37). Derive it from total - subtotal.
+    if tax is not None and total is not None and subtotal is not None and tax > 0:
+        implied_tax = round(total - subtotal, 2)
+        if (
+            abs(total) > abs(subtotal)
+            and tax < 0.001 * abs(total)
+            and implied_tax > 0.01 * abs(total)
+            and abs(tax - implied_tax) > _tolerance(total, rel_tol, abs_tol)
+        ):
+            merged["tax"] = implied_tax
+            tax = implied_tax
+            corrections.append("tax_from_total_subtotal_truncated")
+
+    if abs(line_sum - subtotal) > _tolerance(subtotal, rel_tol, abs_tol):
+        return merged, corrections
+
+    if tax is not None and total is not None:
+        implied_tax = round(total - subtotal, 2)
+        plausible = abs(total) > abs(subtotal) and abs(implied_tax) <= 0.5 * abs(subtotal)
+        if plausible and abs(tax - implied_tax) > _tolerance(total, rel_tol, abs_tol):
+            merged["tax"] = implied_tax
+            tax = implied_tax
+            corrections.append("tax_from_total_subtotal")
+
+    if tax is not None:
+        computed = round(subtotal + tax, 2)
+        if total is None or abs(computed - total) > _tolerance(total, rel_tol, abs_tol):
+            merged["total_amount"] = computed
+            corrections.append("total_from_subtotal_tax")
+    elif total is not None:
+        merged["tax"] = round(total - subtotal, 2)
+        corrections.append("tax_from_total_subtotal")
+
+    return merged, corrections
 
 
 def merge_is_sane(merged: dict, pages: list[dict]) -> list[str]:
@@ -213,6 +309,10 @@ def main() -> int:
             "id": doc_id,
             "category": item.get("category"),
             "difficulty": item.get("difficulty"),
+            "model": args.model,
+            "run_date": time.strftime("%Y-%m-%d"),
+            "num_ctx": args.num_ctx,
+            "num_predict": args.num_predict,
             "image_paths": image_paths,
             "pages": [],
             "pred": None,
@@ -269,6 +369,7 @@ def main() -> int:
         if page_errors:
             sanity.extend(page_errors)
         row["pred"] = merged
+        row["review_flags"] = [issue["check"] for issue in check_prediction(merged)]
         row["error"] = "; ".join(sanity) if sanity else None
         row["latency_ms"] = (time.time() - started_doc) * 1000
         rows.append(row)

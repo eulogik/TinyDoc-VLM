@@ -433,6 +433,119 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"DocVQA check errored: {exc}")
 
+    pagewise_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise.json"
+    pagewise_scores = ROOT.parent / "invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise.json"
+    pagewise_compare = ROOT.parent / "invoice/results/compare_invoice_mp_allpages_vs_pagewise_2b.json"
+    pagewise_rows = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl"
+    pagewise_raw_rows = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_raw.jsonl"
+    pagewise_audit = ROOT.parent / "invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise.json"
+    pagewise_rebuild = ROOT.parent / "invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise.json"
+    pagewise_missing = [
+        path.name
+        for path in (
+            pagewise_summary,
+            pagewise_scores,
+            pagewise_compare,
+            pagewise_rows,
+            pagewise_raw_rows,
+            pagewise_audit,
+            pagewise_rebuild,
+        )
+        if not path.exists()
+    ]
+    if pagewise_missing:
+        failures.append(f"pagewise artifacts missing: {pagewise_missing}")
+    else:
+        try:
+            psum = json.loads(pagewise_summary.read_text())
+            psc = json.loads(pagewise_scores.read_text())
+            pcmp = json.loads(pagewise_compare.read_text())
+            prows = [json.loads(line) for line in pagewise_rows.open() if line.strip()]
+            praw = [json.loads(line) for line in pagewise_raw_rows.open() if line.strip()]
+            paudit = json.loads(pagewise_audit.read_text())
+            prebuild = json.loads(pagewise_rebuild.read_text())
+            invoice_key_fields = (
+                "vendor_name", "invoice_number", "invoice_date", "due_date",
+                "currency", "subtotal", "tax", "total", "document_type",
+            )
+            key_correct = sum(
+                1
+                for doc in psc["documents"]
+                for name in invoice_key_fields
+                if (doc.get("fields", {}).get(name) or {}).get("correct") is True
+            )
+            key_scored = sum(
+                1
+                for doc in psc["documents"]
+                for name in invoice_key_fields
+                if name in (doc.get("fields") or {})
+            )
+            fully = sum(1 for doc in psc["documents"] if doc.get("fully_correct") is True)
+            page_count = sum(len(row.get("pages") or []) for row in prows)
+            silent_cuts = [
+                row["id"]
+                for row in prows
+                for page in row.get("pages") or []
+                if page.get("done_reason") != "stop"
+            ]
+            overflow = [
+                f"{row['id']} p{page.get('page')}"
+                for row in prows
+                for page in row.get("pages") or []
+                if (page.get("prompt_eval_count") or 0) + (page.get("eval_count") or 0) > 8192
+            ]
+            corrections = {
+                row["id"]: (row.get("pred") or {}).get("corrections")
+                for row in prows
+                if (row.get("pred") or {}).get("corrections")
+            }
+            ok = (
+                psum.get("n_docs") == 10
+                and psum.get("parse_errors") == 0
+                and abs(float(psum.get("key_header_accuracy", -1)) - 0.933333) <= 1e-5
+                and abs(float(psum.get("fully_correct_rate", -1)) - 0.6) <= 1e-9
+                and abs(float(psum.get("line_items", {}).get("f1_mean", -1)) - 0.848) <= 1e-9
+                and (key_correct, key_scored, fully) == (84, 90, 6)
+                and psc["summary"]["key_fields"] == {"correct": 84, "scored": 90}
+                and page_count == 46
+                and len(prows) == 10
+                and len(praw) == 10
+                and all(row.get("error") is None for row in prows)
+                and all(row.get("error") is None for row in praw)
+                and not silent_cuts
+                and not overflow
+                and corrections
+                == {
+                    "multipage-3p-na-3": ["subtotal_from_total_tax_residual"],
+                    "multipage-6p-za-8": ["tax_from_total_subtotal_truncated"],
+                }
+                and prebuild.get("corrections") == 2
+                and prebuild.get("review_flags") == 8
+                and paudit.get("ok") is True
+                and pcmp["before"]["all_pages"]["key_correct"] == 64
+                and pcmp["before"]["all_pages"]["fully_correct"] == 4
+                and pcmp["after"]["pagewise"]["key_correct"] == 84
+                and pcmp["after"]["pagewise"]["fully_correct"] == 6
+                and abs(float(pcmp["after"]["pagewise"]["mean_line_f1"]) - 0.848) <= 1e-9
+                and abs(float(pcmp["delta"]["key_accuracy"]) - 0.222222) <= 1e-5
+                and abs(float(pcmp["delta"]["fully_correct_rate"]) - 0.2) <= 1e-9
+                and abs(float(pcmp["delta"]["mean_line_f1"]) - 0.526) <= 1e-9
+                and abs(float(pcmp["transitions"]["key_sign_p"]) - 0.21875) <= 1e-9
+                and abs(float(pcmp["transitions"]["fully_correct_sign_p"]) - 0.625) <= 1e-9
+            )
+            print(
+                f"claim: pagewise multipage 2B key-header {key_correct}/{key_scored} "
+                f"({psum.get('key_header_accuracy'):.4f}), fully correct {fully}/10, "
+                f"line F1 {psum.get('line_items', {}).get('f1_mean'):.3f}; "
+                f"all-pages {pcmp['before']['all_pages']['key_correct']}/90, "
+                f"{pcmp['before']['all_pages']['fully_correct']}/10; "
+                f"corrections {len(corrections)} -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("pagewise probe numbers or corrections changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"pagewise check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

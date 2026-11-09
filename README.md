@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-167-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-184-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -43,7 +43,8 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
 | **Receipts** | 0.9475 / 0.9200 field F1 on SROIE clean-100 (not external) |
 | **Invoices** | 91.9% / 65.7% (3B) · 93.5% / 71.8% (2B) key-header / fully correct, synthetic page 1 |
-| **Multipage** | 4/10 fully correct vs 0/10 page-1 · 46 pages · 2B · n=10, descriptive |
+| **Multipage (all pages)** | 4/10 fully correct vs 0/10 page-1 · 46 pages · 2B · n=10, descriptive |
+| **Multipage (page-wise)** | 6/10 fully correct · 93.3% key-header · 0.848 line F1 · 2B · n=10 |
 | **DocVQA (reading)** | 0.829 ANLS / 0.765 exact · 200 public images · single-reference |
 | **Not yet measured** | Real supplier invoices, SDK multipage path |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
@@ -103,7 +104,7 @@ The figure is available as [`SVG`](docs/assets/architecture.svg) and
 
 ## Measured results
 
-<img src="docs/assets/tiers.svg" alt="Measured TinyDoc results: receipt field F1 94.8% for 3B, 92.0% for 2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 4/10 fully correct vs 0/10 page 1; DocVQA 0.829 single-reference ANLS; latency 7 to 26.5 seconds" width="100%">
+<img src="docs/assets/tiers.svg" alt="Measured TinyDoc results: receipt field F1 94.8% for 3B, 92.0% for 2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 6/10 fully correct page-wise vs 4/10 all pages; DocVQA 0.829 single-reference ANLS; latency 7 to 26.5 seconds" width="100%">
 
 Same 100 receipts, same prompt, same scorer, same 8k context, Ollama Q4,
 temperature 0:
@@ -128,14 +129,26 @@ difference is not significant (p=0.092), so this is *no evidence the 3B is
 better on invoices*, not proof that 2B is. It does not transfer to receipts,
 where the 3B still leads.
 
-**Multipage** — 10 synthetic invoices, 46 pages, 2B, all pages sent in one
-request. Fully-correct documents rise from **0/10** (page 1 only) to **4/10**;
-key-header accuracy rises from **63.3%** (57/90) to **71.1%** (64/90). The paired
-sign tests are not significant (key p=0.29, fully correct p=0.13) and n=10, so
-this is descriptive. Two 8-page invoices with 110–117 line items failed with
-runaway line-item generation (212–213 fabricated rows), and mean line-item F1
-*fell* from 0.418 to 0.322 at the 1400 px multipage render. Multipage is not a
-straight-through path.
+**Multipage** — 10 synthetic invoices, 46 pages, 2B, two methods.
+
+*All pages in one request:* fully-correct documents rise from **0/10** (page 1
+only) to **4/10**; key-header accuracy rises from **63.3%** (57/90) to **71.1%**
+(64/90). Two 8-page invoices with 110–117 line items failed with runaway
+line-item generation (212–213 fabricated rows), and mean line-item F1 *fell* from
+0.418 to 0.322 at the 1400 px render.
+
+*One page per request, deterministic merge:* **6/10 fully correct**, **93.3%**
+key-header (84/90), mean line-item F1 **0.848**, zero parse errors. All 46 pages
+were read; the two 8-page files now parse with 117/117 and 110/110 line items.
+The paired changes versus all-pages are +22.2 pts key-header (5 improved, 1
+regressed, 4 unchanged; p=0.219) and +2 fully-correct documents (3 gained, 1
+lost; p=0.625). n=10 and neither test is significant, so this is descriptive.
+The merge makes two internal-consistency corrections and uses no gold: a
+0.29 subtotal residual on one file and a truncated tax (26.69 → 26,269.37) on
+another. Page-wise is ~2× slower (p50 70.7 s/doc, 16.1 s/page vs 34.7 s/doc,
+8.9 s/page). Three NAD invoices are still read as ZAR, one file has all three
+amounts digit-truncated, and only 1/10 has every line item right. Multipage is
+not a straight-through path.
 
 **DocVQA reading probe** — 200 public images, one question per image, 768 px
 mirror, one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS** and
@@ -182,14 +195,16 @@ If you deploy it:
   invoice tier gap is not statistically significant.
 - **Do not trust flags.** Inconsistent and multi-invoice files were flagged 0/7
   times. Run your own arithmetic and duplicate checks.
-- **Render every page.** On 10 synthetic multipage invoices, sending every page
-  raised fully-correct documents from 0/10 to 4/10. Two 8-page, 110–117-line
-  files failed with runaway generation, and line items remain weak. The SDK
-  extraction path is still single-image.
-- **Budget latency.** 7–26 s per page at p50 on an M4 through Ollama, above the
-  4 s target. Batch work, or wait for an MLX path.
-- **Set context.** 8192 tokens by default; 16384 for 5–8 page invoices. Never
-  send Ollama `format: "json"`.
+- **Render every page, and prefer page-wise for long files.** Sending every page
+  raised fully-correct documents from 0/10 to 4/10; one page per request raised
+  it to 6/10 and 93.3% key-header, and fixed the two 8-page runaway failures.
+  Page-wise is ~2× slower and line items remain weak (0.848 F1, 1/10 all right).
+  The SDK extraction path is still single-image.
+- **Budget latency.** Receipts 7–14 s/doc; page-1 invoices 16–27 s/doc;
+  page-wise multipage 70.7 s/doc p50 (16.1 s/page) on an M4 through Ollama,
+  above the 4 s target. Batch work, or wait for an MLX/chunked path.
+- **Set context.** 8192 tokens per page for page-wise; 16384 for 5–8 page
+  all-pages requests. Never send Ollama `format: "json"`.
 - **Measure on your own documents.** Public sets are not your supplier mix; real
   invoices remain unmeasured here.
 
@@ -232,12 +247,14 @@ to 10 references, so this is a single-reference reading probe, not a leaderboard
 number.
 
 **What about multipage PDFs?**
-The evaluation harness now sends every page. On 10 synthetic multipage invoices
-(46 pages), 4/10 are fully correct on key headers versus 0/10 with page 1 only;
-the paired tests are not significant (n=10). Two 8-page invoices with 110–117
-line items failed with runaway line-item generation (212–213 fabricated rows),
-and mean line-item F1 fell from 0.418 to 0.322. The SDK extraction path is still
-single-image, so multipage is not shipped as a straight-through product path.
+The evaluation harness can send every page, or read one page per request and
+merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B),
+all-pages gets 4/10 fully correct and 71.1% key-header, with two 8-page runaway
+failures; page-wise gets **6/10 fully correct**, **93.3% key-header**, and
+**0.848 line F1**, with zero parse errors. The paired changes are not
+significant (n=10), page-wise is ~2× slower, and three NAD invoices are still
+read as ZAR. The SDK extraction path is still single-image, so multipage is not
+shipped as a straight-through product path.
 
 **How does it compare with OCR + regex?**
 On the same 100 receipts, the 3B + trust layer scores 0.9475 field F1 versus
@@ -272,7 +289,7 @@ for their terms.
 | Hybrid v2 (`hybrid_2p2b`, MLX + Tesseract F3) | 🚢 Shipped 2026-10-07, superseded | 0.603 clean-100; address 0.37; paired address 31/7/62 |
 | SmolVLM2-2.2B SFT / vision LoRA | ❌ Closed | Base 0.536; clean-100 LoRA 0.535–0.540; vision LoRA 0.0395 / 0.4277 |
 | TinyDoc-VLM-256M | ⚠️ Retired research checkpoint | OCRBench **0.0%** (n=999 scored); no performance claims |
-| Multipage invoice path (eval harness) | 🧪 Probe | 4/10 fully correct vs 0/10 page 1; 2 eight-page failures; SDK path still single-image |
+| Multipage invoice path (eval harness) | 🧪 Probe | All-pages 4/10; page-wise **6/10**, 93.3% key-header, 0.848 line F1, ~2× slower; SDK path still single-image |
 | TinyDoc-2B grounded LoRA (v3.1) | 🧪 Conditional | Only if v3.0 leaves a measured invoice/grounding residual |
 
 The honest one-liner: **the evaluation harness and product layer are real; the
@@ -288,9 +305,12 @@ third-party reader behind a grounded extraction layer.
   is retained only as a historical, caveated number.
 - **FUNSD** is a transfer probe with nonstandard gold mapping; never cite it as a
   leaderboard number.
-- **Multipage** is a 10-document synthetic probe at 1400 px, 2B only. It is
-  descriptive, two 8-page files failed, and line-item F1 is not comparable to
-  the 1800 px page-1 run. Do not call it a production multipage claim.
+- **Multipage** is a 10-document synthetic probe at 1400 px, 2B only. All-pages
+  gets 4/10 fully correct and has two 8-page runaway failures; page-wise gets
+  6/10 and 93.3% key-header but is ~2× slower. Neither is significant at n=10,
+  line items remain weak, three NAD invoices are read as ZAR, and line-item F1
+  is not comparable to the 1800 px page-1 run. Do not call it a production
+  multipage claim.
 - **DocVQA** is a 200-image public reading probe with a single reference answer
   per question. The set may be in pretraining and the 768 px mirror is not the
   official pipeline; 0.829 ANLS is not comparable to leaderboard numbers.
@@ -306,7 +326,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 167 passed
+python3 -m pytest tests/ -q                 # 184 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims

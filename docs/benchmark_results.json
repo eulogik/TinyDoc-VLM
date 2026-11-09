@@ -1,8 +1,9 @@
 {
   "metadata": {
     "rewritten": "2026-09-24",
-    "policy": "Every score in `measured` recomputes from a committed artifact in evaluation/phase0/results/. Scores in `legacy_unverified` were never measured \u2014 no artifacts exist \u2014 and MUST NOT be cited, published, or pitched.",
-    "scorer": "evaluation/phase0/metrics.py (ANLS + field-level P/R/F1, identical harness for every engine)"
+    "policy": "Every score in `measured` recomputes from a committed artifact under `evaluation/`. Scores in `legacy_unverified` were never measured \u2014 no artifacts exist \u2014 and MUST NOT be cited, published, or pitched.",
+    "scorer": "evaluation/phase0/metrics.py for receipts; the benchmark's own scorer for invoices; ANLS for DocVQA",
+    "updated": "2026-11-09"
   },
   "measured": [
     {
@@ -75,6 +76,42 @@
       "n": 100,
       "artifact": "evaluation/phase0/results/scores_product_hybrid_clean.json",
       "notes": "schema_valid 0.93; per-field hit: company 0.49, date 0.77, address 0.37, total 0.76; paired win vs VLM alone 31/8/61 (p=0.0003); latency mean ~8.0s/doc; ship-bar decision: no_ship (address<0.50) in v2_product_decision.json"
+    },
+    {
+      "name": "Invoice extraction (synthetic, page 1)",
+      "system": "TinyDoc pipeline (ollama:qwen3-vl:2b-instruct)",
+      "metric": "Key-header accuracy / fully correct",
+      "score": 0.9353,
+      "n": 181,
+      "artifact": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_instruct.json",
+      "notes": "93.5% key-header, 71.8% fully correct; synthetic vendor-made benchmark, page 1 only; not real invoices"
+    },
+    {
+      "name": "Invoice multipage (all pages)",
+      "system": "TinyDoc pipeline (ollama:qwen3-vl:2b-instruct)",
+      "metric": "Key-header accuracy / fully correct",
+      "score": 0.7111,
+      "n": 10,
+      "artifact": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp.json",
+      "notes": "71.1% key-header, 4/10 fully correct, 2 parse errors; 46 pages at 1400 px; n=10 descriptive"
+    },
+    {
+      "name": "Invoice multipage (page-wise)",
+      "system": "TinyDoc page-wise runner (ollama:qwen3-vl:2b-instruct)",
+      "metric": "Key-header accuracy / fully correct / line F1",
+      "score": 0.9333,
+      "n": 10,
+      "artifact": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise.json",
+      "notes": "93.3% key-header, 6/10 fully correct, 0.848 line F1, 0 parse errors; ~2x slower; n=10 descriptive"
+    },
+    {
+      "name": "DocVQA reading probe",
+      "system": "TinyDoc pipeline (ollama:qwen3-vl:2b-instruct)",
+      "metric": "Single-reference ANLS / exact match",
+      "score": 0.8294,
+      "n": 200,
+      "artifact": "evaluation/docvqa/results/summary_docvqa_qwen3-vl_2b_instruct.json",
+      "notes": "0.829 ANLS, 0.765 exact, 0 errors; public images may be in pretraining; single reference, not a leaderboard score"
     }
   ],
   "legacy_unverified": {

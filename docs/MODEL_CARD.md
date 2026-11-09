@@ -9,10 +9,10 @@
 > and field confidence, not a TinyDoc-trained checkpoint. Measured receipt field
 > F1 is 0.9475 (3B) and 0.9200 (2B) on SROIE clean-100 — a non-external,
 > duplicate-filtered set. A synthetic page-1 invoice probe reaches 91.9%/65.7%
-> (3B) and 93.5%/71.8% (2B) key-header/fully-correct. An all-pages probe on 10
-> synthetic multipage invoices moves fully-correct from 0/10 to 4/10 (key-header
-> 63.3% to 71.1%), but two 8-page documents failed with runaway generation and the
-> SDK path remains single-image. A 200-image public DocVQA reading probe scores
+> (3B) and 93.5%/71.8% (2B) key-header/fully-correct. On 10 synthetic multipage
+> invoices, all-pages reading moves fully-correct from 0/10 to 4/10; page-wise
+> reading reaches **6/10**, 93.3% key-header, and 0.848 line-item F1, but is ~2×
+> slower and the SDK path remains single-image. A 200-image public DocVQA reading probe scores
 > 0.829 single-reference ANLS and 0.765 exact match (2B); it is not comparable to
 > leaderboard numbers. Real supplier invoices are not yet measured.
 
@@ -54,8 +54,8 @@ optional overlay. No document leaves the host.
 **Do not use it for:**
 
 - Straight-through accounts payable without review. A third of page-1 invoice
-  documents and 6/10 multipage documents still miss at least one key field, and
-  flagging fails.
+  documents and 4/10 page-wise multipage documents still miss at least one key
+  field, and flagging fails.
 - Real invoices, tax filings, or financial decisions without validation on your
   own document distribution.
 - Identity documents, medical records, or other high-risk domains. Not evaluated.
@@ -117,6 +117,29 @@ JSON. No document has every line item right, and some invoices read unit price
 instead of line amount. This is a descriptive probe, not a production multipage
 claim.
 
+#### 4.2.2 Page-wise multipage (2B, n=10, 46 pages)
+
+| Metric | All pages | Page-wise |
+|---|---:|---:|
+| Key-header accuracy | 71.1% (64/90) | **93.3%** (84/90) |
+| Documents fully correct | 4/10 | **6/10** |
+| Mean line-item F1 | 0.322 | **0.848** |
+| Parse errors | 2 | **0** |
+| p50 latency per document | 34.7 s | 70.7 s |
+| p50 latency per page | 8.9 s | 16.1 s |
+
+One page per request at 1400 px, 8,192-token context, 2,048-token output. The
+deterministic merge takes the first non-empty header, concatenates line items,
+uses final-page totals, and makes two disclosed internal-consistency repairs
+(no gold): a 0.29 subtotal residual and a truncated tax. The two 8-page files now
+parse with 117/117 and 110/110 line items. Paired tests are not significant (key
+p=0.219, fully correct p=0.625; n=10).
+
+**Residuals:** currency is 7/10 (three NAD invoices read as ZAR); one file has
+all three amounts digit-truncated; line items are all correct on only 1/10
+(mean F1 0.848, 8/10 line-sum review flags); page-wise is ~2× slower. This is an
+evaluation method, not a shipped SDK path.
+
 ### 4.3 Evidence and grounding
 
 | Check | Result | Gate |
@@ -158,12 +181,14 @@ pretraining. It measures reading, not field extraction.
 
 - **No real-invoice measurement.** The invoice evidence is synthetic and page 1 only.
 - **Multipage is an evaluation probe, not an SDK path.** The harness can send
-  every page; the SDK extraction path remains single-image. On 10 synthetic
-  documents, 4/10 were fully correct on key headers versus 0/10 with page 1 only;
-  two 8-page files failed with runaway generation, and line items remain weak.
+  every page or read page-wise; the SDK extraction path remains single-image. On
+  10 synthetic documents, all-pages gets 4/10 fully correct, page-wise 6/10 and
+  93.3% key-header. Page-wise is ~2× slower, three NAD invoices are read as ZAR,
+  and line items remain weak.
 - **No external receipt benchmark.** SROIE clean-100 is public-train derived.
-- **Multipage is not solved.** 4/10 synthetic documents fully correct, two
-  8-page failures, line-item F1 worse at the 1400 px multipage render, n=10.
+- **Multipage is not solved.** Page-wise gets 6/10 synthetic documents fully
+  correct and 93.3% key-header, but line items are all correct on 1/10, currency
+  is 7/10, and n=10 is descriptive only.
 - **DocVQA is a single-reference reading probe, not a leaderboard result.**
   The 768 px mirror, one-question sampling, and public/pretraining exposure break
   comparability; 0.829 ANLS is not a product accuracy claim.
