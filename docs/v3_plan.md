@@ -361,7 +361,7 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 - **Fallback if both miss a new vertical: Qwen3-VL-4B** (vendor-reported DocVQA 95.3) — check peak memory on the 16 GB host before enabling it.
 - **Default by vertical:** 3B for receipts (clean-100 0.9475 vs 0.9200), 2B for invoices (93.5% vs 91.9% key-header, 71.8% vs 65.7% fully correct, 16.1 s vs 26.5 s). The invoice tier difference is not significant, so treat this as “no evidence 3B is better on invoices” and revisit on real invoices.
 - Runtime: Ollama Q4 for the pilot; MLX 4-bit for the Mac product; GGUF/llama.cpp for CPU later.
-- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated). PDF/multi-page is **not shipped**: the invoice probe is page-1 only.
+- Layer: schema-driven prompts (receipt/invoice/form), JSON Schema validation, quote + bbox evidence, confidence/abstention (field-level ECE 0.115–0.135 raw, 0.005–0.014 isotonic OOF; doc-level not calibrated). The evaluation harness measures all-pages invoices (4/10 fully correct vs 0/10 page 1, n=10); the SDK extraction path remains **single-image**, so PDF/multi-page is not shipped as a product path.
 - **No model training.** The base is the model; the product is the trust layer.
 
 **Why this is the right first move:** the fair bake-off already clears the receipt gate with zero errors. We do not need to train to get a usable model; we need to package the right one, add the second vertical, and measure it honestly. The 2B is the better edge bet and the v3.1 training target; the 3B is the measured quality ceiling today. The invoice probe now shows the residual is **document consistency, flags, amount exactness, and multipage**, not basic layout transfer.
@@ -375,11 +375,11 @@ If v3.1 fails, **do not ship it**; ship v3.0 and publish the negative result. Th
 | Invoice key-header accuracy | 91.9% (3B) / **93.5%** (2B) — gate met |
 | Invoice fully correct | **65.7%** (3B) / **71.8%** (2B) — 28–34% need review |
 | Invoice flags | **0/7** inconsistent/multi-invoice; 2/172 false alarms |
-| Invoice multipage | 61.1% key-header, **0% fully correct** (page 1 only) |
+| Invoice multipage | page 1: 63.3% key-header, **0/10 fully correct**; all pages: **71.1%**, **4/10**; 2 eight-page runaway failures (n=10) |
 | Invoice amount exactness | currency 83.8%, subtotal 84.4%, tax 87.2%, total 87.7% |
 | VLM boxes | hit@0.5 0.04–0.20 vs 0.70 gate |
 
-So the v3.1 target is **document consistency + amount exactness + boxes**, not re-teaching receipt layout. Do not train on the benchmark answers; build a separate 10k–20k grounded set and a 200-doc multi-vertical val. If only synthetic invoices are available (CORD images absent, DocILE gated), run a **small** synthetic-only adapter as a controlled experiment and kill it if it does not transfer to a held-out real/synthetic mix.
+So the v3.1 target is **document consistency + output control + amount exactness + boxes**, not re-teaching receipt layout. The page-wise runner is the first output-control test; the two 8-page failures show why a longer context alone is not enough. Do not train on the benchmark answers; build a separate 10k–20k grounded set and a 200-doc multi-vertical val. If only synthetic invoices are available (CORD images absent, DocILE gated), run a **small** synthetic-only adapter as a controlled experiment and kill it if it does not transfer to a held-out real/synthetic mix.
 
 **Definition:** Qwen3-VL-2B + LoRA on ~10k–20k grounded extraction examples, released as an adapter. This is the “our model” artifact: same base, but specialized to output schema’d fields with boxes and abstention.
 
@@ -440,7 +440,7 @@ Two candidate routes:
 
 - **Grounding fails the gate:** hit@0.5 is **0.20** for Qwen3-VL-2B and **0.04** for Qwen2.5-VL-3B, versus the 0.70 product gate. v3.0 ships **OCR-span evidence**, not VLM boxes. See §1.8.
 - **Confidence is field-level usable, not document-level calibrated:** evidence-off eval runs are constant 0.4025 (field ECE 0.518–0.545). The evidence-on default is field ECE **0.115–0.135**, and doc-grouped isotonic OOF reaches **0.005–0.014**; document-level ECE stays **0.092–0.097** and isotonic does not reliably improve the 2B. See §1.7.
-- **Invoice probe:** public synthetic benchmark (181 docs, page 1) measures **91.9% key-header / 65.7% fully correct** for the 3B and **93.5% / 71.8%** for the 2B; the paired tier difference is not significant (p=0.09) and the 2B is 40% faster. Flagging is 0/7 and multipage is 0% fully correct. Real supplier invoices remain unmeasured. See §1.9.
+- **Invoice probe:** public synthetic benchmark (181 docs, page 1) measures **91.9% key-header / 65.7% fully correct** for the 3B and **93.5% / 71.8%** for the 2B; the paired tier difference is not significant (p=0.09) and the 2B is 40% faster. Flagging is 0/7 on page 1. All-pages multipage (10 docs, 46 pages, 2B) is **71.1% key-header / 4/10 fully correct** vs 63.3% / 0/10 page 1, with two 8-page runaway failures; n=10 and not significant. Real supplier invoices remain unmeasured. See §1.9.
 - **Multi-vertical:** FUNSD images/labels are present (199 docs; 50 scored in the probe); CORD images are absent and DocILE is gated, so real invoices/forms beyond FUNSD are still unmeasured. Do not claim production invoice performance.
 
 Reproduce the grounding probe:

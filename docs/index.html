@@ -423,7 +423,7 @@
           <p>Two tiers, two verticals, one scorer. Every published number recomputes from committed artifacts.</p>
         </div>
         <figure>
-          <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
+          <img src="assets/tiers.svg" alt="Measured results: receipt field F1 94.8% for Qwen2.5-VL-3B, 92.0% for Qwen3-VL-2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 4/10 fully correct vs 0/10 page 1; DocVQA 0.829 single-reference ANLS; latency 7.0 to 26.5 seconds" width="1200" height="620" loading="eager">
           <figcaption>Receipts: SROIE clean-100. Invoices: public synthetic benchmark, page 1 only. Neither is an external benchmark. DocVQA is a separate single-reference reading probe, not a leaderboard score.</figcaption>
         </figure>
 
@@ -445,7 +445,7 @@
               <tr><td>Invoice flags — inconsistent + multi-invoice</td><td>Recall</td><td class="num"><b>0/7</b></td><td><span class="tag bad">not usable</span></td></tr>
               <tr><td>Evidence coverage — RapidOCR</td><td>Rate</td><td class="num">0.798</td><td><span class="tag warn">gate 0.90</span></td></tr>
               <tr><td>VLM bbox grounding — hit@0.5</td><td>2B / 3B</td><td class="num">0.20 / 0.04</td><td><span class="tag bad">gate 0.70</span></td></tr>
-              <tr><td>DocVQA / CORD</td><td>—</td><td class="num">—</td><td><span class="tag">not measured</span></td></tr>
+              <tr><td>CORD / real supplier invoices</td><td>—</td><td class="num">—</td><td><span class="tag">not measured</span></td></tr>
             </tbody>
           </table>
         </div>

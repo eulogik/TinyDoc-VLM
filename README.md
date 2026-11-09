@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-165-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-167-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -103,7 +103,7 @@ The figure is available as [`SVG`](docs/assets/architecture.svg) and
 
 ## Measured results
 
-<img src="docs/assets/tiers.svg" alt="Measured TinyDoc results: receipt field F1 94.8% for 3B, 92.0% for 2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; latency 7 to 26.5 seconds" width="100%">
+<img src="docs/assets/tiers.svg" alt="Measured TinyDoc results: receipt field F1 94.8% for 3B, 92.0% for 2B, 60.3% first-party hybrid, 37.6% OCR; invoice key-header 91.9% and 93.5%; multipage 4/10 fully correct vs 0/10 page 1; DocVQA 0.829 single-reference ANLS; latency 7 to 26.5 seconds" width="100%">
 
 Same 100 receipts, same prompt, same scorer, same 8k context, Ollama Q4,
 temperature 0:
@@ -306,7 +306,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 165 passed
+python3 -m pytest tests/ -q                 # 167 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims
