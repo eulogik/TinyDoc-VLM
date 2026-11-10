@@ -11,7 +11,7 @@ export TINYDOC_OLLAMA_NUM_PREDICT="${TINYDOC_OLLAMA_NUM_PREDICT:-2048}"
 
 MODEL="${1:-qwen3-vl:2b-instruct}"
 TAG="${2:-qwen3-vl_2b_mp_pagewise}"
-PROMPT_VERSION="${3:-2}"
+PROMPT_VERSION="${3:-1}"
 MANIFEST="${INVOICE_MANIFEST:-evaluation/invoice/manifest_multipage.jsonl}"
 BENCH="${INVOICE_BENCHMARK:-/Volumes/KIOXIA 1TB/tinydoc/invoice-extraction-benchmark}"
 ROOT="$(pwd)"

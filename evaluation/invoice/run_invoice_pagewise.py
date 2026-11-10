@@ -87,7 +87,7 @@ _CURRENCY_LINE_V2 = (
 PAGE_PROMPT = PAGE_PROMPT_V1.replace(_CURRENCY_LINE_V1, _CURRENCY_LINE_V2)
 
 
-def page_prompt(page: int, total: int, version: int = 2) -> str:
+def page_prompt(page: int, total: int, version: int = 1) -> str:
     template = PAGE_PROMPT_V1 if version == 1 else PAGE_PROMPT
     return template.format(page=page, total=total)
 
@@ -322,8 +322,8 @@ def main() -> int:
         "--prompt-version",
         type=int,
         choices=(1, 2),
-        default=2,
-        help="1 = original prompt; 2 = currency-symbol prompt",
+        default=1,
+        help="1 = original (canonical); 2 = currency-symbol variant (tested, not better)",
     )
     args = ap.parse_args()
 
