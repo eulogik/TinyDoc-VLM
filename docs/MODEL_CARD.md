@@ -57,8 +57,9 @@ optional overlay. No document leaves the host.
 **Do not use it for:**
 
 - Straight-through accounts payable without review. A third of page-1 invoice
-  documents and 4/10 page-wise multipage documents still miss at least one key
-  field, and flagging fails.
+  documents still miss at least one key field; page-wise VLM leaves 4/10
+  multipage documents short, and even with OCR totals line items are wrong on
+  9/10. Flagging fails.
 - Real invoices, tax filings, or financial decisions without validation on your
   own document distribution.
 - Identity documents, medical records, or other high-risk domains. Not evaluated.
@@ -203,7 +204,9 @@ pretraining. It measures reading, not field extraction.
 
 ## 5. Limitations
 
-- **No real-invoice measurement.** The invoice evidence is synthetic and page 1 only.
+- **No real-invoice measurement.** All invoice evidence is synthetic: 181
+  documents page 1, plus a 10-document multipage probe. Real supplier invoices
+  are unmeasured.
 - **Multipage is an evaluation probe, not an SDK path.** The harness can send
   every page or read page-wise; the SDK extraction path remains single-image. On
   10 synthetic documents, all-pages gets 4/10 fully correct and page-wise VLM
