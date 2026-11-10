@@ -980,7 +980,7 @@
         },
         "conclusion": "The prompt alone reduced raw key-header accuracy (81/90 vs 84/90) and did not reliably fix currency: the first-page symbol was still wrong on NAD invoices, and one final-page total regressed to 390.50. Deterministic last-page currency plus OCR totals fixed the result. The canonical run keeps prompt v1; prompt v2 is archived as a failed variant."
       },
-      "caveat": "Synthetic, vendor-made, clean PDFs, n=10; descriptive. The 10/10 key-header is a pipeline result: OCR reads the printed monetary totals and the VLM reads text/line items. It is not a pure VLM score and not a production multipage claim. Line items remain weak (0.848 F1, all lines right on 1/10, 8/10 line-sum review flags). The exact 95% CI for 10/10 fully correct is 69.2-100%.",
+      "caveat": "Synthetic, vendor-made, clean PDFs, n=10; descriptive. The 10/10 key-header is a pipeline result: OCR reads the printed monetary totals and the VLM reads text/line items. It is not a pure VLM score and not a production multipage claim. Line items remain weak (0.848 F1, all lines right on 1/10, 8/10 line-sum review flags). The exact 95% CI for 10/10 fully correct is 69.2-100%. The OCR parser was developed against these same 10 final pages; this is not a held-out test of the OCR layer, and a held-out multipage set is required before a production claim.",
       "artifacts": {
         "rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_ocr.jsonl",
         "preds": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",

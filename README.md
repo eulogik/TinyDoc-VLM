@@ -160,9 +160,10 @@ three monetary totals. It uses no gold answers, but it is also not evidence that
 the VLM alone can read every total.
 
 The **10/10 has an exact 95% CI of 69.2–100%** (n=10), so treat it as a
-descriptive probe. Reconciliation was measured on the 10-document multipage
-probe only; the 181-document page-1 table above remains VLM-only and was not
-re-run with OCR. Line items remain weak: F1 0.848, all lines right on **1/10**,
+descriptive probe. The OCR parser was developed against these same 10 final
+pages, so this is **not a held-out test of the OCR layer**. Reconciliation was
+measured on the 10-document multipage probe only; the 181-document page-1 table
+above remains VLM-only and was not re-run with OCR. Line items remain weak: F1 0.848, all lines right on **1/10**,
 and 8/10 trigger a line-sum review flag. OCR adds ~0.2 s/doc; VLM inference
 dominates latency. A currency-symbol prompt (v2) was tested and **rejected**: it
 scored 81/90 raw and 5/10 fully correct versus 84/90 and 6/10 for v1, so the

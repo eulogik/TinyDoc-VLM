@@ -153,6 +153,8 @@ recur.
   every total.
 - The exact 95% CI for 10/10 fully correct is **69.2–100%** (n=10), so this is a
   descriptive probe, not a production rate.
+- The OCR parser was developed against the same 10 final pages it is reported
+  on, so the 10/10 is **not a held-out test of the OCR layer**.
 - The 181-document page-1 probe was **not** re-run with reconciliation; those
   numbers remain VLM-only.
 - Three documents carry disclosed corrections: `multipage-2p-za-1` (amounts from

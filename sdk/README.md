@@ -47,8 +47,9 @@ arithmetic repairs, and OCR-read printed totals accepted only when
 (90/90), with an exact 95% CI of **69.2-100%** at n=10. That is a **pipeline
 result, not a pure VLM score**: line-item F1 is 0.848, all lines are right on
 1/10, and page-wise is ~2× slower (70.7 s/doc, 16.1 s/page). Reconciliation was
-measured on the 10 multipage documents only; the 181-document page-1 numbers
-remain VLM-only. The SDK extraction path remains single-image.
+measured on the 10 multipage documents only and the OCR parser was not held out
+from those pages; the 181-document page-1 numbers remain VLM-only. The SDK
+extraction path remains single-image.
 
 DocVQA reading probe (2B, 200 public images, one question per image, 768 px
 mirror, single reference): **0.829 ANLS / 0.765 exact**, 0 errors, 3.36 s p50.

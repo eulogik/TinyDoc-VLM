@@ -260,6 +260,9 @@ improved 6 / regressed 0 (p=0.03125), fully correct gained 6 / lost 0
   Clopper-Pearson). This is a 10-document probe, not a production rate.
 - **The 181-document page-1 probe was not re-run.** Its 91.9%/93.5% numbers are
   VLM-only; reconciliation was measured only on the 10 multipage documents.
+- **The OCR parser is not held out.** It was developed against the same 10
+  final pages it is reported on, so the 10/10 is not an independent test of the
+  OCR layer. A held-out multipage set is required before a production claim.
 - **Three documents have disclosed corrections.** `multipage-2p-za-1`
   (subtotal/tax/total from OCR), `multipage-3p-na-3` (subtotal residual plus
   currency from OCR), `multipage-6p-za-8` (truncated tax).

@@ -40,6 +40,7 @@ Multipage invoices (2B, 10 synthetic documents, 46 pages, 1400 px):
 The 10/10 is a **pipeline result, not a pure VLM score**: OCR reads the printed
 subtotal/tax/total and the VLM reads headers and line items. It uses no gold
 answers, but line-item F1 is 0.848 and all lines are right on only 1/10. The
+OCR parser was developed against these same 10 pages and is not held out. The
 exact 95% CI for 10/10 fully correct is 69.2–100% at n=10.
 
 DocVQA reading probe: 200 public images, one question per image, 768 px mirror,
