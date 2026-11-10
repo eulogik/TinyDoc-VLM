@@ -1,0 +1,10 @@
+{
+  "rows": 10,
+  "parsed": 10,
+  "errors": 0,
+  "review_flags": 8,
+  "corrections": 3,
+  "ocr_totals_consistent": 10,
+  "out_rows": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_ocr.jsonl",
+  "out_preds": "/Users/eulogikdeveloper/Documents/TinyDoc-VLM/evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise_ocr.json"
+}

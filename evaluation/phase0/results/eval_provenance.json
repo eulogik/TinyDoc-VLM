@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-09",
+  "generated": "2026-11-10",
   "policy": "Every published number must name its eval set and provenance. Clean-100 is not an external test set.",
   "datasets": {
     "sroie_eval": {
@@ -92,7 +92,10 @@
       "multipage": "measured_separately",
       "multipage_probe": "probes.multipage",
       "multipage_pagewise": "measured_separately",
-      "multipage_pagewise_probe": "probes.multipage_pagewise"
+      "multipage_pagewise_probe": "probes.multipage_pagewise",
+      "multipage_pagewise_ocr": "measured",
+      "multipage_pagewise_ocr_probe": "probes.multipage_pagewise_ocr",
+      "multipage_pagewise_prompt_v2": "tested_no_gain"
     },
     "docvqa": {
       "status": "measured_probe",
@@ -861,6 +864,133 @@
         "compare": "evaluation/invoice/results/compare_invoice_mp_allpages_vs_pagewise_2b.json",
         "audit": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise.json",
         "rebuild": "evaluation/invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise.json"
+      }
+    },
+    "multipage_pagewise_ocr": {
+      "date": "2026-11-10",
+      "set": "invoice_extraction_benchmark_v1",
+      "source": "drew-ipp/invoice-extraction-benchmark (CC BY 4.0)",
+      "model": "qwen3-vl:2b-instruct",
+      "prompt_version": 1,
+      "n_docs": 10,
+      "pages": 46,
+      "page_render_px": 1400,
+      "method": "one page per request with prompt v1; deterministic merge (headers first page, line items concatenated, final-page totals); last-page currency code/symbol; internal-consistency repairs (subtotal residual, truncated tax, total from subtotal+tax); OCR reads the final-page printed subtotal/tax/total and printed currency symbol with tesseract, and replaces the three amounts only when the OCR block is arithmetically consistent and disagrees; no gold in any step",
+      "context": 8192,
+      "output_budget": 2048,
+      "ocr": {
+        "engine": "tesseract 5.5.3 (RapidOCR fallback)",
+        "pages_read": 10,
+        "consistent_blocks": 10,
+        "rebuild_seconds_for_10_docs": 2.1,
+        "seconds_per_doc": 0.21,
+        "guard": "subtotal+tax==total within 0.05; tax rate 0-35%; labelled lines only"
+      },
+      "results": {
+        "key_header_accuracy": 1.0,
+        "key_header_correct": 90,
+        "key_header_scored": 90,
+        "fully_correct": 10,
+        "fully_correct_rate": 1.0,
+        "fully_correct_rate_ci95_exact": [
+          0.6915028921812392,
+          1.0
+        ],
+        "mean_line_f1": 0.848,
+        "all_lines_right": 1,
+        "parse_errors": 0,
+        "p50_latency_ms": 70665.8,
+        "mean_latency_ms": 75353.5,
+        "p50_latency_ms_per_page": 16115.6,
+        "ocr_consistent_blocks": 10,
+        "correction_documents": 3,
+        "review_flag_documents": 8
+      },
+      "ladder": {
+        "all_pages_vlm_only": {
+          "key_header": "64/90",
+          "fully_correct": "4/10",
+          "mean_line_f1": 0.322,
+          "p50_ms": 34685.6
+        },
+        "pagewise_vlm_only": {
+          "key_header": "84/90",
+          "fully_correct": "6/10",
+          "mean_line_f1": 0.848,
+          "p50_ms": 70665.8
+        },
+        "pagewise_plus_merge_reconciliation": {
+          "key_header": "86/90",
+          "fully_correct": "8/10",
+          "mean_line_f1": 0.848,
+          "p50_ms": 70665.8
+        },
+        "pagewise_plus_ocr_totals": {
+          "key_header": "90/90",
+          "fully_correct": "10/10",
+          "mean_line_f1": 0.848,
+          "p50_ms": 70665.8
+        }
+      },
+      "comparisons": {
+        "pagewise_vs_ocr": {
+          "key_improved": 4,
+          "key_regressed": 0,
+          "key_unchanged": 6,
+          "key_sign_p": 0.125,
+          "fully_correct_gained": 4,
+          "fully_correct_lost": 0,
+          "fully_correct_sign_p": 0.125
+        },
+        "all_pages_vs_ocr": {
+          "key_improved": 6,
+          "key_regressed": 0,
+          "key_unchanged": 4,
+          "key_sign_p": 0.03125,
+          "fully_correct_gained": 6,
+          "fully_correct_lost": 0,
+          "fully_correct_sign_p": 0.03125
+        }
+      },
+      "corrections": {
+        "multipage-2p-za-1": [
+          "totals_from_ocr:subtotal+tax+total"
+        ],
+        "multipage-3p-na-3": [
+          "subtotal_from_total_tax_residual",
+          "currency_from_ocr_totals"
+        ],
+        "multipage-6p-za-8": [
+          "tax_from_total_subtotal_truncated"
+        ]
+      },
+      "prompt_v2_experiment": {
+        "date": "2026-11-09",
+        "change": "explicit N$/R/$/EUR/GBP symbol map plus a currency_symbol key",
+        "raw_results": {
+          "key_header": "81/90",
+          "fully_correct": "5/10",
+          "mean_line_f1": 0.844,
+          "p50_ms": 72248.5
+        },
+        "after_same_reconciliation": {
+          "key_header": "90/90",
+          "fully_correct": "10/10",
+          "mean_line_f1": 0.844
+        },
+        "conclusion": "The prompt alone reduced raw key-header accuracy (81/90 vs 84/90) and did not reliably fix currency: the first-page symbol was still wrong on NAD invoices, and one final-page total regressed to 390.50. Deterministic last-page currency plus OCR totals fixed the result. The canonical run keeps prompt v1; prompt v2 is archived as a failed variant."
+      },
+      "caveat": "Synthetic, vendor-made, clean PDFs, n=10; descriptive. The 10/10 key-header is a pipeline result: OCR reads the printed monetary totals and the VLM reads text/line items. It is not a pure VLM score and not a production multipage claim. Line items remain weak (0.848 F1, all lines right on 1/10, 8/10 line-sum review flags). The exact 95% CI for 10/10 fully correct is 69.2-100%.",
+      "artifacts": {
+        "rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_ocr.jsonl",
+        "preds": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
+        "scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
+        "summary": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
+        "compare_pagewise": "evaluation/invoice/results/compare_invoice_pagewise_vs_ocr_2b.json",
+        "compare_allpages": "evaluation/invoice/results/compare_invoice_mp_allpages_vs_ocr_2b.json",
+        "audit": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
+        "rebuild": "evaluation/invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
+        "ocr_module": "evaluation/invoice/totals_ocr.py"
       }
     }
   }

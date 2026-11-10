@@ -18,6 +18,17 @@
       0.7
     ]
   },
+  "ci95_exact": {
+    "fully_correct_rate": [
+      0.12155225811982719,
+      0.7376219233930549
+    ],
+    "key_header_accuracy": [
+      0.6060123634676715,
+      0.8018405979690262
+    ],
+    "note": "Clopper-Pearson. The key-header interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level fully-correct interval."
+  },
   "per_field": {
     "currency": {
       "correct": 6,

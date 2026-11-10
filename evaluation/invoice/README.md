@@ -114,50 +114,98 @@ production multipage claim. Artifacts:
 `results/compare_invoice_page1_vs_multipage_2b.json`,
 `results/rows_invoice_qwen3-vl_2b_mp.jsonl`.
 
-### Page-by-page variant (measured 2026-11-09)
+### Page-by-page variant (measured 2026-11-09; reconciled 2026-11-10)
 
 `run_invoice_pagewise.py` sends **one page per request**, asks for that page's
 line items and header fields, drops carried/brought-forward and total rows in
-code, then merges: first non-empty header, concatenated line items, final-page
-totals with a line-sum/arithmetic fallback. It also makes three narrow,
-internal-consistency repairs and records each one: a total from
-`subtotal + tax` when the line items corroborate the subtotal; a small subtotal
-residual resolved toward `total - tax`; and a nonzero tax below 0.1% of the total
-derived from `total - subtotal` (a leading-digit truncation). No repair reads
-gold. It is designed to avoid the 8-page context and runaway problem. Run it
-with approval:
+code, then merges: first non-empty header, concatenated line items, and
+final-page totals. It also makes three narrow internal-consistency repairs and
+records each one: a total from `subtotal + tax` when the line items corroborate
+the subtotal; a small subtotal residual resolved toward `total - tax`; and a
+nonzero tax below 0.1% of the total derived from `total - subtotal` (a
+leading-digit truncation). No repair reads gold. The canonical prompt is **v1**.
+Run it with approval:
 
 ```bash
-python3 evaluation/invoice/run_invoice_pagewise.py   --manifest evaluation/invoice/manifest_multipage.jsonl   --model qwen3-vl:2b-instruct   --out evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl   --preds evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise.json   --resume
+python3 evaluation/invoice/run_invoice_pagewise.py \
+  --manifest evaluation/invoice/manifest_multipage.jsonl \
+  --model qwen3-vl:2b-instruct \
+  --prompt-version 1 \
+  --out evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl \
+  --preds evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise.json \
+  --resume
 ```
 
-Then score with `python -m scorer.evaluate ... --allow-missing`.
+Prompt v2 added an explicit printed-symbol map (`N$` = NAD, `R` = ZAR,
+`$` = USD, `€` = EUR, `£` = GBP, `K` = ZMW) and a `currency_symbol` field. It
+**did not help**: the raw v2 run scored 81/90 key-header and 5/10 fully correct
+versus 84/90 and 6/10 for v1, and one final-page total regressed to 390.50. The
+deterministic last-page currency rule plus OCR totals fixed the same documents.
+Keep v1; v2 is archived as a failed variant, not a claim.
 
-| Metric | All pages | Page-wise |
-|---|---:|---:|
-| Key-header accuracy | 71.1% (64/90) | **93.3%** (84/90) |
-| Documents fully correct | 4/10 | **6/10** |
-| Mean line-item F1 | 0.322 | **0.848** |
-| Parse errors | 2 | **0** |
-| p50 latency per document | 34.7 s | 70.7 s |
-| p50 latency per page | 8.9 s | 16.1 s |
+| Metric | All pages, VLM | Page-wise, VLM | + merge reconciliation | + OCR totals |
+|---|---:|---:|---:|---:|
+| Key-header accuracy | 71.1% (64/90) | 93.3% (84/90) | 95.6% (86/90) | **100% (90/90)** |
+| Documents fully correct | 4/10 | 6/10 | 8/10 | **10/10** |
+| Mean line-item F1 | 0.322 | 0.848 | 0.848 | **0.848** |
+| Parse errors | 2 | 0 | 0 | **0** |
+| p50 latency per document | 34.7 s | 70.7 s | 70.7 s | 70.7 s |
+| p50 latency per page | 8.9 s | 16.1 s | 16.1 s | 16.1 s |
 
-All 46 pages parse; the 8-page files now have 117/117 and 110/110 line items.
-Paired tests are not significant (key p=0.219, fully correct p=0.625; n=10).
-Two merge corrections are recorded: a 0.29 subtotal residual on
-`multipage-3p-na-3`, and a truncated tax (26.69 → 26,269.37) on
-`multipage-6p-za-8`. Residuals: currency 7/10 (three NAD invoices read as ZAR),
-`multipage-2p-za-1` has all three amounts digit-truncated, line items are all
-correct on 1/10, and 8/10 trigger a line-sum review flag. Page-wise is ~2× slower.
-This is a method probe, not a shipped SDK path. Artifacts:
-`results/summary_invoice_qwen3-vl_2b_mp_pagewise.json`,
-`results/compare_invoice_mp_allpages_vs_pagewise_2b.json`,
-`results/audit_invoice_qwen3-vl_2b_mp_pagewise.json`.
+All 46 pages parse; the 8-page files have 117/117 and 110/110 line items. The
+10/10 is the benchmark's **nine key-header fields**, not line items. The exact
+95% CI for 10/10 fully correct is **69.2-100%** (n=10), so this is a descriptive
+probe, not proof of production accuracy. Line items remain weak: F1 0.848, all
+lines right on **1/10**, and 8/10 trigger a line-sum-vs-subtotal review flag.
+OCR plus rebuild adds 2.1 s for all 10 documents (~0.2 s/doc), so latency is
+dominated by page-wise VLM inference.
+
+Three documents have recorded corrections (no gold): `multipage-2p-za-1`
+(subtotal/tax/total from OCR), `multipage-3p-na-3` (subtotal residual plus
+currency from OCR), and `multipage-6p-za-8` (truncated tax). Paired changes:
+page-wise VLM -> OCR, key improved 4 / regressed 0 (p=0.125), fully correct
+gained 4 / lost 0 (p=0.125); all-pages -> OCR, key improved 6 / regressed 0
+(p=0.03125), fully correct 6 gained / 0 lost (p=0.03125). n=10, synthetic, clean
+PDFs; neither result transfers to real invoices. Artifacts:
+`results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`,
+`results/compare_invoice_pagewise_vs_ocr_2b.json`,
+`results/compare_invoice_mp_allpages_vs_ocr_2b.json`,
+`results/audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`.
 
 `rebuild_pagewise.py` re-parses the saved page raws and applies the current merge
 without model calls, so a merge change does not require re-running inference.
 `audit_pagewise_rows.py` fails on a missing page, a non-`stop` page, an output
-budget hit, or a context overflow.
+budget hit, or a context overflow. `scripts/reconcile_invoice_totals.sh` runs
+rebuild + OCR + score + summarize + audit end to end.
+
+### OCR total reconciliation (deterministic, no model)
+
+The vision model sometimes drops leading digits on amounts with space thousands
+separators: `R25 083.76` read as `2 508.36`, or `N$70 390.50` as `390.50`.
+Printed totals are large, labelled, and arithmetic-checkable, so
+`totals_ocr.py` reads the **final page** with tesseract (RapidOCR fallback) and
+returns subtotal, tax, total, and the printed currency symbol/code.
+
+A block is used only when all three labels are found **and**
+`subtotal + tax == total` within tolerance **and** the implied tax rate is
+0-35%. The parser handles space/comma thousands separators, European
+`1.234,56` order, German `MwSt`, trailing ISO codes, and common OCR confusions
+such as `RI75` for `R175`. When a consistent OCR block disagrees with the model,
+the merge replaces the three printed amounts and records
+`totals_from_ocr:...`; a printed symbol/code also overrides the model's currency
+and records `currency_from_ocr_totals`. Line items, dates, and text fields are
+never changed.
+
+This is not gold and not a model call. It is an independent read of the same
+printed totals. It can fail on damaged or low-resolution pages, in which case
+the block is ignored and the model values stand. It is an evaluation/SDK
+robustness path, not a benchmark-answer lookup.
+
+**Measured on the 10 multipage documents:** all 10 final pages produced a
+consistent OCR block, and applying it with the merge moved key-header from
+86/90 (merge only) to **90/90**, and fully correct from 8/10 to **10/10**. The
+line-item F1 is unchanged at 0.848 because OCR touches only the three printed
+totals and currency. See the page-wise section for the full ladder and caveats.
 
 ### Deterministic arithmetic review checks
 
@@ -183,16 +231,26 @@ before using it as a gate.
   a benchmark-format `predictions.json`. Records `prompt_eval_count`,
   `eval_count`, and `done_reason` so a context or output cut is visible.
 - `run_invoice_pagewise.py` — one-page-per-request runner with deterministic merge
-  (implemented; no result yet).
+  and prompt v1/v2 support; v1 is canonical.
 - `audit_multipage_rows.py` — fails on a missing page, a non-`stop` completion, a
   context overflow, or an unaccounted failure; `--allow-failed N` keeps visible
   failures in the denominator.
-- `compare_multipage.py` — page-1 vs all-pages paired comparison with latency and
-  exact sign tests.
+- `audit_pagewise_rows.py` — page-wise audit: every page present, parsed, `stop`,
+  and within the context/output budget.
+- `rebuild_pagewise.py` — rebuild predictions from saved page raws; optional
+  `--ocr-totals` applies the final-page OCR reconciliation without model calls.
+- `compare_multipage.py` / `compare_pagewise.py` — paired comparisons with
+  latency and exact sign tests.
+- `summarize_scores.py` — compact summary; includes an exact Clopper-Pearson
+  interval for the fully-correct rate.
+- `totals_ocr.py` — OCR the final-page printed totals, validate arithmetic, and
+  override digit-truncated amounts/currency when consistent; no model, no gold.
 - `arithmetic_checks.py` — deterministic subtotal/tax/total and line-sum review
   flags; no model, no gold.
 - `merge_multipage_runs.py` — splice a targeted retry into canonical rows.
 - `../../scripts/run_invoice_probe.sh` — runner + memory guard + scorer.
+- `../../scripts/reconcile_invoice_totals.sh` — rebuild with OCR totals + score +
+  summarize + audit, end to end.
 
 ## Reproduce
 

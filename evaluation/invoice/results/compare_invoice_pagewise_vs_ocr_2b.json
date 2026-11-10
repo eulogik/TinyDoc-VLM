@@ -1,0 +1,243 @@
+{
+  "n_docs": 10,
+  "missing_from_before": [],
+  "missing_from_after": [],
+  "before": {
+    "pagewise": {
+      "documents": 10,
+      "key_correct": 84,
+      "key_scored": 90,
+      "key_accuracy": 0.9333333333333333,
+      "fully_correct": 6,
+      "fully_correct_rate": 0.6,
+      "mean_line_f1": 0.848
+    }
+  },
+  "after": {
+    "pagewise_ocr": {
+      "documents": 10,
+      "key_correct": 90,
+      "key_scored": 90,
+      "key_accuracy": 1.0,
+      "fully_correct": 10,
+      "fully_correct_rate": 1.0,
+      "mean_line_f1": 0.848
+    }
+  },
+  "delta": {
+    "key_accuracy": 0.06666666666666665,
+    "fully_correct_rate": 0.4,
+    "mean_line_f1": 0.0
+  },
+  "transitions": {
+    "key_improved": 4,
+    "key_regressed": 0,
+    "key_unchanged": 6,
+    "key_sign_p": 0.125,
+    "fully_correct_gained": 4,
+    "fully_correct_lost": 0,
+    "fully_correct_sign_p": 0.125
+  },
+  "per_field": {
+    "vendor_name": {
+      "pagewise": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "pagewise_correct": 10,
+      "pagewise_ocr_correct": 10
+    },
+    "invoice_number": {
+      "pagewise": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "pagewise_correct": 10,
+      "pagewise_ocr_correct": 10
+    },
+    "invoice_date": {
+      "pagewise": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "pagewise_correct": 10,
+      "pagewise_ocr_correct": 10
+    },
+    "due_date": {
+      "pagewise": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "pagewise_correct": 10,
+      "pagewise_ocr_correct": 10
+    },
+    "currency": {
+      "pagewise": 0.7,
+      "pagewise_ocr": 1.0,
+      "delta": 0.30000000000000004,
+      "pagewise_correct": 7,
+      "pagewise_ocr_correct": 10
+    },
+    "subtotal": {
+      "pagewise": 0.9,
+      "pagewise_ocr": 1.0,
+      "delta": 0.09999999999999998,
+      "pagewise_correct": 9,
+      "pagewise_ocr_correct": 10
+    },
+    "tax": {
+      "pagewise": 0.9,
+      "pagewise_ocr": 1.0,
+      "delta": 0.09999999999999998,
+      "pagewise_correct": 9,
+      "pagewise_ocr_correct": 10
+    },
+    "total": {
+      "pagewise": 0.9,
+      "pagewise_ocr": 1.0,
+      "delta": 0.09999999999999998,
+      "pagewise_correct": 9,
+      "pagewise_ocr_correct": 10
+    },
+    "document_type": {
+      "pagewise": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "pagewise_correct": 10,
+      "pagewise_ocr_correct": 10
+    }
+  },
+  "latency": {
+    "pagewise": {
+      "n": 10,
+      "p50_s": 70.66581439971924,
+      "mean_s": 75.3534926891327,
+      "p50_s_per_page": 16.115595996379852
+    },
+    "pagewise_ocr": {
+      "n": 10,
+      "p50_s": 70.66581439971924,
+      "mean_s": 75.3534926891327,
+      "p50_s_per_page": 16.115595996379852
+    }
+  },
+  "documents": [
+    {
+      "doc_id": "multipage-2p-us-2",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 1.0,
+      "pagewise_ocr_line_f1": 1.0,
+      "pagewise_latency_ms": 31552.563905715942,
+      "pagewise_ocr_latency_ms": 31552.563905715942
+    },
+    {
+      "doc_id": "multipage-2p-za-1",
+      "pagewise_key_correct": 6,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 3,
+      "pagewise_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.85,
+      "pagewise_ocr_line_f1": 0.85,
+      "pagewise_latency_ms": 30069.822072982788,
+      "pagewise_ocr_latency_ms": 30069.822072982788
+    },
+    {
+      "doc_id": "multipage-3p-gb-4",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.69,
+      "pagewise_ocr_line_f1": 0.69,
+      "pagewise_latency_ms": 42552.72817611694,
+      "pagewise_ocr_latency_ms": 42552.72817611694
+    },
+    {
+      "doc_id": "multipage-3p-na-3",
+      "pagewise_key_correct": 8,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 1,
+      "pagewise_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.49,
+      "pagewise_ocr_line_f1": 0.49,
+      "pagewise_latency_ms": 43827.422857284546,
+      "pagewise_ocr_latency_ms": 43827.422857284546
+    },
+    {
+      "doc_id": "multipage-4p-za-5",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.93,
+      "pagewise_ocr_line_f1": 0.93,
+      "pagewise_latency_ms": 67249.91273880005,
+      "pagewise_ocr_latency_ms": 67249.91273880005
+    },
+    {
+      "doc_id": "multipage-5p-de-6",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.99,
+      "pagewise_ocr_line_f1": 0.99,
+      "pagewise_latency_ms": 82274.55019950867,
+      "pagewise_ocr_latency_ms": 82274.55019950867
+    },
+    {
+      "doc_id": "multipage-5p-na-7",
+      "pagewise_key_correct": 8,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 1,
+      "pagewise_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.6,
+      "pagewise_ocr_line_f1": 0.6,
+      "pagewise_latency_ms": 74081.71606063843,
+      "pagewise_ocr_latency_ms": 74081.71606063843
+    },
+    {
+      "doc_id": "multipage-6p-za-8",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.97,
+      "pagewise_ocr_line_f1": 0.97,
+      "pagewise_latency_ms": 109138.07797431946,
+      "pagewise_ocr_latency_ms": 109138.07797431946
+    },
+    {
+      "doc_id": "multipage-8p-na-10",
+      "pagewise_key_correct": 8,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 1,
+      "pagewise_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.97,
+      "pagewise_ocr_line_f1": 0.97,
+      "pagewise_latency_ms": 132432.49702453613,
+      "pagewise_ocr_latency_ms": 132432.49702453613
+    },
+    {
+      "doc_id": "multipage-8p-us-9",
+      "pagewise_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "pagewise_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "pagewise_line_f1": 0.99,
+      "pagewise_ocr_line_f1": 0.99,
+      "pagewise_latency_ms": 140355.63588142395,
+      "pagewise_ocr_latency_ms": 140355.63588142395
+    }
+  ],
+  "caveat": "Descriptive only: same documents, two extraction methods, n<=10. No significance claim and no real-invoice transfer."
+}

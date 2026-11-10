@@ -546,6 +546,125 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"pagewise check errored: {exc}")
 
+    ocr_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json"
+    ocr_scores = ROOT.parent / "invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise_ocr.json"
+    ocr_rows = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_ocr.jsonl"
+    ocr_compare_pagewise = ROOT.parent / "invoice/results/compare_invoice_pagewise_vs_ocr_2b.json"
+    ocr_compare_allpages = ROOT.parent / "invoice/results/compare_invoice_mp_allpages_vs_ocr_2b.json"
+    ocr_audit = ROOT.parent / "invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json"
+    ocr_rebuild = ROOT.parent / "invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise_ocr.json"
+    reconciled_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_reconciled.json"
+    promptv2_raw_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_v2_raw.json"
+    promptv2_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_v2.json"
+    ocr_missing = [
+        path.name
+        for path in (
+            ocr_summary, ocr_scores, ocr_rows, ocr_compare_pagewise,
+            ocr_compare_allpages, ocr_audit, ocr_rebuild, reconciled_summary,
+            promptv2_raw_summary, promptv2_summary,
+        )
+        if not path.exists()
+    ]
+    if ocr_missing:
+        failures.append(f"pagewise OCR artifacts missing: {ocr_missing}")
+    else:
+        try:
+            osum = json.loads(ocr_summary.read_text())
+            osc = json.loads(ocr_scores.read_text())
+            orows = [json.loads(line) for line in ocr_rows.open() if line.strip()]
+            ocp = json.loads(ocr_compare_pagewise.read_text())
+            oca = json.loads(ocr_compare_allpages.read_text())
+            oaudit = json.loads(ocr_audit.read_text())
+            orebuild = json.loads(ocr_rebuild.read_text())
+            rsum = json.loads(reconciled_summary.read_text())
+            v2raw = json.loads(promptv2_raw_summary.read_text())
+            v2sum = json.loads(promptv2_summary.read_text())
+            symbols = {
+                "N$": "NAD", "NAD": "NAD", "R": "ZAR", "ZAR": "ZAR",
+                "$": "USD", "USD": "USD", "EUR": "EUR", "£": "GBP",
+                "GBP": "GBP", "K": "ZMW", "ZMW": "ZMW",
+            }
+            ocr_pages = sum(len(row.get("pages") or []) for row in orows)
+            ocr_blocks = [
+                row["ocr_totals"]
+                for row in orows
+                if (row.get("ocr_totals") or {}).get("consistent") is True
+            ]
+            amount_mismatches = []
+            currency_mismatches = []
+            for row in orows:
+                pred = row.get("pred") or {}
+                block = row.get("ocr_totals") or {}
+                for name, key in (("subtotal", "subtotal"), ("tax", "tax"), ("total", "total_amount")):
+                    if abs(float(pred.get(key)) - float(block.get(name))) > 0.005:
+                        amount_mismatches.append(f"{row['id']}:{key}")
+                expected = symbols.get(str(block.get("currency_symbol", "")).strip().upper())
+                if expected is not None and pred.get("currency") != expected:
+                    currency_mismatches.append(f"{row['id']}:{pred.get('currency')}!={expected}")
+            corrections = {
+                row["id"]: (row.get("pred") or {}).get("corrections")
+                for row in orows
+                if (row.get("pred") or {}).get("corrections")
+            }
+            ok = (
+                osum.get("n_docs") == 10
+                and osum.get("parse_errors") == 0
+                and osum.get("key_header_correct") == 90
+                and osum.get("key_header_scored") == 90
+                and abs(float(osum.get("key_header_accuracy", -1)) - 1.0) <= 1e-9
+                and osum.get("fully_correct") == 10
+                and abs(float(osum.get("fully_correct_rate", -1)) - 1.0) <= 1e-9
+                and abs(float(osum.get("line_items", {}).get("f1_mean", -1)) - 0.848) <= 1e-9
+                and osum.get("line_items", {}).get("all_lines_right") == 1
+                and abs(osum["ci95_exact"]["fully_correct_rate"][0] - 0.6915) < 1e-3
+                and osc["summary"]["key_fields"] == {"correct": 90, "scored": 90}
+                and osc["summary"]["fully_correct"] == 10
+                and len(orows) == 10
+                and ocr_pages == 46
+                and all(row.get("error") is None for row in orows)
+                and all(page.get("done_reason") == "stop" for row in orows for page in row["pages"])
+                and len(ocr_blocks) == 10
+                and not amount_mismatches
+                and not currency_mismatches
+                and corrections == {
+                    "multipage-2p-za-1": ["totals_from_ocr:subtotal+tax+total"],
+                    "multipage-3p-na-3": [
+                        "subtotal_from_total_tax_residual",
+                        "currency_from_ocr_totals",
+                    ],
+                    "multipage-6p-za-8": ["tax_from_total_subtotal_truncated"],
+                }
+                and oaudit.get("ok") is True
+                and orebuild.get("ocr_totals_consistent") == 10
+                and orebuild.get("corrections") == 3
+                and orebuild.get("review_flags") == 8
+                and rsum.get("key_header_correct") == 86
+                and rsum.get("fully_correct") == 8
+                and abs(float(rsum.get("line_items", {}).get("f1_mean", -1)) - 0.848) <= 1e-9
+                and v2raw.get("key_header_correct") == 81
+                and v2raw.get("fully_correct") == 5
+                and abs(float(v2raw.get("line_items", {}).get("f1_mean", -1)) - 0.844) <= 1e-9
+                and v2sum.get("key_header_correct") == 90
+                and v2sum.get("fully_correct") == 10
+                and abs(float(ocp["transitions"]["key_sign_p"]) - 0.125) <= 1e-9
+                and abs(float(ocp["transitions"]["fully_correct_sign_p"]) - 0.125) <= 1e-9
+                and abs(float(oca["transitions"]["key_sign_p"]) - 0.03125) <= 1e-9
+                and abs(float(oca["transitions"]["fully_correct_sign_p"]) - 0.03125) <= 1e-9
+            )
+            print(
+                f"claim: pagewise+OCR 2B key-header {osum.get('key_header_correct')}/90 "
+                f"({osum.get('key_header_accuracy'):.4f}), fully correct "
+                f"{osum.get('fully_correct')}/10, line F1 "
+                f"{osum.get('line_items', {}).get('f1_mean'):.3f}; OCR blocks "
+                f"{len(ocr_blocks)}/10, corrections {len(corrections)}; "
+                f"prompt v2 raw {v2raw.get('key_header_correct')}/90 "
+                f"{v2raw.get('fully_correct')}/10 -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("pagewise OCR numbers, corrections, or prompt-v2 comparison changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"pagewise OCR check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

@@ -41,9 +41,14 @@ Multipage probe (2B, 10 synthetic invoices, 46 pages, 1400 px). Sending every
 page gets **4/10 fully correct** and **71.1%** key-header, with two 8-page
 runaway failures. Reading one page per request and merging deterministically
 gets **6/10 fully correct**, **93.3%** key-header, and **0.848** line-item F1,
-with zero parse errors. Page-wise is ~2× slower (70.7 s/doc, 16.1 s/page), three
-NAD invoices are read as ZAR, and line items remain weak. Paired tests are not
-significant (n=10). The SDK extraction path remains single-image.
+with zero parse errors. Adding deterministic reconciliation (last-page currency,
+arithmetic repairs, and OCR-read printed totals accepted only when
+`subtotal + tax == total`) reaches **10/10 on the nine key-header fields**
+(90/90), with an exact 95% CI of **69.2-100%** at n=10. That is a **pipeline
+result, not a pure VLM score**: line-item F1 is 0.848, all lines are right on
+1/10, and page-wise is ~2× slower (70.7 s/doc, 16.1 s/page). Reconciliation was
+measured on the 10 multipage documents only; the 181-document page-1 numbers
+remain VLM-only. The SDK extraction path remains single-image.
 
 DocVQA reading probe (2B, 200 public images, one question per image, 768 px
 mirror, single reference): **0.829 ANLS / 0.765 exact**, 0 errors, 3.36 s p50.
@@ -55,9 +60,10 @@ this is not a leaderboard number.
 > it during pretraining. The original 100-doc set is 60% leaked. The invoice set
 > is synthetic and vendor-made, and the 181-document probe is page 1 only; real
 > supplier invoices are unmeasured and flagging fails (0/7). The multipage probes
-> are 10 documents, 2B only, descriptive, and not a shipped SDK path. Page-wise
-> is ~2× slower and line items remain unreliable. Use the numbers for
-> same-document engine comparisons, not as generalization claims.
+> are 10 documents, 2B only, descriptive, and not a shipped SDK path. The 10/10
+> key-header result uses deterministic OCR total reconciliation, not the VLM
+> alone; page-wise is ~2× slower and line items remain unreliable. Use the
+> numbers for same-document engine comparisons, not as generalization claims.
 
 ## Install
 

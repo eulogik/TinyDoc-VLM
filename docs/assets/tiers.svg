@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
   <title id="title">TinyDoc measured results by tier</title>
-  <desc id="desc">Receipt field F1: 3B 94.8 percent, 2B 92.0 percent, first-party hybrid 60.3 percent, OCR baseline 37.6 percent. Invoice key-header: 3B 91.9, 2B 93.5; fully correct: 3B 65.7, 2B 71.8. Multipage: all-pages 4 of 10 fully correct; page-wise 6 of 10 and 93.3 percent key-header. Latency per page: receipts 3B 14.1 seconds, 2B 7.0; invoices 3B 26.5, 2B 16.1.</desc>
+  <desc id="desc">Receipt field F1: 3B 94.8 percent, 2B 92.0 percent, first-party hybrid 60.3 percent, OCR baseline 37.6 percent. Invoice key-header: 3B 91.9, 2B 93.5; fully correct: 3B 65.7, 2B 71.8. Multipage: all-pages 4 of 10 fully correct; page-wise VLM 6 of 10 and 93.3 percent key-header; plus OCR totals 10 of 10 (pipeline). Latency per page: receipts 3B 14.1 seconds, 2B 7.0; invoices 3B 26.5, 2B 16.1.</desc>
   <rect width="1200" height="620" fill="#F4F6F2"/>
 
   <text x="64" y="58" font-family="Iowan Old Style, Palatino, Georgia, serif" font-size="30" font-weight="600" fill="#0E1A24">Measured, not marketed</text>
   <text x="64" y="84" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="13.5" fill="#4A5A64">Two tiers, two verticals, one scorer. Every number recomputes from committed artifacts.</text>
-  <text x="1136" y="58" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#4A5A64">2026-11-09</text>
+  <text x="1136" y="58" text-anchor="end" font-family="SF Mono, Menlo, Consolas, monospace" font-size="11" fill="#4A5A64">2026-11-10</text>
   <line x1="64" y1="104" x2="1136" y2="104" stroke="#C9D2CB"/>
 
   <!-- panel 1 -->
@@ -87,7 +87,7 @@
   <rect x="64" y="500" width="1072" height="84" fill="#E7EFE9"/>
   <text x="84" y="524" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#0E1A24">What these sets are</text>
   <text x="84" y="544" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">Receipts: SROIE public train images, duplicate-filtered against our holdout. Not external; may be in pretraining. Invoices: synthetic, vendor-made, page 1 only,</text>
-  <text x="84" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">scored by the benchmark's own scorer. Real supplier invoices are unmeasured. Flagging fails (0/7). Multipage: all-pages 4/10; page-wise 6/10, 93.3% key-header.</text>
+  <text x="84" y="560" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#4A5A64">scored by the benchmark's own scorer. Real supplier invoices are unmeasured. Flagging fails (0/7). Multipage: all-pages 4/10; page-wise VLM 6/10; + OCR totals 10/10 (pipeline, n=10).</text>
   <text x="84" y="576" font-family="SF Mono, Menlo, Consolas, monospace" font-size="9.5" fill="#7A898F">recompute: python3 evaluation/phase0/recompute_scores.py</text>
 
   <text x="64" y="606" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="10.5" fill="#7A898F">TinyDoc Engine 3.0 · Qwen base models, Apache 2.0 · no TinyDoc checkpoint is released</text>

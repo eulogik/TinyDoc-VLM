@@ -38,8 +38,9 @@ third-party base model and the product is the trust layer around it.
 | Invoice v1, page 1 — p50 latency | 26.5 s | **16.1 s** |
 | Invoice multipage, all pages — fully correct (n=10, 46 pages) | — | **4/10** vs 0/10 page 1 |
 | Invoice multipage, all pages — key-header (n=10) | — | **71.1%** vs 63.3% page 1 |
-| Invoice multipage, page-wise — fully correct (n=10, 46 pages) | — | **6/10** · **93.3%** key-header |
-| Invoice multipage, page-wise — line-item F1 | — | **0.848** · 0 parse errors · ~2× slower |
+| Invoice multipage, page-wise VLM — fully correct (n=10, 46 pages) | — | **6/10** · **93.3%** key-header |
+| Invoice multipage, page-wise + OCR totals — key-header / fully correct | — | **100% (90/90) / 10/10** |
+| Invoice multipage, page-wise + OCR totals — line-item F1 | — | **0.848** · 0 parse errors · ~2× slower |
 | DocVQA reading — ANLS / exact (200 public, single-reference) | — | **0.829 / 0.765** |
 
 > **Not an external benchmark.** SROIE clean-100 is a duplicate-filtered split of
@@ -47,9 +48,11 @@ third-party base model and the product is the trust layer around it.
 > The original 100-doc set is 60% leaked. The invoice set is synthetic,
 > vendor-made, and page 1 only; real supplier invoices are unmeasured and
 > flagging fails (0/7). The multipage probes are 10 synthetic documents at
-> 1400 px, 2B only; all-pages gets 4/10, page-wise 6/10 and 93.3% key-header,
-> with zero parse errors but ~2× latency. Line items remain weak, three NAD
-> invoices are read as ZAR, and the SDK path remains single-image. DocVQA is 200
+> 1400 px, 2B only; all-pages gets 4/10, page-wise VLM 6/10 and 93.3%
+> key-header. Deterministic reconciliation plus OCR-read printed totals reaches
+> 10/10 key-header / 90/90 fields, but that is a pipeline result, not a pure VLM
+> score, with a 69.2-100% exact 95% CI at n=10. Line items remain weak (0.848 F1,
+> 1/10 all right) and page-wise is ~2× slower. The SDK path remains single-image. DocVQA is 200
 > public images, one question per image, 768 px mirror, single reference; it is
 > not comparable to leaderboard numbers. These are same-document engine
 > comparisons, not generalization claims.

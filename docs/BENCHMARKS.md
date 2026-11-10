@@ -212,49 +212,74 @@ make multipage invoices straight-through: two 8-page files fail, line items are
 unreliable, and 6/10 still miss at least one key header field. The SDK path
 remains single-image. Artifacts: `evaluation/invoice/results/`.
 
-### Page-wise multipage (2B, n=10, 46 pages)
+### Page-wise multipage + reconciliation (2B, n=10, 46 pages)
 
 The all-pages request's two 8-page failures are an output-control problem, so the
-next probe reads **one page per request** and merges in code: first non-empty
-header, concatenated line items, final-page totals, and two internal-consistency
-repairs. No gold answer is used in the merge.
+next probe reads **one page per request** and merges in code: first-page header,
+concatenated line items, final-page totals, and narrow internal-consistency
+repairs. It then adds deterministic reconciliation:
 
-| Metric | All pages | Page-wise | Delta |
-|---|---:|---:|---:|
-| Key-header accuracy | 71.1% (64/90) | **93.3%** (84/90) | +22.2 pts |
-| Documents fully correct | 4/10 | **6/10** | +2 docs |
-| Mean line-item F1 | 0.322 | **0.848** | +0.526 |
-| Parse errors | 2 | **0** | −2 |
-| p50 latency per document | 34.7 s | 70.7 s | +36.0 s |
-| p50 latency per page | 8.9 s | 16.1 s | +7.2 s |
+1. **Last-page currency.** The final page prints the totals and normally the
+   currency; a printed `N$`/`R`/`$`/`€`/`£` beats a model-guessed code.
+2. **Arithmetic repairs.** A small subtotal residual is resolved toward
+   `total − tax`; a truncated tax is derived from `total − subtotal`; a missing
+   total is taken from `subtotal + tax` when line items corroborate the subtotal.
+3. **OCR printed totals.** `totals_ocr.py` reads the final page with tesseract
+   and accepts a subtotal/tax/total block only when all three labels are found,
+   `subtotal + tax == total` within 0.05, and the implied tax rate is 0–35%.
+   A consistent block replaces the model's three amounts; a printed symbol/code
+   replaces the currency. Line items, dates, and text are never changed.
+
+No step reads gold answers. The ladder:
+
+| Method | Key-header | Fully correct | Line F1 | p50/doc |
+|---|---:|---:|---:|---:|
+| All pages in one request (VLM) | 71.1% (64/90) | 4/10 | 0.322 | 34.7 s |
+| One page per request (VLM) | 93.3% (84/90) | 6/10 | 0.848 | 70.7 s |
+| + merge reconciliation | 95.6% (86/90) | 8/10 | 0.848 | 70.7 s |
+| + OCR printed totals | **100% (90/90)** | **10/10** | 0.848 | 70.7 s |
 
 All 46 pages were sent one at a time at 1400 px with an 8,192-token context and a
-2,048-token output budget. The two 8-page files now parse with **117/117** and
-**110/110** line items. Paired changes are **not significant**: key header
-p=0.219 (5 improved, 1 regressed, 4 unchanged), fully correct p=0.625 (3 gained,
-1 lost). n=10, descriptive only.
+2,048-token output budget; all parsed and stopped cleanly. The two 8-page files
+have **117/117** and **110/110** line items. OCR plus rebuild took **2.1 s for
+all 10 documents** (~0.2 s/doc), so latency remains dominated by VLM inference.
+Paired changes: page-wise VLM → OCR key header improved 4 / regressed 0
+(p=0.125), fully correct gained 4 / lost 0 (p=0.125); all-pages → OCR key
+improved 6 / regressed 0 (p=0.03125), fully correct gained 6 / lost 0
+(p=0.03125). n=10, synthetic, clean PDFs.
 
 **The residual travels with the number:**
 
-- **Currency is 7/10.** Three Namibian documents are read as ZAR instead of NAD.
-  That single field blocks three otherwise fully-correct files.
-- **One regression.** `multipage-2p-za-1` read 25,083.76 / 3,762.56 / 28,846.32
-  as 2,508.36 / 762.56 / 846.32 — all three amounts digit-truncated. The merge
-  cannot repair that without gold, so it stays wrong.
-- **Line items are still weak.** Mean F1 is 0.848 and only **1/10** documents has
-  every line item right; 8/10 trigger a line-sum-vs-subtotal review flag.
-- **Two merge corrections, both disclosed.** A 0.29 subtotal residual was
-  resolved toward `total − tax` on `multipage-3p-na-3`; a truncated tax
-  (26.69 → 26,269.37) was derived from `total − subtotal` on
-  `multipage-6p-za-8`. Both use only internally corroborated values.
+- **10/10 is nine key-header fields, not line items.** Line-item F1 is 0.848,
+  only **1/10** documents has every line right, and 8/10 trigger a
+  line-sum-vs-subtotal review flag.
+- **The 10/10 is a pipeline result, not a pure VLM score.** The VLM alone is
+  **6/10** and 93.3% key-header. OCR reads the three printed monetary totals;
+  it uses no gold but it is an independent reader of the same source.
+- **The exact 95% CI for 10/10 fully correct is 69.2–100%** (n=10,
+  Clopper-Pearson). This is a 10-document probe, not a production rate.
+- **The 181-document page-1 probe was not re-run.** Its 91.9%/93.5% numbers are
+  VLM-only; reconciliation was measured only on the 10 multipage documents.
+- **Three documents have disclosed corrections.** `multipage-2p-za-1`
+  (subtotal/tax/total from OCR), `multipage-3p-na-3` (subtotal residual plus
+  currency from OCR), `multipage-6p-za-8` (truncated tax).
+- **Prompt v2 failed.** An explicit currency-symbol prompt with a
+  `currency_symbol` key scored **81/90 and 5/10** raw versus **84/90 and 6/10**
+  for v1, and one final-page total regressed to 390.50. Deterministic
+  reconciliation fixed the result. The canonical run keeps v1; v2 is archived
+  as a failed variant.
 - **It is ~2× slower.** 70.7 s/doc p50 and 16.1 s/page; chunking is the next
   latency experiment.
 
-**Read this as:** output control, not perception, was the main multipage
-bottleneck. Page-wise reading fixes the runaway, raises key-header accuracy to
-93.3% and fully-correct to 6/10, and nearly triples line-item F1. It is still not
-straight-through: currency, line-item amounts, and latency remain open. The SDK
-path remains single-image. Artifacts: `evaluation/invoice/results/`.
+**Read this as:** output control and field conventions, not page coverage, were
+the main multipage bottlenecks. Page-wise reading fixes the runaway, nearly
+triples line-item F1, and deterministic reconciliation closes the monetary
+fields on this probe. It is still not straight-through: line items, latency, and
+real-invoice transfer remain open. The SDK path remains single-image. Artifacts:
+`evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`,
+`compare_invoice_pagewise_vs_ocr_2b.json`,
+`compare_invoice_mp_allpages_vs_ocr_2b.json`,
+`audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`.
 
 ### DocVQA reading probe (2B, 200 questions, single reference)
 

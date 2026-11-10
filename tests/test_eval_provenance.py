@@ -362,3 +362,65 @@ def test_pagewise_probe_matches_artifacts():
         "multipage-3p-na-3": ["subtotal_from_total_tax_residual"],
         "multipage-6p-za-8": ["tax_from_total_subtotal_truncated"],
     }
+
+
+def test_pagewise_ocr_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    assert data["multi_vertical"]["invoices"]["multipage_pagewise_ocr"] == "measured"
+    assert data["multi_vertical"]["invoices"]["multipage_pagewise_prompt_v2"] == "tested_no_gain"
+    probe = data["probes"]["multipage_pagewise_ocr"]
+    assert probe["n_docs"] == 10
+    assert probe["pages"] == 46
+    assert probe["model"] == "qwen3-vl:2b-instruct"
+    assert probe["prompt_version"] == 1
+    assert probe["ocr"]["consistent_blocks"] == 10
+    assert "no gold" in probe["method"]
+
+    artifacts = probe["artifacts"]
+    rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows"]).read_text().splitlines()
+        if line.strip()
+    ]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+    audit = json.loads((ROOT / artifacts["audit"]).read_text())
+    rebuild = json.loads((ROOT / artifacts["rebuild"]).read_text())
+
+    assert len(rows) == 10
+    assert sum(len(row["pages"]) for row in rows) == 46
+    assert all(row.get("error") is None for row in rows)
+    assert all((row.get("ocr_totals") or {}).get("consistent") is True for row in rows)
+    assert summary["key_header_correct"] == 90
+    assert summary["key_header_scored"] == 90
+    assert summary["fully_correct"] == 10
+    assert summary["parse_errors"] == 0
+    assert abs(summary["line_items"]["f1_mean"] - 0.848) < 1e-9
+    assert summary["line_items"]["all_lines_right"] == 1
+    assert 0.69 < summary["ci95_exact"]["fully_correct_rate"][0] < 0.70
+    assert scores["summary"]["key_fields"] == {"correct": 90, "scored": 90}
+    assert scores["summary"]["fully_correct"] == 10
+    assert audit["ok"] is True
+    assert rebuild["ocr_totals_consistent"] == 10
+    assert rebuild["corrections"] == 3
+    assert rebuild["review_flags"] == 8
+
+    corrections = {
+        row["id"]: row["pred"]["corrections"]
+        for row in rows
+        if row["pred"].get("corrections")
+    }
+    assert corrections == {
+        "multipage-2p-za-1": ["totals_from_ocr:subtotal+tax+total"],
+        "multipage-3p-na-3": [
+            "subtotal_from_total_tax_residual",
+            "currency_from_ocr_totals",
+        ],
+        "multipage-6p-za-8": ["tax_from_total_subtotal_truncated"],
+    }
+
+    experiment = probe["prompt_v2_experiment"]
+    assert experiment["raw_results"]["key_header"] == "81/90"
+    assert experiment["raw_results"]["fully_correct"] == "5/10"
+    assert "did not reliably fix currency" in experiment["conclusion"]
+    assert experiment["after_same_reconciliation"]["fully_correct"] == "10/10"

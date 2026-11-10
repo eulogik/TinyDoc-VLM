@@ -79,6 +79,19 @@ def bootstrap_ci(docs: list[dict], n_boot: int = 2000, seed: int = 42) -> dict:
     }
 
 
+def clopper_pearson(k: int, n: int, alpha: float = 0.05) -> list[float] | None:
+    """Exact binomial interval; honest at 0/0 and all-correct boundaries."""
+    if n <= 0:
+        return None
+    try:
+        from scipy.stats import beta
+    except Exception:  # noqa: BLE001 - optional dependency
+        return None
+    lower = 0.0 if k <= 0 else float(beta.ppf(alpha / 2, k, n - k + 1))
+    upper = 1.0 if k >= n else float(beta.ppf(1 - alpha / 2, k + 1, n - k))
+    return [lower, upper]
+
+
 def summarize(scores: dict, rows: list[dict] | None = None) -> dict:
     docs = scores.get("documents") or []
     per_category: dict[str, dict] = defaultdict(
@@ -130,6 +143,15 @@ def summarize(scores: dict, rows: list[dict] | None = None) -> dict:
         "fully_correct": fully_correct,
         "fully_correct_rate": fully_correct / len(docs) if docs else 0.0,
         "ci95": bootstrap_ci(docs),
+        "ci95_exact": {
+            "fully_correct_rate": clopper_pearson(fully_correct, len(docs)),
+            "key_header_accuracy": clopper_pearson(key_correct, key_scored),
+            "note": (
+                "Clopper-Pearson. The key-header interval treats fields as "
+                "independent and is optimistic because fields cluster within "
+                "documents; cite the document-level fully-correct interval."
+            ),
+        },
         "per_field": dict(sorted(per_field.items())),
         "per_category": dict(sorted(per_category.items())),
         "flags": (scores.get("summary") or {}).get("flags"),

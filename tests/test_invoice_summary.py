@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "evaluation" / "invoice"))
 
-from summarize_scores import bootstrap_ci, summarize
+from summarize_scores import bootstrap_ci, clopper_pearson, summarize
 
 
 def _doc(doc_id, category, key_hits, fully, line_f1=None):
@@ -82,3 +82,31 @@ def test_bootstrap_ci_contains_point_estimate():
     assert low <= 3 / 6 <= high
     low, high = ci["fully_correct_rate"]
     assert low <= 1 / 3 <= high
+
+
+def test_exact_interval_does_not_collapse_at_all_correct():
+    interval = clopper_pearson(10, 10)
+    assert interval is not None
+    assert 0.68 < interval[0] < 0.70
+    assert interval[1] == 1.0
+
+
+def test_exact_interval_at_zero_and_empty():
+    interval = clopper_pearson(0, 10)
+    assert interval[0] == 0.0
+    assert 0.30 < interval[1] < 0.32
+    assert clopper_pearson(0, 0) is None
+
+
+def test_summary_contains_exact_interval():
+    scores = {
+        "documents": [
+            _doc(f"d{i}", "clean", {"vendor_name": True}, True) for i in range(10)
+        ],
+        "meta": {},
+    }
+    out = summarize(scores, None)
+    exact = out["ci95_exact"]
+    assert exact["fully_correct_rate"][1] == 1.0
+    assert exact["fully_correct_rate"][0] < 0.75
+    assert "optimistic" in exact["note"]

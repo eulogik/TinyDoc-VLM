@@ -87,10 +87,19 @@ function gateClaims() {
     bad.push("index.html missing the page-wise multipage result (6/10, 93.3%)");
   }
   if (!/2×|2x/i.test(index)) bad.push("index.html missing the page-wise latency caveat");
+  if (!/10\/10/.test(index) || !/90\/90/.test(index)) {
+    bad.push("index.html missing the reconciled multipage result (10/10, 90/90)");
+  }
+  if (!/pipeline/i.test(index)) bad.push("index.html missing the pipeline-not-pure-VLM caveat");
+  if (!/69\.2/.test(index)) bad.push("index.html missing the exact multipage CI (69.2)");
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
   if (!/0\.0%/.test(bench) || !/1,?000/.test(bench)) bad.push("BENCHMARKS.md missing n=1000 0.0% result");
+  if (!/10\/10/.test(bench) || !/69\.2/.test(bench) || !/pipeline/i.test(bench)) {
+    bad.push("BENCHMARKS.md missing the reconciled multipage result or its pipeline caveat");
+  }
+  if (!/prompt v2|v2 failed/i.test(bench)) bad.push("BENCHMARKS.md missing the rejected prompt-v2 result");
 
   const drafts = ["docs/paper.md", "docs/pitch_deck.md", "docs/reddit_post.md",
                   "docs/twitter_thread.md", "docs/launch_announcement.md"];
@@ -130,6 +139,11 @@ function gateClaims() {
     bad.push("README missing the page-wise multipage result");
   }
   if (!/2×|2x/i.test(readme)) bad.push("README missing the page-wise latency caveat");
+  if (!/10\/10/.test(readme) || !/90\/90/.test(readme)) {
+    bad.push("README missing the reconciled multipage result (10/10, 90/90)");
+  }
+  if (!/pipeline/i.test(readme)) bad.push("README missing the pipeline-not-pure-VLM caveat");
+  if (!/69\.2/.test(readme)) bad.push("README missing the exact multipage CI (69.2)");
   if (!/DocVQA/i.test(bench) || !/not comparable/i.test(bench) || !/0\.829/.test(bench)) {
     bad.push("BENCHMARKS.md missing the DocVQA result or caveat");
   }

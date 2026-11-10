@@ -53,7 +53,7 @@ from run_invoice_eval import (
     normalize_prediction,
 )
 
-PAGE_PROMPT = """You are an invoice data extractor reading page {page} of {total} of ONE invoice. Reply with JSON only.
+PAGE_PROMPT_V1 = """You are an invoice data extractor reading page {page} of {total} of ONE invoice. Reply with JSON only.
 Keys:
 - vendor_name: supplier name exactly as printed, or ""
 - invoice_number: invoice number exactly as printed, or ""
@@ -78,9 +78,18 @@ Rules:
 - Amounts are numbers with a dot decimal and no currency symbols (e.g. 1234.56).
 - JSON only, no markdown, no commentary."""
 
+_CURRENCY_LINE_V1 = "- currency: ISO 4217 code (USD, EUR, GBP, ZAR, NAD, ZMW)"
+_CURRENCY_LINE_V2 = (
+    "- currency: ISO 4217 code (USD, EUR, GBP, ZAR, NAD, ZMW).\n"
+    "  Symbol map: N$ = NAD, R = ZAR, K = ZMW, $ = USD, EUR = €, GBP = £.\n"
+    "- currency_symbol: the currency symbol printed on this page (for example N$, R, $), or \"\""
+)
+PAGE_PROMPT = PAGE_PROMPT_V1.replace(_CURRENCY_LINE_V1, _CURRENCY_LINE_V2)
 
-def page_prompt(page: int, total: int) -> str:
-    return PAGE_PROMPT.format(page=page, total=total)
+
+def page_prompt(page: int, total: int, version: int = 2) -> str:
+    template = PAGE_PROMPT_V1 if version == 1 else PAGE_PROMPT
+    return template.format(page=page, total=total)
 
 
 SUMMARY_ROW = re.compile(
@@ -97,8 +106,42 @@ def is_summary_row(description: str) -> bool:
     return bool(SUMMARY_ROW.match((description or "").strip()))
 
 
+CURRENCY_SYMBOLS = {
+    "N$": "NAD",
+    "NAD$": "NAD",
+    "NAD": "NAD",
+    "USD": "USD",
+    "EUR": "EUR",
+    "GBP": "GBP",
+    "R": "ZAR",
+    "ZAR": "ZAR",
+    "US$": "USD",
+    "$": "USD",
+    "€": "EUR",
+    "£": "GBP",
+    "K": "ZMW",
+    "ZK": "ZMW",
+    "ZMW": "ZMW",
+}
+
+
+def symbol_currency(value) -> str | None:
+    """Map a printed symbol to ISO without guessing from the vendor name."""
+    if value is None:
+        return None
+    return CURRENCY_SYMBOLS.get(str(value).strip().upper().replace(" ", ""))
+
+
 def _first(values):
     for value in values:
+        if value not in (None, "", []):
+            return value
+    return None
+
+
+def _last(values):
+    """Last non-empty value; the final page prints the document totals."""
+    for value in reversed(list(values)):
         if value not in (None, "", []):
             return value
     return None
@@ -107,7 +150,9 @@ def _first(values):
 def merge_pages(pages: list[dict], doc_id: str = "") -> dict:
     """Merge page-level extractions into one normalized invoice prediction."""
     pages = [page for page in pages if isinstance(page, dict)]
-    currency = _currency(_first(page.get("currency") for page in pages))
+    currency = symbol_currency(
+        _last(page.get("currency_symbol") for page in pages)
+    ) or _currency(_last(page.get("currency") for page in pages))
     lines: list[dict] = []
     for page in pages:
         for item in page.get("line_items") or []:
@@ -273,6 +318,13 @@ def main() -> int:
     ap.add_argument("--num-predict", type=int, default=int(os.environ.get("TINYDOC_OLLAMA_NUM_PREDICT", "2048")))
     ap.add_argument("--timeout", type=float, default=float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "600")))
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument(
+        "--prompt-version",
+        type=int,
+        choices=(1, 2),
+        default=2,
+        help="1 = original prompt; 2 = currency-symbol prompt",
+    )
     args = ap.parse_args()
 
     _check_host(args.host)
@@ -310,6 +362,7 @@ def main() -> int:
             "category": item.get("category"),
             "difficulty": item.get("difficulty"),
             "model": args.model,
+            "prompt_version": args.prompt_version,
             "run_date": time.strftime("%Y-%m-%d"),
             "num_ctx": args.num_ctx,
             "num_predict": args.num_predict,
@@ -330,7 +383,7 @@ def main() -> int:
                 response = ask_ollama(
                     args.host,
                     args.model,
-                    page_prompt(page_number, len(image_paths)),
+                    page_prompt(page_number, len(image_paths), args.prompt_version),
                     [b64],
                     args.num_ctx,
                     args.timeout,

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run the page-wise multipage invoice probe, then score it with the benchmark's
 # own scorer. Inference over many documents needs explicit approval (AGENTS.md).
-# Usage: scripts/run_invoice_pagewise.sh [model] [tag]
+# Usage: scripts/run_invoice_pagewise.sh [model] [tag] [prompt_version]
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PATH="/opt/homebrew/bin:$PATH"
@@ -11,6 +11,7 @@ export TINYDOC_OLLAMA_NUM_PREDICT="${TINYDOC_OLLAMA_NUM_PREDICT:-2048}"
 
 MODEL="${1:-qwen3-vl:2b-instruct}"
 TAG="${2:-qwen3-vl_2b_mp_pagewise}"
+PROMPT_VERSION="${3:-2}"
 MANIFEST="${INVOICE_MANIFEST:-evaluation/invoice/manifest_multipage.jsonl}"
 BENCH="${INVOICE_BENCHMARK:-/Volumes/KIOXIA 1TB/tinydoc/invoice-extraction-benchmark}"
 ROOT="$(pwd)"
@@ -26,10 +27,11 @@ if ! curl -sf --max-time 10 "http://127.0.0.1:11434/api/tags" >/dev/null; then
   exit 3
 fi
 
-echo "START $MODEL manifest=$MANIFEST $(date '+%Y-%m-%d %H:%M:%S')"
+echo "START $MODEL prompt=$PROMPT_VERSION manifest=$MANIFEST $(date '+%Y-%m-%d %H:%M:%S')"
 python3 evaluation/invoice/run_invoice_pagewise.py \
   --manifest "$MANIFEST" \
   --model "$MODEL" \
+  --prompt-version "$PROMPT_VERSION" \
   --resume \
   --out "$RESULTS/rows_invoice_${TAG}.jsonl" \
   --preds "$RESULTS/preds_invoice_${TAG}.json" \

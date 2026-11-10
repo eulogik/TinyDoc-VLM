@@ -1,0 +1,104 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-09",
+  "n_docs": 10,
+  "n_corpus": 181,
+  "key_header_accuracy": 0.9,
+  "key_header_correct": 81,
+  "key_header_scored": 90,
+  "fully_correct": 5,
+  "fully_correct_rate": 0.5,
+  "ci95": {
+    "key_header_accuracy": [
+      0.8111111111111111,
+      0.9777777777777777
+    ],
+    "fully_correct_rate": [
+      0.2,
+      0.8
+    ]
+  },
+  "ci95_exact": {
+    "fully_correct_rate": [
+      0.18708602844739855,
+      0.8129139715526015
+    ],
+    "key_header_accuracy": [
+      0.8186400271160681,
+      0.9532446847258357
+    ],
+    "note": "Clopper-Pearson. The key-header interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level fully-correct interval."
+  },
+  "per_field": {
+    "currency": {
+      "correct": 7,
+      "scored": 10
+    },
+    "document_type": {
+      "correct": 10,
+      "scored": 10
+    },
+    "due_date": {
+      "correct": 10,
+      "scored": 10
+    },
+    "invoice_date": {
+      "correct": 10,
+      "scored": 10
+    },
+    "invoice_number": {
+      "correct": 10,
+      "scored": 10
+    },
+    "subtotal": {
+      "correct": 8,
+      "scored": 10
+    },
+    "tax": {
+      "correct": 8,
+      "scored": 10
+    },
+    "total": {
+      "correct": 8,
+      "scored": 10
+    },
+    "vendor_name": {
+      "correct": 10,
+      "scored": 10
+    }
+  },
+  "per_category": {
+    "multipage": {
+      "docs": 10,
+      "key_correct": 81,
+      "key_scored": 90,
+      "fully_correct": 5,
+      "line_f1_mean": 0.844
+    }
+  },
+  "flags": {
+    "inconsistent_invoices": {
+      "total": 0,
+      "flagged": 0
+    },
+    "multi_invoice_files": {
+      "total": 0,
+      "flagged": 0
+    },
+    "consistent_documents": {
+      "total": 10,
+      "flagged": 0
+    }
+  },
+  "line_items": {
+    "docs": 10,
+    "f1_sum": 8.44,
+    "f1_mean": 0.844,
+    "all_lines_right": 1
+  },
+  "latency_ms": {
+    "mean": 73429.87658977509,
+    "p50": 72248.49009513855
+  },
+  "parse_errors": 0
+}

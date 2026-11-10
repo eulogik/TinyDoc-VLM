@@ -27,10 +27,11 @@ sys.path.insert(0, str(HERE.parent.parent / "sdk"))
 
 from arithmetic_checks import check_prediction
 from run_invoice_eval import _extract_json
-from run_invoice_pagewise import merge_is_sane, merge_pages
+from run_invoice_pagewise import merge_is_sane, merge_pages, symbol_currency
+from totals_ocr import apply_totals, read_totals
 
 
-def rebuild_row(row: dict) -> dict:
+def rebuild_row(row: dict, totals_reader=None) -> dict:
     rebuilt = dict(row)
     page_preds: list[dict] = []
     page_errors: list[str] = []
@@ -46,9 +47,26 @@ def rebuild_row(row: dict) -> dict:
         page_preds.append(parsed)
 
     merged = merge_pages(page_preds, row.get("id", ""))
+    ocr_totals = None
+    if totals_reader is not None:
+        image_paths = row.get("image_paths") or []
+        if image_paths:
+            try:
+                ocr_totals = totals_reader(image_paths[-1])
+            except Exception as exc:  # noqa: BLE001 - OCR is optional corroboration
+                ocr_totals = {"error": f"{type(exc).__name__}: {exc}"}
+    if ocr_totals and ocr_totals.get("consistent"):
+        merged, corrections = apply_totals(merged, ocr_totals)
+        symbol = symbol_currency(ocr_totals.get("currency_symbol"))
+        if symbol and merged.get("currency") != symbol:
+            merged["currency"] = symbol
+            corrections.append("currency_from_ocr_totals")
+        if corrections:
+            merged["corrections"] = (merged.get("corrections") or []) + corrections
     sanity = merge_is_sane(merged, page_preds)
     sanity.extend(page_errors)
     rebuilt["pred"] = merged
+    rebuilt["ocr_totals"] = ocr_totals
     rebuilt["review_flags"] = [
         issue["check"] for issue in check_prediction(merged)
     ]
@@ -64,6 +82,11 @@ def main() -> int:
     ap.add_argument("--model", default=None)
     ap.add_argument("--run-date", default=None)
     ap.add_argument("--out-report", default=None)
+    ap.add_argument(
+        "--ocr-totals",
+        action="store_true",
+        help="read printed totals from the final page with OCR and reconcile",
+    )
     args = ap.parse_args()
 
     rows = [
@@ -71,7 +94,8 @@ def main() -> int:
         for line in Path(args.rows).read_text().splitlines()
         if line.strip()
     ]
-    rebuilt = [rebuild_row(row) for row in rows]
+    reader = read_totals if args.ocr_totals else None
+    rebuilt = [rebuild_row(row, reader) for row in rows]
 
     out_rows = Path(args.out_rows)
     out_rows.parent.mkdir(parents=True, exist_ok=True)
@@ -111,6 +135,9 @@ def main() -> int:
             1
             for row in rebuilt
             if (row.get("pred") or {}).get("corrections")
+        ),
+        "ocr_totals_consistent": sum(
+            1 for row in rebuilt if (row.get("ocr_totals") or {}).get("consistent")
         ),
         "out_rows": str(out_rows),
         "out_preds": str(out_preds),

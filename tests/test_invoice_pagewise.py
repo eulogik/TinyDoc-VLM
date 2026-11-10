@@ -14,6 +14,7 @@ from run_invoice_pagewise import (
     merge_pages,
     page_prompt,
     reconcile_totals,
+    symbol_currency,
 )
 
 
@@ -252,3 +253,47 @@ def test_exact_large_totals_are_not_marked_as_corrections():
     )
     merged = merge_pages([page], "doc")
     assert "corrections" not in merged
+
+
+def test_currency_symbol_prompt_is_versioned():
+    v1 = page_prompt(1, 2, version=1)
+    v2 = page_prompt(1, 2, version=2)
+    assert "currency_symbol" not in v1
+    assert "N$ = NAD" not in v1
+    assert "currency_symbol" in v2
+    assert "N$ = NAD" in v2
+
+
+def test_printed_symbol_overrides_a_wrong_currency_code():
+    page = _page(
+        vendor_name="Acme",
+        currency="ZAR",
+        currency_symbol="N$",
+        line_items=[{"description": "A", "amount": 10.0}],
+        subtotal=10.0,
+        tax=0.0,
+        total=10.0,
+    )
+    merged = merge_pages([page], "doc")
+    assert merged["currency"] == "NAD"
+
+
+def test_currency_prefers_the_final_page_symbol():
+    pages = [
+        _page(currency="ZAR", currency_symbol="R"),
+        _page(currency="USD", currency_symbol="$"),
+        _page(currency="NAD", currency_symbol="N$"),
+    ]
+    merged = merge_pages(pages, "doc")
+    assert merged["currency"] == "NAD"
+
+
+def test_symbol_map_is_exact():
+    assert symbol_currency("N$") == "NAD"
+    assert symbol_currency("R") == "ZAR"
+    assert symbol_currency("$") == "USD"
+    assert symbol_currency("€") == "EUR"
+    assert symbol_currency("K") == "ZMW"
+    assert symbol_currency("EUR") == "EUR"
+    assert symbol_currency("NAD") == "NAD"
+    assert symbol_currency("not-a-symbol") is None

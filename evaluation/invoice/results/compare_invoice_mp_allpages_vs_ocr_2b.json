@@ -1,0 +1,243 @@
+{
+  "n_docs": 10,
+  "missing_from_before": [],
+  "missing_from_after": [],
+  "before": {
+    "all_pages": {
+      "documents": 10,
+      "key_correct": 64,
+      "key_scored": 90,
+      "key_accuracy": 0.7111111111111111,
+      "fully_correct": 4,
+      "fully_correct_rate": 0.4,
+      "mean_line_f1": 0.322
+    }
+  },
+  "after": {
+    "pagewise_ocr": {
+      "documents": 10,
+      "key_correct": 90,
+      "key_scored": 90,
+      "key_accuracy": 1.0,
+      "fully_correct": 10,
+      "fully_correct_rate": 1.0,
+      "mean_line_f1": 0.848
+    }
+  },
+  "delta": {
+    "key_accuracy": 0.28888888888888886,
+    "fully_correct_rate": 0.6,
+    "mean_line_f1": 0.526
+  },
+  "transitions": {
+    "key_improved": 6,
+    "key_regressed": 0,
+    "key_unchanged": 4,
+    "key_sign_p": 0.03125,
+    "fully_correct_gained": 6,
+    "fully_correct_lost": 0,
+    "fully_correct_sign_p": 0.03125
+  },
+  "per_field": {
+    "vendor_name": {
+      "all_pages": 0.8,
+      "pagewise_ocr": 1.0,
+      "delta": 0.19999999999999996,
+      "all_pages_correct": 8,
+      "pagewise_ocr_correct": 10
+    },
+    "invoice_number": {
+      "all_pages": 0.8,
+      "pagewise_ocr": 1.0,
+      "delta": 0.19999999999999996,
+      "all_pages_correct": 8,
+      "pagewise_ocr_correct": 10
+    },
+    "invoice_date": {
+      "all_pages": 0.8,
+      "pagewise_ocr": 1.0,
+      "delta": 0.19999999999999996,
+      "all_pages_correct": 8,
+      "pagewise_ocr_correct": 10
+    },
+    "due_date": {
+      "all_pages": 0.8,
+      "pagewise_ocr": 1.0,
+      "delta": 0.19999999999999996,
+      "all_pages_correct": 8,
+      "pagewise_ocr_correct": 10
+    },
+    "currency": {
+      "all_pages": 0.6,
+      "pagewise_ocr": 1.0,
+      "delta": 0.4,
+      "all_pages_correct": 6,
+      "pagewise_ocr_correct": 10
+    },
+    "subtotal": {
+      "all_pages": 0.5,
+      "pagewise_ocr": 1.0,
+      "delta": 0.5,
+      "all_pages_correct": 5,
+      "pagewise_ocr_correct": 10
+    },
+    "tax": {
+      "all_pages": 0.6,
+      "pagewise_ocr": 1.0,
+      "delta": 0.4,
+      "all_pages_correct": 6,
+      "pagewise_ocr_correct": 10
+    },
+    "total": {
+      "all_pages": 0.5,
+      "pagewise_ocr": 1.0,
+      "delta": 0.5,
+      "all_pages_correct": 5,
+      "pagewise_ocr_correct": 10
+    },
+    "document_type": {
+      "all_pages": 1.0,
+      "pagewise_ocr": 1.0,
+      "delta": 0.0,
+      "all_pages_correct": 10,
+      "pagewise_ocr_correct": 10
+    }
+  },
+  "latency": {
+    "all_pages": {
+      "n": 10,
+      "p50_s": 34.68558466434479,
+      "mean_s": 64.28691453933716,
+      "p50_s_per_page": 8.900694346427917
+    },
+    "pagewise_ocr": {
+      "n": 10,
+      "p50_s": 70.66581439971924,
+      "mean_s": 75.3534926891327,
+      "p50_s_per_page": 16.115595996379852
+    }
+  },
+  "documents": [
+    {
+      "doc_id": "multipage-2p-us-2",
+      "all_pages_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "all_pages_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.8,
+      "pagewise_ocr_line_f1": 1.0,
+      "all_pages_latency_ms": 13968.969106674194,
+      "pagewise_ocr_latency_ms": 31552.563905715942
+    },
+    {
+      "doc_id": "multipage-2p-za-1",
+      "all_pages_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "all_pages_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.76,
+      "pagewise_ocr_line_f1": 0.85,
+      "all_pages_latency_ms": 13656.373023986816,
+      "pagewise_ocr_latency_ms": 30069.822072982788
+    },
+    {
+      "doc_id": "multipage-3p-gb-4",
+      "all_pages_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "all_pages_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.14,
+      "pagewise_ocr_line_f1": 0.69,
+      "all_pages_latency_ms": 29453.6612033844,
+      "pagewise_ocr_latency_ms": 42552.72817611694
+    },
+    {
+      "doc_id": "multipage-3p-na-3",
+      "all_pages_key_correct": 5,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 4,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.28,
+      "pagewise_ocr_line_f1": 0.49,
+      "all_pages_latency_ms": 12713.994979858398,
+      "pagewise_ocr_latency_ms": 43827.422857284546
+    },
+    {
+      "doc_id": "multipage-4p-za-5",
+      "all_pages_key_correct": 7,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 2,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.45,
+      "pagewise_ocr_line_f1": 0.93,
+      "all_pages_latency_ms": 19123.29411506653,
+      "pagewise_ocr_latency_ms": 67249.91273880005
+    },
+    {
+      "doc_id": "multipage-5p-de-6",
+      "all_pages_key_correct": 9,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 0,
+      "all_pages_fully_correct": true,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.08,
+      "pagewise_ocr_line_f1": 0.99,
+      "all_pages_latency_ms": 53675.25100708008,
+      "pagewise_ocr_latency_ms": 82274.55019950867
+    },
+    {
+      "doc_id": "multipage-5p-na-7",
+      "all_pages_key_correct": 8,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 1,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.06,
+      "pagewise_ocr_line_f1": 0.6,
+      "all_pages_latency_ms": 39917.508125305176,
+      "pagewise_ocr_latency_ms": 74081.71606063843
+    },
+    {
+      "doc_id": "multipage-6p-za-8",
+      "all_pages_key_correct": 6,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 3,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.65,
+      "pagewise_ocr_line_f1": 0.97,
+      "all_pages_latency_ms": 86830.44481277466,
+      "pagewise_ocr_latency_ms": 109138.07797431946
+    },
+    {
+      "doc_id": "multipage-8p-na-10",
+      "all_pages_key_correct": 1,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 8,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.0,
+      "pagewise_ocr_line_f1": 0.97,
+      "all_pages_latency_ms": 194823.52089881897,
+      "pagewise_ocr_latency_ms": 132432.49702453613
+    },
+    {
+      "doc_id": "multipage-8p-us-9",
+      "all_pages_key_correct": 1,
+      "pagewise_ocr_key_correct": 9,
+      "key_delta": 8,
+      "all_pages_fully_correct": false,
+      "pagewise_ocr_fully_correct": true,
+      "all_pages_line_f1": 0.0,
+      "pagewise_ocr_line_f1": 0.99,
+      "all_pages_latency_ms": 178706.12812042236,
+      "pagewise_ocr_latency_ms": 140355.63588142395
+    }
+  ],
+  "caveat": "Descriptive only: same documents, two extraction methods, n<=10. No significance claim and no real-invoice transfer."
+}
