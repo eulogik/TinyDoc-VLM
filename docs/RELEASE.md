@@ -7,7 +7,7 @@
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 245 passed
+python3 -m pytest tests/ -q                 # expect 247 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -137,10 +137,14 @@ Check the Space reaches `RUNNING` and renders the card.
   −2.2 field points and +4.0 fully-correct points. Two hard failures (one
   runaway `length`, one truncated response with no `done_reason`) and one valid
   JSON with no total. **72.0% / 22-of-100 is the held-out headline.**
-- Before a 0.3.1 release: decide whether the receipt-aware prompt is in scope,
-  bump `sdk/setup.py` from the dev version, rebuild both schemas into the wheel,
-  clean-venv install, upload, tag **`sdk-v0.3.1`**, and update the install lines
-  and site. Do not reuse `sdk-v0.3.0`.
+- **Prompt pilot negative.** A 30-document development pilot tested a
+  header-first prompt (v3) and v1 plus receipt rules (v4). v3 gained 2.9 field
+  points but 2/30 responses looped to the 2048-token cap; v4 lost 1.2 points.
+  Keep prompt **v1**; see `evaluation/invoice/PT_PROMPT_PILOT.md`.
+- Before a 0.3.1 release: decide whether an OCR-total pass, resolution/crop, or
+  retry fix is in scope, bump `sdk/setup.py` from the dev version, rebuild both
+  schemas into the wheel, clean-venv install, upload, tag **`sdk-v0.3.1`**, and
+  update the install lines and site. Do not reuse `sdk-v0.3.0`.
 
 ## 0.2.0 status (2026-11-07)
 

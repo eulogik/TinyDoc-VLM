@@ -22,6 +22,7 @@ ROWS="$RESULTS/rows_invoice_${TAG}.jsonl"
 PREDS="$RESULTS/preds_invoice_${TAG}.json"
 LOG="$RESULTS/run_${TAG}.log"
 MIN_FREE_MB="${TINYDOC_MIN_FREE_MB:-800}"
+PROMPT_VERSION="${TINYDOC_PROMPT_VERSION:-1}"
 PAGESIZE="$(sysctl -n hw.pagesize)"
 
 mkdir -p "$RESULTS"
@@ -33,7 +34,7 @@ ARGS=(
   --model qwen3-vl:2b-instruct
   --out "$ROWS"
   --preds "$PREDS"
-  --prompt-version 1
+  --prompt-version "$PROMPT_VERSION"
   --num-ctx "${TINYDOC_OLLAMA_NUM_CTX:-8192}"
   --num-predict "$NUM_PREDICT"
   --timeout "${TINYDOC_OLLAMA_TIMEOUT:-600}"

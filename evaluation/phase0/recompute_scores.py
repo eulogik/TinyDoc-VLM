@@ -968,6 +968,88 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"real PT holdout check errored: {exc}")
 
+    # Prompt pilot: a 30-document development check of two receipt-aware prompts.
+    # Both were rejected; v1 remains canonical.
+    pilot_manifest = ROOT.parent / "invoice/manifest_pt_pilot30_1400.jsonl"
+    pilot_scores = {
+        name: ROOT.parent / f"invoice/results/scores_invoice_pt_pilot30_{name}.json"
+        for name in ("v1", "v3", "v4")
+    }
+    pilot_summaries = {
+        name: ROOT.parent / f"invoice/results/summary_invoice_pt_pilot30_{name}.json"
+        for name in ("v1", "v3", "v4")
+    }
+    pilot_compare = {
+        name: ROOT.parent / f"invoice/results/compare_pt_pilot30_v1_vs_{name}.json"
+        for name in ("v3", "v4")
+    }
+    pilot_rows = {
+        name: ROOT.parent / f"invoice/results/rows_invoice_pt_pilot30_{name}.jsonl"
+        for name in ("v3", "v4")
+    }
+    pilot_missing = [
+        path.name
+        for path in (pilot_manifest, *pilot_scores.values(), *pilot_summaries.values(),
+                     *pilot_compare.values(), *pilot_rows.values())
+        if not path.exists()
+    ]
+    if pilot_missing:
+        failures.append(f"prompt pilot artifacts missing: {pilot_missing}")
+    else:
+        try:
+            pman = [json.loads(line) for line in pilot_manifest.open() if line.strip()]
+
+            def _pilot_totals(scores):
+                docs = scores.get("documents") or []
+                correct = sum(
+                    1 for doc in docs for item in (doc.get("fields") or {}).values() if item.get("correct")
+                )
+                scored = sum(len(doc.get("fields") or {}) for doc in docs)
+                fully = sum(1 for doc in docs if doc.get("fully_correct"))
+                six = sum(1 for doc in docs if doc.get("fully_correct_six"))
+                six_scored = sum(1 for doc in docs if doc.get("all_six_scored"))
+                return correct, scored, fully, six, six_scored
+
+            vals = {
+                name: _pilot_totals(json.loads(path.read_text()))
+                for name, path in pilot_scores.items()
+            }
+            v3rows = [json.loads(line) for line in pilot_rows["v3"].open() if line.strip()]
+            v4rows = [json.loads(line) for line in pilot_rows["v4"].open() if line.strip()]
+            v3caps = sorted(
+                row["id"] for row in v3rows
+                if row.get("pages") and (row["pages"][0].get("eval_count") or 0) >= 2048
+            )
+            v4caps = [
+                row["id"] for row in v4rows
+                if row.get("pages") and (row["pages"][0].get("eval_count") or 0) >= 2048
+            ]
+            c3 = json.loads(pilot_compare["v3"].read_text())
+            c4 = json.loads(pilot_compare["v4"].read_text())
+            ok = (
+                len(pman) == 30
+                and vals["v1"] == (133, 174, 7, 6, 24)
+                and vals["v3"] == (138, 174, 7, 6, 24)
+                and vals["v4"] == (131, 174, 6, 5, 24)
+                and v3caps == ["ptreal-company-20210318_172727", "ptreal-company-20210508_174017"]
+                and not v4caps
+                and c3["delta"]["fully_correct"] == 0
+                and c3["per_field"]["total"]["delta"] == 2
+                and c3["per_field"]["tax"]["delta"] == 0
+                and c4["delta"]["fully_correct"] == -1
+                and c4["per_field"]["tax"]["delta"] == -2
+                and c4["per_field"]["total"]["delta"] == -2
+            )
+            print(
+                f"claim: prompt pilot 30 docs -> v1 {vals['v1'][0]}/174 fully {vals['v1'][2]}, "
+                f"v3 {vals['v3'][0]}/174 fully {vals['v3'][2]} with {len(v3caps)} cap loops, "
+                f"v4 {vals['v4'][0]}/174 fully {vals['v4'][2]} -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("prompt-pilot counts or loop accounting changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"prompt pilot check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

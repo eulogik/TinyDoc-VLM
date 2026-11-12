@@ -65,6 +65,14 @@ The field interval treats fields as independent and is optimistic because fields
 cluster within documents. Cite the document-level interval for fully-correct
 claims.
 
+## Prompt pilot (negative)
+
+A 30-document development pilot tested two receipt-aware prompts: header-only
+(v3) and v1 plus receipt rules (v4). v3 gained **+2.9 field points** but **2/30
+responses looped to the 2048-token cap**; v4 lost **1.2 points**. The canonical
+**v1 prompt remains the default**; no full-development or holdout run was
+justified. Details and artifacts: [PT_PROMPT_PILOT.md](PT_PROMPT_PILOT.md).
+
 ## Per field
 
 | Field | Development | Holdout | Δ (pp) |

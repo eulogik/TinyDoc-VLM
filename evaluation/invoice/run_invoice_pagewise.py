@@ -314,9 +314,12 @@ def main() -> int:
     ap.add_argument(
         "--prompt-version",
         type=int,
-        choices=(1, 2),
+        choices=(1, 2, 3, 4),
         default=1,
-        help="1 = original (canonical); 2 = currency-symbol variant (tested, not better)",
+        help=(
+            "1 = original (canonical); 2 = currency-symbol variant (tested, not better); "
+            "3 = header-first receipt experiment (rejected: loops); 4 = v1 + receipt rules"
+        ),
     )
     args = ap.parse_args()
 

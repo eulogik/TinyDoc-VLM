@@ -61,6 +61,26 @@ def test_prompt_parity_with_evaluation_module():
     for page, total in ((1, 1), (2, 5), (8, 8)):
         assert eval_prompt(page, total) == page_prompt(page, total)
         assert eval_prompt(page, total, 2) == page_prompt(page, total, 2)
+        assert eval_prompt(page, total, 3) == page_prompt(page, total, 3)
+        assert eval_prompt(page, total, 4) == page_prompt(page, total, 4)
+
+
+def test_header_prompt_v3_is_header_only_and_states_receipt_rules():
+    prompt = page_prompt(1, 1, 3)
+    assert "line_items" not in prompt
+    assert "prices_include_tax" in prompt
+    assert "4.190 = 4.19" in prompt
+    assert "EUR for Portuguese documents" in prompt
+    assert "customer NIF" in prompt
+
+
+def test_receipt_rule_prompt_v4_keeps_line_items_and_adds_rules():
+    prompt = page_prompt(1, 1, 4)
+    assert "line_items" in prompt
+    assert "never add tax to a printed total" in prompt
+    assert "4.190 = 4.19" in prompt
+    assert "customer NIF" in prompt
+    assert "sum their VAT amounts" in prompt
 
 
 def test_sdk_merge_reproduces_the_measured_pagewise_predictions():

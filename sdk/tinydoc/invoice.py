@@ -73,12 +73,66 @@ _CURRENCY_LINE_V2 = (
 )
 PAGE_PROMPT_V2 = PAGE_PROMPT_V1.replace(_CURRENCY_LINE_V1, _CURRENCY_LINE_V2)
 
+# Header-first prompt for real receipts. It deliberately omits line items and
+# states the tax-inclusive, dot-decimal, identifier, and vendor rules. Rejected
+# after a 30-document pilot: 2/30 responses repeated the JSON object until the
+# 2048-token cap, a worse loop rate than v1, despite +2.9 field points. Default
+# remains v1; this is retained as an archived experiment.
+PAGE_PROMPT_V3 = """You are an invoice or receipt data extractor reading page {page} of {total}. Reply with JSON only.
+Keys:
+- vendor_name: seller or brand exactly as printed, or ""
+- invoice_number: document number exactly as printed, or ""
+- invoice_date: YYYY-MM-DD, or null
+- due_date: YYYY-MM-DD, or null
+- currency: ISO 4217 code (EUR for Portuguese documents)
+- document_type: "invoice", "credit_note", or "other"
+- prices_include_tax: true if the printed total already includes VAT (typical receipts), false if subtotal is net before tax, null if unclear
+- subtotal: net amount before tax, or null if not printed
+- tax: total VAT amount, or null if not printed
+- total: amount due printed on the page, or null
+
+Rules:
+- The printed total is the amount due. If prices_include_tax is true, never add tax to it. When a net subtotal is not printed, subtotal = total - tax.
+- Portuguese amounts: 1.234,56 = 1234.56; 4.190 = 4.19; 13,00 = 13.00. A dot followed by three digits is a decimal fraction.
+- invoice_number: use the number labelled Fatura, FT, FS, FR, Recibo, or Fatura Simplificada. Never use a customer NIF, ATM/reference number, or payment reference. Copy every digit, including leading zeros.
+- vendor_name: use the seller or brand at the top. Do not use the customer, bank, payment processor, or a small-print operator.
+- tax: if several VAT rates are printed, sum their VAT amounts. Do not use a line's VAT or a tax code.
+- Dates: keep the printed day/month order; Portuguese dates are day-first.
+- Do not extract line items in this pass.
+- Transcribe, do not guess. Use null for a value this page does not print.
+- JSON only, no markdown, no commentary."""
+
+
+# v4 keeps v1's proven output shape (including line items) and adds only the
+# receipt rules that the real-document residuals called for. It also failed to
+# beat v1 on the 30-document pilot (131/174 vs 133/174 fields), so v1 remains
+# canonical; this is an archived experiment, not a shipped default.
+PAGE_PROMPT_V4 = PAGE_PROMPT_V1.replace(
+    "Rules:\n",
+    "Rules:\n"
+    "- The printed total is the amount due. On receipts, line amounts and the total "
+    "usually include VAT; never add tax to a printed total.\n"
+    "- Portuguese amounts: 1.234,56 = 1234.56; 4.190 = 4.19; 13,00 = 13.00.\n"
+    "- invoice_number: use the number labelled Fatura, FT, FS, FR, Recibo, or Fatura "
+    "Simplificada. Never use a customer NIF, ATM/reference number, or payment "
+    "reference. Copy every digit, including leading zeros.\n"
+    "- vendor_name: use the seller or brand at the top. Do not use the customer, "
+    "bank, payment processor, or a small-print operator.\n"
+    "- tax: if several VAT rates are printed, sum their VAT amounts. Do not use a "
+    "line's VAT or a tax code.\n",
+)
+
 
 def page_prompt(page: int, total: int, version: int = 1) -> str:
-    """Return the per-page invoice prompt. v1 is canonical; v2 is archived."""
-    if version not in (1, 2):
-        raise ValueError(f"unknown prompt version {version!r}; expected 1 or 2")
-    template = PAGE_PROMPT_V1 if version == 1 else PAGE_PROMPT_V2
+    """Return the per-page prompt. v1 is canonical; v2-v4 are experiments."""
+    if version not in (1, 2, 3, 4):
+        raise ValueError(f"unknown prompt version {version!r}; expected 1, 2, 3, or 4")
+    template = {
+        1: PAGE_PROMPT_V1,
+        2: PAGE_PROMPT_V2,
+        3: PAGE_PROMPT_V3,
+        4: PAGE_PROMPT_V4,
+    }[version]
     return template.format(page=page, total=total)
 
 

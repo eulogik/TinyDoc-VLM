@@ -329,6 +329,8 @@ before using it as a gate.
   exact intervals.
 - `PT_REAL_RESULTS.md` — the measured development and held-out results,
   including the merge regression and the preserve-printed-total fix.
+- `PT_PROMPT_PILOT.md` — the rejected 30-document receipt-prompt pilot (v1
+  remains canonical).
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.
