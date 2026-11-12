@@ -52,8 +52,9 @@ The merge fix changes **no model output**. It was applied by rebuilding the
 saved page raws with `rebuild_pagewise.py`; it preserves a printed total and a
 printed tax, uses a derived line sum only for subtotal checks, and repairs a
 total only when it is structurally impossible (less than 95% of a printed
-subtotal). One correction remains in the 100 documents; inconsistencies are
-flagged for review rather than silently rewritten.
+subtotal). One correction remains in the 100 documents; 84/100 documents carry
+at least one arithmetic review flag, so inconsistencies are surfaced rather
+than silently rewritten.
 
 ## Per field
 

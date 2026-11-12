@@ -367,8 +367,8 @@ within documents.
 **What broke.** The 0.3.0 merge rewrote a printed total as `subtotal + tax`. On
 tax-inclusive receipts that double-counted VAT and turned 50 correct printed
 totals into wrong ones. Preserving the printed total and tax recovers 53
-documents with no new model call. The fixed merge also leaves 83/100 documents
-with an arithmetic review flag rather than silently repairing them.
+documents with no new model call. The fixed merge also leaves 84/100 documents
+with at least one arithmetic review flag rather than silently repairing them.
 
 **Residuals after the field-level reading (fixed merge).** Total 28/100 wrong:
 five dot-decimal misreads (`8.88` → `8880`), nine model-computed totals that add
