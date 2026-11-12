@@ -6,19 +6,18 @@ arithmetic review flags for invoices. It runs local Qwen VLMs through Ollama;
 no API key, no cloud, no telemetry.**
 
 ```bash
-pip install tinydoc==0.2.0           # last published release (receipts)
-pip install -e ./sdk                 # 0.3.0 preview: multipage + UI
-pip install 'tinydoc[pdf,ui]'        # once 0.3.0 is published
+pip install tinydoc==0.3.0           # multipage + local UI
+pip install 'tinydoc[pdf,ui]'        # with PDF rendering + Gradio
+pip install -e ./sdk                 # development install
 ollama pull qwen2.5vl:3b             # quality tier
 ollama pull qwen3-vl:2b-instruct     # fast tier
 ```
 
-> **Status (2026-11-12):** 0.2.0 is the last published release. The 0.3.0
-> preview adds the page-wise multipage invoice SDK path and the local Gradio UI.
-> It is built and tested in this repository but **not yet on PyPI**. The
-> first-party 256M model is retired (OCRBench 0.0%) and the SmolVLM2-2.2B SFT
-> track is closed (no gain over base). The product is the engine + trust layer,
-> not the old checkpoint. Full analysis:
+> **Status (2026-11-12):** 0.3.0 is published on PyPI. It adds the page-wise
+> multipage invoice SDK path and the local Gradio UI, both preview-quality.
+> The first-party 256M model is retired (OCRBench 0.0%) and the SmolVLM2-2.2B
+> SFT track is closed (no gain over base). The product is the engine + trust
+> layer, not the old checkpoint. Full analysis:
 > [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
@@ -120,7 +119,7 @@ this is not a leaderboard number.
 ## Install
 
 ```bash
-pip install tinydoc==0.2.0
+pip install tinydoc==0.3.0
 ```
 
 Core deps: `pydantic`, `pillow`, `jsonschema`. Optional extras:

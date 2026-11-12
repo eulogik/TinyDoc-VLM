@@ -19,10 +19,10 @@ CARD = """
 TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice
 images into schema-validated JSON, with the page, span, and a confidence score
 behind every field. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models
-through Ollama. A 0.3.0 preview in the repository adds `tinydoc invoice`
-(page-wise PDFs with deterministic OCR total reconciliation) and `tinydoc ui`
-(a local Gradio app); the preview is not yet on PyPI. It is **not** a fine-tuned TinyDoc checkpoint; the reader is a
-third-party base model and the product is the trust layer around it.
+through Ollama. 0.3.0 adds `tinydoc invoice` (page-wise PDFs with deterministic
+OCR total reconciliation) and `tinydoc ui` (a local Gradio app); it is on PyPI.
+It is **not** a fine-tuned TinyDoc checkpoint; the reader is a third-party base
+model and the product is the trust layer around it.
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
 
@@ -79,7 +79,7 @@ a probability:
 ## Run it locally
 
 ```bash
-pip install tinydoc==0.2.0
+pip install tinydoc==0.3.0
 
 ollama pull qwen2.5vl:3b            # quality tier
 ollama pull qwen3-vl:2b-instruct    # fast tier

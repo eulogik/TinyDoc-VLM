@@ -59,12 +59,11 @@ one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS / 0.765 exact**,
 > it during pretraining. The original 100-doc set is 60% leaked. Invoice results
 > are synthetic and vendor-made; real supplier invoices are unmeasured and
 > flagging fails (0/7). The multipage probe is 10 documents at 1400 px, 2B only,
-> is descriptive, and is not a shipped SDK path (the SDK is single-image). These
-> are same-document engine comparisons, not generalization claims.
+> is descriptive, and is not a production multipage claim. These are
+> same-document engine comparisons, not generalization claims.
 
-A 0.3.0 preview in the repository adds a page-wise multipage invoice path
-(`tinydoc invoice`) and a local Gradio UI (`tinydoc ui`). It is built and tested
-in the repository but **not yet on PyPI**.
+0.3.0 is on PyPI and adds a page-wise multipage invoice path (`tinydoc invoice`)
+and a local Gradio UI (`tinydoc ui`). Both are preview-quality.
 
 See [the repository](https://github.com/eulogik/TinyDoc-VLM) for install
 instructions and [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md)

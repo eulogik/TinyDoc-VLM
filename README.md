@@ -37,7 +37,7 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 
 | | |
 |---|---|
-| **Install** | `pip install tinydoc` (0.2.0) · `pip install -e ./sdk` for the 0.3.0 preview (multipage + UI) |
+| **Install** | `pip install tinydoc` (0.3.0) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
 | **Runtime** | Local Ollama; Python 3.9+; no API key |
 | **Readers** | `qwen2.5vl:3b` (quality) · `qwen3-vl:2b-instruct` (fast) |
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
@@ -54,7 +54,7 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 ## Quick start
 
 ```bash
-pip install tinydoc==0.2.0
+pip install tinydoc==0.3.0
 
 # Pull one local reader (choose one or both)
 ollama pull qwen2.5vl:3b            # quality tier
@@ -80,13 +80,12 @@ tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \
     --out results.jsonl --overlay overlays/
 ```
 
-### 0.3.0 preview: multipage invoices and the local UI
+### 0.3.0: multipage invoices and the local UI
 
-The 0.3.0 preview is in the repository (`pip install -e ./sdk`) but **not yet
-on PyPI**. It adds the page-wise invoice SDK path and a local Gradio UI:
+0.3.0 is on PyPI. It adds the page-wise invoice SDK path and a local Gradio UI:
 
 ```bash
-pip install -e ./sdk
+pip install 'tinydoc[pdf,ui]'
 tinydoc invoice invoice.pdf --out result.jsonl   # page-wise + OCR totals
 tinydoc ui                                      # 127.0.0.1:7860, local only
 ```
@@ -96,15 +95,15 @@ from tinydoc import InvoicePipeline
 
 pipe = InvoicePipeline("ollama:qwen3-vl:2b-instruct")
 result = pipe.extract("invoice.pdf", with_ocr_totals=True)
-print(result.fields)         # nine key-header fields
+print(result.fields)         # key-header fields + line_items
 print(result.line_items)     # concatenated in page order
 print(result.review_flags)   # arithmetic checks, not model confidence
 print(result.corrections)    # every deterministic repair
 ```
 
 The UI is local-only; it does not upload documents. Invoice fields intentionally
-carry no confidence probability. The clean multipage probe is a 10-document
-synthetic set; degraded scans and real invoices are still unmeasured.
+carry no confidence probability. The clean and degraded multipage probes are
+10-document synthetic sets; real invoices and harsher scans are still unmeasured.
 
 A run returns a `DocumentResult`; `tinydoc.draw_overlay` renders the cited spans
 onto a PNG. The older receipt-only demo is `python demo/app.py --share` (requires Ollama).

@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TinyDoc">
   <meta property="og:title" content="TinyDoc — cited document extraction that runs locally">
-  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 10/10 multipage key fields with OCR reconciliation (n=10); 0.2.0 on PyPI.">
+  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 10/10 multipage key fields with OCR reconciliation (n=10); 0.3.0 on PyPI.">
   <meta property="og:url" content="https://eulogik.github.io/TinyDoc-VLM/">
   <meta property="og:image" content="https://eulogik.github.io/TinyDoc-VLM/assets/og-card.png">
   <meta property="og:image:width" content="1200">
@@ -205,7 +205,7 @@
         "alternateName": "TinyDoc Engine 3.0",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "macOS, Linux",
-        "softwareVersion": "0.2.0",
+        "softwareVersion": "0.3.0",
         "description": "Local-first receipt and invoice extraction: schema-valid JSON with OCR-span evidence and per-field confidence, powered by local Qwen VLMs.",
         "url": "https://eulogik.github.io/TinyDoc-VLM/",
         "downloadUrl": "https://pypi.org/project/tinydoc/",
@@ -226,7 +226,7 @@
           {
             "@type": "Question",
             "name": "Is there a local UI?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. A 0.3.0 preview in the repository adds `tinydoc ui`, a local Gradio app for receipt and multipage invoice extraction, and `tinydoc invoice`, a page-wise PDF/CLI path. It is local-only and not yet on PyPI." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. 0.3.0 is on PyPI and adds `tinydoc ui`, a local Gradio app for receipt and multipage invoice extraction, and `tinydoc invoice`, a page-wise PDF/CLI path. It is local-only." }
           },
           {
             "@type": "Question",
@@ -299,7 +299,7 @@
     <header class="hero">
       <div class="wrap hero-grid">
         <div class="reveal">
-          <p class="kicker">TinyDoc Engine 3.0 · v0.2.0</p>
+          <p class="kicker">TinyDoc Engine 3.0 · v0.3.0</p>
           <h1>Document extraction you can <em>check</em>.</h1>
           <p class="lede">Receipts and invoices become schema-valid JSON, with the exact OCR span and a confidence score behind every field. Local Qwen VLMs. No API key, no cloud, no telemetry.</p>
           <div class="hero-actions">
@@ -485,7 +485,7 @@
         <div class="grid-2">
           <div>
             <pre class="code"><code><span class="c"># 1. install</span>
-pip install tinydoc==0.2.0
+pip install tinydoc==0.3.0
 
 <span class="c"># 2. pull a local reader (choose one)</span>
 ollama pull qwen2.5vl:3b            <span class="c"># quality</span>
@@ -528,7 +528,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         </details>
         <details>
           <summary>Is there a local UI?</summary>
-          <p>Yes. A 0.3.0 preview in the repository adds <code>tinydoc ui</code>, a local Gradio app for receipt and multipage invoice extraction, and <code>tinydoc invoice</code>, a page-wise PDF/CLI path with deterministic OCR total reconciliation. It is local-only and <b>not yet on PyPI</b>.</p>
+          <p>Yes. 0.3.0 is on PyPI and adds <code>tinydoc ui</code>, a local Gradio app for receipt and multipage invoice extraction, and <code>tinydoc invoice</code>, a page-wise PDF/CLI path with deterministic OCR total reconciliation. It is local-only.</p>
         </details>
         <details>
           <summary>Does TinyDoc ship its own model?</summary>
@@ -580,7 +580,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md"><b>Benchmarks</b><span>Every measured number and caveat</span></a>
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/MODEL_CARD.md"><b>System card</b><span>Intended use, limits, confidence</span></a>
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md"><b>Plan and evidence ledger</b><span>What was tried, what failed, what is next</span></a>
-          <a href="https://pypi.org/project/tinydoc/"><b>PyPI</b><span>tinydoc 0.2.0</span></a>
+          <a href="https://pypi.org/project/tinydoc/"><b>PyPI</b><span>tinydoc 0.3.0</span></a>
           <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><b>Evidence card</b><span>Hugging Face Space</span></a>
         </div>
       </div>

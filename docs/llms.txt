@@ -4,7 +4,7 @@
 
 ## Key facts
 
-- Package: `pip install tinydoc` (0.2.0), Apache 2.0, Python 3.10+.
+- Package: `pip install tinydoc` (0.3.0), Apache 2.0, Python 3.9+.
 - Readers: `qwen2.5vl:3b` (quality) and `qwen3-vl:2b-instruct` (fast); both Apache 2.0.
 - Output: JSON Schema-valid fields, per-field quote/page/bbox evidence, confidence, optional overlay PNG.
 - Runtime: local Ollama. No API key, no cloud, no telemetry.

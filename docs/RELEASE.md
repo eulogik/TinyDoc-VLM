@@ -1,7 +1,7 @@
 # TinyDoc release checklist
 
-**Current target:** `tinydoc` 0.3.0 preview (page-wise invoice SDK + local UI).
-**Last published:** 0.2.0 (receipt pipeline, schemas, evidence, CLI).
+**Current target:** `tinydoc` 0.3.0 (page-wise invoice SDK + local UI), published.
+**Last published:** 0.3.0 on 2026-11-12 (multipage + UI).
 
 ## 1. Preflight (must all pass)
 
@@ -66,9 +66,9 @@ python3 -m venv /tmp/tinydoc_pypi_check
 /tmp/tinydoc_pypi_check/bin/python -c "import tinydoc; print(tinydoc.__all__)"
 ```
 
-Confirm <https://pypi.org/project/tinydoc/0.3.0/> shows the new README. 0.3.0
-is **not published yet**; the token was rotated after the 0.2.0 leak, so obtain a
-new upload token before this step.
+Confirm <https://pypi.org/project/tinydoc/0.3.0/> shows the new README. The
+0.2.0 upload token was rotated after a leak; use a fresh token for any future
+release and never commit it.
 
 ## 6. Hugging Face Space
 
@@ -99,7 +99,7 @@ Check the Space reaches `RUNNING` and renders the card.
 - Tag **`sdk-v0.3.0`** at the 0.3.0 release commit and create a GitHub release
   with the wheel/sdist. Do **not** reuse `v0.2.0` or `sdk-v0.2.0`: those tags
   point at older commits and published tags should not be moved.
-- Update the README install line from source to PyPI once 0.3.0 is live.
+- Keep the README install line pinned to the latest PyPI release.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
 
@@ -111,15 +111,17 @@ Check the Space reaches `RUNNING` and renders the card.
 
 ## Current status (2026-11-12)
 
-- 0.3.0 preview code is in `sdk/`: `InvoicePipeline`, `ocr_totals.py`,
-  `invoice.schema.json`, `ui.py`, and the `invoice`/`ui` CLI commands. It is
-  built and tested in the repository but **not on PyPI**.
+- **0.3.0 is published on PyPI** with the wheel and sdist: `InvoicePipeline`,
+  `ocr_totals.py`, `invoice.schema.json`, `ui.py`, and the `invoice`/`ui` CLI
+  commands. A clean venv installs 0.3.0 and passes the schema/CLI smoke tests.
 - The clean 10-document multipage probe (VLM + OCR totals) is measured and
   committed: 10/10 fully correct, 90/90 key-header, 0.848 line F1.
 - The degraded multipage probe is measured and committed: 8/10 documents
   completed, 7/8 fully correct, 71/72 key-header, 0.795 line F1, and two
   explicitly allowed page failures (malformed JSON and an Ollama HTTP 500).
-- Space card and repository docs describe the 0.3.0 preview as preview-quality.
+- Space card and repository docs describe the 0.3.0 release as preview-quality.
+- Tag **`sdk-v0.3.0`** at the release commit; do not move `v0.2.0` or
+  `sdk-v0.2.0`.
 
 ## 0.2.0 status (2026-11-07)
 

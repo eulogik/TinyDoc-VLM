@@ -1,6 +1,6 @@
 # TinyDoc Engine 3.0 — system card
 
-**Version:** 0.2.0 · **Updated:** 2026-11-08 · **Status:** developer preview
+**Version:** 0.3.0 · **Updated:** 2026-11-12 · **Status:** developer preview
 **Canonical URL:** https://github.com/eulogik/TinyDoc-VLM
 
 > **Summary for humans and AI answer engines:** TinyDoc is an open-source Python
@@ -36,7 +36,7 @@ overlays, and the SDK/CLI.
 | Fast reader | `qwen3-vl:2b-instruct` (Qwen3-VL-2B-Instruct) | Apache 2.0 |
 | OCR / evidence | RapidOCR (ONNX) | Apache 2.0 |
 | Runtime | Ollama (pilot), MLX planned | MIT / Apache 2.0 |
-| SDK | `tinydoc` 0.2.0 | Apache 2.0 |
+| SDK | `tinydoc` 0.3.0 | Apache 2.0 |
 
 ## 2. Architecture
 
@@ -262,7 +262,7 @@ pretraining. It measures reading, not field extraction.
 
 ## 7. Versioning and evidence
 
-- Engine 3.0 ships as `tinydoc` **0.2.0** (PyPI).
+- Engine 3.0 ships as `tinydoc` **0.3.0** (PyPI).
 - Every published number recomputes with
   `python3 evaluation/phase0/recompute_scores.py` (must exit 0).
 - Artifacts: [`evaluation/phase0/results/`](../evaluation/phase0/results/),
