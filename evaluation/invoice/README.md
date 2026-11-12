@@ -325,8 +325,10 @@ before using it as a gate.
   tax-inclusive double counts, number digit errors, vendor aliases).
 - `make_pt_holdout.py` — draw the disjoint seed-43 holdout from the 843
   documents not in the development probe.
-- `PT_REAL_RESULTS.md` — the measured development-probe result, including the
-  merge regression and the preserve-printed-total fix.
+- `compare_pt_probes.py` — unpaired development-vs-holdout comparison with both
+  exact intervals.
+- `PT_REAL_RESULTS.md` — the measured development and held-out results,
+  including the merge regression and the preserve-printed-total fix.
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

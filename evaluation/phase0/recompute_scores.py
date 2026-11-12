@@ -895,6 +895,79 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"real PT probe check errored: {exc}")
 
+    # Real Portuguese holdout: disjoint seed-43 documents, fixed merge, run once.
+    hold_scores = ROOT.parent / "invoice/results/scores_invoice_pt_holdout100_1400_full.json"
+    hold_summary = ROOT.parent / "invoice/results/summary_invoice_pt_holdout100_1400_full.json"
+    hold_rows = ROOT.parent / "invoice/results/rows_invoice_pt_holdout100_1400.jsonl"
+    hold_audit = ROOT.parent / "invoice/results/audit_invoice_pt_holdout100_1400.json"
+    hold_compare = ROOT.parent / "invoice/results/compare_pt_dev_vs_holdout.json"
+    hold_missing = [
+        path.name
+        for path in (hold_scores, hold_summary, hold_rows, hold_audit, hold_compare)
+        if not path.exists()
+    ]
+    if hold_missing:
+        failures.append(f"real PT holdout artifacts missing: {hold_missing}")
+    else:
+        try:
+            hsc = json.loads(hold_scores.read_text())
+            hsum = json.loads(hold_summary.read_text())
+            hrows = [json.loads(line) for line in hold_rows.open() if line.strip()]
+            haud = json.loads(hold_audit.read_text())
+            hcmp = json.loads(hold_compare.read_text())
+            hdocs = hsc.get("documents") or []
+            hcorrect = sum(
+                1 for doc in hdocs for item in (doc.get("fields") or {}).values() if item.get("correct")
+            )
+            hscored = sum(len(doc.get("fields") or {}) for doc in hdocs)
+            hfully = sum(1 for doc in hdocs if doc.get("fully_correct"))
+            hsix = sum(1 for doc in hdocs if doc.get("fully_correct_six"))
+            hsix_scored = sum(1 for doc in hdocs if doc.get("all_six_scored"))
+            hper = {}
+            for doc in hdocs:
+                for name, item in (doc.get("fields") or {}).items():
+                    bucket = hper.setdefault(name, [0, 0])
+                    bucket[1] += 1
+                    bucket[0] += int(bool(item.get("correct")))
+            expected_hold = {
+                "currency": [96, 100],
+                "invoice_date": [91, 98],
+                "invoice_number": [41, 98],
+                "tax": [59, 91],
+                "total": [76, 100],
+                "vendor_name": [56, 95],
+            }
+            hfail = haud.get("failures") or []
+            ok = (
+                (hcorrect, hscored) == (419, 582)
+                and hfully == 22
+                and (hsix, hsix_scored) == (15, 84)
+                and hper == expected_hold
+                and abs(float(hsum.get("field_accuracy", -1)) - 419 / 582) < 1e-9
+                and hsum.get("fully_correct") == 22
+                and hsum.get("fully_correct_six") == 15
+                and len(hrows) == 100
+                and haud.get("documents") == 100
+                and haud.get("failed") == 2
+                and haud.get("allowed_failed") == 2
+                and [item.get("doc_id") for item in hfail]
+                == ["ptreal-company-20210323_184527", "ptreal-personal-20210215_165018"]
+                and [item.get("check") for item in hfail] == ["done_reason", "page_error"]
+                and len(haud.get("merge_sanity") or []) == 3
+                and (haud.get("truncated_pages") or [{}])[0].get("eval_count") == 2048
+                and abs(float(hcmp["delta"]["field_accuracy"]) + 0.0218364928204303) < 1e-9
+                and abs(float(hcmp["delta"]["fully_correct_rate"]) - 0.04) < 1e-9
+            )
+            print(
+                f"claim: real PT holdout 2B 1400px -> field {hcorrect}/{hscored} "
+                f"({hcorrect / hscored:.4f}), fully {hfully}/100, six {hsix}/{hsix_scored}; "
+                f"2 hard failures -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("real PT holdout numbers, failures, or comparison changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"real PT holdout check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

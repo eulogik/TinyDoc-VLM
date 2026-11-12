@@ -1,0 +1,61 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_real_holdout100_1400.jsonl",
+  "rows_path": "evaluation/invoice/results/rows_invoice_pt_holdout100_1400.jsonl",
+  "documents": 100,
+  "rows": 100,
+  "missing": [],
+  "failed": 2,
+  "allowed_failed": 2,
+  "failures": [
+    {
+      "doc_id": "ptreal-company-20210323_184527",
+      "page": 1,
+      "check": "done_reason",
+      "detail": "None"
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_165018",
+      "page": 1,
+      "check": "page_error",
+      "detail": "no JSON object; done_reason=length"
+    }
+  ],
+  "merge_sanity": [
+    {
+      "doc_id": "ptreal-company-20210323_184527",
+      "error": "no total"
+    },
+    {
+      "doc_id": "ptreal-company-20210429_192628",
+      "error": "no total"
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_165018",
+      "error": "no page parsed; page 1: no JSON object"
+    }
+  ],
+  "done_reasons": {
+    "None": 1,
+    "length": 1,
+    "stop": 98
+  },
+  "truncated_pages": [
+    {
+      "doc_id": "ptreal-personal-20210215_165018",
+      "page": 1,
+      "eval_count": 2048,
+      "done_reason": "length"
+    }
+  ],
+  "latency_ms": {
+    "p50": 8435.1167678833,
+    "p90": 10425.561904907227,
+    "n": 100
+  },
+  "tokens": {
+    "prompt_p50": 1829,
+    "prompt_max": 1829,
+    "output_p50": 200,
+    "output_max": 2048
+  }
+}

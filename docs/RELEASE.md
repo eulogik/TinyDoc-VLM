@@ -132,10 +132,13 @@ Check the Space reaches `RUNNING` and renders the card.
 - Real Portuguese probe, seed-42 development set, 100 real photos, five fields:
   **64.8% field / 3/100 fully correct** with the 0.3.0 merge, **74.2% / 18/100**
   with the fix. One document hit the 2048-token cap and produced no JSON.
-- The seed-43 holdout (`manifest_pt_real_holdout100_1400.jsonl`) is frozen but
-  **not run**. Do not publish 74.2% as a held-out number.
-- Before a 0.3.1 release: run the holdout, decide whether the receipt-aware
-  prompt is in scope, bump `sdk/setup.py`, rebuild both schemas into the wheel,
+- Seed-43 holdout, 100 disjoint real photos, fixed merge: **72.0% field
+  (419/582), 22/100 fully correct, 15/84 all six**. Development → holdout is
+  −2.2 field points and +4.0 fully-correct points. Two hard failures (one
+  runaway `length`, one truncated response with no `done_reason`) and one valid
+  JSON with no total. **72.0% / 22-of-100 is the held-out headline.**
+- Before a 0.3.1 release: decide whether the receipt-aware prompt is in scope,
+  bump `sdk/setup.py` from the dev version, rebuild both schemas into the wheel,
   clean-venv install, upload, tag **`sdk-v0.3.1`**, and update the install lines
   and site. Do not reuse `sdk-v0.3.0`.
 

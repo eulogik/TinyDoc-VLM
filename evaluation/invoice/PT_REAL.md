@@ -1,11 +1,10 @@
 # Real Portuguese invoice/receipt probe (field subset)
 
 **Status:** source downloaded, checksum-verified, deduplicated, and frozen into a
-100-document development probe. The baseline has been measured once; the
-seed-43 holdout is prepared but **not run**. Results:
-[PT_REAL_RESULTS.md](PT_REAL_RESULTS.md). Any number produced from it is a
-real-world transfer probe, not an external leaderboard result and not a full
-nine-field invoice benchmark.
+100-document development probe and a disjoint 100-document holdout. Both have
+been measured once. Results: [PT_REAL_RESULTS.md](PT_REAL_RESULTS.md). Any number
+produced from it is a real-world transfer probe, not an external leaderboard
+result and not a full nine-field invoice benchmark.
 
 ## Source
 
@@ -83,8 +82,10 @@ legal-form stopwords. The merge was measured twice from the same saved raws:
 once with the shipped 0.3.0 merge and once with the preserve-printed-total fix.
 
 The seed-43 holdout (`manifest_pt_real_holdout100.jsonl`) is disjoint from the
-development 100 and is frozen. Do not tune on it; run it only with a frozen
-prompt/merge candidate.
+development 100 and was run once with the fixed merge. Its result is the
+held-out estimate: **72.0% field, 22/100 fully correct**. Do not tune on it
+further without labeling a new experiment post-hoc; a new prompt needs a new
+holdout.
 
 Label it **"real Portuguese receipt/invoice field-subset probe"** in every
 public surface. Never merge it into the synthetic benchmark's key-header
@@ -98,8 +99,8 @@ number.
 - Human labels contain noise; implausible tax values are excluded, not repaired.
 - Phone photos have dark backgrounds, perspective, glare, and curled thermal
   paper. The product's 1400 px cap may be the limiting factor.
-- n=100 gives a 95% interval of roughly ±6–8 points around a 90% field accuracy;
-  do not quote a point estimate without the interval.
+- Each split is n=100, giving a 95% interval of roughly ±6–8 points around a
+  90% field accuracy; do not quote a point estimate without the interval.
 - This probe says nothing about line items, due dates, flags, confidence
   calibration, or grounding.
 

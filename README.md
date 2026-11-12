@@ -30,10 +30,10 @@ grounded extraction layer around it. The first-party 256M checkpoint is retired
 **Measured today:** **0.9475** field F1 on SROIE clean-100 with Qwen2.5-VL-3B and
 **0.9200** with Qwen3-VL-2B-Instruct at 2× the speed. On a synthetic 181-page
 invoice probe, **65.7%** (3B) and **71.8%** (2B) of documents are fully correct.
-A separate 100-document **real Portuguese receipt/invoice** probe (five fields)
-reaches **74.2%** field accuracy and **18/100** fully correct after the
-unreleased merge fix; it is a development set, not a supplier-invoice benchmark.
-Real B2B supplier invoices are still unmeasured. Full provenance and caveats are
+A separate **real Portuguese receipt/invoice** probe (five fields) reaches
+**72.0%** field accuracy and **22/100** fully correct on a held-out 100-document
+set after an unreleased merge fix (development set: 74.2% / 18). It is not a
+supplier-invoice benchmark. Real B2B supplier invoices are still unmeasured. Full provenance and caveats are
 in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 <a id="at-a-glance"></a>
@@ -50,9 +50,9 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 | **Multipage (page-wise + OCR totals)** | **10/10 fully correct** · 100% key-header (90/90) · 0.848 line F1 · 2B · n=10 · **not a pure VLM score** |
 | **Multipage (VLM only, page-wise)** | 6/10 fully correct · 93.3% key-header · 0.848 line F1 · 2B · n=10 |
 | **Multipage (degraded, page-wise + OCR)** | 7/8 fully correct · 98.6% key-header · 2/10 documents failed · 2B · n=10 |
-| **Real Portuguese probe (5 fields)** | 74.2% field · 18/100 fully correct · 100 real phone photos · 2B · **development set**, unreleased merge fix; 0.3.0 merge 64.8% / 3/100 |
+| **Real Portuguese probe (5 fields)** | **72.0%** field · **22/100** fully correct on the held-out 100; development 74.2% / 18; 0.3.0 merge 64.8% / 3/100 · unreleased merge fix |
 | **DocVQA (reading)** | 0.829 ANLS / 0.765 exact · 200 public images · single-reference |
-| **Not yet measured** | Real B2B supplier invoices, harsher/adversarial scans, the seed-43 real-document holdout |
+| **Not yet measured** | Real B2B supplier invoices, harsher/adversarial scans, real-document line items |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
 
 ## Quick start
@@ -221,23 +221,26 @@ CC BY 4.0, with human-transcribed vendor, invoice number, date, currency, tax,
 and total. It measures **five fields**, not the nine-field invoice schema, and it
 is **not** a B2B supplier-invoice set.
 
-| Path (same model outputs) | Field accuracy | Documents fully correct |
+| Set / path | Field accuracy | Documents fully correct |
 |---|---:|---:|
-| 0.3.0 shipped merge | 374/577 = **64.8%** | 3/100 = **3%** |
-| Preserve-printed-total merge (unreleased) | 428/577 = **74.2%** | 18/100 = **18%** |
+| Development, 0.3.0 shipped merge | 374/577 = **64.8%** | 3/100 = **3%** |
+| Development, preserve-printed-total merge | 428/577 = **74.2%** | 18/100 = **18%** |
+| **Holdout, preserve-printed-total merge (held out)** | 419/582 = **72.0%** | 22/100 = **22%** |
 
 The 0.3.0 merge rewrote a printed total as `subtotal + tax`; on tax-inclusive
 receipts that double-counted VAT and turned **50 correct totals into wrong
 ones**. Preserving the printed total and tax, and flagging inconsistency instead
-of silently repairing it, recovers **53 documents** without a new model call.
-After the fix: currency 96.0%, date 95.9%, tax 78.2%, total 72.0%, vendor 57.9%,
-invoice number 44.9%. One receipt generated line items until the 2048-token cap
-and produced no JSON; it is counted wrong.
+of silently repairing it, recovers **53 development documents** without a new
+model call. The sealed seed-43 holdout was then run once: field accuracy moved
+**−2.2 points** and fully-correct moved **+4.0 points**, so the fix generalizes.
 
-The 100 documents are a **development set**, and the merge fix was designed after
-seeing their failures, so 74.2% is a **post-hoc** result. A disjoint seed-43
-holdout is frozen but not yet run. The 0.3.0 wheel on PyPI does **not** contain
-the fix. Method, exact intervals, residual categories, and artifacts:
+On holdout: currency 96.0%, date 92.9%, total 76.0%, vendor 58.9%, invoice
+number 41.8%, tax 64.8%. Tax is the least stable field; the remaining total
+errors are the reader's, not the merge's. Three holdout documents were
+incomplete: one runaway 2048-token line-item generation, one truncated response
+with no completion reason, and one valid JSON with no total. The 0.3.0 wheel on
+PyPI does **not** contain the fix. Method, exact intervals, residual categories,
+and artifacts:
 [`evaluation/invoice/PT_REAL_RESULTS.md`](evaluation/invoice/PT_REAL_RESULTS.md).
 
 **DocVQA reading probe** — 200 public images, one question per image, 768 px

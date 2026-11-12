@@ -333,58 +333,70 @@ a production multipage claim. Artifacts:
 `audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
 `degrade_mp_recipe_42.json`.
 
-### Real Portuguese receipts and invoices (five fields, n=100, development set)
+### Real Portuguese receipts and invoices (five fields, development + holdout)
 
-A separate probe adds **real documents**, not synthetic invoices: 100 phone
-photos of Portuguese receipts and simplified invoices (80 from a private
-company, 20 personal), CC BY 4.0, with human transcriptions of vendor, invoice
+A separate probe adds **real documents**, not synthetic invoices: 200 phone
+photos of Portuguese receipts and simplified invoices (80% from a private
+company, 20% personal), CC BY 4.0, with human transcriptions of vendor, invoice
 number, date, currency, tax, and total. It is a **five-field transfer probe**,
 not the nine-field invoice benchmark and not a B2B supplier-invoice set.
 
+- **Development set:** 100 documents, seed 42, 577 scored fields. Used to find
+  the merge bug and design the fix.
+- **Holdout:** a disjoint 100 documents, seed 43, 582 scored fields. Frozen
+  before the fix and run once; it did not reuse a development document.
+
 Setup: `qwen3-vl:2b-instruct`, canonical page prompt v1, long side 1400 px,
-8192 context, 2048 output cap, one page per document. One of 100 documents hit
-the output cap with runaway line items (`done_reason: length`) and produced no
-JSON; it is counted wrong. p50 latency 8.7 s/doc.
+8192 context, 2048 output cap, one page per document. Development p50 8.7 s/doc;
+holdout p50 8.4 s/doc.
 
-| Path (same model outputs) | Field accuracy | Fully correct | All six (n=80) |
+| Set / path | Field accuracy | Fully correct | All six |
 |---|---:|---:|---:|
-| 0.3.0 shipped merge | 374/577 = **64.8%** | 3/100 = **3%** | 2/80 = **2.5%** |
-| Preserve-printed-total merge (unreleased) | 428/577 = **74.2%** | 18/100 = **18%** | 13/80 = **16.3%** |
+| Development, 0.3.0 shipped merge | 374/577 = **64.8%** | 3/100 = **3%** | 2/80 = **2.5%** |
+| Development, preserve-printed-total merge | 428/577 = **74.2%** | 18/100 = **18%** | 13/80 = **16.3%** |
+| **Holdout, preserve-printed-total merge** | 419/582 = **72.0%** | 22/100 = **22%** | 15/84 = **17.9%** |
 
-Exact 95% intervals for the fixed merge: field accuracy 70.4–77.7%; fully
-correct 11.0–26.9%. The field interval is optimistic because fields cluster
-within documents.
+Exact 95% intervals for the fixed merge: development field 70.4–77.7%, fully
+correct 11.0–26.9%; holdout field 68.2–75.6%, fully correct 14.3–31.4%. The
+field interval is optimistic because fields cluster within documents. Development
+to holdout: field **−2.2 points**, fully-correct **+4.0 points**; the fix
+generalizes.
 
-| Field | Shipped merge | Fixed merge | 95% CI (fixed) |
+| Field | Development | Holdout | Δ |
 |---|---:|---:|---:|
-| Currency | 96/100 (96.0%) | 96/100 (96.0%) | 90.1–98.9% |
-| Invoice date | 93/97 (95.9%) | 93/97 (95.9%) | 89.8–98.9% |
-| Invoice number | 44/98 (44.9%) | 44/98 (44.9%) | 34.8–55.3% |
-| Tax | 67/87 (77.0%) | 68/87 (78.2%) | 68.0–86.3% |
-| Total | 19/100 (19.0%) | 72/100 (72.0%) | 62.1–80.5% |
-| Vendor | 55/95 (57.9%) | 55/95 (57.9%) | 47.3–68.0% |
+| Currency | 96/100 (96.0%) | 96/100 (96.0%) | 0.0 pp |
+| Invoice date | 93/97 (95.9%) | 91/98 (92.9%) | −3.0 pp |
+| Invoice number | 44/98 (44.9%) | 41/98 (41.8%) | −3.1 pp |
+| Tax | 68/87 (78.2%) | 59/91 (64.8%) | −13.3 pp |
+| Total | 72/100 (72.0%) | 76/100 (76.0%) | +4.0 pp |
+| Vendor | 55/95 (57.9%) | 56/95 (58.9%) | +1.1 pp |
 
 **What broke.** The 0.3.0 merge rewrote a printed total as `subtotal + tax`. On
-tax-inclusive receipts that double-counted VAT and turned 50 correct printed
+tax-inclusive receipts that double-counted VAT and turned 50 correct development
 totals into wrong ones. Preserving the printed total and tax recovers 53
-documents with no new model call. The fixed merge also leaves 84/100 documents
-with at least one arithmetic review flag rather than silently repairing them.
+documents with no new model call. The fixed merge leaves 84/100 development
+documents with at least one arithmetic review flag rather than silently
+repairing them, and one tax field differs from the raw reader on holdout.
 
-**Residuals after the field-level reading (fixed merge).** Total 28/100 wrong:
-five dot-decimal misreads (`8.88` → `8880`), nine model-computed totals that add
-tax to a tax-inclusive amount, three missing, and the rest line-amount/digit
-errors. Invoice number 54/98 wrong: 17 one-or-two-digit errors, 11 empty, 26
-wrong-field/other. Vendor 40/95 wrong: 12 brand-vs-legal-entity cases and 27
-wrong-seller cases. Currency is 96/100 (two `BRL`, one `E`, one empty); date is
-93/97.
+**Incidents.** Development: one receipt generated line items until the
+2048-token cap (`done_reason: length`) and produced no JSON. Holdout: one
+runaway (same cap), one truncated response with **no `done_reason`** (partial
+JSON with no total), and one valid JSON that omitted the total. The audit allows
+the two hard failures and lists all three merge-sanity flags.
 
-**Caveats that travel with every number.** The 100 documents are a development
-set; the merge fix was designed after seeing their failures, so 74.2% is a
-**post-hoc** result. A disjoint seed-43 holdout is frozen but **not run**. The
-0.3.0 wheel on PyPI does not contain the fix. No line-item, due-date, flag
-quality, confidence-calibration, or real-B2B-supplier claim is supported by this
-probe. Labels are human transcriptions and contain noise; implausible tax values
-were excluded, not corrected. Full method and artifacts:
+**Residuals on holdout (fixed merge).** Tax is the largest category (30 wrong):
+a wrong VAT line, multi-rate receipt, or total/tax confusion. Invoice number has
+27 wrong-field/other, 19 empty, and 11 one-or-two-digit errors. Vendor has 25
+wrong-seller cases and 13 brand-vs-legal-entity cases. Total has 11 **reader-
+computed** double counts, 6 other, 3 missing, 3 line-amount selections, and 1
+dot-decimal ×1000. The merge no longer causes the double count.
+
+**Caveats that travel with every number.** Five fields only; no line items, due
+dates, flag quality, or confidence calibration. One country (Portugal,
+2019–2021), two sources, 1400 px phone photos, human labels with brand/legal-
+entity ambiguity and occasional tax noise. The 0.3.0 wheel on PyPI does **not**
+contain the fix; 72.0% measures the unreleased 0.3.1-dev path. No B2B
+supplier-invoice claim is supported. Full method and artifacts:
 [`evaluation/invoice/PT_REAL_RESULTS.md`](../evaluation/invoice/PT_REAL_RESULTS.md).
 
 ### DocVQA reading probe (2B, 200 questions, single reference)

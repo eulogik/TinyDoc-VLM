@@ -45,17 +45,17 @@ model and the product is the trust layer around it.
 | Invoice multipage, degraded photo/scan (n=10) | — | **8/10 complete** · **7/8 fully correct** · **71/72 key-header** · 2 page failures |
 | Invoice multipage, page-wise + OCR totals — line-item F1 | — | **0.848** · 0 parse errors · ~2× slower |
 | DocVQA reading — ANLS / exact (200 public, single-reference) | — | **0.829 / 0.765** |
-| Real Portuguese receipts/invoices (n=100, 5 fields, development set) | — | **74.2% field** · **18/100 fully correct** · unreleased merge fix; 0.3.0 64.8% / 3/100 |
+| Real Portuguese receipts/invoices (held-out n=100, 5 fields) | — | **72.0% field** · **22/100 fully correct** · unreleased merge fix; development 74.2% / 18; 0.3.0 64.8% / 3/100 |
 
 > **Not an external benchmark.** SROIE clean-100 is a duplicate-filtered split of
 > the public SROIE **train** pool; Qwen may have seen it during pretraining.
 > The original 100-doc set is 60% leaked. The invoice set is synthetic,
 > vendor-made, and page 1 only; real B2B supplier invoices are unmeasured and
 > flagging fails (0/7). A separate 100-document real Portuguese receipt/invoice
-> probe (five fields, development set) reaches 74.2% field accuracy and 18/100
-> fully correct with an unreleased merge fix; the 0.3.0 merge gets 64.8% / 3/100
-> because it double-counts VAT on tax-inclusive receipts. Its seed-43 holdout is
-> frozen but not run. The multipage probes are 10 synthetic documents at
+> probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a
+> held-out 100-document set with an unreleased merge fix; the development set
+> gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts
+> VAT on tax-inclusive receipts. The multipage probes are 10 synthetic documents at
 > 1400 px, 2B only; all-pages gets 4/10, page-wise VLM 6/10 and 93.3%
 > key-header. Deterministic reconciliation plus OCR-read printed totals reaches
 > 10/10 key-header / 90/90 fields, but that is a pipeline result, not a pure VLM

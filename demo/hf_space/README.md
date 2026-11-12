@@ -59,10 +59,10 @@ one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS / 0.765 exact**,
 > it during pretraining. The original 100-doc set is 60% leaked. Invoice results
 > are synthetic and vendor-made; real B2B supplier invoices are unmeasured and
 > flagging fails (0/7). A separate 100-document real Portuguese receipt/invoice
-> probe (five fields, development set) reaches 74.2% field accuracy and 18/100
-> fully correct with an unreleased merge fix; the 0.3.0 merge gets 64.8% / 3/100
-> because it double-counts VAT on tax-inclusive receipts. Its seed-43 holdout is
-> frozen but not run. The multipage probe is 10 documents at 1400 px, 2B only,
+> probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a
+> held-out 100-document set with an unreleased merge fix; the development set
+> gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts
+> VAT on tax-inclusive receipts. The multipage probe is 10 documents at 1400 px, 2B only,
 > is descriptive, and is not a production multipage claim. These are
 > same-document engine comparisons, not generalization claims.
 
