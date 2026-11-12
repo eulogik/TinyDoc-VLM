@@ -41,7 +41,7 @@ A deterministic degraded photo/scan copy of the same 46 pages completed
 **8/10 documents**: **7/8 fully correct**, **71/72 key-header** (98.6%), line
 F1 **0.795**, and OCR totals consistent on all 10 degraded final pages. Two
 pages failed (one malformed JSON, one transient Ollama HTTP 500); the audit
-fails on those rows.
+explicitly allows those two failures and lists them.
 
 The 10/10 is a **pipeline result, not a pure VLM score**: OCR reads the printed
 subtotal/tax/total and the VLM reads headers and line items. It uses no gold

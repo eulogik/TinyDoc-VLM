@@ -76,6 +76,8 @@ PAGE_PROMPT_V2 = PAGE_PROMPT_V1.replace(_CURRENCY_LINE_V1, _CURRENCY_LINE_V2)
 
 def page_prompt(page: int, total: int, version: int = 1) -> str:
     """Return the per-page invoice prompt. v1 is canonical; v2 is archived."""
+    if version not in (1, 2):
+        raise ValueError(f"unknown prompt version {version!r}; expected 1 or 2")
     template = PAGE_PROMPT_V1 if version == 1 else PAGE_PROMPT_V2
     return template.format(page=page, total=total)
 
@@ -727,7 +729,7 @@ class InvoicePipeline:
             page_images = [
                 _resize_image(path, workdir.name, max_px) for path in page_images
             ]
-            page_records, parsed_pages = self._read_pages(
+            page_records, parsed_pages, page_payloads = self._read_pages(
                 page_images, num_predict, prompt_version
             )
 
@@ -738,7 +740,9 @@ class InvoicePipeline:
                 raise RuntimeError(f"no page produced parseable JSON: {errors or 'unknown'}")
 
             doc_id = hint or Path(source_text).stem
-            merged = merge_pages(parsed_pages, doc_id)
+            # Keep failed pages as empty placeholders so a failed final page
+            # cannot silently contribute an earlier page's printed totals.
+            merged = merge_pages(page_payloads, doc_id)
             corrections: List[str] = list(merged.pop("corrections", []) or [])
             ocr_totals = None
             if with_ocr_totals:
@@ -757,6 +761,16 @@ class InvoicePipeline:
             issues = check_prediction(merged)
             review_flags = [issue["check"] for issue in issues]
             review_flags.extend(merge_is_sane(merged, parsed_pages))
+            failed_pages = sorted(
+                {
+                    int(record["page"])
+                    for record in page_records
+                    if record.get("error")
+                }
+            )
+            review_flags.extend(f"page_{page}_error" for page in failed_pages)
+            if failed_pages and failed_pages[-1] == len(page_images):
+                review_flags.append("final_page_error")
             # Preserve order while removing duplicates.
             review_flags = list(dict.fromkeys(review_flags))
 
@@ -775,8 +789,20 @@ class InvoicePipeline:
                     "line_items",
                 )
             }
+            header_page = next(
+                (
+                    int(record["page"])
+                    for record in page_records
+                    if not record.get("error")
+                ),
+                1,
+            )
             evidence = self._collect_evidence(
-                merged, page_images, ocr_totals, with_evidence
+                merged,
+                page_images,
+                ocr_totals,
+                with_evidence,
+                header_page=header_page,
             )
             return InvoiceResult(
                 source=source_text,
@@ -808,9 +834,14 @@ class InvoicePipeline:
         page_images: Sequence[str],
         num_predict: int,
         prompt_version: int,
-    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    ) -> Tuple[
+        List[Dict[str, Any]],
+        List[Dict[str, Any]],
+        List[Dict[str, Any]],
+    ]:
         records: List[Dict[str, Any]] = []
         parsed_pages: List[Dict[str, Any]] = []
+        page_payloads: List[Dict[str, Any]] = []
         total = len(page_images)
         for index, image_path in enumerate(page_images, start=1):
             page_started = time.time()
@@ -834,7 +865,11 @@ class InvoicePipeline:
                 )
                 if parsed is not None:
                     parsed_pages.append(parsed)
+                    page_payloads.append(parsed)
+                else:
+                    page_payloads.append({})
             except Exception as exc:  # noqa: BLE001 - keep other pages alive
+                page_payloads.append({})
                 records.append(
                     {
                         "page": index,
@@ -843,7 +878,7 @@ class InvoicePipeline:
                         "error": f"{type(exc).__name__}: {exc}",
                     }
                 )
-        return records, parsed_pages
+        return records, parsed_pages, page_payloads
 
     @staticmethod
     def _collect_evidence(
@@ -851,6 +886,7 @@ class InvoicePipeline:
         page_images: Sequence[str],
         ocr_totals: Optional[dict],
         enabled: bool,
+        header_page: int = 1,
     ) -> Dict[str, Any]:
         evidence: Dict[str, Any] = {}
         if not enabled or not page_images:
@@ -859,8 +895,11 @@ class InvoicePipeline:
             key: str(merged.get(key) or "")
             for key in ("vendor_name", "invoice_number", "invoice_date", "due_date")
         }
+        page_index = min(max(int(header_page), 1), len(page_images))
         try:
-            header_evidence = attach_evidence(header, page_images[0], page=1)
+            header_evidence = attach_evidence(
+                header, page_images[page_index - 1], page=page_index
+            )
         except Exception:  # noqa: BLE001 - evidence is optional
             header_evidence = {}
         for key, item in header_evidence.items():

@@ -156,6 +156,12 @@ class TestRouter:
         eng = build_engine("ocr_regex")
         assert isinstance(eng, OcrRegexEngine)
 
+    def test_build_engine_ollama_model_override_wins(self):
+        eng = build_engine("ollama:qwen3-vl:2b-instruct", model="qwen2.5vl:7b")
+        assert eng.model == "qwen2.5vl:7b"
+        default = build_engine("ollama:qwen3-vl:2b-instruct")
+        assert default.model == "qwen3-vl:2b-instruct"
+
     def test_build_engine_unknown(self):
         with pytest.raises(ValueError):
             build_engine("nope")

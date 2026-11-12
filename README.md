@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-225-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-228-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -46,7 +46,7 @@ Real supplier invoices are still unmeasured. Full provenance and caveats are in
 | **Multipage (all pages)** | 4/10 fully correct vs 0/10 page-1 · 46 pages · 2B · n=10, descriptive |
 | **Multipage (page-wise + OCR totals)** | **10/10 fully correct** · 100% key-header (90/90) · 0.848 line F1 · 2B · n=10 · **not a pure VLM score** |
 | **Multipage (VLM only, page-wise)** | 6/10 fully correct · 93.3% key-header · 0.848 line F1 · 2B · n=10 |
-| **Multipage (degraded, page-wise + OCR)** | 7/8 fully correct · 98.6% key-header · 2/10 page failures · 2B · n=10 |
+| **Multipage (degraded, page-wise + OCR)** | 7/8 fully correct · 98.6% key-header · 2/10 documents failed · 2B · n=10 |
 | **DocVQA (reading)** | 0.829 ANLS / 0.765 exact · 200 public images · single-reference |
 | **Not yet measured** | Real supplier invoices, harsher/adversarial scans |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
@@ -204,8 +204,8 @@ noise, JPEG 58). **8/10 documents completed**; among those, **7/8 fully
 correct**, **71/72 key-header** (98.6%), line F1 **0.795**, and OCR totals were
 consistent on **all 10 degraded final pages**. Two documents failed on a page:
 one reproducible malformed JSON and one transient Ollama HTTP 500 under memory
-pressure. The audit fails on those two rows. This is a robustness probe, not a
-production claim. Artifacts:
+pressure. The audit explicitly allows those two failures and lists them. This
+is a robustness probe, not a production claim. Artifacts:
 `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
 `compare_invoice_clean_vs_degraded_2b.json`.
 
@@ -396,7 +396,7 @@ third-party reader behind a grounded extraction layer.
 ## Development
 
 ```bash
-python3 -m pytest tests/ -q                 # 225 passed
+python3 -m pytest tests/ -q                 # 228 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI-scope lint
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs claims

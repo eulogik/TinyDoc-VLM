@@ -7,6 +7,9 @@
 #   scripts/reconcile_invoice_totals.sh \
 #     evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_v2_raw.jsonl \
 #     qwen3-vl_2b_mp_pagewise_v2
+#
+# ALLOW_FAILED defaults to 0. Set it only for a documented probe whose page
+# failures are reported; the audit still lists every failed row.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PATH="/opt/homebrew/bin:$PATH"
@@ -52,13 +55,23 @@ fi
     --markdown "$R/scores_invoice_${TAG}.md" \
     --allow-missing >> "$ROOT/logs/reconcile_${TAG}.log" 2>&1
 )
-echo "SCORE rc=$?"
+score_rc=$?
+echo "SCORE rc=$score_rc"
+if [ "$score_rc" -ne 0 ]; then
+  tail -20 "logs/reconcile_${TAG}.log" >&2
+  exit "$score_rc"
+fi
 
 python3 evaluation/invoice/summarize_scores.py \
   --scores "$R/scores_invoice_${TAG}.json" \
   --rows "$R/rows_invoice_${TAG}.jsonl" \
   --out "$R/summary_invoice_${TAG}.json" >/dev/null 2>&1
-echo "SUMMARY rc=$?"
+summary_rc=$?
+echo "SUMMARY rc=$summary_rc"
+if [ "$summary_rc" -ne 0 ]; then
+  echo "ERROR: summary failed for $TAG" >&2
+  exit "$summary_rc"
+fi
 
 python3 evaluation/invoice/audit_pagewise_rows.py \
   --manifest "$MANIFEST" \
@@ -66,7 +79,8 @@ python3 evaluation/invoice/audit_pagewise_rows.py \
   --num-ctx 8192 --num-predict 2048 \
   --allow-failed "${ALLOW_FAILED:-0}" \
   > "$R/audit_invoice_${TAG}.json" 2>&1
-echo "AUDIT rc=$?"
+audit_rc=$?
+echo "AUDIT rc=$audit_rc"
 
 python3 - <<PY
 import json
@@ -90,4 +104,9 @@ print(json.dumps({
     "p50_ms": summary["latency_ms"]["p50"],
 }, indent=2))
 PY
+
+if [ "$audit_rc" -ne 0 ]; then
+  echo "ERROR: audit failed for $TAG; see $R/audit_invoice_${TAG}.json" >&2
+  exit "$audit_rc"
+fi
 echo "END reconcile tag=$TAG $(date '+%Y-%m-%d %H:%M:%S')"

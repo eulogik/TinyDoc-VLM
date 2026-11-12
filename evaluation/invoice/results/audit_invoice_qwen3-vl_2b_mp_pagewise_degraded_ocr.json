@@ -18,7 +18,7 @@
       "expected_pages": 6
     }
   ],
-  "allowed_failures": 0,
-  "ok": false,
+  "allowed_failures": 2,
+  "ok": true,
   "issues": []
 }

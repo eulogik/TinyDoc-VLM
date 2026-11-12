@@ -473,7 +473,13 @@ def test_degraded_multipage_probe_matches_artifacts():
     assert scores["summary"]["key_fields"] == {"correct": 71, "scored": 72}
     assert scores["summary"]["fully_correct"] == 7
     assert scores["summary"]["documents"] == 8
-    assert audit["ok"] is False
+    assert audit["ok"] is True
+    assert audit["allowed_failures"] == 2
+    assert sorted(row["id"] for row in audit["failed_rows"]) == [
+        "multipage-3p-gb-4",
+        "multipage-6p-za-8",
+    ]
+    assert probe["audit"]["allowed_failures"] == 2
     assert compare["n_docs"] == 8
     assert sorted(compare["missing_from_after"]) == [
         "multipage-3p-gb-4",

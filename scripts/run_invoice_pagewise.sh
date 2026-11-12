@@ -52,6 +52,10 @@ if [ "$rc" -eq 0 ]; then
       --allow-missing \
       >> "$ROOT/logs/invoice_${TAG}.log" 2>&1
   )
-  echo "SCORE rc=$? $(date '+%Y-%m-%d %H:%M:%S')"
+  score_rc=$?
+  echo "SCORE rc=$score_rc $(date '+%Y-%m-%d %H:%M:%S')"
+  if [ "$score_rc" -ne 0 ]; then
+    exit "$score_rc"
+  fi
 fi
 exit "$rc"

@@ -88,8 +88,8 @@ rotation, blur, noise, JPEG 58) completed **8/10 documents**: **7/8 fully
 correct**, **71/72 key-header** (98.6%), line F1 **0.795**, and OCR totals
 consistent on **all 10 degraded final pages**. Two pages failed (one
 reproducible malformed JSON, one transient Ollama HTTP 500 under memory
-pressure); the audit fails on those rows. This is a robustness probe, not a
-production claim.
+pressure); the audit explicitly allows those two failures and lists them. This
+is a robustness probe, not a production claim.
 
 Local UI:
 

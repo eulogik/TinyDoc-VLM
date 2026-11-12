@@ -7,7 +7,7 @@
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 225 passed
+python3 -m pytest tests/ -q                 # expect 228 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -99,7 +99,7 @@ Check the Space reaches `RUNNING` and renders the card.
 - Tag **`sdk-v0.3.0`** at the 0.3.0 release commit and create a GitHub release
   with the wheel/sdist. Do **not** reuse `v0.2.0` or `sdk-v0.2.0`: those tags
   point at older commits and published tags should not be moved.
-- Update the README install line from source to PyPI once 0.2.0 is live.
+- Update the README install line from source to PyPI once 0.3.0 is live.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
 
@@ -115,7 +115,10 @@ Check the Space reaches `RUNNING` and renders the card.
   `invoice.schema.json`, `ui.py`, and the `invoice`/`ui` CLI commands. It is
   built and tested in the repository but **not on PyPI**.
 - The clean 10-document multipage probe (VLM + OCR totals) is measured and
-  committed. The degraded multipage probe is the next evidence gap.
+  committed: 10/10 fully correct, 90/90 key-header, 0.848 line F1.
+- The degraded multipage probe is measured and committed: 8/10 documents
+  completed, 7/8 fully correct, 71/72 key-header, 0.795 line F1, and two
+  explicitly allowed page failures (malformed JSON and an Ollama HTTP 500).
 - Space card and repository docs describe the 0.3.0 preview as preview-quality.
 
 ## 0.2.0 status (2026-11-07)

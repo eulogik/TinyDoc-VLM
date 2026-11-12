@@ -65,27 +65,34 @@ def test_prompt_parity_with_evaluation_module():
 
 def test_sdk_merge_reproduces_the_measured_pagewise_predictions():
     results = ROOT / "evaluation" / "invoice" / "results"
-    rows_path = results / "rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl"
-    if not rows_path.exists():  # pragma: no cover - committed in the repo
-        pytest.skip("page-wise rows artifact not present")
-
     from run_invoice_pagewise import merge_pages as eval_merge
 
-    rows = [
-        json.loads(line)
-        for line in rows_path.read_text().splitlines()
-        if line.strip()
-    ]
-    assert rows
-    for row in rows:
-        pages = [
-            parsed
-            for page in row["pages"]
-            if (parsed := _extract_json(page.get("raw") or "")) is not None
+    checked = 0
+    for name in (
+        "rows_invoice_qwen3-vl_2b_mp_pagewise.jsonl",
+        "rows_invoice_qwen3-vl_2b_mp_pagewise_degraded.jsonl",
+    ):
+        rows_path = results / name
+        if not rows_path.exists():  # pragma: no cover - committed in the repo
+            continue
+        rows = [
+            json.loads(line)
+            for line in rows_path.read_text().splitlines()
+            if line.strip()
         ]
-        sdk = merge_pages(pages, row["id"])
-        evaluation = eval_merge(pages, row["id"])
-        assert sdk == evaluation, row["id"]
+        assert rows, name
+        for row in rows:
+            pages = [
+                parsed
+                for page in row["pages"]
+                if (parsed := _extract_json(page.get("raw") or "")) is not None
+            ]
+            sdk = merge_pages(pages, row["id"])
+            evaluation = eval_merge(pages, row["id"])
+            assert sdk == evaluation, f"{name}:{row['id']}"
+        checked += 1
+    if checked == 0:  # pragma: no cover - committed in the repo
+        pytest.skip("page-wise rows artifacts not present")
 
 
 def test_single_page_pipeline_merges_and_validates(tmp_path):
@@ -178,6 +185,42 @@ def test_multipage_merge_uses_first_header_and_final_totals(tmp_path):
     assert [item["description"] for item in result.line_items] == ["Paper", "Ink"]
     assert result.review_flags == []
     assert "page 2 of 2" in engine.calls[1][0]
+
+
+def test_failed_final_page_is_flagged_and_does_not_reuse_totals(tmp_path):
+    page1 = _png(tmp_path / "p1.png")
+    page2 = _png(tmp_path / "p2.png")
+    engine = FakeEngine(
+        [
+            json.dumps(
+                {
+                    "vendor_name": "Acme Supply",
+                    "invoice_number": "INV-003",
+                    "currency": "USD",
+                    "document_type": "invoice",
+                    "line_items": [{"description": "Paper", "amount": 100.0}],
+                    "subtotal": 100.0,
+                    "tax": 15.0,
+                    "total": 115.0,
+                }
+            ),
+            "not json",
+        ]
+    )
+    result = InvoicePipeline(engine).extract(
+        page1,
+        images=[page1, page2],
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert result.page_count == 2
+    assert result.fields["line_items"] == [{"description": "Paper", "amount": 100.0}]
+    # The final page failed, so its printed totals are unknown. Do not reuse
+    # page 1's totals as if they were the document total.
+    assert result.fields["total_amount"] is None
+    assert "page_2_error" in result.review_flags
+    assert "final_page_error" in result.review_flags
+    assert "no total" in result.review_flags
 
 
 def test_ocr_totals_are_applied_with_a_recorded_correction(tmp_path, monkeypatch):

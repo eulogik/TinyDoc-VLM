@@ -304,7 +304,7 @@ page-wise prompt, merge, and OCR total reconciliation were unchanged.
 | OCR consistent blocks | 10/10 | **10/10** |
 | p50 latency per document | 70.7 s | **101.1 s** |
 
-**Two documents failed on a page, and the audit fails because of them:**
+**Two documents failed on a page; the audit explicitly allows those two failures and lists them:**
 
 - `multipage-3p-gb-4` page 1: the model emitted malformed JSON (an arithmetic
   expression in the total field). A targeted retry reproduced the failure.

@@ -18,10 +18,9 @@ invoice tab shows evidence match quality and review flags instead.
 
 from __future__ import annotations
 
-import json
 import tempfile
 from pathlib import Path
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 RECEIPT_ENGINES = [
     "ollama:qwen2.5vl:3b",
@@ -46,7 +45,9 @@ a clear error; it will not silently upload the document.
 an external benchmark. The invoice multipage probe is 10 synthetic documents:
 page-wise VLM gets 6/10 fully correct; adding deterministic OCR totals reaches
 10/10 on nine key-header fields, but that is a **pipeline result, not a pure VLM
-score**, and line items remain weak. Real supplier invoices are unmeasured.
+score**, and line items remain weak. A deterministic degraded photo/scan copy
+completed 8/10 documents (7/8 fully correct, 71/72 key-header) with two page
+failures. Real supplier invoices are unmeasured.
 """
 
 CSS = """
@@ -188,7 +189,7 @@ def _error(message: str) -> dict:
     return {"ok": False, "error": message}
 
 
-def _receipt_rows(result) -> List[List[Any]]:
+def _receipt_rows(result) -> list[list[Any]]:
     rows = []
     for field in result.field_results:
         evidence = field.evidence or {}
@@ -204,7 +205,7 @@ def _receipt_rows(result) -> List[List[Any]]:
     return rows
 
 
-def _receipt_overlay(result, image_path: str) -> Optional[str]:
+def _receipt_overlay(result, image_path: str) -> str | None:
     try:
         from tinydoc.overlay import draw_overlay
 
@@ -217,9 +218,18 @@ def _receipt_overlay(result, image_path: str) -> Optional[str]:
 
 
 def _invoice_flags(result) -> str:
+    lines = []
+    if result.ocr_totals is not None:
+        state = "consistent" if result.ocr_totals.get("consistent") else "not consistent"
+        lines.append(f"OCR printed totals: **{state}**.")
     if not result.review_flags:
+        if lines:
+            lines.extend(["", "No arithmetic review flags."])
+            return "\n".join(lines)
         return "No arithmetic review flags."
-    lines = ["**Review flags (arithmetic, no gold answers):**", ""]
+    if lines:
+        lines.append("")
+    lines.extend(["**Review flags (arithmetic, no gold answers):**", ""])
     for issue in result.arithmetic_issues:
         lines.append(
             f"- `{issue['check']}`: expected {issue['expected']}, "
@@ -272,6 +282,14 @@ def build_app():
         paths = [str(path) for path in files if path]
         if not paths:
             return _error("No readable file paths."), [], ""
+        pdfs = [path for path in paths if Path(path).suffix.lower() == ".pdf"]
+        if len(pdfs) > 1 or (pdfs and len(paths) > 1):
+            return (
+                _error("Choose one PDF for a multipage invoice, or multiple page images; "
+                       "do not mix several PDFs with images."),
+                [],
+                "",
+            )
         try:
             pipeline = InvoicePipeline(engine)
             # One PDF is handled page-by-page by the pipeline. Multiple images
@@ -338,6 +356,10 @@ def build_app():
                     label="One PDF, or the ordered page images of one invoice",
                 )
                 with gr.Column():
+                    gr.Markdown(
+                        "One PDF is read page by page. Multiple images are treated "
+                        "as the ordered pages of one invoice."
+                    )
                     invoice_engine = gr.Dropdown(
                         INVOICE_ENGINES,
                         value=INVOICE_ENGINES[0],
@@ -370,9 +392,9 @@ def build_app():
 
 def launch(host: str = "127.0.0.1", port: int = 7860, share: bool = False) -> None:
     """Launch the local UI. ``share=True`` exposes a public Gradio link."""
+    demo = build_app()
     import gradio as gr
 
-    demo = build_app()
     if share:
         print(
             "WARNING: --share exposes this app through a public Gradio link. "

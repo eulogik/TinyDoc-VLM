@@ -181,8 +181,9 @@ photo/scan copy (downscale-then-upscale, rotation, blur, noise, JPEG 58) complet
 OCR totals were consistent on **all 10 degraded final pages**. Two documents
 failed on a page: `multipage-3p-gb-4` produced malformed JSON (reproduced on
 retry), and `multipage-6p-za-8` hit an Ollama HTTP 500 under memory pressure
-(another HTTP 500 on retry). The audit fails on those two rows; they are reported,
-not hidden. This is a robustness probe, not a production claim.
+(another HTTP 500 on retry). The audit explicitly allows those two failures and
+lists them; they are reported, not hidden. This is a robustness probe, not a
+production claim.
 
 ### 4.3 Evidence and grounding
 

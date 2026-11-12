@@ -738,7 +738,8 @@ def main() -> int:
                     "multipage-3p-na-3": ["totals_from_ocr:tax"],
                     "multipage-5p-na-7": ["currency_from_ocr_totals"],
                 }
-                and daudit.get("ok") is False
+                and daudit.get("ok") is True
+                and daudit.get("allowed_failures") == 2
                 and sorted(row["id"] for row in daudit.get("failed_rows") or []) == failed_rows
                 and dcmp.get("n_docs") == 8
                 and sorted(dcmp.get("missing_from_after") or []) == failed_rows

@@ -684,9 +684,11 @@ def build_engine(name: str = "auto", **kwargs) -> BaseEngine:
         except Exception:
             return OcrRegexEngine()
     if name == "ollama" or name.startswith("ollama:"):
-        model = kwargs.pop("model", "qwen2.5vl:3b")
-        if name.startswith("ollama:"):
-            model = name[len("ollama:") :]
+        # An explicit model kwarg wins over the engine-name suffix, so
+        # ``--engine ollama:qwen3-vl:2b-instruct --model ...`` is not a no-op.
+        model = kwargs.pop("model", None)
+        if model is None:
+            model = name[len("ollama:") :] if name.startswith("ollama:") else "qwen2.5vl:3b"
         return OllamaEngine(model=model, **kwargs)
     if name == "ocr_regex":
         return OcrRegexEngine()

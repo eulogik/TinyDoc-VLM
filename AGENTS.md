@@ -40,7 +40,7 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 225 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 228 passed)
 - SDK preview: `PYTHONPATH=sdk python3 -m tinydoc.cli ui --port 7860` (local Gradio, receipts + invoices)
 - Multipage invoice: `PYTHONPATH=sdk python3 -m tinydoc.cli invoice invoice.pdf --out result.jsonl`
 - Degraded multipage probe: `python3 evaluation/invoice/degrade_pages.py --help` (deterministic recipe)
