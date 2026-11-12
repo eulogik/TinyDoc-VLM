@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eulogik.github.io/TinyDoc-VLM/schemas/invoice.schema.json",
+  "title": "TinyDoc invoice extraction",
+  "type": "object",
+  "required": [
+    "vendor_name",
+    "invoice_number",
+    "invoice_date",
+    "due_date",
+    "currency",
+    "subtotal",
+    "tax",
+    "total_amount",
+    "document_type",
+    "line_items"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "vendor_name": {"type": "string", "maxLength": 300},
+    "invoice_number": {"type": "string", "maxLength": 120},
+    "invoice_date": {"type": ["string", "null"], "maxLength": 40},
+    "due_date": {"type": ["string", "null"], "maxLength": 40},
+    "currency": {"type": ["string", "null"], "maxLength": 8},
+    "subtotal": {"type": ["number", "null"]},
+    "tax": {"type": ["number", "null"]},
+    "total_amount": {"type": ["number", "null"]},
+    "document_type": {
+      "type": "string",
+      "enum": ["invoice", "credit_note", "other"]
+    },
+    "line_items": {
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "required": ["description", "amount"],
+        "additionalProperties": false,
+        "properties": {
+          "description": {"type": "string", "maxLength": 500},
+          "amount": {"type": ["number", "null"]}
+        }
+      }
+    }
+  }
+}

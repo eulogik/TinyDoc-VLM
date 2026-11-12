@@ -53,43 +53,11 @@ from run_invoice_eval import (
     normalize_prediction,
 )
 
-PAGE_PROMPT_V1 = """You are an invoice data extractor reading page {page} of {total} of ONE invoice. Reply with JSON only.
-Keys:
-- vendor_name: supplier name exactly as printed, or ""
-- invoice_number: invoice number exactly as printed, or ""
-- invoice_date: YYYY-MM-DD, or null
-- due_date: YYYY-MM-DD, or null
-- currency: ISO 4217 code (USD, EUR, GBP, ZAR, NAD, ZMW)
-- document_type: "invoice", "credit_note", or "other"
-- line_items: array of {{"description": "...", "amount": number}} for line items printed on THIS page only
-- subtotal: net amount before tax printed on this page, or null
-- tax: tax/VAT amount printed on this page, or null
-- total: amount due printed on this page, or null
+# The per-page prompt is owned by the SDK so the measured evaluation path and
+# the shipped product path cannot drift (tests/test_invoice_prompt_parity.py).
+from tinydoc.invoice import PAGE_PROMPT_V2, page_prompt
 
-Rules:
-- Extract only what is printed on THIS page. Never repeat items from another page.
-- Exclude the rows "carried forward", "brought forward", "subtotal", "tax", "VAT",
-  "sales tax", "total", "continued", and "page X of Y" from line_items.
-- amount is the printed line total (quantity x unit price), never the unit price.
-- If this is not the final page, subtotal/tax/total are normally null. Only use a
-  printed page total when it is explicitly labelled on this page.
-- Transcribe, do not guess. Use null for a value this page does not print.
-- Dates: keep the printed day/month order; do not swap them.
-- Amounts are numbers with a dot decimal and no currency symbols (e.g. 1234.56).
-- JSON only, no markdown, no commentary."""
-
-_CURRENCY_LINE_V1 = "- currency: ISO 4217 code (USD, EUR, GBP, ZAR, NAD, ZMW)"
-_CURRENCY_LINE_V2 = (
-    "- currency: ISO 4217 code (USD, EUR, GBP, ZAR, NAD, ZMW).\n"
-    "  Symbol map: N$ = NAD, R = ZAR, K = ZMW, $ = USD, EUR = €, GBP = £.\n"
-    "- currency_symbol: the currency symbol printed on this page (for example N$, R, $), or \"\""
-)
-PAGE_PROMPT = PAGE_PROMPT_V1.replace(_CURRENCY_LINE_V1, _CURRENCY_LINE_V2)
-
-
-def page_prompt(page: int, total: int, version: int = 1) -> str:
-    template = PAGE_PROMPT_V1 if version == 1 else PAGE_PROMPT
-    return template.format(page=page, total=total)
+PAGE_PROMPT = PAGE_PROMPT_V2
 
 
 SUMMARY_ROW = re.compile(

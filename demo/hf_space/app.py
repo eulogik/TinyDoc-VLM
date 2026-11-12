@@ -19,7 +19,9 @@ CARD = """
 TinyDoc is an open-source Python SDK and CLI that turns receipt and invoice
 images into schema-validated JSON, with the page, span, and a confidence score
 behind every field. It runs local Qwen2.5-VL-3B or Qwen3-VL-2B-Instruct models
-through Ollama. It is **not** a fine-tuned TinyDoc checkpoint; the reader is a
+through Ollama. A 0.3.0 preview in the repository adds `tinydoc invoice`
+(page-wise PDFs with deterministic OCR total reconciliation) and `tinydoc ui`
+(a local Gradio app); the preview is not yet on PyPI. It is **not** a fine-tuned TinyDoc checkpoint; the reader is a
 third-party base model and the product is the trust layer around it.
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
@@ -40,6 +42,7 @@ third-party base model and the product is the trust layer around it.
 | Invoice multipage, all pages — key-header (n=10) | — | **71.1%** vs 63.3% page 1 |
 | Invoice multipage, page-wise VLM — fully correct (n=10, 46 pages) | — | **6/10** · **93.3%** key-header |
 | Invoice multipage, page-wise + OCR totals — key-header / fully correct | — | **100% (90/90) / 10/10** |
+| Invoice multipage, degraded photo/scan (n=10) | — | **8/10 complete** · **7/8 fully correct** · **71/72 key-header** · 2 page failures |
 | Invoice multipage, page-wise + OCR totals — line-item F1 | — | **0.848** · 0 parse errors · ~2× slower |
 | DocVQA reading — ANLS / exact (200 public, single-reference) | — | **0.829 / 0.765** |
 
@@ -51,8 +54,10 @@ third-party base model and the product is the trust layer around it.
 > 1400 px, 2B only; all-pages gets 4/10, page-wise VLM 6/10 and 93.3%
 > key-header. Deterministic reconciliation plus OCR-read printed totals reaches
 > 10/10 key-header / 90/90 fields, but that is a pipeline result, not a pure VLM
-> score, with a 69.2-100% exact 95% CI at n=10. Line items remain weak (0.848 F1,
-> 1/10 all right) and page-wise is ~2× slower. The SDK path remains single-image. DocVQA is 200
+> score, with a 69.2-100% exact 95% CI at n=10. A deterministic degraded copy of
+> the same 46 pages completed 8/10 documents (7/8 fully correct, 71/72 key-header)
+> with 2 page failures. Line items remain weak (0.848 F1, 1/10 all right) and
+> page-wise is ~2× slower. DocVQA is 200
 > public images, one question per image, 768 px mirror, single reference; it is
 > not comparable to leaderboard numbers. These are same-document engine
 > comparisons, not generalization claims.

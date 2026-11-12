@@ -665,6 +665,111 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"pagewise OCR check errored: {exc}")
 
+    # Degraded multipage probe: same 10 documents, deterministic photo/scan
+    # degradation. The OCR parser is held out from these pages, and two page
+    # failures are part of the result, not hidden.
+    deg_summary = ROOT.parent / "invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json"
+    deg_scores = ROOT.parent / "invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json"
+    deg_rows = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.jsonl"
+    deg_compare = ROOT.parent / "invoice/results/compare_invoice_clean_vs_degraded_2b.json"
+    deg_audit = ROOT.parent / "invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json"
+    deg_recipe = ROOT.parent / "invoice/results/degrade_mp_recipe_42.json"
+    deg_retry = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_retry.jsonl"
+    deg_retry6p = ROOT.parent / "invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_retry6p.jsonl"
+    deg_missing = [
+        path.name
+        for path in (
+            deg_summary, deg_scores, deg_rows, deg_compare, deg_audit, deg_recipe,
+            deg_retry, deg_retry6p,
+        )
+        if not path.exists()
+    ]
+    if deg_missing:
+        failures.append(f"degraded multipage artifacts missing: {deg_missing}")
+    else:
+        try:
+            dsum = json.loads(deg_summary.read_text())
+            dsc = json.loads(deg_scores.read_text())
+            drows = [json.loads(line) for line in deg_rows.open() if line.strip()]
+            dcmp = json.loads(deg_compare.read_text())
+            daudit = json.loads(deg_audit.read_text())
+            drecipe = json.loads(deg_recipe.read_text())
+            dretry = [json.loads(line) for line in deg_retry.open() if line.strip()]
+            dretry6p = [json.loads(line) for line in deg_retry6p.open() if line.strip()]
+            failed_rows = sorted(row["id"] for row in drows if row.get("error"))
+            parsed_pages = [
+                page
+                for row in drows
+                for page in row.get("pages") or []
+                if not page.get("error")
+            ]
+            ocr_blocks = [
+                row["ocr_totals"]
+                for row in drows
+                if (row.get("ocr_totals") or {}).get("consistent") is True
+            ]
+            corrections = {
+                row["id"]: (row.get("pred") or {}).get("corrections")
+                for row in drows
+                if (row.get("pred") or {}).get("corrections")
+            }
+            ok = (
+                dsum.get("n_docs") == 8
+                and dsum.get("key_header_correct") == 71
+                and dsum.get("key_header_scored") == 72
+                and abs(float(dsum.get("key_header_accuracy", -1)) - 0.9861111111111112) <= 1e-9
+                and dsum.get("fully_correct") == 7
+                and abs(float(dsum.get("fully_correct_rate", -1)) - 0.875) <= 1e-9
+                and abs(float(dsum.get("line_items", {}).get("f1_mean", -1)) - 0.795) <= 1e-9
+                and dsum.get("line_items", {}).get("all_lines_right") == 0
+                and dsum.get("parse_errors") == 2
+                and abs(dsum["ci95_exact"]["fully_correct_rate"][0] - 0.4735) < 1e-3
+                and abs(float(dsum.get("latency_ms", {}).get("p50", -1)) - 101094.658) < 1.0
+                and dsc["summary"]["key_fields"] == {"correct": 71, "scored": 72}
+                and dsc["summary"]["fully_correct"] == 7
+                and dsc["summary"]["documents"] == 8
+                and len(drows) == 10
+                and sum(len(row.get("pages") or []) for row in drows) == 46
+                and failed_rows == ["multipage-3p-gb-4", "multipage-6p-za-8"]
+                and all(page.get("done_reason") == "stop" for page in parsed_pages)
+                and len(ocr_blocks) == 10
+                and corrections == {
+                    "multipage-2p-za-1": ["totals_from_ocr:subtotal+tax+total"],
+                    "multipage-3p-na-3": ["totals_from_ocr:tax"],
+                    "multipage-5p-na-7": ["currency_from_ocr_totals"],
+                }
+                and daudit.get("ok") is False
+                and sorted(row["id"] for row in daudit.get("failed_rows") or []) == failed_rows
+                and dcmp.get("n_docs") == 8
+                and sorted(dcmp.get("missing_from_after") or []) == failed_rows
+                and abs(float(dcmp["delta"]["key_accuracy"]) + 0.01388888888888884) < 1e-9
+                and abs(float(dcmp["delta"]["fully_correct_rate"]) + 0.125) < 1e-9
+                and abs(float(dcmp["delta"]["mean_line_f1"]) + 0.0575) < 1e-3
+                and drecipe.get("documents") == 10
+                and drecipe.get("pages") == 46
+                and drecipe.get("seed") == 42
+                and drecipe.get("recipe", {}).get("quality") == 58
+                and len(dretry) == 1
+                and dretry[0]["id"] == "multipage-3p-gb-4"
+                and dretry[0].get("error") == "page 1: no JSON object"
+                and len(dretry6p) == 1
+                and dretry6p[0]["id"] == "multipage-6p-za-8"
+                and dretry6p[0].get("error")
+            )
+            print(
+                f"claim: degraded multipage 2B complete {dsum.get('n_docs')}/10, "
+                f"key-header {dsum.get('key_header_correct')}/72 "
+                f"({dsum.get('key_header_accuracy'):.4f}), fully correct "
+                f"{dsum.get('fully_correct')}/8, line F1 "
+                f"{dsum.get('line_items', {}).get('f1_mean'):.3f}; OCR blocks "
+                f"{len(ocr_blocks)}/10, failures {failed_rows} -> "
+                f"{'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("degraded multipage numbers, failures, or comparison changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"degraded multipage check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

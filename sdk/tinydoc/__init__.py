@@ -1,5 +1,6 @@
 from .models import ExtractionResult, QAResult, TableResult
 from .pipeline import ReceiptPipeline, DocumentResult, FieldResult, build_engine
+from .invoice import InvoicePipeline, InvoiceResult
 from .evidence import Evidence, attach_evidence
 from .overlay import draw_overlay
 
@@ -10,6 +11,8 @@ __all__ = [
     "ReceiptPipeline",
     "DocumentResult",
     "FieldResult",
+    "InvoicePipeline",
+    "InvoiceResult",
     "build_engine",
     "Evidence",
     "attach_evidence",

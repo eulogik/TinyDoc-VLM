@@ -1,0 +1,7 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-12",
+  "page_mode": "pagewise",
+  "notes": "Page-by-page extraction with deterministic merge; synthetic benchmark; see evaluation/invoice/README.md",
+  "documents": {}
+}

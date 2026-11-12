@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tinydoc",
-    version="0.2.0",
+    version="0.3.0",
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -16,6 +16,8 @@ setup(
         "jsonschema>=4.20.0",
     ],
     extras_require={
+        "pdf": ["pypdfium2>=4.30.0"],
+        "ui": ["gradio>=4.0.0"],
         "ocr": ["pytesseract>=0.3.10"],
         "ocr-pp": ["rapidocr-onnxruntime>=1.3.0"],
         "smolvlm2": [
@@ -26,6 +28,7 @@ setup(
         ],
         "onnx": ["onnxruntime>=1.19.0", "optimum>=1.22.0"],
         "all": [
+            "pypdfium2>=4.30.0",
             "pytesseract>=0.3.10",
             "rapidocr-onnxruntime>=1.3.0",
             "torch>=2.2.0",

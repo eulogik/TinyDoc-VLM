@@ -40,7 +40,10 @@ memory watchdog when they are model inference.
 
 ## Commands
 
-- Full test suite: `python3 -m pytest tests/ -q` (expect 209 passed)
+- Full test suite: `python3 -m pytest tests/ -q` (expect 225 passed)
+- SDK preview: `PYTHONPATH=sdk python3 -m tinydoc.cli ui --port 7860` (local Gradio, receipts + invoices)
+- Multipage invoice: `PYTHONPATH=sdk python3 -m tinydoc.cli invoice invoice.pdf --out result.jsonl`
+- Degraded multipage probe: `python3 evaluation/invoice/degrade_pages.py --help` (deterministic recipe)
 - CI-scope lint: `python3 -m ruff check tinydoc_vlm/ tests/`
 - Claim audit (must exit 0 before publishing numbers):
   `python3 evaluation/phase0/recompute_scores.py`

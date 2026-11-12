@@ -14,8 +14,11 @@
 > VLM reading reaches 6/10 and 93.3% key-header. Adding deterministic
 > reconciliation (last-page currency, arithmetic repairs, OCR-read printed
 > totals) reaches **10/10 key-header** on this probe, but that is a pipeline
-> result, not a pure VLM score; line-item F1 is 0.848 and the SDK path remains
-> single-image. A 200-image public DocVQA reading probe scores
+> result, not a pure VLM score; line-item F1 is 0.848. The 0.3.0 SDK preview
+> exposes the page-wise path, but that is probe-quality, not a production
+> multipage claim. A deterministic degraded copy of the same pages completed
+> 8/10 documents (7/8 fully correct, 71/72 key-header) with 2 page failures.
+> A 200-image public DocVQA reading probe scores
 > 0.829 single-reference ANLS and 0.765 exact match (2B); it is not comparable to
 > leaderboard numbers. Real supplier invoices are not yet measured.
 
@@ -154,7 +157,10 @@ recur.
 - The exact 95% CI for 10/10 fully correct is **69.2–100%** (n=10), so this is a
   descriptive probe, not a production rate.
 - The OCR parser was developed against the same 10 final pages it is reported
-  on, so the 10/10 is **not a held-out test of the OCR layer**.
+  on, so the 10/10 is **not a held-out test of the OCR layer**. The degraded
+  copy is a held-out test of the OCR layer on these documents; it found a
+  consistent block on all 10 degraded final pages, but the VLM page path still
+  failed on 2 documents.
 - The 181-document page-1 probe was **not** re-run with reconciliation; those
   numbers remain VLM-only.
 - Three documents carry disclosed corrections: `multipage-2p-za-1` (amounts from
@@ -164,8 +170,19 @@ recur.
   versus 84/90 and 6/10 for v1, with one total regression. The canonical prompt
   is v1.
 
-Page-wise is ~2× slower than all-pages (70.7 vs 34.7 s/doc p50). This is an
-evaluation method, not a shipped SDK path.
+Page-wise is ~2× slower than all-pages (70.7 vs 34.7 s/doc p50). The 0.3.0 SDK
+preview exposes the same page-wise method, but it is probe-quality, not a
+shipped production path.
+
+**Degraded multipage probe (2B, same 10 documents, 46 pages).** A deterministic
+photo/scan copy (downscale-then-upscale, rotation, blur, noise, JPEG 58) completed
+**8/10 documents**. Among those, **7/8 fully correct**, **71/72 key-header**
+(98.6%, exact 95% CI 47.3–99.7%), and line-item F1 **0.795** (0/8 all right).
+OCR totals were consistent on **all 10 degraded final pages**. Two documents
+failed on a page: `multipage-3p-gb-4` produced malformed JSON (reproduced on
+retry), and `multipage-6p-za-8` hit an Ollama HTTP 500 under memory pressure
+(another HTTP 500 on retry). The audit fails on those two rows; they are reported,
+not hidden. This is a robustness probe, not a production claim.
 
 ### 4.3 Evidence and grounding
 
@@ -209,12 +226,13 @@ pretraining. It measures reading, not field extraction.
 - **No real-invoice measurement.** All invoice evidence is synthetic: 181
   documents page 1, plus a 10-document multipage probe. Real supplier invoices
   are unmeasured.
-- **Multipage is an evaluation probe, not an SDK path.** The harness can send
-  every page or read page-wise; the SDK extraction path remains single-image. On
-  10 synthetic documents, all-pages gets 4/10 fully correct and page-wise VLM
-  6/10. Deterministic reconciliation plus OCR totals reaches 10/10 key-header,
-  but that is a pipeline result with a 69.2–100% exact 95% CI at n=10; line items
-  remain weak (0.848 F1, 1/10 all right). Page-wise is ~2× slower.
+- **Multipage is a probe-quality SDK feature, not a production claim.** The
+  harness can send every page or read page-wise; the 0.3.0 SDK preview exposes
+  the page-wise method. On 10 synthetic documents, all-pages gets 4/10 fully
+  correct and page-wise VLM 6/10. Deterministic reconciliation plus OCR totals
+  reaches 10/10 key-header, but that is a pipeline result with a 69.2–100% exact
+  95% CI at n=10; line items remain weak (0.848 F1, 1/10 all right). Page-wise is
+  ~2× slower.
 - **No external receipt benchmark.** SROIE clean-100 is public-train derived.
 - **Multipage is not solved.** Page-wise VLM gets 6/10 synthetic documents fully
   correct; reconciliation reaches 10/10 key-header but line items are all correct

@@ -1,0 +1,24 @@
+{
+  "n_docs": 10,
+  "n_expected": 10,
+  "pages": 46,
+  "num_ctx_default": 8192,
+  "num_predict_default": 2048,
+  "failed_rows": [
+    {
+      "id": "multipage-3p-gb-4",
+      "error": "page 1: no JSON object",
+      "pages": 3,
+      "expected_pages": 3
+    },
+    {
+      "id": "multipage-6p-za-8",
+      "error": "page 5: HTTPError: HTTP Error 500: Internal Server Error",
+      "pages": 6,
+      "expected_pages": 6
+    }
+  ],
+  "allowed_failures": 0,
+  "ok": false,
+  "issues": []
+}

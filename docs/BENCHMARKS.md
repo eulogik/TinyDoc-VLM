@@ -209,8 +209,9 @@ correct; the two 8-page failures are counted in the 71.1% / 4/10 headline.
 **Read this as:** reading every page fixes document-wide key headers on 4 of 10
 synthetic invoices and moves fully-correct from 0/10 to 4/10, but it does **not**
 make multipage invoices straight-through: two 8-page files fail, line items are
-unreliable, and 6/10 still miss at least one key header field. The SDK path
-remains single-image. Artifacts: `evaluation/invoice/results/`.
+unreliable, and 6/10 still miss at least one key header field. The 0.3.0 SDK
+preview exposes the page-wise path, but it is a probe-quality feature. Artifacts:
+`evaluation/invoice/results/`.
 
 ### Page-wise multipage + reconciliation (2B, n=10, 46 pages)
 
@@ -278,11 +279,53 @@ improved 6 / regressed 0 (p=0.03125), fully correct gained 6 / lost 0
 the main multipage bottlenecks. Page-wise reading fixes the runaway, nearly
 triples line-item F1, and deterministic reconciliation closes the monetary
 fields on this probe. It is still not straight-through: line items, latency, and
-real-invoice transfer remain open. The SDK path remains single-image. Artifacts:
+real-invoice transfer remain open. The 0.3.0 SDK preview exposes the page-wise
+path; that is not a production multipage claim. Artifacts:
 `evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`,
 `compare_invoice_pagewise_vs_ocr_2b.json`,
 `compare_invoice_mp_allpages_vs_ocr_2b.json`,
 `audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json`.
+
+### Degraded multipage probe (2B, same 10 documents, 46 pages)
+
+The clean multipage probe uses PDF-rendered text. Real uploads are photos, scans,
+and re-compressed images, so the same 46 pages were degraded deterministically
+(seed 42): downscale to 1100 px then upscale to 1400, rotate up to 1.2°, Gaussian
+blur, brightness/contrast jitter, Gaussian sensor noise, and JPEG quality 58. The
+page-wise prompt, merge, and OCR total reconciliation were unchanged.
+
+| Metric | Clean (10 docs) | Degraded (8 complete docs) |
+|---|---:|---:|
+| Documents completed | 10/10 | **8/10** |
+| Key-header accuracy | 100% (90/90) | **98.6% (71/72)** |
+| Fully correct | 10/10 | **7/8** (exact 95% CI 47.3–99.7%) |
+| Mean line-item F1 | 0.848 | **0.795** |
+| All line items right | 1/10 | **0/8** |
+| OCR consistent blocks | 10/10 | **10/10** |
+| p50 latency per document | 70.7 s | **101.1 s** |
+
+**Two documents failed on a page, and the audit fails because of them:**
+
+- `multipage-3p-gb-4` page 1: the model emitted malformed JSON (an arithmetic
+  expression in the total field). A targeted retry reproduced the failure.
+- `multipage-6p-za-8` page 5: Ollama returned HTTP 500 under memory pressure. A
+  targeted retry hit another HTTP 500 on page 1.
+
+The scorer therefore sees 8 documents, not 10. This is a robustness finding, not
+a hidden failure: degraded pages can break both the VLM output and the local
+server. OCR totals were consistent on **all 10 degraded final pages**, which is a
+held-out test of the OCR layer on these documents; it corrected three amounts or
+currency values. Paired against the clean run on the same 8 documents:
+key-header 72/72 → 71/72, fully correct 8/8 → 7/8, line F1 0.8525 → 0.795.
+
+**Read this as:** the printed-total OCR reader generalizes to mild photo/scan
+degradation on this set, but the VLM page path is not robust to it. Line items
+remain weak. The degradation is mild and deterministic, n=10, synthetic, and not
+a production multipage claim. Artifacts:
+`evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
+`compare_invoice_clean_vs_degraded_2b.json`,
+`audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
+`degrade_mp_recipe_42.json`.
 
 ### DocVQA reading probe (2B, 200 questions, single reference)
 

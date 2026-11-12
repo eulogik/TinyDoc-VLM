@@ -1,12 +1,13 @@
 # TinyDoc release checklist
 
-**Current target:** `tinydoc` 0.2.0 (SDK pipeline, schemas, evidence, CLI).
+**Current target:** `tinydoc` 0.3.0 preview (page-wise invoice SDK + local UI).
+**Last published:** 0.2.0 (receipt pipeline, schemas, evidence, CLI).
 
 ## 1. Preflight (must all pass)
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 209 passed
+python3 -m pytest tests/ -q                 # expect 225 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -21,10 +22,11 @@ Claim audit must exit 0. Do not publish a number that does not recompute from
 cd sdk
 rm -rf build dist tinydoc.egg-info
 python3 -m build --wheel --sdist
-unzip -l dist/tinydoc-0.2.0-py3-none-any.whl | grep schemas
+unzip -l dist/tinydoc-0.3.0-py3-none-any.whl | grep schemas
 ```
 
-The wheel must contain `tinydoc/schemas/sroie_receipt.schema.json`.
+The wheel must contain `tinydoc/schemas/sroie_receipt.schema.json` and
+`tinydoc/schemas/invoice.schema.json`.
 
 ## 3. Clean-venv install test
 
@@ -33,9 +35,10 @@ VENV=/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/tinydoc_venv_rele
 rm -rf "$VENV"
 python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q --upgrade pip
-"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.2.0-py3-none-any.whl
-"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.2.0'"
+"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.3.0-py3-none-any.whl
+"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.3.0'"
 "$VENV/bin/tinydoc" --help
+"$VENV/bin/python" -c "from tinydoc.invoice import invoice_schema_is_valid; assert invoice_schema_is_valid({'vendor_name':'A','invoice_number':'1','invoice_date':'2026-01-01','due_date':None,'currency':'USD','subtotal':1.0,'tax':0.0,'total_amount':1.0,'document_type':'invoice','line_items':[]})"
 TINYDOC_OLLAMA_TIMEOUT=600 TINYDOC_OLLAMA_NUM_CTX=8192 \
   "$VENV/bin/tinydoc" extract <one-receipt.jpg> \
   --engine ollama:qwen3-vl:2b-instruct --no-evidence
@@ -48,7 +51,7 @@ The extraction must return `schema=True` and non-empty fields.
 Requires a PyPI API token with upload scope. Never commit the token.
 
 ```bash
-python3 -m twine upload sdk/dist/tinydoc-0.2.0-py3-none-any.whl sdk/dist/tinydoc-0.2.0.tar.gz
+python3 -m twine upload sdk/dist/tinydoc-0.3.0-py3-none-any.whl sdk/dist/tinydoc-0.3.0.tar.gz
 # username: __token__
 # password: pypi-...
 ```
@@ -59,11 +62,13 @@ If `twine` is missing: `python3 -m pip install --user twine`.
 
 ```bash
 python3 -m venv /tmp/tinydoc_pypi_check
-/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.2.0
+/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.3.0
 /tmp/tinydoc_pypi_check/bin/python -c "import tinydoc; print(tinydoc.__all__)"
 ```
 
-Confirm <https://pypi.org/project/tinydoc/0.2.0/> shows the new README.
+Confirm <https://pypi.org/project/tinydoc/0.3.0/> shows the new README. 0.3.0
+is **not published yet**; the token was rotated after the 0.2.0 leak, so obtain a
+new upload token before this step.
 
 ## 6. Hugging Face Space
 
@@ -91,9 +96,9 @@ Check the Space reaches `RUNNING` and renders the card.
 
 ## 7. Post-release
 
-- Tag **`sdk-v0.2.0`** at the release commit and create a GitHub release with the
-  wheel/sdist. Do **not** reuse `v0.2.0`: that tag already points at an older
-  model-era commit, and published tags should not be moved.
+- Tag **`sdk-v0.3.0`** at the 0.3.0 release commit and create a GitHub release
+  with the wheel/sdist. Do **not** reuse `v0.2.0` or `sdk-v0.2.0`: those tags
+  point at older commits and published tags should not be moved.
 - Update the README install line from source to PyPI once 0.2.0 is live.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
@@ -104,7 +109,16 @@ Check the Space reaches `RUNNING` and renders the card.
 - The HF Space can be reverted with `git revert` on the Space repo (or re-upload
   the previous `app.py`).
 
-## Current status (2026-11-07)
+## Current status (2026-11-12)
+
+- 0.3.0 preview code is in `sdk/`: `InvoicePipeline`, `ocr_totals.py`,
+  `invoice.schema.json`, `ui.py`, and the `invoice`/`ui` CLI commands. It is
+  built and tested in the repository but **not on PyPI**.
+- The clean 10-document multipage probe (VLM + OCR totals) is measured and
+  committed. The degraded multipage probe is the next evidence gap.
+- Space card and repository docs describe the 0.3.0 preview as preview-quality.
+
+## 0.2.0 status (2026-11-07)
 
 - 0.2.0 wheel and sdist built in `sdk/dist/`; `twine check` passed.
 - **0.2.0 is published on PyPI**; `https://pypi.org/pypi/tinydoc/json` reports

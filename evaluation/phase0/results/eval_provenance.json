@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10",
+  "generated": "2026-11-12",
   "policy": "Every published number must name its eval set and provenance. Clean-100 is not an external test set.",
   "datasets": {
     "sroie_eval": {
@@ -95,7 +95,9 @@
       "multipage_pagewise_probe": "probes.multipage_pagewise",
       "multipage_pagewise_ocr": "measured",
       "multipage_pagewise_ocr_probe": "probes.multipage_pagewise_ocr",
-      "multipage_pagewise_prompt_v2": "tested_no_gain"
+      "multipage_pagewise_prompt_v2": "tested_no_gain",
+      "multipage_pagewise_degraded": "measured",
+      "multipage_pagewise_degraded_probe": "probes.multipage_pagewise_degraded"
     },
     "docvqa": {
       "status": "measured_probe",
@@ -991,6 +993,108 @@
         "audit": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
         "rebuild": "evaluation/invoice/results/rebuild_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
         "ocr_module": "evaluation/invoice/totals_ocr.py"
+      }
+    },
+    "multipage_pagewise_degraded": {
+      "date": "2026-11-12",
+      "set": "invoice_extraction_benchmark_v1",
+      "source": "drew-ipp/invoice-extraction-benchmark (CC BY 4.0)",
+      "model": "qwen3-vl:2b-instruct",
+      "prompt_version": 1,
+      "n_docs": 10,
+      "pages": 46,
+      "documents_complete": 8,
+      "documents_failed": 2,
+      "method": "same page-wise merge and OCR total reconciliation as the clean probe, run on a deterministic degraded copy of the same 46 pages: downscale to 1100 px then upscale to 1400, rotate up to 1.2 degrees, Gaussian blur 0.2-0.8, brightness 0.93-1.05, contrast 0.90-1.08, Gaussian noise sigma 1.5-6, JPEG quality 58. Seed 42. No gold in any step.",
+      "degradation": {
+        "seed": 42,
+        "recipe": "downscale+rotate+blur+brightness+noise+jpeg",
+        "max_px": 1400,
+        "downscale_px": 1100,
+        "rotation_deg": 1.2,
+        "blur_max": 0.8,
+        "jpeg_quality": 58,
+        "recipe_report": "evaluation/invoice/results/degrade_mp_recipe_42.json"
+      },
+      "context": 8192,
+      "output_budget": 2048,
+      "results": {
+        "documents_complete": 8,
+        "documents_failed": 2,
+        "key_header_accuracy": 0.9861111111111112,
+        "key_header_correct": 71,
+        "key_header_scored": 72,
+        "fully_correct": 7,
+        "fully_correct_rate": 0.875,
+        "fully_correct_rate_ci95_exact": [
+          0.47349032912479344,
+          0.9968402764687481
+        ],
+        "mean_line_f1": 0.795,
+        "all_lines_right": 0,
+        "parse_errors": 2,
+        "p50_latency_ms": 101094.65801715851,
+        "mean_latency_ms": 106807.7730178833,
+        "ocr_consistent_blocks": 10,
+        "correction_documents": 3,
+        "review_flag_documents": 10
+      },
+      "failures": {
+        "multipage-3p-gb-4": {
+          "page": 1,
+          "error": "no JSON object",
+          "detail": "the model emitted an arithmetic expression in the total field; reproduced on a targeted retry",
+          "retry_artifact": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_retry.jsonl"
+        },
+        "multipage-6p-za-8": {
+          "page": 5,
+          "error": "HTTPError: HTTP Error 500: Internal Server Error",
+          "detail": "Ollama runner connection refused under memory pressure; a targeted retry hit another HTTP 500 on page 1",
+          "retry_artifact": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_retry6p.jsonl"
+        }
+      },
+      "comparison_clean_vs_degraded": {
+        "n_docs": 8,
+        "clean_ocr": {
+          "key_correct": 72,
+          "key_scored": 72,
+          "fully_correct": 8,
+          "mean_line_f1": 0.8525
+        },
+        "degraded_ocr": {
+          "key_correct": 71,
+          "key_scored": 72,
+          "fully_correct": 7,
+          "mean_line_f1": 0.795
+        },
+        "delta": {
+          "key_accuracy": -0.01388888888888884,
+          "fully_correct_rate": -0.125,
+          "mean_line_f1": -0.057499999999999996
+        },
+        "missing_from_degraded": [
+          "multipage-3p-gb-4",
+          "multipage-6p-za-8"
+        ],
+        "artifact": "evaluation/invoice/results/compare_invoice_clean_vs_degraded_2b.json"
+      },
+      "audit": {
+        "ok": false,
+        "failed_rows": [
+          "multipage-3p-gb-4",
+          "multipage-6p-za-8"
+        ],
+        "artifact": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json"
+      },
+      "caveat": "Synthetic, vendor-made, n=10, mild deterministic degradation. 8/10 documents completed; among those, 7/8 fully correct and 71/72 key-header fields. The exact 95% CI for 7/8 is 47.3-99.7%. Two documents failed on a page (one reproducible malformed JSON, one transient Ollama HTTP 500 under memory pressure), so the scorer only sees 8. OCR totals were consistent on all 10 degraded final pages, which is a held-out test of the OCR layer on these documents. Line items remain weak (0.795 F1, 0/8 all right). This is a robustness probe, not a production multipage claim.",
+      "artifacts": {
+        "rows": "evaluation/invoice/results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.jsonl",
+        "preds": "evaluation/invoice/results/preds_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json",
+        "scores": "evaluation/invoice/results/scores_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json",
+        "summary": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json",
+        "compare_clean_vs_degraded": "evaluation/invoice/results/compare_invoice_clean_vs_degraded_2b.json",
+        "audit": "evaluation/invoice/results/audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json",
+        "degrade_module": "evaluation/invoice/degrade_pages.py"
       }
     }
   }

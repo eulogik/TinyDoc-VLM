@@ -397,6 +397,60 @@ class OllamaEngine(BaseEngine):
                 return fields2
         return fields
 
+    def generate(
+        self,
+        prompt: str,
+        image_path: str,
+        num_predict: int = 2048,
+        num_ctx: Optional[int] = None,
+        timeout: Optional[float] = None,
+    ) -> Dict[str, object]:
+        """Run one prompt/image pair and return raw text + Ollama metadata.
+
+        This is the generic path used by the multipage invoice pipeline. It
+        deliberately does not set ``format="json"``: constrained decoding
+        truncated long fields on the measured engine, so the caller parses the
+        free-form JSON itself.
+        """
+        import base64
+        import urllib.request
+
+        b64 = base64.b64encode(Path(image_path).read_bytes()).decode()
+        context = (
+            int(num_ctx)
+            if num_ctx is not None
+            else int(os.environ.get("TINYDOC_OLLAMA_NUM_CTX", "8192"))
+        )
+        wait = (
+            float(timeout)
+            if timeout is not None
+            else float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "600"))
+        )
+        payload = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt, "images": [b64]}],
+            "stream": False,
+            "options": {
+                "temperature": 0,
+                "num_predict": int(num_predict),
+                "num_ctx": context,
+            },
+        }
+        req = urllib.request.Request(
+            f"{self.host}/api/chat",
+            data=json.dumps(payload).encode(),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=wait) as resp:
+            body = json.loads(resp.read().decode())
+        return {
+            "raw": (body.get("message") or {}).get("content", "") or "",
+            "prompt_eval_count": body.get("prompt_eval_count"),
+            "eval_count": body.get("eval_count"),
+            "done_reason": body.get("done_reason"),
+        }
+
 
 class OcrRegexEngine(BaseEngine):
     name = "ocr_regex"

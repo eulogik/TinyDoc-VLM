@@ -37,6 +37,12 @@ Multipage invoices (2B, 10 synthetic documents, 46 pages, 1400 px):
 | + deterministic reconciliation | 95.6% | 8/10 | 0.848 |
 | + OCR printed totals | **100% (90/90)** | **10/10** | 0.848 |
 
+A deterministic degraded photo/scan copy of the same 46 pages completed
+**8/10 documents**: **7/8 fully correct**, **71/72 key-header** (98.6%), line
+F1 **0.795**, and OCR totals consistent on all 10 degraded final pages. Two
+pages failed (one malformed JSON, one transient Ollama HTTP 500); the audit
+fails on those rows.
+
 The 10/10 is a **pipeline result, not a pure VLM score**: OCR reads the printed
 subtotal/tax/total and the VLM reads headers and line items. It uses no gold
 answers, but line-item F1 is 0.848 and all lines are right on only 1/10. The
@@ -55,6 +61,10 @@ one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS / 0.765 exact**,
 > flagging fails (0/7). The multipage probe is 10 documents at 1400 px, 2B only,
 > is descriptive, and is not a shipped SDK path (the SDK is single-image). These
 > are same-document engine comparisons, not generalization claims.
+
+A 0.3.0 preview in the repository adds a page-wise multipage invoice path
+(`tinydoc invoice`) and a local Gradio UI (`tinydoc ui`). It is built and tested
+in the repository but **not yet on PyPI**.
 
 See [the repository](https://github.com/eulogik/TinyDoc-VLM) for install
 instructions and [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md)

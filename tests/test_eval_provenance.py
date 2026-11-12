@@ -424,3 +424,63 @@ def test_pagewise_ocr_probe_matches_artifacts():
     assert experiment["raw_results"]["fully_correct"] == "5/10"
     assert "did not reliably fix currency" in experiment["conclusion"]
     assert experiment["after_same_reconciliation"]["fully_correct"] == "10/10"
+
+
+def test_degraded_multipage_probe_matches_artifacts():
+    data = json.loads(PROVENANCE.read_text())
+    assert data["multi_vertical"]["invoices"]["multipage_pagewise_degraded"] == "measured"
+    probe = data["probes"]["multipage_pagewise_degraded"]
+    assert probe["n_docs"] == 10
+    assert probe["pages"] == 46
+    assert probe["documents_complete"] == 8
+    assert probe["documents_failed"] == 2
+    assert probe["model"] == "qwen3-vl:2b-instruct"
+    assert probe["prompt_version"] == 1
+    assert probe["degradation"]["seed"] == 42
+    assert probe["degradation"]["jpeg_quality"] == 58
+    assert probe["degradation"]["recipe"] == "downscale+rotate+blur+brightness+noise+jpeg"
+    assert set(probe["failures"]) == {"multipage-3p-gb-4", "multipage-6p-za-8"}
+
+    artifacts = probe["artifacts"]
+    rows = [
+        json.loads(line)
+        for line in (ROOT / artifacts["rows"]).read_text().splitlines()
+        if line.strip()
+    ]
+    summary = json.loads((ROOT / artifacts["summary"]).read_text())
+    scores = json.loads((ROOT / artifacts["scores"]).read_text())
+    audit = json.loads((ROOT / artifacts["audit"]).read_text())
+    compare = json.loads((ROOT / artifacts["compare_clean_vs_degraded"]).read_text())
+    recipe = json.loads((ROOT / probe["degradation"]["recipe_report"]).read_text())
+
+    assert len(rows) == 10
+    assert sum(len(row["pages"]) for row in rows) == 46
+    assert sorted(row["id"] for row in rows if row.get("error")) == [
+        "multipage-3p-gb-4",
+        "multipage-6p-za-8",
+    ]
+    assert all(
+        (row.get("ocr_totals") or {}).get("consistent") is True for row in rows
+    )
+    assert summary["n_docs"] == 8
+    assert summary["key_header_correct"] == 71
+    assert summary["key_header_scored"] == 72
+    assert summary["fully_correct"] == 7
+    assert summary["parse_errors"] == 2
+    assert abs(summary["line_items"]["f1_mean"] - 0.795) < 1e-9
+    assert summary["line_items"]["all_lines_right"] == 0
+    assert 0.47 < summary["ci95_exact"]["fully_correct_rate"][0] < 0.48
+    assert scores["summary"]["key_fields"] == {"correct": 71, "scored": 72}
+    assert scores["summary"]["fully_correct"] == 7
+    assert scores["summary"]["documents"] == 8
+    assert audit["ok"] is False
+    assert compare["n_docs"] == 8
+    assert sorted(compare["missing_from_after"]) == [
+        "multipage-3p-gb-4",
+        "multipage-6p-za-8",
+    ]
+    assert abs(compare["delta"]["fully_correct_rate"] + 0.125) < 1e-9
+    assert recipe["documents"] == 10
+    assert recipe["pages"] == 46
+    assert recipe["seed"] == 42
+    assert recipe["recipe"]["quality"] == 58

@@ -207,6 +207,53 @@ consistent OCR block, and applying it with the merge moved key-header from
 line-item F1 is unchanged at 0.848 because OCR touches only the three printed
 totals and currency. See the page-wise section for the full ladder and caveats.
 
+### SDK product path
+
+`InvoicePipeline` (`sdk/tinydoc/invoice.py`) is the productized version of this
+probe. It owns the canonical page prompt, the product merge, the arithmetic
+review flags, and the OCR total reader (`sdk/tinydoc/ocr_totals.py`). The
+evaluation runner keeps a frozen copy of the merge so the measured run stays
+reproducible, and a parity test replays every saved page-wise raw through both
+merges. Changing the SDK merge therefore changes the product, and a rebuild that
+changes the evaluation merge changes the measured result; the test fails if the
+two drift. See `tests/test_invoice_sdk.py`.
+
+### Degraded multipage probe (measured 2026-11-12)
+
+`degrade_pages.py` renders a deterministic photo/scan copy of the same 46 pages
+(downscale to 1100 px then upscale to 1400, rotation up to 1.2°, Gaussian blur,
+brightness/contrast jitter, Gaussian noise, JPEG quality 58; seed 42) so the
+pipeline can be tested beyond clean PDF text. The recipe is recorded in
+`results/degrade_mp_recipe_42.json`. The clean-probe numbers are not evidence
+about degraded uploads.
+
+| Metric | Clean (10 docs) | Degraded (8 complete docs) |
+|---|---:|---:|
+| Documents completed | 10/10 | **8/10** |
+| Key-header accuracy | 100% (90/90) | **98.6% (71/72)** |
+| Fully correct | 10/10 | **7/8** (exact 95% CI 47.3–99.7%) |
+| Mean line-item F1 | 0.848 | **0.795** |
+| All line items right | 1/10 | **0/8** |
+| OCR consistent blocks | 10/10 | **10/10** |
+| p50 latency per document | 70.7 s | **101.1 s** |
+
+Two documents failed on a page, and the audit fails because of them:
+
+- `multipage-3p-gb-4` page 1: the model emitted malformed JSON (an arithmetic
+  expression in the total field). A targeted retry reproduced the failure.
+- `multipage-6p-za-8` page 5: Ollama returned HTTP 500 under memory pressure. A
+  targeted retry hit another HTTP 500 on page 1.
+
+The scorer therefore sees 8 documents, not 10. OCR totals were consistent on
+**all 10 degraded final pages**; the parser corrected three amounts or currency
+values. Paired against the clean run on the same 8 documents: key-header
+72/72 → 71/72, fully correct 8/8 → 7/8, line F1 0.8525 → 0.795. This is a
+robustness probe, not a production claim. Artifacts:
+`results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
+`results/compare_invoice_clean_vs_degraded_2b.json`,
+`results/audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
+`results/rows_invoice_qwen3-vl_2b_mp_pagewise_degraded_retry*.jsonl`.
+
 ### Deterministic arithmetic review checks
 
 `arithmetic_checks.py` flags a prediction when `subtotal + tax` disagrees with
@@ -239,12 +286,14 @@ before using it as a gate.
   and within the context/output budget.
 - `rebuild_pagewise.py` — rebuild predictions from saved page raws; optional
   `--ocr-totals` applies the final-page OCR reconciliation without model calls.
+- `degrade_pages.py` — deterministic photo/scan degradation of a page manifest
+  (downscale, rotation, blur, noise, JPEG); recipe seed is recorded.
 - `compare_multipage.py` / `compare_pagewise.py` — paired comparisons with
   latency and exact sign tests.
 - `summarize_scores.py` — compact summary; includes an exact Clopper-Pearson
   interval for the fully-correct rate.
-- `totals_ocr.py` — OCR the final-page printed totals, validate arithmetic, and
-  override digit-truncated amounts/currency when consistent; no model, no gold.
+- `totals_ocr.py` — thin wrapper over `sdk/tinydoc/ocr_totals.py`; the
+  implementation is shared with the product path.
 - `arithmetic_checks.py` — deterministic subtotal/tax/total and line-sum review
   flags; no model, no gold.
 - `merge_multipage_runs.py` — splice a targeted retry into canonical rows.
@@ -276,6 +325,16 @@ scripts/run_invoice_probe.sh qwen3-vl:2b-instruct qwen3-vl_2b_instruct
 cd "/Volumes/KIOXIA 1TB/tinydoc/invoice-extraction-benchmark"
 python3 -m scorer.evaluate <predictions.json> --out scores.json \
   --markdown scores.md --allow-missing
+
+# 5. Degraded multipage probe (deterministic; recipe seed 42)
+SCRATCH="${TMPDIR:-/tmp}/tinydoc_degraded"
+python3 evaluation/invoice/degrade_pages.py \
+  --manifest evaluation/invoice/manifest_multipage.jsonl \
+  --out-dir "$SCRATCH/pages" --out-manifest "$SCRATCH/manifest.jsonl" \
+  --seed 42 --report evaluation/invoice/results/degrade_mp_recipe_42.json
+INVOICE_MANIFEST="$SCRATCH/manifest.jsonl" \
+  scripts/run_invoice_pagewise.sh qwen3-vl:2b-instruct \
+  qwen3-vl_2b_mp_pagewise_degraded 1
 ```
 
 ## Normalization choices

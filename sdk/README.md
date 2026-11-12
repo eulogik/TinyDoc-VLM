@@ -1,19 +1,24 @@
-# TinyDoc 0.2.0 — local-first grounded document extraction
+# TinyDoc 0.3.0 (preview) — local-first grounded document extraction
 
 **TinyDoc turns receipt and invoice images into schema-validated JSON with
-per-field evidence (quote + OCR bbox) and confidence. It runs local Qwen VLMs
-through Ollama; no API key, no cloud, no telemetry.**
+per-field evidence (quote + OCR bbox), confidence for receipt review routing, and
+arithmetic review flags for invoices. It runs local Qwen VLMs through Ollama;
+no API key, no cloud, no telemetry.**
 
 ```bash
-pip install tinydoc==0.2.0
-ollama pull qwen2.5vl:3b            # quality tier
-ollama pull qwen3-vl:2b-instruct    # fast tier
+pip install tinydoc==0.2.0           # last published release (receipts)
+pip install -e ./sdk                 # 0.3.0 preview: multipage + UI
+pip install 'tinydoc[pdf,ui]'        # once 0.3.0 is published
+ollama pull qwen2.5vl:3b             # quality tier
+ollama pull qwen3-vl:2b-instruct     # fast tier
 ```
 
-> **Status (2026-11-07):** 0.2.0 is published on PyPI. The SDK and evaluation
-> harness are measured. The first-party 256M model is retired (OCRBench 0.0%) and
-> the SmolVLM2-2.2B SFT track is closed (no gain over base). The product is the
-> engine + trust layer, not the old checkpoint. Full analysis:
+> **Status (2026-11-12):** 0.2.0 is the last published release. The 0.3.0
+> preview adds the page-wise multipage invoice SDK path and the local Gradio UI.
+> It is built and tested in this repository but **not yet on PyPI**. The
+> first-party 256M model is retired (OCRBench 0.0%) and the SmolVLM2-2.2B SFT
+> track is closed (no gain over base). The product is the engine + trust layer,
+> not the old checkpoint. Full analysis:
 > [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
@@ -48,8 +53,53 @@ arithmetic repairs, and OCR-read printed totals accepted only when
 result, not a pure VLM score**: line-item F1 is 0.848, all lines are right on
 1/10, and page-wise is ~2× slower (70.7 s/doc, 16.1 s/page). Reconciliation was
 measured on the 10 multipage documents only and the OCR parser was not held out
-from those pages; the 181-document page-1 numbers remain VLM-only. The SDK
-extraction path remains single-image.
+from those pages; the 181-document page-1 numbers remain VLM-only.
+
+### Multipage invoices in the SDK
+
+`tinydoc 0.3.0` ships that page-wise path as `InvoicePipeline`. It renders a PDF
+to page images capped at 1400 px (matching the probe), reads one page per
+request, merges deterministically, and can reconcile the printed totals with
+OCR. No model calls happen in the merge; every repair is recorded.
+
+```python
+from tinydoc import InvoicePipeline
+
+pipe = InvoicePipeline("ollama:qwen3-vl:2b-instruct")
+result = pipe.extract("invoice.pdf", with_ocr_totals=True)
+print(result.fields)          # nine key-header fields
+print(result.line_items)      # concatenated, in page order
+print(result.review_flags)    # arithmetic checks, not model confidence
+print(result.corrections)     # every deterministic repair, e.g. totals_from_ocr
+```
+
+```bash
+pip install 'tinydoc[pdf]'
+tinydoc invoice invoice.pdf --out result.jsonl --max-px 1400
+```
+
+The OCR total reader needs system `tesseract` (`pip install 'tinydoc[ocr]'`) and
+is applied only when the final page yields a consistent subtotal/tax/total block.
+Invoice fields intentionally do **not** carry a confidence probability; use
+`review_flags` and the recorded OCR corrections for review routing.
+
+A deterministic degraded copy of the same 46 pages (downscale-then-upscale,
+rotation, blur, noise, JPEG 58) completed **8/10 documents**: **7/8 fully
+correct**, **71/72 key-header** (98.6%), line F1 **0.795**, and OCR totals
+consistent on **all 10 degraded final pages**. Two pages failed (one
+reproducible malformed JSON, one transient Ollama HTTP 500 under memory
+pressure); the audit fails on those rows. This is a robustness probe, not a
+production claim.
+
+Local UI:
+
+```bash
+pip install 'tinydoc[ui]'
+tinydoc ui                    # Gradio on 127.0.0.1:7860, local only
+```
+
+The UI is a local app, not a hosted service. It has a receipt tab (four fields,
+evidence, overlay) and an invoice tab (PDF or page images, merge, flags).
 
 DocVQA reading probe (2B, 200 public images, one question per image, 768 px
 mirror, single reference): **0.829 ANLS / 0.765 exact**, 0 errors, 3.36 s p50.
@@ -61,9 +111,10 @@ this is not a leaderboard number.
 > it during pretraining. The original 100-doc set is 60% leaked. The invoice set
 > is synthetic and vendor-made, and the 181-document probe is page 1 only; real
 > supplier invoices are unmeasured and flagging fails (0/7). The multipage probes
-> are 10 documents, 2B only, descriptive, and not a shipped SDK path. The 10/10
-> key-header result uses deterministic OCR total reconciliation, not the VLM
-> alone; page-wise is ~2× slower and line items remain unreliable. Use the
+> are 10 documents, 2B only, descriptive; the SDK exposes the same page-wise
+> method, but that does not turn the probe into a production multipage claim. The
+> 10/10 key-header result uses deterministic OCR total reconciliation, not the
+> VLM alone; page-wise is ~2× slower and line items remain unreliable. Use the
 > numbers for same-document engine comparisons, not as generalization claims.
 
 ## Install
@@ -77,6 +128,8 @@ Core deps: `pydantic`, `pillow`, `jsonschema`. Optional extras:
 ```bash
 pip install 'tinydoc[ocr]'      # pytesseract for evidence + ocr_regex
 pip install 'tinydoc[ocr-pp]'   # RapidOCR ONNX evidence
+pip install 'tinydoc[pdf]'      # pypdfium2 for multipage PDF invoices
+pip install 'tinydoc[ui]'       # Gradio for the local UI
 pip install 'tinydoc[smolvlm2]' # optional local HF SmolVLM2 engine
 ```
 
@@ -117,6 +170,13 @@ tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \
 
 Overlay PNGs draw OCR-span evidence boxes and field labels (`tinydoc.draw_overlay`).
 
+Multipage invoices and the local UI:
+
+```bash
+tinydoc invoice invoice.pdf --out result.jsonl     # page-wise + OCR totals
+tinydoc ui                                        # 127.0.0.1:7860, local only
+```
+
 ## Engines
 
 | Engine id | What it does |
@@ -134,9 +194,13 @@ and prompt-v1.
 
 ### Environment
 
-- `TINYDOC_OLLAMA_TIMEOUT` (default 180 s): raise to 600 for slow local runs.
+- `TINYDOC_OLLAMA_TIMEOUT` (default 180 s for receipts, 600 s for invoice page
+  prompts): raise for slow local runs.
 - `TINYDOC_OLLAMA_NUM_CTX` (default 8192): Ollama context window. The implicit
   4096 rejected 2481×3508 scans with HTTP 400; keep 8192 for full pages.
+- `TINYDOC_OLLAMA_NUM_PREDICT` (default 2048 for invoice pages): output budget.
+  Page-wise sends one page per request; a larger budget does not fix runaway
+  line items, and a smaller one can cut them off.
 
 ## Evidence and honesty
 
@@ -159,9 +223,12 @@ and prompt-v1.
 ```
 sdk/tinydoc/
   pipeline.py   # engines, schema, sanitize, confidence, ReceiptPipeline
+  invoice.py    # page-wise invoice prompt, merge, OCR reconciliation, InvoicePipeline
+  ocr_totals.py # printed-total OCR (shared with the evaluation harness)
   evidence.py   # OCR-span evidence
   overlay.py    # draw bboxes + labels
-  cli.py        # tinydoc extract
+  ui.py         # local Gradio UI
+  cli.py        # tinydoc extract|invoice|ui
   schemas/      # JSON Schema per doc type
 ```
 

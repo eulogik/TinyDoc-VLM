@@ -92,6 +92,12 @@ function gateClaims() {
   }
   if (!/pipeline/i.test(index)) bad.push("index.html missing the pipeline-not-pure-VLM caveat");
   if (!/69\.2/.test(index)) bad.push("index.html missing the exact multipage CI (69.2)");
+  if (!/8 of 10/.test(index) || !/7 of 8/.test(index) || !/71 of 72/.test(index)) {
+    bad.push("index.html missing the degraded multipage result (8/10 complete, 7/8, 71/72)");
+  }
+  if (!/2 page failures/.test(index)) {
+    bad.push("index.html missing the degraded multipage page-failure disclosure");
+  }
 
   const bench = existsSync(path.join(ROOT, "docs/BENCHMARKS.md"))
     ? readFileSync(path.join(ROOT, "docs/BENCHMARKS.md"), "utf8") : "";
@@ -100,6 +106,12 @@ function gateClaims() {
     bad.push("BENCHMARKS.md missing the reconciled multipage result or its pipeline caveat");
   }
   if (!/prompt v2|v2 failed/i.test(bench)) bad.push("BENCHMARKS.md missing the rejected prompt-v2 result");
+  if (!/8\/10/.test(bench) || !/7\/8/.test(bench) || !/71\/72/.test(bench)) {
+    bad.push("BENCHMARKS.md missing the degraded multipage result (8/10, 7/8, 71/72)");
+  }
+  if (!/malformed JSON/.test(bench) || !/HTTP 500/.test(bench)) {
+    bad.push("BENCHMARKS.md missing the degraded page-failure disclosure");
+  }
 
   const drafts = ["docs/paper.md", "docs/pitch_deck.md", "docs/reddit_post.md",
                   "docs/twitter_thread.md", "docs/launch_announcement.md"];
@@ -144,6 +156,12 @@ function gateClaims() {
   }
   if (!/pipeline/i.test(readme)) bad.push("README missing the pipeline-not-pure-VLM caveat");
   if (!/69\.2/.test(readme)) bad.push("README missing the exact multipage CI (69.2)");
+  if (!/8\/10/.test(readme) || !/7\/8/.test(readme) || !/71\/72/.test(readme)) {
+    bad.push("README missing the degraded multipage result (8/10, 7/8, 71/72)");
+  }
+  if (!/HTTP 500/.test(readme)) {
+    bad.push("README missing the degraded page-failure disclosure");
+  }
   if (!/DocVQA/i.test(bench) || !/not comparable/i.test(bench) || !/0\.829/.test(bench)) {
     bad.push("BENCHMARKS.md missing the DocVQA result or caveat");
   }

@@ -1,0 +1,104 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-12",
+  "n_docs": 8,
+  "n_corpus": 181,
+  "key_header_accuracy": 0.9861111111111112,
+  "key_header_correct": 71,
+  "key_header_scored": 72,
+  "fully_correct": 7,
+  "fully_correct_rate": 0.875,
+  "ci95": {
+    "key_header_accuracy": [
+      0.9583333333333334,
+      1.0
+    ],
+    "fully_correct_rate": [
+      0.625,
+      1.0
+    ]
+  },
+  "ci95_exact": {
+    "fully_correct_rate": [
+      0.47349032912479344,
+      0.9968402764687481
+    ],
+    "key_header_accuracy": [
+      0.9250286891460808,
+      0.9996484255947664
+    ],
+    "note": "Clopper-Pearson. The key-header interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level fully-correct interval."
+  },
+  "per_field": {
+    "currency": {
+      "correct": 8,
+      "scored": 8
+    },
+    "document_type": {
+      "correct": 8,
+      "scored": 8
+    },
+    "due_date": {
+      "correct": 8,
+      "scored": 8
+    },
+    "invoice_date": {
+      "correct": 8,
+      "scored": 8
+    },
+    "invoice_number": {
+      "correct": 8,
+      "scored": 8
+    },
+    "subtotal": {
+      "correct": 8,
+      "scored": 8
+    },
+    "tax": {
+      "correct": 8,
+      "scored": 8
+    },
+    "total": {
+      "correct": 8,
+      "scored": 8
+    },
+    "vendor_name": {
+      "correct": 7,
+      "scored": 8
+    }
+  },
+  "per_category": {
+    "multipage": {
+      "docs": 8,
+      "key_correct": 71,
+      "key_scored": 72,
+      "fully_correct": 7,
+      "line_f1_mean": 0.795
+    }
+  },
+  "flags": {
+    "inconsistent_invoices": {
+      "total": 0,
+      "flagged": 0
+    },
+    "multi_invoice_files": {
+      "total": 0,
+      "flagged": 0
+    },
+    "consistent_documents": {
+      "total": 8,
+      "flagged": 0
+    }
+  },
+  "line_items": {
+    "docs": 8,
+    "f1_sum": 6.36,
+    "f1_mean": 0.795,
+    "all_lines_right": 0
+  },
+  "latency_ms": {
+    "mean": 106807.7730178833,
+    "p50": 101094.65801715851
+  },
+  "parse_errors": 2
+}

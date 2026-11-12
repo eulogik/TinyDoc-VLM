@@ -1,0 +1,14 @@
+{
+  "documents": 10,
+  "pages": 46,
+  "seed": 42,
+  "manifest": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/degraded_mp/manifest.jsonl",
+  "out_dir": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/degraded_mp/pages",
+  "recipe": {
+    "max_px": 1400,
+    "downscale_px": 1100,
+    "rotation": 1.2,
+    "blur": 0.8,
+    "quality": 58
+  }
+}

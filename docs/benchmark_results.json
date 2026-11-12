@@ -3,8 +3,9 @@
     "rewritten": "2026-09-24",
     "policy": "Every score in `measured` recomputes from a committed artifact under `evaluation/`. Scores in `legacy_unverified` were never measured \u2014 no artifacts exist \u2014 and MUST NOT be cited, published, or pitched.",
     "scorer": "evaluation/phase0/metrics.py for receipts; the benchmark's own scorer for invoices; ANLS for DocVQA",
-    "updated": "2026-11-10",
-    "pipeline_note": "The 10/10 multipage entry is a pipeline result: deterministic OCR reads the printed subtotal/tax/total and the VLM reads headers and line items. It is not a pure VLM score."
+    "updated": "2026-11-12",
+    "pipeline_note": "The 10/10 multipage entry is a pipeline result: deterministic OCR reads the printed subtotal/tax/total and the VLM reads headers and line items. It is not a pure VLM score.",
+    "degraded_note": "The degraded multipage entry uses a deterministic photo/scan copy of the same 10 synthetic documents. 8/10 completed; 2 page failures are reported, not hidden."
   },
   "measured": [
     {
@@ -122,6 +123,15 @@
       "n": 10,
       "artifact": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_ocr.json",
       "notes": "100% key-header (90/90), 10/10 fully correct, 0.848 line F1, 0 parse errors, 10/10 OCR blocks consistent; pipeline result, not pure VLM; exact 95% CI 69.2-100%; line items all right on 1/10; ~2x slower; n=10 descriptive"
+    },
+    {
+      "name": "Invoice multipage (page-wise + OCR totals, degraded)",
+      "system": "TinyDoc page-wise runner + deterministic OCR total reconciliation on a degraded photo/scan copy",
+      "metric": "Key-header accuracy / fully correct / line F1",
+      "score": 0.9861,
+      "n": 8,
+      "artifact": "evaluation/invoice/results/summary_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json",
+      "notes": "8/10 documents completed; 98.6% key-header (71/72), 7/8 fully correct, 0.795 line F1, 0/8 all lines right, 2 page failures (malformed JSON + Ollama HTTP 500), OCR consistent on all 10 degraded final pages; exact 95% CI 47.3-99.7%; n=10 degraded, descriptive"
     }
   ],
   "legacy_unverified": {
