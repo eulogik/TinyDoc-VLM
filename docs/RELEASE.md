@@ -141,10 +141,19 @@ Check the Space reaches `RUNNING` and renders the card.
   header-first prompt (v3) and v1 plus receipt rules (v4). v3 gained 2.9 field
   points but 2/30 responses looped to the 2048-token cap; v4 lost 1.2 points.
   Keep prompt **v1**; see `evaluation/invoice/PT_PROMPT_PILOT.md`.
-- Before a 0.3.1 release: decide whether an OCR-total pass, resolution/crop, or
-  retry fix is in scope, bump `sdk/setup.py` from the dev version, rebuild both
-  schemas into the wheel, clean-venv install, upload, tag **`sdk-v0.3.1`**, and
-  update the install lines and site. Do not reuse `sdk-v0.3.0`.
+- **Resolution check mixed.** On 30 development documents, 2400 px added 4.6
+  field points and 4 fully-correct documents. A fixed 50-document holdout subset
+  confirmed +3.5 points and +1 fully-correct document, at 4.4× latency; tax (+8)
+  and invoice number (+5) improved while total (−2) and vendor (−3) regressed. A
+  fixed field hybrid reached 78.2% but needs both runs. Treat 2400 as an
+  optional retry for tax/identifiers, not a default; see
+  `evaluation/invoice/PT_RESOLUTION_PILOT.md`. Define and validate a trigger
+  before considering it for 0.3.1.
+- Before a 0.3.1 release: decide whether an OCR-total pass, high-resolution
+  retry, or transport retry fix is in scope, bump `sdk/setup.py` from the dev
+  version, rebuild both schemas into the wheel, clean-venv install, upload, tag
+  **`sdk-v0.3.1`**, and update the install lines and site. Do not reuse
+  `sdk-v0.3.0`.
 
 ## 0.2.0 status (2026-11-07)
 

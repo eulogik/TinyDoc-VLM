@@ -1,0 +1,77 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_pilot30_1400.jsonl",
+  "a_name": "v1-1400",
+  "b_name": "v1-2400",
+  "documents": 30,
+  "a": {
+    "field_correct": 133,
+    "field_scored": 174,
+    "field_accuracy": 0.764367816091954,
+    "fully_correct": 7,
+    "fully_correct_six": 6,
+    "six_scored": 24
+  },
+  "b": {
+    "field_correct": 141,
+    "field_scored": 174,
+    "field_accuracy": 0.8103448275862069,
+    "fully_correct": 11,
+    "fully_correct_six": 9,
+    "six_scored": 24
+  },
+  "delta": {
+    "field_accuracy": 0.04597701149425282,
+    "fully_correct": 4
+  },
+  "per_field": {
+    "currency": {
+      "a_correct": 28,
+      "b_correct": 29,
+      "scored": 30,
+      "delta": 1
+    },
+    "invoice_date": {
+      "a_correct": 30,
+      "b_correct": 30,
+      "scored": 30,
+      "delta": 0
+    },
+    "invoice_number": {
+      "a_correct": 15,
+      "b_correct": 18,
+      "scored": 30,
+      "delta": 3
+    },
+    "tax": {
+      "a_correct": 21,
+      "b_correct": 21,
+      "scored": 25,
+      "delta": 0
+    },
+    "total": {
+      "a_correct": 19,
+      "b_correct": 21,
+      "scored": 30,
+      "delta": 2
+    },
+    "vendor_name": {
+      "a_correct": 20,
+      "b_correct": 22,
+      "scored": 29,
+      "delta": 2
+    }
+  },
+  "field_pairs": {
+    "both": 130,
+    "a_only": 3,
+    "b_only": 11,
+    "neither": 30
+  },
+  "doc_pairs": {
+    "both": 7,
+    "a_only": 0,
+    "b_only": 4,
+    "neither": 19
+  },
+  "note": "Paired on the same documents; fields still cluster within documents."
+}

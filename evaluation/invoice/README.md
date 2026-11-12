@@ -331,6 +331,8 @@ before using it as a gate.
   including the merge regression and the preserve-printed-total fix.
 - `PT_PROMPT_PILOT.md` — the rejected 30-document receipt-prompt pilot (v1
   remains canonical).
+- `PT_RESOLUTION_PILOT.md` — the 30-document 1400 px vs 2400 px pilot (a
+  promising optional retry, not a default).
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

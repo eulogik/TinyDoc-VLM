@@ -1,0 +1,819 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-12",
+  "page_mode": "pagewise",
+  "prompt_version": 1,
+  "notes": "Built from saved page-wise rows without dropping merge-sanity flags; see evaluation/invoice/PT_REAL.md",
+  "documents": {
+    "ptreal-company-20210318_172727": {
+      "vendor_name": "BCM BRICOLAGE SA",
+      "invoice_number": "501649FF20",
+      "invoice_date": "2019-01-18",
+      "due_date": "2019-01-18",
+      "currency": "EUR",
+      "subtotal": 119220.0,
+      "tax": 0.0,
+      "total_amount": 119220.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRAS",
+          "amount": 119220.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_174038": {
+      "vendor_name": "CARLOS A SANTOS LDA",
+      "invoice_number": "",
+      "invoice_date": "2019-01-28",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 9250.0,
+      "tax": null,
+      "total_amount": null,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRAS",
+          "amount": 9250.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_205001": {
+      "vendor_name": "H&M",
+      "invoice_number": "981",
+      "invoice_date": "2019-01-22",
+      "due_date": "2019-02-21",
+      "currency": "EUR",
+      "subtotal": 38.99,
+      "tax": 8.97,
+      "total_amount": 47.96,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "HD Sala de estar",
+          "amount": 9.99
+        },
+        {
+          "description": "HD Cozinha",
+          "amount": 14.99
+        },
+        {
+          "description": "HD Sala de estar",
+          "amount": 12.99
+        },
+        {
+          "description": "HD Sala de estar",
+          "amount": 9.99
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_205159": {
+      "vendor_name": "STAPLES PORTUGAL SA",
+      "invoice_number": "2795-684 CARNAXIDE",
+      "invoice_date": "2019-01-23",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 21670.0,
+      "tax": 0.0,
+      "total_amount": 21670.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "EQUIP. ESCRITORIO",
+          "amount": 21670.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210322_125040": {
+      "vendor_name": "RENATO FONSECA LDA",
+      "invoice_number": "FP001.0008038",
+      "invoice_date": "2019-03-27",
+      "due_date": null,
+      "currency": "BRL",
+      "subtotal": 7.96,
+      "tax": 1.99,
+      "total_amount": 6.77,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "ESPATULA CHINESA 1.1/2",
+          "amount": 1.99
+        },
+        {
+          "description": "HANTEK 15-950 0503",
+          "amount": 5.97
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210322_135306": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 02221061902/0009834",
+      "invoice_date": "2019-03-29",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 20.95,
+      "tax": 20.95,
+      "total_amount": 20.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0211 - Coina pv",
+          "amount": 0.0
+        },
+        {
+          "description": "Titulo: Bem lido-Transito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 20,95 \u20ac",
+          "amount": 20.95
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210322_163546": {
+      "vendor_name": "Intermarch\u00e9",
+      "invoice_number": "F1 3F5C111219/753",
+      "invoice_date": "2019-07-05",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 46.0,
+      "tax": 1.72,
+      "total_amount": 47.72,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "CARTEIRA ETIQUETAS 3",
+          "amount": 23.0
+        },
+        {
+          "description": "CAD. AGR C. PRET. A5 L1",
+          "amount": 23.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210322_172402": {
+      "vendor_name": "EVA",
+      "invoice_number": "02614/91001EA",
+      "invoice_date": "2019-06-20",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 18.87,
+      "tax": 1.13,
+      "total_amount": 20.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "1 INTEIRO",
+          "amount": 20.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_162904": {
+      "vendor_name": "INTERMARCH\u00c9",
+      "invoice_number": "FT 3F5C121219/229",
+      "invoice_date": "2019-06-14",
+      "due_date": "2019-06-14",
+      "currency": "EUR",
+      "subtotal": 8.86,
+      "tax": 2.04,
+      "total_amount": 10.9,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "CHUVEIRO ANTI-CAL VA",
+          "amount": 8.86
+        },
+        {
+          "description": "B",
+          "amount": 23.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_183059": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 01271021902/0003212",
+      "invoice_date": "2019-01-16",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 0.7,
+      "tax": 0.7,
+      "total_amount": 1.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0128 - Alverca pv",
+          "amount": 0.0
+        },
+        {
+          "description": "Titulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 0,70 \u20ac",
+          "amount": 0.7
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_144401": {
+      "vendor_name": "ROGERIO PAIS, LDA",
+      "invoice_number": "FS 1A1901/1404",
+      "invoice_date": "2019-02-15",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 3.65,
+      "tax": 0.68,
+      "total_amount": 3.65,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "1 Cola PATEX bisnaga 50gr",
+          "amount": 3.65
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_150944": {
+      "vendor_name": "ROGERIO PAIS, LDA",
+      "invoice_number": "FS 1A1901/2205",
+      "invoice_date": "2019-03-19",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 44.5,
+      "tax": 8.32,
+      "total_amount": 44.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "1 Lampada MATEL globo LED",
+          "amount": 13.0
+        },
+        {
+          "description": "1 Lampada Fluorescente",
+          "amount": 3.0
+        },
+        {
+          "description": "1 Puxador Porta Interior",
+          "amount": 28.5
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_183109": {
+      "vendor_name": "LELIMEL-MATERIAIS DE CONSTRU\u00c7\u00c3O,LDA",
+      "invoice_number": "FR 14/8266",
+      "invoice_date": "2019-01-03",
+      "due_date": "2019-01-03",
+      "currency": "EUR",
+      "subtotal": 12.8,
+      "tax": 2.39,
+      "total_amount": 12.8,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "DESCARGA AUTOCLISMO SIMPLES",
+          "amount": 12.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_183503": {
+      "vendor_name": "CASA BERNARDINO",
+      "invoice_number": "FS A9/282",
+      "invoice_date": "2019-02-11",
+      "due_date": "2019-03-11",
+      "currency": "EUR",
+      "subtotal": 11.0,
+      "tax": 2.06,
+      "total_amount": 11.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "bicha",
+          "amount": 7.0
+        },
+        {
+          "description": "telefone",
+          "amount": 4.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_204159": {
+      "vendor_name": "JMTD-FERRAGENS DO COMBRO LDA",
+      "invoice_number": "A/31040",
+      "invoice_date": "2019-05-09",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 2.4,
+      "tax": 0.45,
+      "total_amount": 2.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Amigos do Senhorio",
+          "amount": 2.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_232117": {
+      "vendor_name": "GL\u00d3RIA NUNES PEREIRA, LDA.",
+      "invoice_number": "004/0007018",
+      "invoice_date": "2019-04-26",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 4.14,
+      "tax": 0.95,
+      "total_amount": 5.09,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMUTADOR DE LUSTRE",
+          "amount": 3.16
+        },
+        {
+          "description": "TECLA DUPLA(PAR)BRANCA",
+          "amount": 0.61
+        },
+        {
+          "description": "ESPELHO SIMPLES BRANCO",
+          "amount": 0.37
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210429_200119": {
+      "vendor_name": "Pingo Doce",
+      "invoice_number": "331379",
+      "invoice_date": "2019-07-03",
+      "due_date": "2019-07-20",
+      "currency": "EUR",
+      "subtotal": 0.99,
+      "tax": 0.19,
+      "total_amount": 0.99,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "DETERG. E PROD. LIMPEZA E 23% FILTR CAF\u00c9 HOME7 N\u00ba4",
+          "amount": 0.99
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210429_204946": {
+      "vendor_name": "Tivoli Forum",
+      "invoice_number": "FS 120/248238",
+      "invoice_date": "2019-11-25",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 7.5,
+      "tax": 0.95,
+      "total_amount": 7.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Mn H3 Prato Grelhado",
+          "amount": 0.0
+        },
+        {
+          "description": "Medio Passado",
+          "amount": 0.0
+        },
+        {
+          "description": "Arroz Thai",
+          "amount": 0.93
+        },
+        {
+          "description": "Limonada H3",
+          "amount": 1.17
+        },
+        {
+          "description": "H3 Grelhado",
+          "amount": 5.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210429_205320": {
+      "vendor_name": "FRANCISCO METRASS",
+      "invoice_number": "",
+      "invoice_date": "2019-11-09",
+      "due_date": "2019-11-09",
+      "currency": "EUR",
+      "subtotal": 12.47,
+      "tax": 2.98,
+      "total_amount": 12.17,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "E 23% LACASITOS TUBO",
+          "amount": 1.18
+        },
+        {
+          "description": "Poupan\u00e7a Imediata",
+          "amount": 0.3
+        },
+        {
+          "description": "E 23% BOL WAF PD BAUN 250G",
+          "amount": 0.85
+        },
+        {
+          "description": "E 23% TAB SCHOGETTEN PRL",
+          "amount": 1.19
+        },
+        {
+          "description": "E 23% TAB SCHOGETTEN AVEL",
+          "amount": 1.19
+        },
+        {
+          "description": "C 6% P\u00c3O DA AVO PEQ KG",
+          "amount": 1.16
+        },
+        {
+          "description": "E 23% DESENT CAN GEL UP 1L",
+          "amount": 1.29
+        },
+        {
+          "description": "E 23% S\u00c1CO PL\u00c1ST RECICL PD",
+          "amount": 0.1
+        },
+        {
+          "description": "C 6% PENSO EVAX F&S 12",
+          "amount": 1.82
+        },
+        {
+          "description": "E 23% DEO RON NARTA INVISI",
+          "amount": 3.69
+        },
+        {
+          "description": "TOTAL POUpan\u00e7a",
+          "amount": 0.3
+        },
+        {
+          "description": "TOTAL A PAGAR",
+          "amount": 12.17
+        },
+        {
+          "description": "TOTAL PAGO",
+          "amount": 12.17
+        },
+        {
+          "description": "Resumo IVA",
+          "amount": 2.98
+        },
+        {
+          "description": "Taxa",
+          "amount": 2.98
+        },
+        {
+          "description": "Valor s/IVA",
+          "amount": 2.81
+        },
+        {
+          "description": "Valor IVA",
+          "amount": 0.17
+        },
+        {
+          "description": "Valor c/IVA",
+          "amount": 2.98
+        },
+        {
+          "description": "Resumo IVA",
+          "amount": 9.19
+        },
+        {
+          "description": "E 23%",
+          "amount": 7.47
+        },
+        {
+          "description": "Valor s/IVA",
+          "amount": 7.47
+        },
+        {
+          "description": "Valor IVA",
+          "amount": 1.72
+        },
+        {
+          "description": "Valor c/IVA",
+          "amount": 9.19
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210507_182145": {
+      "vendor_name": "ENCOJASMIM LDA",
+      "invoice_number": "FAC 101/00022723",
+      "invoice_date": "2019-09-02",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 9.15,
+      "tax": 1.71,
+      "total_amount": 9.15,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "23% Nido trampa",
+          "amount": 2.0
+        },
+        {
+          "description": "23% Sapix po 100g",
+          "amount": 3.5
+        },
+        {
+          "description": "23% Maton 300ml",
+          "amount": 2.75
+        },
+        {
+          "description": "23% Toalhitas infantil",
+          "amount": 0.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_144014": {
+      "vendor_name": "INTERERICEIRA - Supermercados LDA",
+      "invoice_number": "FT6173P1T00A85C007DDB37/17558",
+      "invoice_date": "2018-11-27",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 40.37,
+      "tax": 7.55,
+      "total_amount": 40.37,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Bomba:6 Mangueira:4",
+          "amount": 40.37
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_170722": {
+      "vendor_name": "WORTEN",
+      "invoice_number": "NC HRX006/003311",
+      "invoice_date": "2018-11-20",
+      "due_date": "2018-12-10",
+      "currency": "EUR",
+      "subtotal": 39.99,
+      "tax": 7.48,
+      "total_amount": 39.99,
+      "document_type": "credit_note",
+      "line_items": [
+        {
+          "description": "Pequenos Dom\u00e9sticos: 5601988258299 IRRAD.OLED KUNFT2000W KOR-",
+          "amount": 39.99
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_174017": {
+      "vendor_name": "Consertos Rapidos Amoreiras, Lda",
+      "invoice_number": "C 2/08191502",
+      "invoice_date": "2018-11-08",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 16.6,
+      "tax": 3.1,
+      "total_amount": 19.7,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "CHAVE PALHETAO CSL / CI-4G ou CI-14G /",
+          "amount": 14.2
+        },
+        {
+          "description": "CHAVE PLANA ULC50 / U-5D",
+          "amount": 2.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_180009": {
+      "vendor_name": "ROGERIO PAIS, LDA",
+      "invoice_number": "FS 1A1801/4812",
+      "invoice_date": "2018-06-05",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 29.0,
+      "tax": 5.42,
+      "total_amount": 29.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "4 Silicone Preto PECOL",
+          "amount": 14.0
+        },
+        {
+          "description": "5 Lampada MATEL lede vela",
+          "amount": 15.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210215_162447": {
+      "vendor_name": "DECOR HOME STYLING",
+      "invoice_number": "FR F600 20/550",
+      "invoice_date": "2020-11-24",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 28.0,
+      "tax": 5.23,
+      "total_amount": 28.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "ALMOFADA 50X30 COM VIVO E ENCHIMENTO",
+          "amount": 15.95
+        },
+        {
+          "description": "TECIDO VARADERO",
+          "amount": 12.05
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210215_165051": {
+      "vendor_name": "ZARA HOME (PORTUGAL)",
+      "invoice_number": "FS 001718012020/013379",
+      "invoice_date": "2020-11-28",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 3.24,
+      "tax": 0.75,
+      "total_amount": 3.99,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "TSH 23,00 1 3,99 3,99 V",
+          "amount": 3.99
+        },
+        {
+          "description": "10001839 4243679399099 COSMETICA",
+          "amount": 3.99
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210215_172714": {
+      "vendor_name": "Ana Sousa",
+      "invoice_number": "081F/5A643",
+      "invoice_date": "2020-12-17",
+      "due_date": "2020-01-31",
+      "currency": "EUR",
+      "subtotal": 31.26,
+      "tax": 0.59,
+      "total_amount": 10.44,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "SAUDADES DE COIMBRA(1917/)",
+          "amount": 13.9
+        },
+        {
+          "description": "SAUDADES DE COIMBRA(1901/)",
+          "amount": 13.9
+        },
+        {
+          "description": "SAUDADES DE COIMBRA(1934/)",
+          "amount": 13.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210508_235847": {
+      "vendor_name": "TOZELI-COMERCIO DE CARNES LDA",
+      "invoice_number": "B/1439",
+      "invoice_date": "2021-04-14",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 18.99,
+      "tax": 1.07,
+      "total_amount": 18.99,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "BIFE FRANGO",
+          "amount": 9.09
+        },
+        {
+          "description": "FIGADO BOVINO",
+          "amount": 8.1
+        },
+        {
+          "description": "OVOS CATG.A TAMANHO.GRAND.",
+          "amount": 1.8
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210509_002309": {
+      "vendor_name": "FARMACIA SAO JOSE",
+      "invoice_number": "F U011/17761",
+      "invoice_date": "2021-03-19",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 8.54,
+      "tax": 0.48,
+      "total_amount": 8.54,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "mascara cirurgica 3 camadas (unidade)",
+          "amount": 2.5
+        },
+        {
+          "description": "\u00c1lcool Gel Antiss\u00e9ptico 500ml",
+          "amount": 3.7
+        },
+        {
+          "description": "Dettol Gel Desinf Maos 50Ml",
+          "amount": 2.34
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210509_002320": {
+      "vendor_name": "Farmacia Gaspar",
+      "invoice_number": "FR U001/1771",
+      "invoice_date": "2021-04-23",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 65.8,
+      "tax": 15.25,
+      "total_amount": 81.05,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Farma+ Pano Microfibra Antiembac",
+          "amount": 21.8
+        },
+        {
+          "description": "Voltaren 25, 25 mg x 20 c\u00e1ps mole",
+          "amount": 7.95
+        },
+        {
+          "description": "SEPTIVON GEL 250ML",
+          "amount": 4.95
+        },
+        {
+          "description": "Frezyderm De-Make Up 4in1 200ml",
+          "amount": 23.8
+        },
+        {
+          "description": "MASCARAS CIRURGICAS *50 UNIDADES",
+          "amount": 7.3
+        }
+      ],
+      "flagged": false,
+      "references": []
+    }
+  }
+}

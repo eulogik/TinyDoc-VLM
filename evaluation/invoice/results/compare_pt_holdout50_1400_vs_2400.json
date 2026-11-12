@@ -1,0 +1,77 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_holdout50_2400.jsonl",
+  "a_name": "holdout50-1400",
+  "b_name": "holdout50-2400",
+  "documents": 50,
+  "a": {
+    "field_correct": 211,
+    "field_scored": 289,
+    "field_accuracy": 0.7301038062283737,
+    "fully_correct": 11,
+    "fully_correct_six": 8,
+    "six_scored": 40
+  },
+  "b": {
+    "field_correct": 221,
+    "field_scored": 289,
+    "field_accuracy": 0.7647058823529411,
+    "fully_correct": 12,
+    "fully_correct_six": 11,
+    "six_scored": 40
+  },
+  "delta": {
+    "field_accuracy": 0.03460207612456745,
+    "fully_correct": 1
+  },
+  "per_field": {
+    "currency": {
+      "a_correct": 49,
+      "b_correct": 50,
+      "scored": 50,
+      "delta": 1
+    },
+    "invoice_date": {
+      "a_correct": 44,
+      "b_correct": 45,
+      "scored": 48,
+      "delta": 1
+    },
+    "invoice_number": {
+      "a_correct": 19,
+      "b_correct": 24,
+      "scored": 48,
+      "delta": 5
+    },
+    "tax": {
+      "a_correct": 30,
+      "b_correct": 38,
+      "scored": 46,
+      "delta": 8
+    },
+    "total": {
+      "a_correct": 41,
+      "b_correct": 39,
+      "scored": 50,
+      "delta": -2
+    },
+    "vendor_name": {
+      "a_correct": 28,
+      "b_correct": 25,
+      "scored": 47,
+      "delta": -3
+    }
+  },
+  "field_pairs": {
+    "both": 198,
+    "a_only": 13,
+    "b_only": 23,
+    "neither": 55
+  },
+  "doc_pairs": {
+    "both": 7,
+    "a_only": 4,
+    "b_only": 5,
+    "neither": 34
+  },
+  "note": "Paired on the same documents; fields still cluster within documents."
+}

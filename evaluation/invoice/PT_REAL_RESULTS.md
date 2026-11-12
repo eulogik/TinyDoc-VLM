@@ -73,6 +73,18 @@ responses looped to the 2048-token cap**; v4 lost **1.2 points**. The canonical
 **v1 prompt remains the default**; no full-development or holdout run was
 justified. Details and artifacts: [PT_PROMPT_PILOT.md](PT_PROMPT_PILOT.md).
 
+## Resolution pilot (promising)
+
+On the 30-document development pilot, raising the input from 1400 px to 2400 px
+with prompt v1 adds **+4.6 field points** (141/174 vs 133/174) and 4 more
+fully-correct documents, at **4.1× latency**. On a fixed **50-document holdout
+subset**, the gain is smaller but still positive: **73.0% → 76.5%** (+3.5
+points, +1 fully-correct document), at 4.4× latency. The field pattern is mixed:
+tax **+8** and invoice number **+5**, but total **−2** and vendor **−3**. A fixed
+field hybrid reaches 78.2% but needs both runs. This is a candidate for a
+**targeted high-resolution retry for tax and identifiers**, not a new default.
+Details: [PT_RESOLUTION_PILOT.md](PT_RESOLUTION_PILOT.md).
+
 ## Per field
 
 | Field | Development | Holdout | Δ (pp) |

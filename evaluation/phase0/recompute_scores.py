@@ -1050,6 +1050,145 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"prompt pilot check errored: {exc}")
 
+    # Resolution pilot: same 30 development documents at 1400 px vs 2400 px.
+    res_manifest = ROOT.parent / "invoice/manifest_pt_pilot30_2400.jsonl"
+    res_scores = ROOT.parent / "invoice/results/scores_invoice_pt_pilot30_2400_v1.json"
+    res_summary = ROOT.parent / "invoice/results/summary_invoice_pt_pilot30_2400_v1.json"
+    res_rows = ROOT.parent / "invoice/results/rows_invoice_pt_pilot30_2400_v1.jsonl"
+    res_compare = ROOT.parent / "invoice/results/compare_pt_pilot30_1400_vs_2400.json"
+    res_missing = [
+        path.name
+        for path in (res_manifest, res_scores, res_summary, res_rows, res_compare)
+        if not path.exists()
+    ]
+    if res_missing:
+        failures.append(f"resolution pilot artifacts missing: {res_missing}")
+    else:
+        try:
+            rman = [json.loads(line) for line in res_manifest.open() if line.strip()]
+            rsc = json.loads(res_scores.read_text())
+            rsum = json.loads(res_summary.read_text())
+            rrows = [json.loads(line) for line in res_rows.open() if line.strip()]
+            rcmp = json.loads(res_compare.read_text())
+            rdocs = rsc.get("documents") or []
+            rcorrect = sum(
+                1 for doc in rdocs for item in (doc.get("fields") or {}).values() if item.get("correct")
+            )
+            rscored = sum(len(doc.get("fields") or {}) for doc in rdocs)
+            rfully = sum(1 for doc in rdocs if doc.get("fully_correct"))
+            rsix = sum(1 for doc in rdocs if doc.get("fully_correct_six"))
+            rsix_scored = sum(1 for doc in rdocs if doc.get("all_six_scored"))
+            rper = {}
+            for doc in rdocs:
+                for name, item in (doc.get("fields") or {}).items():
+                    bucket = rper.setdefault(name, [0, 0])
+                    bucket[1] += 1
+                    bucket[0] += int(bool(item.get("correct")))
+            expected_res = {
+                "currency": [29, 30],
+                "invoice_date": [30, 30],
+                "invoice_number": [18, 30],
+                "tax": [21, 25],
+                "total": [21, 30],
+                "vendor_name": [22, 29],
+            }
+            no_total = [row for row in rrows if row.get("error") == "no total"]
+            ok = (
+                len(rman) == 30
+                and (rcorrect, rscored) == (141, 174)
+                and rfully == 11
+                and (rsix, rsix_scored) == (9, 24)
+                and rper == expected_res
+                and abs(float(rsum.get("field_accuracy", -1)) - 141 / 174) < 1e-9
+                and rsum.get("fully_correct") == 11
+                and abs(float(rsum.get("latency_ms", {}).get("p50", -1)) - 33798.19703102112) < 1.0
+                and len(no_total) == 1
+                and no_total[0]["id"] == "ptreal-company-20210318_174038"
+                and no_total[0]["pages"][0].get("done_reason") == "stop"
+                and abs(float(rcmp["delta"]["field_accuracy"]) - 0.04597701149425282) < 1e-9
+                and rcmp["delta"]["fully_correct"] == 4
+                and rcmp["field_pairs"] == {"both": 130, "a_only": 3, "b_only": 11, "neither": 30}
+                and rcmp["doc_pairs"] == {"both": 7, "a_only": 0, "b_only": 4, "neither": 19}
+            )
+            print(
+                f"claim: resolution pilot 30 docs -> 1400 133/174 fully 7; 2400 {rcorrect}/174 "
+                f"fully {rfully}, six {rsix}/{rsix_scored}, p50 "
+                f"{rsum.get('latency_ms', {}).get('p50', 0) / 1000:.1f}s -> "
+                f"{'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("resolution-pilot counts or latency changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"resolution pilot check errored: {exc}")
+
+    # Resolution holdout-50: fixed subset of the seed-43 holdout, 1400 vs 2400.
+    h50_manifest = ROOT.parent / "invoice/manifest_pt_holdout50_2400.jsonl"
+    h50_scores = {
+        name: ROOT.parent / f"invoice/results/scores_invoice_pt_holdout50_{name}.json"
+        for name in ("1400", "2400_v1", "hybrid")
+    }
+    h50_summaries = {
+        name: ROOT.parent / f"invoice/results/summary_invoice_pt_holdout50_{name}.json"
+        for name in ("1400", "2400_v1", "hybrid")
+    }
+    h50_rows = {
+        name: ROOT.parent / f"invoice/results/rows_invoice_pt_holdout50_{name}.jsonl"
+        for name in ("1400", "2400_v1")
+    }
+    h50_compare = ROOT.parent / "invoice/results/compare_pt_holdout50_1400_vs_2400.json"
+    h50_prep = ROOT.parent / "invoice/results/pt_real_holdout_prep_2400.json"
+    h50_missing = [
+        path.name
+        for path in (h50_manifest, *h50_scores.values(), *h50_summaries.values(),
+                     *h50_rows.values(), h50_compare, h50_prep)
+        if not path.exists()
+    ]
+    if h50_missing:
+        failures.append(f"resolution holdout-50 artifacts missing: {h50_missing}")
+    else:
+        try:
+            hman = [json.loads(line) for line in h50_manifest.open() if line.strip()]
+
+            def _h50_totals(scores):
+                docs = scores.get("documents") or []
+                correct = sum(
+                    1 for doc in docs for item in (doc.get("fields") or {}).values() if item.get("correct")
+                )
+                scored = sum(len(doc.get("fields") or {}) for doc in docs)
+                fully = sum(1 for doc in docs if doc.get("fully_correct"))
+                six = sum(1 for doc in docs if doc.get("fully_correct_six"))
+                six_scored = sum(1 for doc in docs if doc.get("all_six_scored"))
+                return correct, scored, fully, six, six_scored
+
+            hv = {name: _h50_totals(json.loads(path.read_text())) for name, path in h50_scores.items()}
+            hcmp = json.loads(h50_compare.read_text())
+            hprep = json.loads(h50_prep.read_text())
+            h2400_rows = [json.loads(line) for line in h50_rows["2400_v1"].open() if line.strip()]
+            ok = (
+                len(hman) == 50
+                and hv["1400"] == (211, 289, 11, 8, 40)
+                and hv["2400_v1"] == (221, 289, 12, 11, 40)
+                and hv["hybrid"] == (226, 289, 13, 11, 40)
+                and abs(float(hcmp["delta"]["field_accuracy"]) - 10 / 289) < 1e-9
+                and hcmp["delta"]["fully_correct"] == 1
+                and hcmp["field_pairs"] == {"both": 198, "a_only": 13, "b_only": 23, "neither": 55}
+                and hcmp["doc_pairs"] == {"both": 7, "a_only": 4, "b_only": 5, "neither": 34}
+                and abs(float(json.loads(h50_summaries["2400_v1"].read_text())["latency_ms"]["p50"]) - 36599.40004348755) < 1.0
+                and len(h2400_rows) == 50
+                and all(not row.get("error") for row in h2400_rows)
+                and hprep.get("documents") == 100
+                and hprep.get("max_px") == 2400
+            )
+            print(
+                f"claim: resolution holdout50 -> 1400 {hv['1400'][0]}/289 fully {hv['1400'][2]}, "
+                f"2400 {hv['2400_v1'][0]}/289 fully {hv['2400_v1'][2]}, hybrid "
+                f"{hv['hybrid'][0]}/289 fully {hv['hybrid'][2]} -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("resolution holdout-50 counts or comparison changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"resolution holdout-50 check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"
