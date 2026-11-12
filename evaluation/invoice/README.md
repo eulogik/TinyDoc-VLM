@@ -3,6 +3,11 @@
 This harness measures the TinyDoc prompt/schema on invoices. It is **not** a
 real-supplier invoice benchmark and not an independent evaluation.
 
+> **Real-document probe:** `PT_REAL.md` documents the separate 100-document
+> Portuguese invoice/receipt probe built from public CC BY 4.0 phone photos.
+> It is a five-field transfer probe, not a nine-field invoice benchmark and not
+> a leaderboard result.
+
 ## Corpus
 
 [Invoice Extraction Benchmark v1](https://github.com/DrewKraken/invoice-extraction-benchmark)
@@ -303,6 +308,18 @@ before using it as a gate.
 - `arithmetic_checks.py` — deterministic subtotal/tax/total and line-sum review
   flags; no model, no gold.
 - `merge_multipage_runs.py` — splice a targeted retry into canonical rows.
+- `build_pt_manifest.py` — download/verify the two Zenodo Portuguese archives,
+  normalize the five scoreable fields, deduplicate repeat photos, and write the
+  real-document manifests. See `PT_REAL.md`.
+- `prepare_pt_probe.py` — apply the product's page cap (1400 px by default) and
+  record the source/prepared hashes before inference.
+- `pt_score.py` — five-field scorer for the Portuguese probe, using the same
+  vendor/number/date/money rules as the benchmark scorer.
+- `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
+  frozen real-document probe; images are external, only the manifest is
+  committed.
+- `../../scripts/run_pt_probe.sh` — real-document runner with a macOS memory
+  watchdog.
 - `../../scripts/run_invoice_probe.sh` — runner + memory guard + scorer.
 - `../../scripts/reconcile_invoice_totals.sh` — rebuild with OCR totals + score +
   summarize + audit, end to end.

@@ -1,0 +1,659 @@
+{
+  "raw_documents": 1003,
+  "documents": 943,
+  "duplicates_dropped": 60,
+  "sources": {
+    "real_pt_company": 754,
+    "real_pt_personal": 189
+  },
+  "field_scored": {
+    "currency": 943,
+    "invoice_date": 930,
+    "invoice_number": 921,
+    "tax": 816,
+    "total": 942,
+    "vendor_name": 882
+  },
+  "totals_eur": {
+    "min": 0.35,
+    "p25": 6.0,
+    "median": 13.8,
+    "p75": 30.19,
+    "max": 671.0
+  },
+  "tax_ratio": {
+    "min": 0.0,
+    "p25": 0.12200956937799044,
+    "median": 0.186875,
+    "p75": 0.18703939008894535,
+    "max": 0.22996645546030564
+  },
+  "date_min": "2011-04-06",
+  "date_max": "2021-11-06",
+  "annotation_issues": {
+    "implausible_tax": 14,
+    "missing_invoice_number": 22,
+    "missing_vendor": 61,
+    "unparseable_date": 13,
+    "unparseable_total": 1
+  },
+  "duplicates": [
+    {
+      "id": "ptreal-company-20210320_172214",
+      "duplicate_of": "ptreal-company-20210320_172349",
+      "business_key": [
+        "loule mar shopping",
+        "06470071901010617 000174",
+        "2019-03-30",
+        16.34
+      ]
+    },
+    {
+      "id": "ptreal-company-20210320_173326",
+      "duplicate_of": "ptreal-company-20210320_173953",
+      "business_key": [
+        "drogaria semino",
+        "fs 3 533",
+        "2019-03-29",
+        53.5
+      ]
+    },
+    {
+      "id": "ptreal-company-20210320_174150",
+      "duplicate_of": "ptreal-company-20210321_115948",
+      "business_key": [
+        "flor de val eguas",
+        "fr b19 43",
+        "2019-06-03",
+        8.5
+      ]
+    },
+    {
+      "id": "ptreal-company-20210321_120107",
+      "duplicate_of": "ptreal-company-20210321_115948",
+      "business_key": [
+        "flor de val eguas",
+        "fr b19 43",
+        "2019-06-03",
+        8.5
+      ]
+    },
+    {
+      "id": "ptreal-company-20210321_120748",
+      "duplicate_of": "ptreal-company-20210320_164226",
+      "business_key": [
+        "galp",
+        "012010004335faaa00000141902019 000005525",
+        "2019-07-14",
+        78.7
+      ]
+    },
+    {
+      "id": "ptreal-company-20210322_140548",
+      "duplicate_of": "ptreal-company-20210321_115948",
+      "business_key": [
+        "flor de val eguas",
+        "fr b19 43",
+        "2019-06-03",
+        8.5
+      ]
+    },
+    {
+      "id": "ptreal-company-20210322_161701",
+      "duplicate_of": "ptreal-company-20210322_163546",
+      "business_key": [
+        "intermarche",
+        "3f5c111219 753",
+        "2019-07-05",
+        1.72
+      ]
+    },
+    {
+      "id": "ptreal-company-20210322_172251",
+      "duplicate_of": "ptreal-company-20210322_172109",
+      "business_key": [
+        "galp",
+        "012010002337faaa00000191072019 000013671",
+        "2019-06-20",
+        40.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210323_161023",
+      "duplicate_of": "ptreal-company-20210322_172109",
+      "business_key": [
+        "galp",
+        "012010002337faaa00000191072019 000013671",
+        "2019-06-20",
+        40.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210323_162221",
+      "duplicate_of": "ptreal-company-20210322_172436",
+      "business_key": [
+        "intermarche",
+        "0eaa061219 134",
+        "2019-06-20",
+        24.99
+      ]
+    },
+    {
+      "id": "ptreal-company-20210323_175940",
+      "duplicate_of": "ptreal-company-20210323_175833",
+      "business_key": [
+        "aldi",
+        "20190075004 00004992",
+        "2019-05-22",
+        5.97
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_162353",
+      "duplicate_of": "ptreal-company-20210326_113614",
+      "business_key": [
+        "norauto",
+        "ft 060600003 332060",
+        "2019-02-24",
+        22.45
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_162552",
+      "duplicate_of": "ptreal-company-20210326_113812",
+      "business_key": [
+        "ferragens g lemos lda",
+        "ft pos19v12 1903880",
+        "2019-02-26",
+        9.51
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_195741",
+      "duplicate_of": "ptreal-company-20210326_121938",
+      "business_key": [
+        "drogaria s marcal lda",
+        "fr 001 12446",
+        "2019-03-14",
+        2.8
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_200119",
+      "duplicate_of": "ptreal-company-20210427_162019",
+      "business_key": [
+        "casa magane",
+        "a 23694",
+        "2019-03-04",
+        7.2
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_200206",
+      "duplicate_of": "ptreal-company-20210427_162159",
+      "business_key": [
+        "jmtd ferragens do combro lda",
+        "a 29649",
+        "2019-03-07",
+        10.5
+      ]
+    },
+    {
+      "id": "ptreal-company-20210324_202134",
+      "duplicate_of": "ptreal-company-20210428_005103",
+      "business_key": [
+        "pingo doce",
+        "ft 04510051901010617 000417",
+        "2019-02-10",
+        3.84
+      ]
+    },
+    {
+      "id": "ptreal-company-20210427_161912",
+      "duplicate_of": "ptreal-company-20210324_200034",
+      "business_key": [
+        "casa travanca capucho",
+        "19ft 001 1045",
+        "2019-03-07",
+        5.25
+      ]
+    },
+    {
+      "id": "ptreal-company-20210427_162556",
+      "duplicate_of": "ptreal-company-20210324_200647",
+      "business_key": [
+        "esil parques de estacionamento s a",
+        "081168",
+        "2019-03-11",
+        4.3
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_144731",
+      "duplicate_of": "ptreal-company-20210428_144738",
+      "business_key": [
+        "montepio geral",
+        "018106",
+        "2019-02-05",
+        1.6
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_150345",
+      "duplicate_of": "ptreal-company-20210428_150208",
+      "business_key": [
+        "autovidreira lda",
+        "fs n 121",
+        "2019-03-18",
+        19.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_150559",
+      "duplicate_of": "ptreal-company-20210428_150208",
+      "business_key": [
+        "autovidreira lda",
+        "fs n 121",
+        "2019-03-18",
+        19.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_151425",
+      "duplicate_of": "ptreal-company-20210428_151418",
+      "business_key": [
+        "parque chao do loureiro",
+        "19 703 000777",
+        "2019-02-21",
+        1.45
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_151922",
+      "duplicate_of": "ptreal-company-20210428_151849",
+      "business_key": [
+        "botaminuto",
+        "ftr 6 3899",
+        "2019-03-02",
+        34.6
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_153242",
+      "duplicate_of": "ptreal-company-20210428_151849",
+      "business_key": [
+        "botaminuto",
+        "ftr 6 3899",
+        "2019-03-02",
+        34.6
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_153631",
+      "duplicate_of": "ptreal-company-20210428_153616",
+      "business_key": [
+        "ctt correios de portugal sa",
+        "fr ctt2019fr881074701 1235",
+        "2019-03-04",
+        5.16
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_182317",
+      "duplicate_of": "ptreal-company-20210428_182337",
+      "business_key": [
+        "drogaria s marcal lda",
+        "fr 001 12623",
+        "2019-04-09",
+        6.3
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_183146",
+      "duplicate_of": "ptreal-company-20210428_183255",
+      "business_key": [
+        "lelimel",
+        "fr 14 8263",
+        "2019-01-03",
+        10.4
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_183626",
+      "duplicate_of": "ptreal-company-20210428_183637",
+      "business_key": [
+        "erilar",
+        "fr 1 1072",
+        "2018-12-06",
+        59.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_191743",
+      "duplicate_of": "ptreal-company-20210428_191730",
+      "business_key": [
+        "propel",
+        "ft 63376100012019 00001440",
+        "2019-03-01",
+        20.32
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_200604",
+      "duplicate_of": "ptreal-company-20210428_200638",
+      "business_key": [
+        "rogerio pais lda",
+        "fs 1a1901 2540",
+        "2019-03-29",
+        5.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_201118",
+      "duplicate_of": "ptreal-company-20210428_201102",
+      "business_key": [
+        "el corte ingles",
+        "fc 014019376a 000156",
+        "2019-05-05",
+        69.9
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_201804",
+      "duplicate_of": "ptreal-company-20210428_201826",
+      "business_key": [
+        "easy style",
+        "fac 1101 00004180",
+        "2019-05-29",
+        12.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_202941",
+      "duplicate_of": "ptreal-company-20210428_203001",
+      "business_key": [
+        "jmtd ferragens do combro lda",
+        "a 30993",
+        "2019-05-07",
+        10.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210428_230149",
+      "duplicate_of": "ptreal-company-20210428_230241",
+      "business_key": [
+        "pingo doce",
+        "ft 08280051901010618 002457",
+        "2019-05-07",
+        4.07
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_181749",
+      "duplicate_of": "ptreal-company-20210429_181657",
+      "business_key": [
+        "delta q",
+        "fs 2a1904 15202",
+        "2019-08-09",
+        32.4
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_190008",
+      "duplicate_of": "ptreal-company-20210429_190156",
+      "business_key": [
+        "dia portugal",
+        "ft 021140220190102 00008700",
+        "2019-09-27",
+        2.97
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_190622",
+      "duplicate_of": "ptreal-company-20210429_190534",
+      "business_key": [
+        "dia portugal",
+        "ft 021140320190102 00008391",
+        "2019-09-02",
+        1.69
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_190725",
+      "duplicate_of": "ptreal-company-20210429_190827",
+      "business_key": [
+        "dia portugal",
+        "ft 021140220190102 00007907",
+        "2019-09-04",
+        2.1
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_191634",
+      "duplicate_of": "ptreal-company-20210429_191705",
+      "business_key": [
+        "galp",
+        "012010004659faaa00000113462019 000025418",
+        "2019-10-01",
+        24.1
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_192107",
+      "duplicate_of": "ptreal-company-20210429_192229",
+      "business_key": [
+        "fnac",
+        "0010182019090000 016477",
+        "2019-09-15",
+        129.99
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_194331",
+      "duplicate_of": "ptreal-company-20210429_194338",
+      "business_key": [
+        "casa travanca capucho",
+        "19ft 001 4194",
+        "2019-09-27",
+        1.6
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_194911",
+      "duplicate_of": "ptreal-company-20210429_194859",
+      "business_key": [
+        "j j figueira lda",
+        "3378 201",
+        "2019-10-02",
+        2.1
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_195855",
+      "duplicate_of": "ptreal-company-20210429_194859",
+      "business_key": [
+        "j j figueira lda",
+        "3378 201",
+        "2019-10-02",
+        2.1
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_200153",
+      "duplicate_of": "ptreal-company-20210429_200119",
+      "business_key": [
+        "pingo doce",
+        "ft 04400021901010617 003644",
+        "2019-07-03",
+        0.99
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_203534",
+      "duplicate_of": "ptreal-company-20210429_203900",
+      "business_key": [
+        "pingo doce",
+        "ft 04400031907201225 000154",
+        "2019-08-07",
+        5.58
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_203641",
+      "duplicate_of": "ptreal-company-20210429_203717",
+      "business_key": [
+        "pingo doce",
+        "ft 04400021901010617 004551",
+        "2019-08-23",
+        1.79
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_205749",
+      "duplicate_of": "ptreal-company-20210429_205727",
+      "business_key": [
+        "pingo doce",
+        "ft 04420061901010621 001881",
+        "2019-10-20",
+        18.89
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_211116",
+      "duplicate_of": "ptreal-company-20210429_211138",
+      "business_key": [
+        "dia portugal",
+        "ft 021140220190102 00007068",
+        "2019-08-08",
+        1.98
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_215912",
+      "duplicate_of": "ptreal-company-20210429_215920",
+      "business_key": [
+        "flying tiger",
+        "19114 199403",
+        "2019-10-03",
+        17.0
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_221716",
+      "duplicate_of": "ptreal-company-20210429_221741",
+      "business_key": [
+        "elencojasmim lda",
+        "fac 101 00023869",
+        "2019-11-25",
+        15.45
+      ]
+    },
+    {
+      "id": "ptreal-company-20210429_221719",
+      "duplicate_of": "ptreal-company-20210429_221741",
+      "business_key": [
+        "elencojasmim lda",
+        "fac 101 00023869",
+        "2019-11-25",
+        15.45
+      ]
+    },
+    {
+      "id": "ptreal-company-20210507_202844",
+      "duplicate_of": "ptreal-company-20210507_202806",
+      "business_key": [
+        "worten",
+        "ft bpn004 041235",
+        "2017-10-05",
+        39.98
+      ]
+    },
+    {
+      "id": "ptreal-company-20210507_203500",
+      "duplicate_of": "ptreal-company-20210507_203502",
+      "business_key": [
+        "copimatica",
+        "ftr 2 68637",
+        "2017-11-11",
+        5.43
+      ]
+    },
+    {
+      "id": "ptreal-company-20210507_215902",
+      "duplicate_of": "ptreal-company-20210507_215936",
+      "business_key": [
+        "portvgalia",
+        "113 156787",
+        "2017-11-20",
+        54.8
+      ]
+    },
+    {
+      "id": "ptreal-company-20210508_144732",
+      "duplicate_of": "ptreal-company-20210508_151222",
+      "business_key": [
+        "supermercado rocha s a",
+        "ft 20182003 422",
+        "2018-10-10",
+        10.4
+      ]
+    },
+    {
+      "id": "ptreal-company-20210508_151333",
+      "duplicate_of": "ptreal-company-20210508_144946",
+      "business_key": [
+        "pingo doce",
+        "ft 04510051801010617 003884",
+        "2018-10-25",
+        14.76
+      ]
+    },
+    {
+      "id": "ptreal-company-20210508_210653",
+      "duplicate_of": "ptreal-company-20210508_210618",
+      "business_key": [
+        "pingo doce",
+        "ft 07610021801010621 000574",
+        "2018-04-06",
+        4.49
+      ]
+    },
+    {
+      "id": "ptreal-company-20210508_211205",
+      "duplicate_of": "ptreal-company-20210508_211208",
+      "business_key": [
+        "aki",
+        "ft 05540111 0182955",
+        "2018-04-26",
+        38.29
+      ]
+    },
+    {
+      "id": "ptreal-personal-20210509_000052",
+      "duplicate_of": "ptreal-personal-20210316_220206",
+      "business_key": [
+        "restaurante manuel julio",
+        "fts 76060",
+        "2021-03-16",
+        21.5
+      ]
+    }
+  ],
+  "probe": {
+    "path": "evaluation/invoice/manifest_pt_real_probe100.jsonl",
+    "size": 100,
+    "seed": 42,
+    "sources": {
+      "real_pt_company": 80,
+      "real_pt_personal": 20
+    },
+    "field_scored": {
+      "currency": 100,
+      "invoice_date": 97,
+      "invoice_number": 98,
+      "tax": 87,
+      "total": 100,
+      "vendor_name": 95
+    }
+  }
+}
