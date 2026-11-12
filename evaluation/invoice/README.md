@@ -4,9 +4,10 @@ This harness measures the TinyDoc prompt/schema on invoices. It is **not** a
 real-supplier invoice benchmark and not an independent evaluation.
 
 > **Real-document probe:** `PT_REAL.md` documents the separate 100-document
-> Portuguese invoice/receipt probe built from public CC BY 4.0 phone photos.
-> It is a five-field transfer probe, not a nine-field invoice benchmark and not
-> a leaderboard result.
+> Portuguese invoice/receipt probe built from public CC BY 4.0 phone photos;
+> `PT_REAL_RESULTS.md` reports the first measurement. It is a five-field
+> transfer probe, not a nine-field invoice benchmark and not a leaderboard
+> result.
 
 ## Corpus
 
@@ -315,6 +316,16 @@ before using it as a gate.
   record the source/prepared hashes before inference.
 - `pt_score.py` — five-field scorer for the Portuguese probe, using the same
   vendor/number/date/money rules as the benchmark scorer.
+- `preds_from_pagewise_rows.py` — rebuild merged and raw prediction files from
+  saved rows without dropping merge-sanity flags.
+- `audit_pt_rows.py` — page/parse/completion/output-budget audit for the
+  real-document probe.
+- `analyze_pt_errors.py` — residual categories (dot-decimal misreads,
+  tax-inclusive double counts, number digit errors, vendor aliases).
+- `make_pt_holdout.py` — draw the disjoint seed-43 holdout from the 843
+  documents not in the development probe.
+- `PT_REAL_RESULTS.md` — the measured development-probe result, including the
+  merge regression and the preserve-printed-total fix.
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

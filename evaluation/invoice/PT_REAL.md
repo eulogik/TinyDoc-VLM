@@ -1,9 +1,11 @@
 # Real Portuguese invoice/receipt probe (field subset)
 
 **Status:** source downloaded, checksum-verified, deduplicated, and frozen into a
-100-document probe. **No model has been run on it yet.** Any number produced
-from it is a real-world transfer probe, not an external leaderboard result and
-not a full nine-field invoice benchmark.
+100-document development probe. The baseline has been measured once; the
+seed-43 holdout is prepared but **not run**. Results:
+[PT_REAL_RESULTS.md](PT_REAL_RESULTS.md). Any number produced from it is a
+real-world transfer probe, not an external leaderboard result and not a full
+nine-field invoice benchmark.
 
 ## Source
 
@@ -72,22 +74,21 @@ due-date column.
   their labels provide.
 - The sample was fixed before any model run.
 
-## Protocol (when approved)
+## Protocol
 
-1. Run the canonical page prompt (v1) on page 1 of 1 with
-   `qwen3-vl:2b-instruct` through Ollama.
-2. Match the product page cap: resize the long side to 1400 px, then evaluate a
-   2400 px variant only if the smoke run shows resolution is the binding
-   constraint.
-3. Score with the benchmark's MIT scorer rules: fuzzy vendor (legal forms and
-   punctuation ignored), exact invoice number, ISO date, ISO currency, and
-   cent-exact money.
-4. Report per-field accuracy, documents with all available fields correct, and
-   a stricter all-six-fields count on the 80 documents that have all six. Report
-   exact binomial intervals, parse/schema rate, and latency.
-5. Label it **"real Portuguese receipt/invoice field-subset probe"** in every
-   public surface. Never merge it into the synthetic benchmark's key-header
-   number.
+The baseline run used the canonical page prompt (v1), one page per document,
+`qwen3-vl:2b-instruct`, long side 1400 px (the product cap), 8192 context, and a
+2048-token output cap. The scorer uses the benchmark's MIT rules with Portuguese
+legal-form stopwords. The merge was measured twice from the same saved raws:
+once with the shipped 0.3.0 merge and once with the preserve-printed-total fix.
+
+The seed-43 holdout (`manifest_pt_real_holdout100.jsonl`) is disjoint from the
+development 100 and is frozen. Do not tune on it; run it only with a frozen
+prompt/merge candidate.
+
+Label it **"real Portuguese receipt/invoice field-subset probe"** in every
+public surface. Never merge it into the synthetic benchmark's key-header
+number.
 
 ## Limitations
 

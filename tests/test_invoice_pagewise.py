@@ -297,3 +297,45 @@ def test_symbol_map_is_exact():
     assert symbol_currency("EUR") == "EUR"
     assert symbol_currency("NAD") == "NAD"
     assert symbol_currency("not-a-symbol") is None
+
+
+def test_printed_total_is_preserved_on_tax_inclusive_receipt():
+    # A Portuguese receipt prints a gross total and the VAT amount, not a net
+    # subtotal. The old merge rewrote 32.00 as 32.00 + 5.98.
+    page = _page(
+        line_items=[{"description": "A", "amount": 32.0}],
+        subtotal=32.0,
+        tax=5.98,
+        total=32.0,
+    )
+    merged = merge_pages([page], "doc")
+    assert merged["total_amount"] == 32.0
+    assert merged["tax"] == 5.98
+    assert "corrections" not in merged or "total_from_subtotal_tax" not in merged["corrections"]
+
+
+def test_derived_subtotal_does_not_rewrite_printed_tax():
+    # The receipt prints total 10.00 and VAT 0.65 but no net subtotal. The line
+    # sum is not a printed subtotal and must not drive a tax overwrite.
+    page = _page(
+        line_items=[{"description": "A", "amount": 6.98}],
+        subtotal=None,
+        tax=0.65,
+        total=10.0,
+    )
+    merged = merge_pages([page], "doc")
+    assert merged["tax"] == 0.65
+    assert merged["total_amount"] == 10.0
+
+
+def test_small_total_below_subtotal_is_not_treated_as_truncation():
+    # A 0.10 discount/rounding is not a truncated total (the repair threshold is
+    # the larger of 1.00 and 5% of the printed subtotal).
+    page = _page(
+        line_items=[{"description": "A", "amount": 13.3}],
+        subtotal=13.3,
+        tax=1.52,
+        total=13.2,
+    )
+    merged = merge_pages([page], "doc")
+    assert merged["total_amount"] == 13.2

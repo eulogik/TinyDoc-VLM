@@ -222,9 +222,15 @@ repairs. It then adds deterministic reconciliation:
 
 1. **Last-page currency.** The final page prints the totals and normally the
    currency; a printed `N$`/`R`/`$`/`€`/`£` beats a model-guessed code.
-2. **Arithmetic repairs.** A small subtotal residual is resolved toward
-   `total − tax`; a truncated tax is derived from `total − subtotal`; a missing
-   total is taken from `subtotal + tax` when line items corroborate the subtotal.
+2. **Conservative arithmetic.** A printed total and a printed tax are
+   authoritative. A small subtotal residual is resolved toward `total − tax`, a
+   truncated tax is derived from `total − subtotal`, and a total is derived only
+   when it is missing or structurally impossible (less than 95% of a printed
+   subtotal). Inconsistencies are flagged; they are not silently rewritten.
+   This policy was tightened after the real Portuguese probe below, where the
+   old unconditional `total = subtotal + tax` rewrite double-counted VAT on 50
+   tax-inclusive receipts. The 86/90 non-OCR row in the table was measured with
+   the 0.3.0 merge; the OCR 90/90 row is unchanged.
 3. **OCR printed totals.** `totals_ocr.py` reads the final page with tesseract
    and accepts a subtotal/tax/total block only when all three labels are found,
    `subtotal + tax == total` within 0.05, and the implied tax rate is 0–35%.
@@ -326,6 +332,60 @@ a production multipage claim. Artifacts:
 `compare_invoice_clean_vs_degraded_2b.json`,
 `audit_invoice_qwen3-vl_2b_mp_pagewise_degraded_ocr.json`,
 `degrade_mp_recipe_42.json`.
+
+### Real Portuguese receipts and invoices (five fields, n=100, development set)
+
+A separate probe adds **real documents**, not synthetic invoices: 100 phone
+photos of Portuguese receipts and simplified invoices (80 from a private
+company, 20 personal), CC BY 4.0, with human transcriptions of vendor, invoice
+number, date, currency, tax, and total. It is a **five-field transfer probe**,
+not the nine-field invoice benchmark and not a B2B supplier-invoice set.
+
+Setup: `qwen3-vl:2b-instruct`, canonical page prompt v1, long side 1400 px,
+8192 context, 2048 output cap, one page per document. One of 100 documents hit
+the output cap with runaway line items (`done_reason: length`) and produced no
+JSON; it is counted wrong. p50 latency 8.7 s/doc.
+
+| Path (same model outputs) | Field accuracy | Fully correct | All six (n=80) |
+|---|---:|---:|---:|
+| 0.3.0 shipped merge | 374/577 = **64.8%** | 3/100 = **3%** | 2/80 = **2.5%** |
+| Preserve-printed-total merge (unreleased) | 428/577 = **74.2%** | 18/100 = **18%** | 13/80 = **16.3%** |
+
+Exact 95% intervals for the fixed merge: field accuracy 70.4–77.7%; fully
+correct 11.0–26.9%. The field interval is optimistic because fields cluster
+within documents.
+
+| Field | Shipped merge | Fixed merge | 95% CI (fixed) |
+|---|---:|---:|---:|
+| Currency | 96/100 (96.0%) | 96/100 (96.0%) | 90.1–98.9% |
+| Invoice date | 93/97 (95.9%) | 93/97 (95.9%) | 89.8–98.9% |
+| Invoice number | 44/98 (44.9%) | 44/98 (44.9%) | 34.8–55.3% |
+| Tax | 67/87 (77.0%) | 68/87 (78.2%) | 68.0–86.3% |
+| Total | 19/100 (19.0%) | 72/100 (72.0%) | 62.1–80.5% |
+| Vendor | 55/95 (57.9%) | 55/95 (57.9%) | 47.3–68.0% |
+
+**What broke.** The 0.3.0 merge rewrote a printed total as `subtotal + tax`. On
+tax-inclusive receipts that double-counted VAT and turned 50 correct printed
+totals into wrong ones. Preserving the printed total and tax recovers 53
+documents with no new model call. The fixed merge also leaves 83/100 documents
+with an arithmetic review flag rather than silently repairing them.
+
+**Residuals after the field-level reading (fixed merge).** Total 28/100 wrong:
+five dot-decimal misreads (`8.88` → `8880`), nine model-computed totals that add
+tax to a tax-inclusive amount, three missing, and the rest line-amount/digit
+errors. Invoice number 54/98 wrong: 17 one-or-two-digit errors, 11 empty, 26
+wrong-field/other. Vendor 40/95 wrong: 12 brand-vs-legal-entity cases and 27
+wrong-seller cases. Currency is 96/100 (two `BRL`, one `E`, one empty); date is
+93/97.
+
+**Caveats that travel with every number.** The 100 documents are a development
+set; the merge fix was designed after seeing their failures, so 74.2% is a
+**post-hoc** result. A disjoint seed-43 holdout is frozen but **not run**. The
+0.3.0 wheel on PyPI does not contain the fix. No line-item, due-date, flag
+quality, confidence-calibration, or real-B2B-supplier claim is supported by this
+probe. Labels are human transcriptions and contain noise; implausible tax values
+were excluded, not corrected. Full method and artifacts:
+[`evaluation/invoice/PT_REAL_RESULTS.md`](../evaluation/invoice/PT_REAL_RESULTS.md).
 
 ### DocVQA reading probe (2B, 200 questions, single reference)
 

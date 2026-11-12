@@ -312,9 +312,11 @@ def merge_pages(pages: Sequence[dict], doc_id: str = "") -> dict:
             lines.append({"description": description, "amount": amount})
 
     final = pages[-1] if pages else {}
-    subtotal = _num(final.get("subtotal"))
+    printed_subtotal = _num(final.get("subtotal"))
+    subtotal = printed_subtotal
     tax = _num(final.get("tax"))
-    total = _num(final.get("total", final.get("total_amount")))
+    printed_total = _num(final.get("total", final.get("total_amount")))
+    total = printed_total
     line_sum = sum(item["amount"] for item in lines if item.get("amount") is not None)
 
     if subtotal is None and lines:
@@ -347,7 +349,11 @@ def merge_pages(pages: Sequence[dict], doc_id: str = "") -> dict:
         "references": [],
     }
     normalized = normalize_prediction(merged, doc_id)
-    normalized, corrections = reconcile_totals(normalized)
+    normalized, corrections = reconcile_totals(
+        normalized,
+        preserve_total=printed_total is not None,
+        subtotal_is_printed=printed_subtotal is not None,
+    )
     if corrections:
         normalized["corrections"] = corrections
     return normalized
@@ -361,13 +367,19 @@ def reconcile_totals(
     merged: dict,
     rel_tol: float = 0.001,
     abs_tol: float = 0.02,
+    preserve_total: bool = True,
+    subtotal_is_printed: bool = True,
 ) -> Tuple[dict, List[str]]:
     """Repair a total only when the extracted line items corroborate the subtotal.
 
-    This is internal consistency, not gold: if the line amounts sum to the printed
-    subtotal, then subtotal + tax is the best available total. A printed total
-    that disagrees is replaced and the correction is recorded. If the line sum
-    does not corroborate the subtotal, nothing is changed.
+    This is internal consistency, not gold. A printed total is authoritative:
+    subtotal/tax repairs must stay consistent with it, and the total is replaced
+    only when the page did not print one or the printed value is structurally
+    impossible (for example, 12.00 under a printed 100.00 subtotal). The old
+    unconditional
+    ``total = subtotal + tax`` rewrite double-counted VAT on tax-inclusive
+    receipts (50 of 100 real Portuguese receipts), so ``preserve_total`` defaults
+    to true; callers pass false only when they know the total was derived.
     """
     corrections: List[str] = []
     lines = merged.get("line_items") or []
@@ -422,7 +434,7 @@ def reconcile_totals(
     if abs(line_sum - subtotal) > _tolerance(subtotal, rel_tol, abs_tol):
         return merged, corrections
 
-    if tax is not None and total is not None:
+    if tax is not None and total is not None and subtotal_is_printed:
         implied_tax = round(total - subtotal, 2)
         plausible = abs(total) > abs(subtotal) and abs(implied_tax) <= 0.5 * abs(
             subtotal
@@ -434,7 +446,20 @@ def reconcile_totals(
 
     if tax is not None:
         computed = round(subtotal + tax, 2)
-        if total is None or abs(computed - total) > _tolerance(total, rel_tol, abs_tol):
+        # A printed total below a printed subtotal by a wide margin is a
+        # truncation (12.00 for 120.00), not a tax-inclusive receipt (where
+        # subtotal and total are normally equal).
+        impossible = (
+            subtotal_is_printed
+            and total is not None
+            and (subtotal - total) > max(1.0, 0.05 * abs(subtotal))
+        )
+        if total is None:
+            merged["total_amount"] = computed
+            corrections.append("total_from_subtotal_tax")
+        elif (impossible or not preserve_total) and abs(computed - total) > _tolerance(
+            total, rel_tol, abs_tol
+        ):
             merged["total_amount"] = computed
             corrections.append("total_from_subtotal_tax")
     elif total is not None:

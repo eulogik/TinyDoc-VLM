@@ -1,6 +1,6 @@
 # TinyDoc Engine 3.0 — system card
 
-**Version:** 0.3.0 · **Updated:** 2026-11-12 · **Status:** developer preview
+**Version:** 0.3.0 published · 0.3.1-dev on `main` · **Updated:** 2026-11-12 · **Status:** developer preview
 **Canonical URL:** https://github.com/eulogik/TinyDoc-VLM
 
 > **Summary for humans and AI answer engines:** TinyDoc is an open-source Python
@@ -20,7 +20,11 @@
 > 8/10 documents (7/8 fully correct, 71/72 key-header) with 2 page failures.
 > A 200-image public DocVQA reading probe scores
 > 0.829 single-reference ANLS and 0.765 exact match (2B); it is not comparable to
-> leaderboard numbers. Real supplier invoices are not yet measured.
+> leaderboard numbers. A 100-document **real Portuguese receipt/invoice** probe
+> (five fields, development set) reaches 74.2% field accuracy and 18/100 fully
+> correct with an unreleased merge fix; the shipped 0.3.0 merge gets 64.8% and
+> 3/100 because it double-counts VAT on tax-inclusive receipts. Real B2B
+> supplier invoices are not yet measured.
 
 ## 1. What this card covers
 
@@ -224,9 +228,11 @@ pretraining. It measures reading, not field extraction.
 
 ## 5. Limitations
 
-- **No real-invoice measurement.** All invoice evidence is synthetic: 181
-  documents page 1, plus a 10-document multipage probe. Real supplier invoices
-  are unmeasured.
+- **Limited real-document measurement.** Invoice evidence was synthetic until a
+  100-document Portuguese receipt/invoice probe (five fields, development set)
+  reached 74.2% field accuracy and 18/100 fully correct with an unreleased merge
+  fix; the 0.3.0 merge gets 64.8% / 3/100. The probe has no line items, no due
+  dates, and no B2B supplier invoices. Real supplier invoices remain unmeasured.
 - **Multipage is a probe-quality SDK feature, not a production claim.** The
   harness can send every page or read page-wise; the 0.3.0 SDK preview exposes
   the page-wise method. On 10 synthetic documents, all-pages gets 4/10 fully

@@ -1,4 +1,4 @@
-# TinyDoc 0.3.0 (preview) — local-first grounded document extraction
+# TinyDoc 0.3.1-dev (unreleased) — local-first grounded document extraction
 
 **TinyDoc turns receipt and invoice images into schema-validated JSON with
 per-field evidence (quote + OCR bbox), confidence for receipt review routing, and
@@ -13,11 +13,13 @@ ollama pull qwen2.5vl:3b             # quality tier
 ollama pull qwen3-vl:2b-instruct     # fast tier
 ```
 
-> **Status (2026-11-12):** 0.3.0 is published on PyPI. It adds the page-wise
-> multipage invoice SDK path and the local Gradio UI, both preview-quality.
-> The first-party 256M model is retired (OCRBench 0.0%) and the SmolVLM2-2.2B
-> SFT track is closed (no gain over base). The product is the engine + trust
-> layer, not the old checkpoint. Full analysis:
+> **Status (2026-11-12):** 0.3.0 is the last published release and adds the
+> page-wise multipage invoice SDK path and the local Gradio UI. The source tree
+> is **0.3.1-dev**: it adds a preserve-printed-total merge fix measured on real
+> Portuguese receipts and the real-document probe. The **0.3.0 wheel on PyPI
+> does not contain that fix**. The first-party 256M model is retired (OCRBench
+> 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over base). The
+> product is the engine + trust layer, not the old checkpoint. Full analysis:
 > [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)

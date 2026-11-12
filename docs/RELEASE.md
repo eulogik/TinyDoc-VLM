@@ -1,13 +1,13 @@
 # TinyDoc release checklist
 
-**Current target:** `tinydoc` 0.3.0 (page-wise invoice SDK + local UI), published.
+**Current target:** 0.3.1-dev on `main` (preserve-printed-total merge fix + real Portuguese probe).
 **Last published:** 0.3.0 on 2026-11-12 (multipage + UI).
 
 ## 1. Preflight (must all pass)
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 228 passed
+python3 -m pytest tests/ -q                 # expect 245 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -122,6 +122,22 @@ Check the Space reaches `RUNNING` and renders the card.
 - Space card and repository docs describe the 0.3.0 release as preview-quality.
 - Tag **`sdk-v0.3.0`** at the release commit; do not move `v0.2.0` or
   `sdk-v0.2.0`.
+
+## 0.3.1-dev status (unreleased)
+
+- **The 0.3.0 wheel does not contain the merge fix.** On `main`,
+  `reconcile_totals` preserves a printed total and a printed tax; a total is
+  derived only when missing or structurally impossible. This was measured by
+  rebuilding the same real-document page raws, not by a new model run.
+- Real Portuguese probe, seed-42 development set, 100 real photos, five fields:
+  **64.8% field / 3/100 fully correct** with the 0.3.0 merge, **74.2% / 18/100**
+  with the fix. One document hit the 2048-token cap and produced no JSON.
+- The seed-43 holdout (`manifest_pt_real_holdout100_1400.jsonl`) is frozen but
+  **not run**. Do not publish 74.2% as a held-out number.
+- Before a 0.3.1 release: run the holdout, decide whether the receipt-aware
+  prompt is in scope, bump `sdk/setup.py`, rebuild both schemas into the wheel,
+  clean-venv install, upload, tag **`sdk-v0.3.1`**, and update the install lines
+  and site. Do not reuse `sdk-v0.3.0`.
 
 ## 0.2.0 status (2026-11-07)
 

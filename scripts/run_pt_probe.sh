@@ -41,6 +41,9 @@ ARGS=(
 if [ "$LIMIT" -gt 0 ]; then
   ARGS+=(--limit "$LIMIT")
 fi
+if [ "${TINYDOC_RESUME:-0}" = "1" ]; then
+  ARGS+=(--resume)
+fi
 
 "${ARGS[@]}" >>"$LOG" 2>&1 &
 PID=$!
@@ -62,6 +65,12 @@ while kill -0 "$PID" 2>/dev/null; do
     END {printf "%d", (free+inactive+spec)*ps/1048576}
   ')"
   if [ "$FREE_MB" -lt "$MIN_FREE_MB" ]; then
+    # Give a just-finished runner a moment to exit; killing it after it has
+    # written every row would turn a successful run into a false failure.
+    sleep 5
+    if ! kill -0 "$PID" 2>/dev/null; then
+      break
+    fi
     {
       echo "watchdog: free=${FREE_MB}MB below ${MIN_FREE_MB}MB; killing runner"
       vm_stat | head -8
@@ -74,5 +83,10 @@ while kill -0 "$PID" 2>/dev/null; do
   sleep 10
 done
 
-wait "$PID"
-echo "run complete tag=$TAG rows=$ROWS preds=$PREDS" | tee -a "$LOG"
+if wait "$PID"; then
+  echo "run complete tag=$TAG rows=$ROWS preds=$PREDS" | tee -a "$LOG"
+else
+  rc=$?
+  echo "run failed tag=$TAG rc=$rc rows=$ROWS" | tee -a "$LOG"
+  exit "$rc"
+fi

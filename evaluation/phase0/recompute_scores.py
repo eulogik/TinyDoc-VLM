@@ -771,6 +771,130 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"degraded multipage check errored: {exc}")
 
+    # Real Portuguese probe: 100 real phone photos, five fields. This is a
+    # development-set measurement; the seed-43 holdout is prepared but not run.
+    pt_manifest = ROOT.parent / "invoice/manifest_pt_real_probe100.jsonl"
+    pt_manifest_1400 = ROOT.parent / "invoice/manifest_pt_real_probe100_1400.jsonl"
+    pt_holdout = ROOT.parent / "invoice/manifest_pt_real_holdout100.jsonl"
+    pt_holdout_1400 = ROOT.parent / "invoice/manifest_pt_real_holdout100_1400.jsonl"
+    pt_rows = ROOT.parent / "invoice/results/rows_invoice_pt_probe100_1400.jsonl"
+    pt_scores = ROOT.parent / "invoice/results/scores_invoice_pt_probe100_1400_full.json"
+    pt_summary = ROOT.parent / "invoice/results/summary_invoice_pt_probe100_1400_full.json"
+    pt_fix_scores = ROOT.parent / "invoice/results/scores_invoice_pt_probe100_1400_mergefix5.json"
+    pt_fix_summary = ROOT.parent / "invoice/results/summary_invoice_pt_probe100_1400_mergefix5.json"
+    pt_audit = ROOT.parent / "invoice/results/audit_invoice_pt_probe100_1400.json"
+    pt_prep = ROOT.parent / "invoice/results/pt_real_probe_prep_1400.json"
+    pt_holdout_prep = ROOT.parent / "invoice/results/pt_real_holdout_prep_1400.json"
+    pt_missing = [
+        path.name
+        for path in (
+            pt_manifest, pt_manifest_1400, pt_holdout, pt_holdout_1400, pt_rows,
+            pt_scores, pt_summary, pt_fix_scores, pt_fix_summary, pt_audit,
+            pt_prep, pt_holdout_prep,
+        )
+        if not path.exists()
+    ]
+    if pt_missing:
+        failures.append(f"real PT probe artifacts missing: {pt_missing}")
+    else:
+        try:
+            pman = [json.loads(line) for line in pt_manifest.open() if line.strip()]
+            pman1400 = [json.loads(line) for line in pt_manifest_1400.open() if line.strip()]
+            phold = [json.loads(line) for line in pt_holdout.open() if line.strip()]
+            phold1400 = [json.loads(line) for line in pt_holdout_1400.open() if line.strip()]
+            prows = [json.loads(line) for line in pt_rows.open() if line.strip()]
+            psc = json.loads(pt_scores.read_text())
+            psum = json.loads(pt_summary.read_text())
+            pfsc = json.loads(pt_fix_scores.read_text())
+            pfsum = json.loads(pt_fix_summary.read_text())
+            paud = json.loads(pt_audit.read_text())
+            pprep = json.loads(pt_prep.read_text())
+            phprep = json.loads(pt_holdout_prep.read_text())
+
+            def _pt_counts(scores):
+                docs = scores.get("documents") or []
+                correct = scored = fully = six = six_scored = 0
+                per_field = {}
+                for doc in docs:
+                    fields = doc.get("fields") or {}
+                    correct += sum(1 for item in fields.values() if item.get("correct"))
+                    scored += len(fields)
+                    fully += int(bool(doc.get("fully_correct")))
+                    six += int(bool(doc.get("fully_correct_six")))
+                    six_scored += int(bool(doc.get("all_six_scored")))
+                    for name, item in fields.items():
+                        bucket = per_field.setdefault(name, [0, 0])
+                        bucket[1] += 1
+                        bucket[0] += int(bool(item.get("correct")))
+                return correct, scored, fully, six, six_scored, per_field
+
+            correct, scored, fully, six, six_scored, per_field = _pt_counts(psc)
+            fcorrect, fscored, ffully, fsix, fsix_scored, fper = _pt_counts(pfsc)
+            expected_full = {
+                "currency": [96, 100],
+                "invoice_date": [93, 97],
+                "invoice_number": [44, 98],
+                "tax": [67, 87],
+                "total": [19, 100],
+                "vendor_name": [55, 95],
+            }
+            expected_fix = {
+                "currency": [96, 100],
+                "invoice_date": [93, 97],
+                "invoice_number": [44, 98],
+                "tax": [68, 87],
+                "total": [72, 100],
+                "vendor_name": [55, 95],
+            }
+            dev_ids = {str(row["id"]) for row in pman}
+            ok = (
+                len(pman) == 100
+                and len(pman1400) == 100
+                and dev_ids == {str(row["id"]) for row in pman1400}
+                and len(prows) == 100
+                and (correct, scored) == (374, 577)
+                and fully == 3
+                and (six, six_scored) == (2, 80)
+                and (fcorrect, fscored) == (428, 577)
+                and ffully == 18
+                and (fsix, fsix_scored) == (13, 80)
+                and per_field == expected_full
+                and fper == expected_fix
+                and abs(float(psum.get("field_accuracy", -1)) - 374 / 577) < 1e-9
+                and abs(float(pfsum.get("field_accuracy", -1)) - 428 / 577) < 1e-9
+                and psum.get("fully_correct") == 3
+                and pfsum.get("fully_correct") == 18
+                and psum.get("fully_correct_six") == 2
+                and pfsum.get("fully_correct_six") == 13
+                and paud.get("documents") == 100
+                and paud.get("rows") == 100
+                and paud.get("failed") == 1
+                and paud.get("allowed_failed") == 1
+                and [item.get("doc_id") for item in paud.get("failures") or []]
+                == ["ptreal-personal-20210215_164929"]
+                and (paud.get("failures") or [{}])[0].get("detail") == "no JSON object; done_reason=length"
+                and (paud.get("truncated_pages") or [{}])[0].get("eval_count") == 2048
+                and pprep.get("documents") == 100
+                and pprep.get("max_px") == 1400
+                and pprep.get("resized") == 100
+                and len(phold) == 100
+                and len(phold1400) == 100
+                and {str(row["id"]) for row in phold} == {str(row["id"]) for row in phold1400}
+                and not (dev_ids & {str(row["id"]) for row in phold})
+                and phprep.get("documents") == 100
+                and phprep.get("max_px") == 1400
+            )
+            print(
+                f"claim: real PT probe 2B 1400px 100 docs -> field {correct}/{scored} "
+                f"({correct / scored:.4f}), fully {fully}/100; merge fix {fcorrect}/{fscored} "
+                f"({fcorrect / fscored:.4f}), fully {ffully}/100; holdout "
+                f"{len(phold)} docs disjoint -> {'PASS' if ok else 'FAIL'}"
+            )
+            if not ok:
+                failures.append("real PT probe numbers, failure accounting, or holdout split changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"real PT probe check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"
