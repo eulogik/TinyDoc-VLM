@@ -125,11 +125,12 @@ production multipage claim. Artifacts:
 `run_invoice_pagewise.py` sends **one page per request**, asks for that page's
 line items and header fields, drops carried/brought-forward and total rows in
 code, then merges: first non-empty header, concatenated line items, and
-final-page totals. It also makes three narrow internal-consistency repairs and
-records each one: a total from `subtotal + tax` when the line items corroborate
-the subtotal; a small subtotal residual resolved toward `total - tax`; and a
-nonzero tax below 0.1% of the total derived from `total - subtotal` (a
-leading-digit truncation). No repair reads gold. The canonical prompt is **v1**.
+final-page totals. Printed totals and printed tax are authoritative: a small
+subtotal residual is resolved toward `total - tax`, a nonzero tax below 0.1% of
+the total is derived from `total - subtotal` (a leading-digit truncation), and a
+total is derived from `subtotal + tax` only when it is missing or structurally
+impossible. Inconsistencies are flagged rather than silently rewritten. No
+repair reads gold. The canonical prompt is **v1**.
 Run it with approval:
 
 ```bash
