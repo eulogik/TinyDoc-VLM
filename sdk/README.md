@@ -13,16 +13,14 @@ ollama pull qwen2.5vl:3b             # quality tier
 ollama pull qwen3-vl:2b-instruct     # fast tier
 ```
 
-> **Status (2026-11-13):** 0.3.0 is the last published release and adds the
-> page-wise multipage invoice SDK path and the local Gradio UI. The source tree
-> is **0.3.1-dev**: it adds a preserve-printed-total merge fix measured on real
-> Portuguese receipts (74.2% field / 18-of-100 development, 72.0% / 22-of-100
-> held out at 1400 px) and a validated targeted tax retry (fresh 100-doc set:
-> 401/570 → 411/570, tax 51/82 → 61/82, +2 fully correct, no regression).
-> The **0.3.0 wheel on PyPI does not contain these fixes**. The first-party 256M
-> model is retired (OCRBench 0.0%) and the SmolVLM2-2.2B SFT track is closed
-> (no gain over base). The product is the engine + trust layer, not the old
-> checkpoint. Full analysis:
+> **Status (2026-11-13):** 0.3.1 is the current release (PyPI). It ships the
+> preserve-printed-total merge fix (real Portuguese probe: 74.2% field /
+> 18-of-100 development, 72.0% / 22-of-100 held out at 1400 px) and the
+> validated targeted tax retry (fresh 100-doc set: 401/570 → 411/570, tax
+> 51/82 → 61/82, +2 fully correct, no regression). The 0.3.0 wheel on PyPI
+> does not contain these fixes. The first-party 256M model is retired (OCRBench
+> 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over base). The
+> product is the engine + trust layer, not the old checkpoint. Full analysis:
 > [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
