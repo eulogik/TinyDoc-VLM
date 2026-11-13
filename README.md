@@ -243,6 +243,14 @@ PyPI does **not** contain the fix. Method, exact intervals, residual categories,
 and artifacts:
 [`evaluation/invoice/PT_REAL_RESULTS.md`](evaluation/invoice/PT_REAL_RESULTS.md).
 
+A validated targeted tax retry is also in progress on `main`: on a fresh
+100-document set (seed 44) it moves tax 51/82 → 61/82 and field accuracy
+401/570 → 411/570 (+10 fields, +1.8 pp), fully correct 19 → 21, with no field
+regression. It re-reads only the final page at 2400 px on ~23% of documents,
+triggered by a structurally implausible printed tax, and accepts a candidate
+only when the implied VAT rate is 1.0–27.5%. See
+[`evaluation/invoice/PT_TAX_RETRY.md`](evaluation/invoice/PT_TAX_RETRY.md).
+
 **DocVQA reading probe** — 200 public images, one question per image, 768 px
 mirror, one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS** and
 **0.765 exact match**, 0 errors, p50 3.36 s. This measures document reading, not

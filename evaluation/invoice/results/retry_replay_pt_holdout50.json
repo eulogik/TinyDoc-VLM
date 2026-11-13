@@ -1,0 +1,229 @@
+{
+  "label": "holdout50 replay",
+  "documents": 50,
+  "triggered": 15,
+  "applied": 11,
+  "baseline": {
+    "field_correct": 211,
+    "field_scored": 289,
+    "field_accuracy": 0.7301038062283737,
+    "fully_correct": 11,
+    "fully_correct_six": 8,
+    "six_scored": 40
+  },
+  "retry": {
+    "field_correct": 221,
+    "field_scored": 289,
+    "field_accuracy": 0.7647058823529411,
+    "fully_correct": 13,
+    "fully_correct_six": 10,
+    "six_scored": 40
+  },
+  "per_field": {
+    "currency": {
+      "before_correct": 49,
+      "after_correct": 49,
+      "scored": 50,
+      "delta": 0
+    },
+    "invoice_date": {
+      "before_correct": 44,
+      "after_correct": 44,
+      "scored": 48,
+      "delta": 0
+    },
+    "invoice_number": {
+      "before_correct": 19,
+      "after_correct": 19,
+      "scored": 48,
+      "delta": 0
+    },
+    "tax": {
+      "before_correct": 30,
+      "after_correct": 40,
+      "scored": 46,
+      "delta": 10
+    },
+    "total": {
+      "before_correct": 41,
+      "after_correct": 41,
+      "scored": 50,
+      "delta": 0
+    },
+    "vendor_name": {
+      "before_correct": 28,
+      "after_correct": 28,
+      "scored": 47,
+      "delta": 0
+    }
+  },
+  "fields_gained": 10,
+  "fields_lost": 0,
+  "changes": [
+    {
+      "doc_id": "ptreal-company-20210321_120551",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 1609.0,
+      "tax_candidate": 14.37,
+      "tax_after": 14.37,
+      "expected": 14.37,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210322_172436",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 20.32,
+      "tax_candidate": 4.67,
+      "tax_after": 4.67,
+      "expected": 4.67,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210323_183805",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 20.95,
+      "tax_candidate": 20.95,
+      "tax_after": 20.95,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210326_113812",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 9.51,
+      "tax_candidate": 1.78,
+      "tax_after": 1.78,
+      "expected": 1.78,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_005103",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 3.74,
+      "tax_candidate": 0.43,
+      "tax_after": 0.43,
+      "expected": 0.43,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_135731",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 23.0,
+      "tax_candidate": 1.87,
+      "tax_after": 1.87,
+      "expected": 1.87,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_141337",
+      "trigger": "tax_under_one_percent",
+      "tax_before": 0.1,
+      "tax_candidate": 3.72,
+      "tax_after": 3.72,
+      "expected": 3.72,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_142929",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_194558",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 5.18,
+      "tax_candidate": 0.97,
+      "tax_after": 0.97,
+      "expected": 0.97,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_194905",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 3.5,
+      "tax_candidate": 3.5,
+      "tax_after": 3.5,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_221203",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.97,
+      "tax_after": 0.97,
+      "expected": 0.97,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_172257",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 5.58,
+      "tax_candidate": 1.04,
+      "tax_after": 1.04,
+      "expected": 1.04,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210213_135622",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 9.92,
+      "tax_candidate": 2.28,
+      "tax_after": 2.28,
+      "expected": 2.28,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002109",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 14.09,
+      "tax_candidate": 0.85,
+      "tax_after": 0.85,
+      "expected": 0.47,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002620",
+      "trigger": "tax_under_one_percent",
+      "tax_before": 15.35,
+      "tax_candidate": 1535.0,
+      "tax_after": 15.35,
+      "expected": 3.55,
+      "accepted": false,
+      "correct_before": false,
+      "correct_after": false
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "system": "TinyDoc v1 1400px + targeted 2400 tax retry, fresh seed 44",
+  "run_date": "2026-11-13",
+  "n_docs": 100,
+  "field_accuracy": 0.7210526315789474,
+  "field_correct": 411,
+  "field_scored": 570,
+  "fully_correct": 21,
+  "fully_correct_rate": 0.21,
+  "fully_correct_six": 13,
+  "six_scored": 74,
+  "fully_correct_six_rate": 0.17567567567567569,
+  "ci95_exact": {
+    "field_accuracy": [
+      0.6822757236757614,
+      0.7575205244227581
+    ],
+    "fully_correct_rate": [
+      0.13494369570532916,
+      0.3029153793505408
+    ],
+    "fully_correct_six_rate": [
+      0.09699276945158891,
+      0.28165670107764
+    ],
+    "note": "Clopper-Pearson. The field interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level intervals for fully-correct rates."
+  },
+  "per_field": {
+    "currency": {
+      "correct": 94,
+      "scored": 100,
+      "accuracy": 0.94
+    },
+    "invoice_date": {
+      "correct": 91,
+      "scored": 98,
+      "accuracy": 0.9285714285714286
+    },
+    "invoice_number": {
+      "correct": 43,
+      "scored": 96,
+      "accuracy": 0.4479166666666667
+    },
+    "tax": {
+      "correct": 61,
+      "scored": 82,
+      "accuracy": 0.7439024390243902
+    },
+    "total": {
+      "correct": 68,
+      "scored": 100,
+      "accuracy": 0.68
+    },
+    "vendor_name": {
+      "correct": 54,
+      "scored": 94,
+      "accuracy": 0.574468085106383
+    }
+  },
+  "per_category": {
+    "real_pt_company": {
+      "docs": 80,
+      "field_accuracy": 0.7142857142857143,
+      "field_correct": 325,
+      "field_scored": 455,
+      "fully_correct": 17,
+      "fully_correct_rate": 0.2125,
+      "fully_correct_six": 10,
+      "six_scored": 59,
+      "fully_correct_six_rate": 0.1694915254237288
+    },
+    "real_pt_personal": {
+      "docs": 20,
+      "field_accuracy": 0.7478260869565218,
+      "field_correct": 86,
+      "field_scored": 115,
+      "fully_correct": 4,
+      "fully_correct_rate": 0.2,
+      "fully_correct_six": 3,
+      "six_scored": 15,
+      "fully_correct_six_rate": 0.2
+    }
+  },
+  "latency_ms": {
+    "p50": 10530.600309371948,
+    "p90": 45384.66715812683,
+    "n": 100
+  },
+  "parse_errors": 7
+}

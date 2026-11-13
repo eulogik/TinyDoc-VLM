@@ -45,6 +45,13 @@ fi
 if [ "${TINYDOC_RESUME:-0}" = "1" ]; then
   ARGS+=(--resume)
 fi
+if [ "${TINYDOC_RETRY_TAX_PX:-0}" -gt 0 ]; then
+  ARGS+=(
+    --retry-tax-px "$TINYDOC_RETRY_TAX_PX"
+    --retry-images "${TINYDOC_RETRY_IMAGES:?set TINYDOC_RETRY_IMAGES to the prepared directory}"
+    --preds-first-pass "$RESULTS/preds_invoice_${TAG}_first_pass.json"
+  )
+fi
 
 "${ARGS[@]}" >>"$LOG" 2>&1 &
 PID=$!

@@ -99,6 +99,30 @@ def main() -> int:
         if row.get("latency_ms"):
             latencies.append(float(row["latency_ms"]))
 
+    retries = []
+    retry_latencies = []
+    for row in rows:
+        retry = row.get("retry")
+        if not retry:
+            continue
+        record = retry.get("record") or {}
+        retries.append(
+            {
+                "doc_id": str(row["id"]),
+                "trigger": retry.get("trigger"),
+                "applied": bool(retry.get("applied")),
+                "tax_before": retry.get("tax_before"),
+                "tax_candidate": retry.get("tax_candidate"),
+                "tax_after": retry.get("tax_after"),
+                "done_reason": record.get("done_reason"),
+                "eval_count": record.get("eval_count"),
+                "error": retry.get("error") or record.get("error"),
+            }
+        )
+        if retry.get("latency_ms"):
+            retry_latencies.append(float(retry["latency_ms"]))
+    retry_errors = [item for item in retries if item.get("error")]
+
     payload = {
         "manifest": str(args.manifest),
         "rows_path": str(args.rows),
@@ -111,6 +135,15 @@ def main() -> int:
         "merge_sanity": sanity,
         "done_reasons": dict(sorted(reasons.items())),
         "truncated_pages": truncated,
+        "retry": {
+            "documents": len(retries),
+            "applied": sum(1 for item in retries if item["applied"]),
+            "errors": retry_errors,
+            "p50_latency_ms": (
+                statistics.median(retry_latencies) if retry_latencies else None
+            ),
+            "items": retries,
+        },
         "latency_ms": {
             "p50": statistics.median(latencies) if latencies else None,
             "p90": sorted(latencies)[round(0.9 * (len(latencies) - 1))] if latencies else None,
@@ -135,6 +168,9 @@ def main() -> int:
                 "allowed_failed": args.allow_failed,
                 "merge_sanity": len(sanity),
                 "done_reasons": payload["done_reasons"],
+                "retried": payload["retry"]["documents"],
+                "retry_applied": payload["retry"]["applied"],
+                "retry_errors": len(retry_errors),
                 "latency_p50_ms": payload["latency_ms"]["p50"],
                 "task": str(args.out),
             },

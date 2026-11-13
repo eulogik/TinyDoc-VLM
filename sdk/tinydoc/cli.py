@@ -58,6 +58,16 @@ def main(argv=None) -> int:
     inv.add_argument("--model", default=None, help="Ollama model id override")
     inv.add_argument("--out", default=None, help="Write JSONL here")
     inv.add_argument("--max-px", type=int, default=1400)
+    inv.add_argument(
+        "--retry-tax-px",
+        type=int,
+        default=0,
+        metavar="PX",
+        help=(
+            "Re-read the final page at this higher resolution when the printed "
+            "tax is structurally implausible (0 disables; try 2400)"
+        ),
+    )
     inv.add_argument("--no-ocr-totals", action="store_true")
     inv.add_argument("--no-evidence", action="store_true")
     inv.add_argument("--prompt-version", type=int, choices=(1, 2), default=1)
@@ -170,6 +180,7 @@ def _run_invoice(args) -> int:
             result = pipe.extract(
                 path,
                 max_px=args.max_px,
+                retry_tax_px=args.retry_tax_px,
                 with_ocr_totals=not args.no_ocr_totals,
                 with_evidence=not args.no_evidence,
                 prompt_version=args.prompt_version,

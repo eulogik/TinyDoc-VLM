@@ -1,0 +1,77 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_retry100_1400.jsonl",
+  "a_name": "fresh-firstpass",
+  "b_name": "fresh-retry",
+  "documents": 100,
+  "a": {
+    "field_correct": 401,
+    "field_scored": 570,
+    "field_accuracy": 0.7035087719298245,
+    "fully_correct": 19,
+    "fully_correct_six": 12,
+    "six_scored": 74
+  },
+  "b": {
+    "field_correct": 411,
+    "field_scored": 570,
+    "field_accuracy": 0.7210526315789474,
+    "fully_correct": 21,
+    "fully_correct_six": 13,
+    "six_scored": 74
+  },
+  "delta": {
+    "field_accuracy": 0.01754385964912286,
+    "fully_correct": 2
+  },
+  "per_field": {
+    "currency": {
+      "a_correct": 94,
+      "b_correct": 94,
+      "scored": 100,
+      "delta": 0
+    },
+    "invoice_date": {
+      "a_correct": 91,
+      "b_correct": 91,
+      "scored": 98,
+      "delta": 0
+    },
+    "invoice_number": {
+      "a_correct": 43,
+      "b_correct": 43,
+      "scored": 96,
+      "delta": 0
+    },
+    "tax": {
+      "a_correct": 51,
+      "b_correct": 61,
+      "scored": 82,
+      "delta": 10
+    },
+    "total": {
+      "a_correct": 68,
+      "b_correct": 68,
+      "scored": 100,
+      "delta": 0
+    },
+    "vendor_name": {
+      "a_correct": 54,
+      "b_correct": 54,
+      "scored": 94,
+      "delta": 0
+    }
+  },
+  "field_pairs": {
+    "both": 401,
+    "a_only": 0,
+    "b_only": 10,
+    "neither": 159
+  },
+  "doc_pairs": {
+    "both": 19,
+    "a_only": 0,
+    "b_only": 2,
+    "neither": 79
+  },
+  "note": "Paired on the same documents; fields still cluster within documents."
+}

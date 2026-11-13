@@ -32,7 +32,8 @@ import tempfile
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
+from collections.abc import Sequence
 
 from .evidence import attach_evidence
 from .ocr_totals import apply_totals, read_totals
@@ -567,6 +568,59 @@ def _line_total(lines: Any) -> Optional[float]:
     return sum(amounts)
 
 
+# --- High-resolution tax retry (structural, no gold) ------------------------
+
+# VAT is a fraction of the net amount. A printed tax can be half of the total
+# only in pathological cases; on the receipts this product targets it is a
+# misread gross amount, a tax rate (23.0), or a truncated digit. The retry is
+# also rejected when the implied rate is outside a plausible band, so a second
+# read cannot replace a good value with nonsense.
+RETRY_TAX_MIN_RATE = 1.0
+RETRY_TAX_MAX_RATE = 27.5
+
+
+def tax_retry_reason(prediction: dict) -> Optional[str]:
+    """Return why the printed tax needs a higher-resolution re-read, or None.
+
+    Structural only: no gold answers, no country or vendor lookup. The trigger
+    fires when the merged tax is missing, non-positive, at least half of the
+    total, or below 1% of it. All four are implausible for a printed VAT amount
+    on the invoices and receipts this pipeline targets, and all four are visible
+    in the prediction itself.
+    """
+    total = _number(prediction.get("total_amount", prediction.get("total")))
+    if total is None or total <= 0:
+        return None
+    tax = _number(prediction.get("tax"))
+    if tax is None:
+        return "tax_missing"
+    if tax <= 0:
+        return "tax_nonpositive"
+    if tax >= 0.5 * total:
+        return "tax_at_least_half_total"
+    if tax < 0.01 * total:
+        return "tax_under_one_percent"
+    return None
+
+
+def retry_tax_is_plausible(prediction: dict, candidate: Any) -> bool:
+    """Accept a retry only if it looks like a VAT portion of the printed total.
+
+    The implied rate is ``candidate / (total - candidate)``: a tax-inclusive
+    total minus the included tax gives the net base. Rates outside
+    ``RETRY_TAX_MIN_RATE..RETRY_TAX_MAX_RATE`` are rejected, which keeps the
+    retry from turning a plausible value into a gross amount or a rate.
+    """
+    total = _number(prediction.get("total_amount", prediction.get("total")))
+    tax = _number(candidate)
+    if total is None or total <= 0 or tax is None:
+        return False
+    if tax <= 0 or tax >= total:
+        return False
+    implied_rate = (tax / (total - tax)) * 100.0
+    return RETRY_TAX_MIN_RATE <= implied_rate <= RETRY_TAX_MAX_RATE
+
+
 def check_prediction(
     prediction: dict,
     rel_tol: float = 0.001,
@@ -617,8 +671,12 @@ def render_pdf_pages(
     pdf_path: Union[str, Path],
     out_dir: Union[str, Path],
     max_px: int = 1400,
+    page_numbers: Optional[Sequence[int]] = None,
 ) -> List[str]:
-    """Render every PDF page to a PNG capped at ``max_px`` on the long edge."""
+    """Render PDF pages to PNGs capped at ``max_px`` on the long edge.
+
+    ``page_numbers`` selects 1-based pages; by default every page is rendered.
+    """
     try:
         import pypdfium2 as pdfium
     except ImportError as exc:  # pragma: no cover - depends on optional extra
@@ -631,7 +689,15 @@ def render_pdf_pages(
     pdf = pdfium.PdfDocument(str(pdf_path))
     paths: List[str] = []
     try:
-        for index in range(len(pdf)):
+        count = len(pdf)
+        indexes = (
+            range(count)
+            if page_numbers is None
+            else [number - 1 for number in page_numbers]
+        )
+        for index in indexes:
+            if index < 0 or index >= count:
+                raise IndexError(f"page {index + 1} outside 1..{count}")
             page = pdf[index]
             width, height = page.get_size()
             scale = max(0.1, float(max_px) / max(width, height))
@@ -709,6 +775,7 @@ class InvoiceResult:
     review_flags: List[str] = field(default_factory=list)
     arithmetic_issues: List[Dict[str, Any]] = field(default_factory=list)
     ocr_totals: Optional[Dict[str, Any]] = None
+    retry: Optional[Dict[str, Any]] = None
     pages: List[Dict[str, Any]] = field(default_factory=list)
     evidence: Dict[str, Any] = field(default_factory=dict)
     latency_ms: float = 0.0
@@ -729,6 +796,7 @@ class InvoiceResult:
             "review_flags": self.review_flags,
             "arithmetic_issues": self.arithmetic_issues,
             "ocr_totals": self.ocr_totals,
+            "retry": self.retry,
             "evidence": self.evidence,
             "pages": self.pages,
             "latency_ms": round(self.latency_ms, 1),
@@ -774,17 +842,26 @@ class InvoicePipeline:
         *,
         images: Optional[Sequence[Union[str, Path]]] = None,
         max_px: int = 1400,
+        retry_tax_px: int = 0,
         with_ocr_totals: bool = True,
         with_evidence: bool = True,
         num_predict: int = 2048,
         hint: str = "",
         prompt_version: int = 1,
     ) -> InvoiceResult:
-        """Extract one invoice from a PDF, a page image, or a page list."""
+        """Extract one invoice from a PDF, a page image, or a page list.
+
+        ``retry_tax_px`` enables a targeted second read of the final page at a
+        higher resolution when the merged tax is structurally implausible (see
+        :func:`tax_retry_reason`). It is opt-in and never runs on every page.
+        """
         started = time.time()
         source_text = str(source)
+        if retry_tax_px and retry_tax_px <= max_px:
+            raise ValueError("retry_tax_px must be larger than max_px, or 0 to disable")
         tempdirs: List[tempfile.TemporaryDirectory] = []
         page_images: List[str] = []
+        pdf_path: Optional[Path] = None
         try:
             if images is not None:
                 page_images = [str(path) for path in images]
@@ -793,6 +870,7 @@ class InvoicePipeline:
                 if not path.exists():
                     raise FileNotFoundError(str(path))
                 if path.suffix.lower() == ".pdf":
+                    pdf_path = path
                     pdf_dir = tempfile.TemporaryDirectory(prefix="tinydoc-pages-")
                     tempdirs.append(pdf_dir)
                     page_images = render_pdf_pages(path, pdf_dir.name, max_px=max_px)
@@ -800,6 +878,7 @@ class InvoicePipeline:
                     page_images = [str(path)]
             if not page_images:
                 raise ValueError("no pages to extract")
+            source_pages = list(page_images)
 
             # Cap image size for context control, matching the measured probe.
             # The work directory stays alive until evidence collection finishes.
@@ -836,6 +915,20 @@ class InvoicePipeline:
                     if symbol and merged.get("currency") != symbol:
                         merged["currency"] = symbol
                         corrections.append("currency_from_ocr_totals")
+
+            retry = None
+            if retry_tax_px:
+                retry = self._retry_tax(
+                    merged,
+                    source_pages,
+                    pdf_path,
+                    retry_tax_px,
+                    num_predict,
+                    prompt_version,
+                    tempdirs,
+                )
+                if retry and retry.get("applied"):
+                    corrections.append("tax_from_high_res_retry")
 
             issues = check_prediction(merged)
             review_flags = [issue["check"] for issue in issues]
@@ -883,6 +976,11 @@ class InvoicePipeline:
                 with_evidence,
                 header_page=header_page,
             )
+            method = "page_wise_merge"
+            if retry and retry.get("applied"):
+                method += "+high_res_tax_retry"
+            if with_ocr_totals:
+                method += "+ocr_totals"
             return InvoiceResult(
                 source=source_text,
                 engine=getattr(self.engine, "name", str(self.engine)),
@@ -894,19 +992,116 @@ class InvoicePipeline:
                 review_flags=review_flags,
                 arithmetic_issues=issues,
                 ocr_totals=ocr_totals,
+                retry=retry,
                 pages=page_records,
                 evidence=evidence,
                 latency_ms=(time.time() - started) * 1000,
                 render_px=max_px,
-                method=(
-                    "page_wise_merge+ocr_totals"
-                    if with_ocr_totals
-                    else "page_wise_merge"
-                ),
+                method=method,
             )
         finally:
             for directory in reversed(tempdirs):
                 directory.cleanup()
+
+    def _retry_tax(
+        self,
+        merged: dict,
+        source_pages: Sequence[str],
+        pdf_path: Optional[Path],
+        retry_px: int,
+        num_predict: int,
+        prompt_version: int,
+        tempdirs: List[tempfile.TemporaryDirectory],
+    ) -> Optional[Dict[str, Any]]:
+        """Re-read only the final page at a higher resolution for the printed tax.
+
+        The decision, the accepted value, and the raw retry response are recorded
+        on the result. A failed retry leaves the first-pass value untouched; it
+        can never fail the whole extraction.
+        """
+        reason = tax_retry_reason(merged)
+        if reason is None:
+            return None
+        started = time.time()
+        info: Dict[str, Any] = {
+            "trigger": reason,
+            "page": len(source_pages),
+            "px": retry_px,
+            "tax_before": merged.get("tax"),
+            "applied": False,
+        }
+        try:
+            retry_dir = tempfile.TemporaryDirectory(prefix="tinydoc-retry-")
+            tempdirs.append(retry_dir)
+            if pdf_path is not None:
+                retry_image = render_pdf_pages(
+                    pdf_path,
+                    retry_dir.name,
+                    max_px=retry_px,
+                    page_numbers=[len(source_pages)],
+                )[0]
+            else:
+                retry_image = _resize_image(source_pages[-1], retry_dir.name, retry_px)
+            record, parsed = self._read_page(
+                len(source_pages),
+                len(source_pages),
+                retry_image,
+                num_predict,
+                prompt_version,
+            )
+            info["record"] = record
+            if record.get("error"):
+                info["error"] = record["error"]
+            candidate = (parsed or {}).get("tax")
+            info["tax_candidate"] = candidate
+            if retry_tax_is_plausible(merged, candidate):
+                merged["tax"] = round(float(_number(candidate)), 2)
+                info["applied"] = True
+                info["tax_after"] = merged["tax"]
+        except Exception as exc:  # noqa: BLE001 - a retry must never fail extraction
+            info["error"] = f"{type(exc).__name__}: {exc}"
+        info["latency_ms"] = round((time.time() - started) * 1000, 1)
+        return info
+
+    def _read_page(
+        self,
+        page: int,
+        total: int,
+        image_path: str,
+        num_predict: int,
+        prompt_version: int,
+    ) -> Tuple[Dict[str, Any], Optional[dict]]:
+        """Read one page; return its record and the parsed object (or None)."""
+        started = time.time()
+        raw = ""
+        try:
+            response = self._generate(
+                page_prompt(page, total, prompt_version), image_path, num_predict
+            )
+            raw = response.get("raw") or response.get("content") or ""
+            parsed = _extract_json(raw)
+            return (
+                {
+                    "page": page,
+                    "raw": raw,
+                    "latency_ms": round((time.time() - started) * 1000, 1),
+                    "prompt_eval_count": response.get("prompt_eval_count"),
+                    "eval_count": response.get("eval_count"),
+                    "done_reason": response.get("done_reason"),
+                    "error": None if parsed is not None else "no JSON object",
+                },
+                parsed,
+            )
+        except Exception as exc:  # noqa: BLE001 - keep other pages alive
+            return (
+                {
+                    "page": page,
+                    "raw": raw,
+                    "latency_ms": round((time.time() - started) * 1000, 1),
+                    "error": f"{type(exc).__name__}: {exc}",
+                },
+                None,
+            )
 
     def _read_pages(
         self,
@@ -923,40 +1118,15 @@ class InvoicePipeline:
         page_payloads: List[Dict[str, Any]] = []
         total = len(page_images)
         for index, image_path in enumerate(page_images, start=1):
-            page_started = time.time()
-            raw = ""
-            try:
-                response = self._generate(
-                    page_prompt(index, total, prompt_version), image_path, num_predict
-                )
-                raw = response.get("raw") or response.get("content") or ""
-                parsed = _extract_json(raw)
-                records.append(
-                    {
-                        "page": index,
-                        "raw": raw,
-                        "latency_ms": round((time.time() - page_started) * 1000, 1),
-                        "prompt_eval_count": response.get("prompt_eval_count"),
-                        "eval_count": response.get("eval_count"),
-                        "done_reason": response.get("done_reason"),
-                        "error": None if parsed is not None else "no JSON object",
-                    }
-                )
-                if parsed is not None:
-                    parsed_pages.append(parsed)
-                    page_payloads.append(parsed)
-                else:
-                    page_payloads.append({})
-            except Exception as exc:  # noqa: BLE001 - keep other pages alive
+            record, parsed = self._read_page(
+                index, total, image_path, num_predict, prompt_version
+            )
+            records.append(record)
+            if parsed is not None:
+                parsed_pages.append(parsed)
+                page_payloads.append(parsed)
+            else:
                 page_payloads.append({})
-                records.append(
-                    {
-                        "page": index,
-                        "raw": raw,
-                        "latency_ms": round((time.time() - page_started) * 1000, 1),
-                        "error": f"{type(exc).__name__}: {exc}",
-                    }
-                )
         return records, parsed_pages, page_payloads
 
     @staticmethod
@@ -1008,6 +1178,8 @@ __all__ = [
     "reconcile_totals",
     "merge_is_sane",
     "check_prediction",
+    "tax_retry_reason",
+    "retry_tax_is_plausible",
     "render_pdf_pages",
     "invoice_schema_is_valid",
 ]

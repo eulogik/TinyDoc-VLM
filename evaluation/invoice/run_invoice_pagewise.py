@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import json
 import os
 import re
@@ -55,7 +56,12 @@ from run_invoice_eval import (
 
 # The per-page prompt is owned by the SDK so the measured evaluation path and
 # the shipped product path cannot drift (tests/test_invoice_prompt_parity.py).
-from tinydoc.invoice import PAGE_PROMPT_V2, page_prompt
+from tinydoc.invoice import (
+    PAGE_PROMPT_V2,
+    page_prompt,
+    retry_tax_is_plausible,
+    tax_retry_reason,
+)
 
 PAGE_PROMPT = PAGE_PROMPT_V2
 
@@ -98,6 +104,18 @@ def symbol_currency(value) -> str | None:
     if value is None:
         return None
     return CURRENCY_SYMBOLS.get(str(value).strip().upper().replace(" ", ""))
+
+
+def find_retry_image(directory: str | None, doc_id: str) -> str | None:
+    """Return the prepared high-resolution image for one document, if any."""
+    if not directory:
+        return None
+    base = Path(directory)
+    for suffix in (".jpg", ".jpeg", ".png", ".webp"):
+        candidate = base / f"{doc_id}{suffix}"
+        if candidate.exists():
+            return str(candidate)
+    return None
 
 
 def _first(values):
@@ -305,12 +323,31 @@ def main() -> int:
     ap.add_argument("--model", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--preds", required=True)
+    ap.add_argument(
+        "--preds-first-pass",
+        default=None,
+        help="Optional: write the pre-retry predictions for a paired comparison",
+    )
     ap.add_argument("--host", default=os.environ.get("TINYDOC_OLLAMA_HOST", "http://127.0.0.1:11434"))
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--num-ctx", type=int, default=int(os.environ.get("TINYDOC_OLLAMA_NUM_CTX", "8192")))
     ap.add_argument("--num-predict", type=int, default=int(os.environ.get("TINYDOC_OLLAMA_NUM_PREDICT", "2048")))
     ap.add_argument("--timeout", type=float, default=float(os.environ.get("TINYDOC_OLLAMA_TIMEOUT", "600")))
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument(
+        "--retry-tax-px",
+        type=int,
+        default=0,
+        help=(
+            "Re-read the final page at this resolution when the merged tax is "
+            "structurally implausible (0 disables; 2400 matches the pilot)"
+        ),
+    )
+    ap.add_argument(
+        "--retry-images",
+        default=None,
+        help="Directory of <doc-id>.jpg/.png images prepared at --retry-tax-px",
+    )
     ap.add_argument(
         "--prompt-version",
         type=int,
@@ -414,6 +451,65 @@ def main() -> int:
                 )
 
         merged = merge_pages(page_preds, doc_id)
+        row["pred_first_pass"] = (
+            copy.deepcopy(merged) if args.retry_tax_px else None
+        )
+        retry = None
+        if args.retry_tax_px:
+            reason = tax_retry_reason(merged)
+            if reason:
+                retry = {
+                    "trigger": reason,
+                    "page": len(image_paths),
+                    "px": args.retry_tax_px,
+                    "tax_before": merged.get("tax"),
+                    "applied": False,
+                }
+                retry_image = find_retry_image(args.retry_images, doc_id)
+                if retry_image is None:
+                    retry["error"] = "no retry image"
+                else:
+                    retry_started = time.time()
+                    try:
+                        b64 = base64.b64encode(
+                            _read_image(Path(retry_image))
+                        ).decode()
+                        response = ask_ollama(
+                            args.host,
+                            args.model,
+                            page_prompt(
+                                len(image_paths),
+                                len(image_paths),
+                                args.prompt_version,
+                            ),
+                            [b64],
+                            args.num_ctx,
+                            args.timeout,
+                            args.num_predict,
+                        )
+                        raw = response["content"]
+                        parsed = _extract_json(raw)
+                        retry["record"] = {
+                            "page": len(image_paths),
+                            "raw": raw,
+                            "prompt_eval_count": response.get("prompt_eval_count"),
+                            "eval_count": response.get("eval_count"),
+                            "done_reason": response.get("done_reason"),
+                            "error": (
+                                None if parsed is not None else "no JSON object"
+                            ),
+                        }
+                        candidate = (parsed or {}).get("tax")
+                        retry["tax_candidate"] = candidate
+                        if retry_tax_is_plausible(merged, candidate):
+                            merged["tax"] = round(float(_num(candidate)), 2)
+                            retry["applied"] = True
+                            retry["tax_after"] = merged["tax"]
+                    except Exception as exc:  # noqa: BLE001 - keep the first pass
+                        retry["error"] = f"{type(exc).__name__}: {exc}"
+                    retry["latency_ms"] = (time.time() - retry_started) * 1000
+                row["retry"] = retry
+
         sanity = merge_is_sane(merged, page_preds)
         if page_errors:
             sanity.extend(page_errors)
@@ -424,11 +520,16 @@ def main() -> int:
         rows.append(row)
         with out_path.open("a") as handle:
             handle.write(json.dumps(row) + "\n")
+        retry_note = ""
+        if retry:
+            retry_note = (
+                f" retry={retry['trigger']} applied={retry['applied']}"
+            )
         print(
             f"[{index}/{len(manifest)}] {doc_id} pages={len(image_paths)} "
             f"parsed={len(page_preds)} lines={len(merged.get('line_items') or [])} "
             f"total={merged.get('total_amount')} err={row['error']} "
-            f"lat={row['latency_ms'] / 1000:.1f}s",
+            f"lat={row['latency_ms'] / 1000:.1f}s{retry_note}",
             flush=True,
         )
 
@@ -450,7 +551,27 @@ def main() -> int:
     Path(args.preds).parent.mkdir(parents=True, exist_ok=True)
     Path(args.preds).write_text(json.dumps(preds, indent=2) + "\n")
 
+    if args.preds_first_pass:
+        first_documents = {}
+        for row in rows:
+            if row.get("error"):
+                continue
+            if row.get("pred_first_pass") is not None:
+                first_documents[row["id"]] = row["pred_first_pass"]
+        first_preds = dict(preds)
+        first_preds["system"] = f"TinyDoc engine eval first pass ({args.model})"
+        first_preds["notes"] = (
+            "Pre-retry page-wise predictions from the same run; used to measure "
+            "the high-resolution tax retry."
+        )
+        first_preds["documents"] = first_documents
+        Path(args.preds_first_pass).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.preds_first_pass).write_text(
+            json.dumps(first_preds, indent=2) + "\n"
+        )
+
     latencies = [row["latency_ms"] for row in rows if row.get("latency_ms")]
+    retried = [row for row in rows if row.get("retry")]
     print(
         json.dumps(
             {
@@ -458,10 +579,15 @@ def main() -> int:
                 "n": len(rows),
                 "parsed": sum(1 for row in rows if not row.get("error")),
                 "errors": sum(1 for row in rows if row.get("error")),
+                "retried": len(retried),
+                "retry_applied": sum(
+                    1 for row in retried if row["retry"].get("applied")
+                ),
                 "p50_latency_ms": statistics.median(latencies) if latencies else None,
                 "elapsed_s": time.time() - started,
                 "rows": str(out_path),
                 "preds": str(args.preds),
+                "preds_first_pass": args.preds_first_pass,
             },
             indent=2,
         )

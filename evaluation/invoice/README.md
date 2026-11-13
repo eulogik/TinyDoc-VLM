@@ -290,8 +290,9 @@ before using it as a gate.
 - `run_invoice_eval.py` — all-pages Ollama runner; writes per-document rows and
   a benchmark-format `predictions.json`. Records `prompt_eval_count`,
   `eval_count`, and `done_reason` so a context or output cut is visible.
-- `run_invoice_pagewise.py` — one-page-per-request runner with deterministic merge
-  and prompt v1/v2 support; v1 is canonical.
+- `run_invoice_pagewise.py` — one-page-per-request runner with deterministic merge,
+  prompt v1/v2 support, and an optional `--retry-tax-px` targeted re-read of the
+  final page; v1 is canonical.
 - `audit_multipage_rows.py` — fails on a missing page, a non-`stop` completion, a
   context overflow, or an unaccounted failure; `--allow-failed N` keeps visible
   failures in the denominator.
@@ -318,13 +319,16 @@ before using it as a gate.
 - `pt_score.py` — five-field scorer for the Portuguese probe, using the same
   vendor/number/date/money rules as the benchmark scorer.
 - `preds_from_pagewise_rows.py` — rebuild merged and raw prediction files from
-  saved rows without dropping merge-sanity flags.
+  saved rows without dropping merge-sanity flags; `--pred-key pred_first_pass`
+  rebuilds the pre-retry predictions.
 - `audit_pt_rows.py` — page/parse/completion/output-budget audit for the
-  real-document probe.
+  real-document probe, including the optional tax-retry records.
 - `analyze_pt_errors.py` — residual categories (dot-decimal misreads,
   tax-inclusive double counts, number digit errors, vendor aliases).
-- `make_pt_holdout.py` — draw the disjoint seed-43 holdout from the 843
-  documents not in the development probe.
+- `analyze_tax_retry.py` — replay the targeted tax retry from saved 1400/2400
+  predictions; no model calls.
+- `make_pt_holdout.py` — draw a disjoint seed-43 holdout (or a fresh seed-44
+  set with multiple `--exclude` manifests) from the documents not yet used.
 - `compare_pt_probes.py` — unpaired development-vs-holdout comparison with both
   exact intervals.
 - `PT_REAL_RESULTS.md` — the measured development and held-out results,
@@ -333,6 +337,9 @@ before using it as a gate.
   remains canonical).
 - `PT_RESOLUTION_PILOT.md` — the 30-document 1400 px vs 2400 px pilot (a
   promising optional retry, not a default).
+- `PT_TAX_RETRY.md` — the targeted high-resolution tax retry (structural
+  trigger, 1.0–27.5% rate acceptance, development replay; fresh validation in
+  progress).
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

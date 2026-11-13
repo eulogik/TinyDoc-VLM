@@ -40,6 +40,11 @@ def main() -> int:
     ap.add_argument("--rows", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--raw-out", required=True, type=Path)
+    ap.add_argument(
+        "--pred-key",
+        default="pred",
+        help="Row key to write as the merged prediction (use pred_first_pass for a retry comparison)",
+    )
     args = ap.parse_args()
 
     rows = [json.loads(line) for line in args.rows.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -55,7 +60,7 @@ def main() -> int:
             no_page.append(row["id"])
             continue
         doc_id = str(row["id"])
-        merged = row.get("pred")
+        merged = row.get(args.pred_key)
         if merged:
             merged_docs[doc_id] = merged
         first = parsed_pages[0]

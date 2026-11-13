@@ -26,19 +26,29 @@ from pathlib import Path
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", required=True, type=Path)
-    ap.add_argument("--exclude", required=True, type=Path)
+    ap.add_argument(
+        "--exclude",
+        required=True,
+        type=Path,
+        nargs="+",
+        help="One or more manifests whose document ids must not be sampled",
+    )
     ap.add_argument("--out", required=True, type=Path)
     ap.add_argument("--size", type=int, default=100)
     ap.add_argument("--seed", type=int, default=43)
     args = ap.parse_args()
 
     rows = [json.loads(line) for line in args.manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
-    excluded = {
-        str(row["id"])
-        for row in (
-            json.loads(line) for line in args.exclude.read_text(encoding="utf-8").splitlines() if line.strip()
+    excluded = set()
+    for path in args.exclude:
+        excluded.update(
+            str(row["id"])
+            for row in (
+                json.loads(line)
+                for line in path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            )
         )
-    }
     pool = [row for row in rows if str(row["id"]) not in excluded]
     if len(pool) < args.size:
         raise SystemExit(f"only {len(pool)} documents left after exclusion; need {args.size}")

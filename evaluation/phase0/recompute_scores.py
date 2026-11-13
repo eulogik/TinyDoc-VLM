@@ -1189,6 +1189,165 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"resolution holdout-50 check errored: {exc}")
 
+    # Targeted tax retry replayed from the saved 1400/2400 predictions. This is
+    # development evidence: the same documents chose the trigger and thresholds.
+    replay_paths = {
+        "holdout50": ROOT.parent / "invoice/results/retry_replay_pt_holdout50.json",
+        "pilot30": ROOT.parent / "invoice/results/retry_replay_pt_pilot30.json",
+    }
+    replay_missing = [path.name for path in replay_paths.values() if not path.exists()]
+    if replay_missing:
+        failures.append(f"tax-retry replay artifacts missing: {replay_missing}")
+    else:
+        try:
+            replay = {name: json.loads(path.read_text()) for name, path in replay_paths.items()}
+
+            def _replay_tuple(item):
+                return (
+                    item["baseline"]["field_correct"],
+                    item["baseline"]["field_scored"],
+                    item["baseline"]["fully_correct"],
+                    item["baseline"]["fully_correct_six"],
+                    item["baseline"]["six_scored"],
+                    item["retry"]["field_correct"],
+                    item["retry"]["fully_correct"],
+                    item["retry"]["fully_correct_six"],
+                )
+
+            replay_ok = (
+                replay["holdout50"]["documents"] == 50
+                and replay["holdout50"]["triggered"] == 15
+                and replay["holdout50"]["applied"] == 11
+                and _replay_tuple(replay["holdout50"]) == (211, 289, 11, 8, 40, 221, 13, 10)
+                and replay["holdout50"]["per_field"]["tax"]["before_correct"] == 30
+                and replay["holdout50"]["per_field"]["tax"]["after_correct"] == 40
+                and replay["holdout50"]["fields_gained"] == 10
+                and replay["holdout50"]["fields_lost"] == 0
+                and replay["pilot30"]["documents"] == 30
+                and replay["pilot30"]["triggered"] == 6
+                and replay["pilot30"]["applied"] == 1
+                and _replay_tuple(replay["pilot30"]) == (133, 174, 7, 6, 24, 134, 7, 6)
+                and replay["pilot30"]["per_field"]["tax"]["before_correct"] == 21
+                and replay["pilot30"]["per_field"]["tax"]["after_correct"] == 22
+                and replay["pilot30"]["fields_gained"] == 1
+                and replay["pilot30"]["fields_lost"] == 0
+            )
+            h50_changes = {item["doc_id"]: item for item in replay["holdout50"]["changes"]}
+            accepted = h50_changes.get("ptreal-company-20210321_120551") or {}
+            rejected = h50_changes.get("ptreal-personal-20210509_002620") or {}
+            replay_ok = (
+                replay_ok
+                and accepted.get("accepted") is True
+                and accepted.get("tax_before") == 1609.0
+                and accepted.get("tax_candidate") == 14.37
+                and accepted.get("tax_after") == 14.37
+                and rejected.get("accepted") is False
+                and rejected.get("tax_before") == 15.35
+                and rejected.get("tax_candidate") == 1535.0
+                and rejected.get("tax_after") == 15.35
+            )
+            print(
+                "claim: tax-retry replay -> holdout50 "
+                f"{replay['holdout50']['baseline']['field_correct']}/289 -> "
+                f"{replay['holdout50']['retry']['field_correct']}/289 "
+                f"(tax 30 -> 40); pilot30 "
+                f"{replay['pilot30']['baseline']['field_correct']}/174 -> "
+                f"{replay['pilot30']['retry']['field_correct']}/174 "
+                f"(tax 21 -> 22) -> {'PASS' if replay_ok else 'FAIL'}"
+            )
+            if not replay_ok:
+                failures.append("tax-retry replay counts or spot checks changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"tax-retry replay check errored: {exc}")
+
+    # Fresh tax-retry validation (seed 44, 100 documents): first pass vs retry.
+    fresh_tag = "pt_retry100_1400_retry2400"
+    fresh_manifest = ROOT.parent / "invoice/manifest_pt_retry100_1400.jsonl"
+    fresh_rows = ROOT.parent / f"invoice/results/rows_invoice_{fresh_tag}.jsonl"
+    fresh_first_scores = ROOT.parent / f"invoice/results/scores_invoice_{fresh_tag}_firstpass.json"
+    fresh_retry_scores = ROOT.parent / f"invoice/results/scores_invoice_{fresh_tag}.json"
+    fresh_compare = ROOT.parent / "invoice/results/compare_pt_retry100_firstpass_vs_retry.json"
+    fresh_audit = ROOT.parent / f"invoice/results/audit_invoice_{fresh_tag}.json"
+    fresh_replay = ROOT.parent / "invoice/results/retry_replay_pt_retry100.json"
+    fresh_missing = [
+        path.name
+        for path in (
+            fresh_manifest,
+            fresh_rows,
+            fresh_first_scores,
+            fresh_retry_scores,
+            fresh_compare,
+            fresh_audit,
+            fresh_replay,
+        )
+        if not path.exists()
+    ]
+    if fresh_missing:
+        failures.append(f"fresh tax-retry artifacts missing: {fresh_missing}")
+    else:
+        try:
+            fman = [json.loads(line) for line in fresh_manifest.open() if line.strip()]
+            frows = [json.loads(line) for line in fresh_rows.open() if line.strip()]
+            fa = json.loads(fresh_first_scores.read_text())
+            fr = json.loads(fresh_retry_scores.read_text())
+            fcmp = json.loads(fresh_compare.read_text())
+            faudit = json.loads(fresh_audit.read_text())
+            freplay = json.loads(fresh_replay.read_text())
+
+            def _fresh_totals(scores):
+                docs = scores.get("documents") or []
+                correct = sum(
+                    1 for doc in docs for item in (doc.get("fields") or {}).values() if item.get("correct")
+                )
+                scored = sum(len(doc.get("fields") or {}) for doc in docs)
+                fully = sum(1 for doc in docs if doc.get("fully_correct"))
+                six = sum(1 for doc in docs if doc.get("fully_correct_six"))
+                six_scored = sum(1 for doc in docs if doc.get("all_six_scored"))
+                return correct, scored, fully, six, six_scored
+
+            fv = {
+                "first": _fresh_totals(fa),
+                "retry": _fresh_totals(fr),
+            }
+            fresh_ok = (
+                len(fman) == 100
+                and len(frows) == 100
+                and faudit.get("documents") == 100
+                and faudit.get("rows") == 100
+                and faudit.get("missing") == []
+                and faudit.get("failed") == 3
+                and faudit.get("allowed_failed") == 7
+                and faudit.get("done_reasons") == {"stop": 98, "length": 2}
+                and faudit.get("retry", {}).get("documents") == 23
+                and faudit.get("retry", {}).get("applied") == 12
+                and faudit.get("retry", {}).get("errors") == []
+                and fv["first"] == (401, 570, 19, 12, 74)
+                and fv["retry"] == (411, 570, 21, 13, 74)
+                and abs(float(fcmp["delta"]["field_accuracy"]) - 10 / 570) < 1e-9
+                and fcmp["delta"]["fully_correct"] == 2
+                and fcmp["field_pairs"] == {"both": 401, "a_only": 0, "b_only": 10, "neither": 159}
+                and fcmp["doc_pairs"] == {"both": 19, "a_only": 0, "b_only": 2, "neither": 79}
+                and freplay.get("documents") == 97
+                and freplay.get("triggered") == 23
+                and freplay.get("applied") == 12
+                and freplay.get("fields_gained") == 10
+                and freplay.get("fields_lost") == 0
+                and freplay.get("baseline", {}).get("field_correct") == 401
+                and freplay.get("retry", {}).get("field_correct") == 411
+                and freplay.get("per_field", {}).get("tax", {}).get("before_correct") == 51
+                and freplay.get("per_field", {}).get("tax", {}).get("after_correct") == 61
+            )
+            print(
+                "claim: fresh tax-retry (seed 44) -> "
+                f"first {fv['first'][0]}/570 fully {fv['first'][2]}, "
+                f"retry {fv['retry'][0]}/570 fully {fv['retry'][2]}, "
+                f"tax 51/82 -> 61/82 -> {'PASS' if fresh_ok else 'FAIL'}"
+            )
+            if not fresh_ok:
+                failures.append("fresh tax-retry counts, audit, or comparison changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"fresh tax-retry check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

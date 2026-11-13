@@ -29,6 +29,8 @@ from tinydoc.invoice import (
     merge_pages,
     page_prompt,
     reconcile_totals,
+    retry_tax_is_plausible,
+    tax_retry_reason,
 )
 from tinydoc.pipeline import BaseEngine, _extract_json
 
@@ -365,3 +367,140 @@ def test_evaluation_ocr_module_is_the_sdk_module():
     assert totals_ocr.read_totals is sdk_ocr.read_totals
     assert totals_ocr.parse_totals_lines is sdk_ocr.parse_totals_lines
     assert totals_ocr.apply_totals is sdk_ocr.apply_totals
+
+
+# --- High-resolution tax retry ---------------------------------------------
+
+
+def _receipt(tax):
+    return {
+        "vendor_name": "Acme",
+        "invoice_number": "INV-1",
+        "invoice_date": "2026-11-01",
+        "due_date": None,
+        "currency": "EUR",
+        "document_type": "receipt",
+        "line_items": [],
+        "subtotal": 76.85,
+        "tax": tax,
+        "total": 76.85,
+    }
+
+
+def test_tax_retry_trigger_and_acceptance():
+    assert tax_retry_reason({"total_amount": 76.85, "tax": 1609.0}) == (
+        "tax_at_least_half_total"
+    )
+    assert tax_retry_reason({"total_amount": 20.0, "tax": 0.0}) == "tax_nonpositive"
+    assert tax_retry_reason({"total_amount": 20.0, "tax": None}) == "tax_missing"
+    assert tax_retry_reason({"total_amount": 20.0, "tax": 0.1}) == (
+        "tax_under_one_percent"
+    )
+    assert tax_retry_reason({"total_amount": 100.0, "tax": 15.0}) is None
+    assert tax_retry_reason({"total_amount": None, "tax": 1.0}) is None
+
+    assert retry_tax_is_plausible({"total_amount": 76.85}, 14.37) is True
+    assert retry_tax_is_plausible({"total_amount": 18.92}, 17.2) is False
+    assert retry_tax_is_plausible({"total_amount": 10.0}, 10.0) is False
+    assert retry_tax_is_plausible({"total_amount": 10.0}, 0.0) is False
+    assert retry_tax_is_plausible({"total_amount": 10.0}, None) is False
+
+
+def test_pipeline_retries_only_the_implausible_tax(tmp_path):
+    image = _png(tmp_path / "receipt.png")
+    engine = FakeEngine(
+        [
+            json.dumps(_receipt(1609.0)),
+            json.dumps({"tax": 14.37}),
+        ]
+    )
+    result = InvoicePipeline(engine).extract(
+        image,
+        max_px=1400,
+        retry_tax_px=2400,
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert len(engine.calls) == 2
+    assert "page 1 of 1" in engine.calls[1][0]
+    assert result.fields["tax"] == 14.37
+    assert result.retry["trigger"] == "tax_at_least_half_total"
+    assert result.retry["applied"] is True
+    assert result.retry["tax_before"] == 1609.0
+    assert result.retry["tax_after"] == 14.37
+    assert result.retry["tax_candidate"] == 14.37
+    assert "tax_from_high_res_retry" in result.corrections
+    assert result.method == "page_wise_merge+high_res_tax_retry"
+    assert result.to_dict()["retry"]["applied"] is True
+
+
+def test_tax_retry_keeps_the_first_pass_when_the_candidate_is_implausible(tmp_path):
+    image = _png(tmp_path / "receipt.png")
+    engine = FakeEngine(
+        [
+            json.dumps(_receipt(40.0)),
+            json.dumps({"tax": 76.85}),
+        ]
+    )
+    result = InvoicePipeline(engine).extract(
+        image,
+        retry_tax_px=2400,
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert len(engine.calls) == 2
+    assert result.fields["tax"] == 40.0
+    assert result.retry["applied"] is False
+    assert result.retry["tax_candidate"] == 76.85
+    assert "tax_from_high_res_retry" not in result.corrections
+    assert result.method == "page_wise_merge"
+
+
+def test_tax_retry_is_off_by_default(tmp_path):
+    image = _png(tmp_path / "receipt.png")
+    engine = FakeEngine([json.dumps(_receipt(1609.0))])
+    result = InvoicePipeline(engine).extract(
+        image, with_ocr_totals=False, with_evidence=False
+    )
+    assert len(engine.calls) == 1
+    assert result.fields["tax"] == 1609.0
+    assert result.retry is None
+
+
+def test_tax_retry_does_not_fail_the_extraction(tmp_path):
+    image = _png(tmp_path / "receipt.png")
+
+    class FlakyEngine(FakeEngine):
+        def generate(self, prompt, image_path, num_predict=2048, **kwargs):
+            if self.calls:
+                raise TimeoutError("retry timed out")
+            return super().generate(prompt, image_path, num_predict)
+
+    engine = FlakyEngine([json.dumps(_receipt(1609.0))])
+    result = InvoicePipeline(engine).extract(
+        image,
+        retry_tax_px=2400,
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert result.fields["tax"] == 1609.0
+    assert result.retry["applied"] is False
+    assert "TimeoutError" in result.retry["error"]
+
+
+def test_tax_retry_must_be_higher_resolution(tmp_path):
+    image = _png(tmp_path / "receipt.png")
+    with pytest.raises(ValueError, match="retry_tax_px must be larger"):
+        InvoicePipeline(FakeEngine([])).extract(image, max_px=2400, retry_tax_px=1400)
+
+
+def test_evaluation_runner_uses_the_sdk_retry_decision(tmp_path):
+    import run_invoice_pagewise as eval_runner
+
+    assert eval_runner.tax_retry_reason is tax_retry_reason
+    assert eval_runner.retry_tax_is_plausible is retry_tax_is_plausible
+    assert eval_runner.find_retry_image(None, "doc") is None
+    _png(tmp_path / "doc.png")
+    assert eval_runner.find_retry_image(str(tmp_path), "doc") == str(
+        tmp_path / "doc.png"
+    )

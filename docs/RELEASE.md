@@ -141,19 +141,18 @@ Check the Space reaches `RUNNING` and renders the card.
   header-first prompt (v3) and v1 plus receipt rules (v4). v3 gained 2.9 field
   points but 2/30 responses looped to the 2048-token cap; v4 lost 1.2 points.
   Keep prompt **v1**; see `evaluation/invoice/PT_PROMPT_PILOT.md`.
-- **Resolution check mixed.** On 30 development documents, 2400 px added 4.6
-  field points and 4 fully-correct documents. A fixed 50-document holdout subset
-  confirmed +3.5 points and +1 fully-correct document, at 4.4× latency; tax (+8)
-  and invoice number (+5) improved while total (−2) and vendor (−3) regressed. A
-  fixed field hybrid reached 78.2% but needs both runs. Treat 2400 as an
-  optional retry for tax/identifiers, not a default; see
-  `evaluation/invoice/PT_RESOLUTION_PILOT.md`. Define and validate a trigger
-  before considering it for 0.3.1.
-- Before a 0.3.1 release: decide whether an OCR-total pass, high-resolution
-  retry, or transport retry fix is in scope, bump `sdk/setup.py` from the dev
-  version, rebuild both schemas into the wheel, clean-venv install, upload, tag
-  **`sdk-v0.3.1`**, and update the install lines and site. Do not reuse
-  `sdk-v0.3.0`.
+- **Targeted tax retry validated.** A structural trigger on the first-pass printed
+  tax re-reads only the final page at 2400 px and replaces only `tax`, accepted
+  only when the implied rate is 1.0–27.5%. On a fresh 100-document set (seed 44)
+  it moves tax 51/82 → 61/82 and field accuracy 401/570 → 411/570 (+10 fields,
+  +1.8 pp), fully correct 19 → 21, with no field regression and 0 retry errors.
+  23/100 triggered, 12 applied. This is the chosen structural lever for 0.3.1.
+  See `evaluation/invoice/PT_TAX_RETRY.md`.
+- Before a 0.3.1 release: decide whether to make the retry the CLI default
+  (`--retry-tax-px 2400`), bump `sdk/setup.py` from the dev version, rebuild both
+  schemas into the wheel, clean-venv install, upload, tag **`sdk-v0.3.1`**, and
+  update the install lines and site. Do not reuse `sdk-v0.3.0`. A fresh PyPI
+  token is needed; the token used for 0.3.0 should be rotated/revoked.
 
 ## 0.2.0 status (2026-11-07)
 

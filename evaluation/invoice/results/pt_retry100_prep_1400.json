@@ -1,0 +1,12 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_retry100.jsonl",
+  "out_manifest": "evaluation/invoice/manifest_pt_retry100_1400.jsonl",
+  "out_dir": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_retry100_1400",
+  "documents": 100,
+  "max_px": 1400,
+  "jpeg_quality": 92,
+  "resized": 100,
+  "median_pixels": 1470000,
+  "min_pixels": 1470000,
+  "max_pixels": 1470000
+}

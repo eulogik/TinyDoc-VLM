@@ -1,0 +1,317 @@
+{
+  "label": "fresh seed44",
+  "documents": 97,
+  "triggered": 23,
+  "applied": 12,
+  "baseline": {
+    "field_correct": 401,
+    "field_scored": 570,
+    "field_accuracy": 0.7035087719298245,
+    "fully_correct": 19,
+    "fully_correct_six": 12,
+    "six_scored": 74
+  },
+  "retry": {
+    "field_correct": 411,
+    "field_scored": 570,
+    "field_accuracy": 0.7210526315789474,
+    "fully_correct": 21,
+    "fully_correct_six": 13,
+    "six_scored": 74
+  },
+  "per_field": {
+    "currency": {
+      "before_correct": 94,
+      "after_correct": 94,
+      "scored": 100,
+      "delta": 0
+    },
+    "invoice_date": {
+      "before_correct": 91,
+      "after_correct": 91,
+      "scored": 98,
+      "delta": 0
+    },
+    "invoice_number": {
+      "before_correct": 43,
+      "after_correct": 43,
+      "scored": 96,
+      "delta": 0
+    },
+    "tax": {
+      "before_correct": 51,
+      "after_correct": 61,
+      "scored": 82,
+      "delta": 10
+    },
+    "total": {
+      "before_correct": 68,
+      "after_correct": 68,
+      "scored": 100,
+      "delta": 0
+    },
+    "vendor_name": {
+      "before_correct": 54,
+      "after_correct": 54,
+      "scored": 94,
+      "delta": 0
+    }
+  },
+  "fields_gained": 10,
+  "fields_lost": 0,
+  "changes": [
+    {
+      "doc_id": "ptreal-company-20210318_114507",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_122239",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_205544",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 23.0,
+      "tax_candidate": 1.22,
+      "tax_after": 1.22,
+      "expected": 1.22,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210323_162534",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 19.96,
+      "tax_candidate": 3.73,
+      "tax_after": 3.73,
+      "expected": 3.73,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210323_182431",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 2095.0,
+      "tax_candidate": 20.95,
+      "tax_after": 20.95,
+      "expected": null,
+      "accepted": true,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210323_184939",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 20.95,
+      "tax_candidate": 20.95,
+      "tax_after": 20.95,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_140131",
+      "trigger": "tax_nonpositive",
+      "tax_before": -6.0,
+      "tax_candidate": -6.0,
+      "tax_after": -6.0,
+      "expected": 1.5,
+      "accepted": false,
+      "correct_before": false,
+      "correct_after": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_175951",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_224350",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 20.0,
+      "tax_candidate": 3.74,
+      "tax_after": 3.74,
+      "expected": 3.74,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210429_192826",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_194217",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": 0.0,
+      "accepted": false,
+      "correct_before": true,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210429_202036",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 1.8,
+      "tax_candidate": 0.1,
+      "tax_after": 0.1,
+      "expected": 0.1,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210429_215920",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 13.82,
+      "tax_candidate": 3.18,
+      "tax_after": 3.18,
+      "expected": 3.18,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_214834",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 9.15,
+      "tax_candidate": 9.15,
+      "tax_after": 9.15,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-company-20210508_172537",
+      "trigger": "tax_under_one_percent",
+      "tax_before": 0.01,
+      "tax_candidate": 9.35,
+      "tax_after": 9.35,
+      "expected": 9.35,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_173428",
+      "trigger": "tax_nonpositive",
+      "tax_before": -2.2,
+      "tax_candidate": -2.2,
+      "tax_after": -2.2,
+      "expected": 0.0,
+      "accepted": false,
+      "correct_before": false,
+      "correct_after": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_205649",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 29.86,
+      "tax_candidate": 6.86,
+      "tax_after": 6.86,
+      "expected": 6.86,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_163646",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 13.01,
+      "tax_candidate": 2.99,
+      "tax_after": 2.99,
+      "expected": 2.99,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_172625",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 31.71,
+      "tax_candidate": 31.71,
+      "tax_after": 31.71,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    },
+    {
+      "doc_id": "ptreal-personal-20210316_210935",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 7.55,
+      "tax_candidate": 1.73,
+      "tax_after": 1.73,
+      "expected": 1.73,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210316_213440",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 13.75,
+      "tax_candidate": 0.82,
+      "tax_after": 0.82,
+      "expected": 0.82,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002053",
+      "trigger": "tax_at_least_half_total",
+      "tax_before": 26.55,
+      "tax_candidate": 0.34,
+      "tax_after": 0.34,
+      "expected": 0.93,
+      "accepted": true,
+      "correct_before": false,
+      "correct_after": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002327",
+      "trigger": "tax_nonpositive",
+      "tax_before": 0.0,
+      "tax_candidate": 0.0,
+      "tax_after": 0.0,
+      "expected": null,
+      "accepted": false,
+      "correct_before": null,
+      "correct_after": null
+    }
+  ]
+}
