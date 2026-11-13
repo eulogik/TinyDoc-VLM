@@ -40,7 +40,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 | | |
 |---|---|
-| **Install** | `pip install tinydoc` (0.3.0) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
+| **Install** | `pip install tinydoc` (0.3.1) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
 | **Runtime** | Local Ollama; Python 3.9+; no API key |
 | **Readers** | `qwen2.5vl:3b` (quality) · `qwen3-vl:2b-instruct` (fast) |
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
