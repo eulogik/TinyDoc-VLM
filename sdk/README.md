@@ -1,4 +1,4 @@
-# TinyDoc 0.3.1-dev (unreleased) — local-first grounded document extraction
+# TinyDoc 0.3.1 — local-first grounded document extraction
 
 **TinyDoc turns receipt and invoice images into schema-validated JSON with
 per-field evidence (quote + OCR bbox), confidence for receipt review routing, and
@@ -6,7 +6,7 @@ arithmetic review flags for invoices. It runs local Qwen VLMs through Ollama;
 no API key, no cloud, no telemetry.**
 
 ```bash
-pip install tinydoc==0.3.0           # multipage + local UI
+pip install tinydoc==0.3.1           # multipage + local UI + tax retry
 pip install 'tinydoc[pdf,ui]'        # with PDF rendering + Gradio
 pip install -e ./sdk                 # development install
 ollama pull qwen2.5vl:3b             # quality tier
@@ -59,7 +59,8 @@ from those pages; the 181-document page-1 numbers remain VLM-only.
 
 ### Multipage invoices in the SDK
 
-`tinydoc 0.3.0` ships that page-wise path as `InvoicePipeline`. It renders a PDF
+`tinydoc 0.3.0` added that page-wise path as `InvoicePipeline`; `0.3.1` keeps it
+and adds the opt-in tax retry. It renders a PDF
 to page images capped at 1400 px (matching the probe), reads one page per
 request, merges deterministically, and can reconcile the printed totals with
 OCR. No model calls happen in the merge; every repair is recorded.
@@ -79,6 +80,27 @@ print(result.corrections)     # every deterministic repair, e.g. totals_from_ocr
 pip install 'tinydoc[pdf]'
 tinydoc invoice invoice.pdf --out result.jsonl --max-px 1400
 ```
+
+The opt-in tax retry re-reads only the final page at 2400 px when the first-pass
+printed tax is missing, non-positive, at least half the total, or below 1% of it.
+It replaces only `tax`, and only when the implied VAT rate is 1.0–27.5%; a failed
+or declined retry leaves the first pass untouched. Off by default:
+
+```bash
+tinydoc invoice invoice.pdf --out result.jsonl --retry-tax-px 2400
+```
+
+```python
+result = pipe.extract("invoice.pdf", retry_tax_px=2400)
+print(result.retry)          # trigger, candidate, accepted value, raw response
+print(result.method)         # adds +high_res_tax_retry only when applied
+```
+
+Measured on a fresh 100-document real-photo set (seed 44, 570 fields): field
+accuracy **401/570 = 70.4% → 411/570 = 72.1%**, tax **51/82 → 61/82**, fully
+correct **19 → 21**, zero field regressions and zero retry errors; 23/100
+documents triggered and 12 applied. See
+[`evaluation/invoice/PT_TAX_RETRY.md`](https://github.com/eulogik/TinyDoc-VLM/blob/main/evaluation/invoice/PT_TAX_RETRY.md).
 
 The OCR total reader needs system `tesseract` (`pip install 'tinydoc[ocr]'`) and
 is applied only when the final page yields a consistent subtotal/tax/total block.
@@ -122,7 +144,7 @@ this is not a leaderboard number.
 ## Install
 
 ```bash
-pip install tinydoc==0.3.0
+pip install tinydoc==0.3.1
 ```
 
 Core deps: `pydantic`, `pillow`, `jsonschema`. Optional extras:

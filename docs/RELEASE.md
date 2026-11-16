@@ -1,13 +1,14 @@
 # TinyDoc release checklist
 
-**Current target:** 0.3.1-dev on `main` (preserve-printed-total merge fix + real Portuguese probe).
-**Last published:** 0.3.0 on 2026-11-12 (multipage + UI).
+**Current release:** 0.3.1 on PyPI (2026-11-13) — preserve-printed-total merge
+fix + targeted high-resolution tax retry.
+**Previous:** 0.3.0 on 2026-11-12 (multipage + UI).
 
 ## 1. Preflight (must all pass)
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 247 passed
+python3 -m pytest tests/ -q                 # expect 254 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -22,7 +23,7 @@ Claim audit must exit 0. Do not publish a number that does not recompute from
 cd sdk
 rm -rf build dist tinydoc.egg-info
 python3 -m build --wheel --sdist
-unzip -l dist/tinydoc-0.3.0-py3-none-any.whl | grep schemas
+unzip -l dist/tinydoc-0.3.1-py3-none-any.whl | grep schemas
 ```
 
 The wheel must contain `tinydoc/schemas/sroie_receipt.schema.json` and
@@ -35,8 +36,8 @@ VENV=/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/tinydoc_venv_rele
 rm -rf "$VENV"
 python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q --upgrade pip
-"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.3.0-py3-none-any.whl
-"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.3.0'"
+"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.3.1-py3-none-any.whl
+"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.3.1'"
 "$VENV/bin/tinydoc" --help
 "$VENV/bin/python" -c "from tinydoc.invoice import invoice_schema_is_valid; assert invoice_schema_is_valid({'vendor_name':'A','invoice_number':'1','invoice_date':'2026-01-01','due_date':None,'currency':'USD','subtotal':1.0,'tax':0.0,'total_amount':1.0,'document_type':'invoice','line_items':[]})"
 TINYDOC_OLLAMA_TIMEOUT=600 TINYDOC_OLLAMA_NUM_CTX=8192 \
@@ -51,7 +52,7 @@ The extraction must return `schema=True` and non-empty fields.
 Requires a PyPI API token with upload scope. Never commit the token.
 
 ```bash
-python3 -m twine upload sdk/dist/tinydoc-0.3.0-py3-none-any.whl sdk/dist/tinydoc-0.3.0.tar.gz
+python3 -m twine upload sdk/dist/tinydoc-0.3.1-py3-none-any.whl sdk/dist/tinydoc-0.3.1.tar.gz
 # username: __token__
 # password: pypi-...
 ```
@@ -62,13 +63,13 @@ If `twine` is missing: `python3 -m pip install --user twine`.
 
 ```bash
 python3 -m venv /tmp/tinydoc_pypi_check
-/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.3.0
+/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.3.1
 /tmp/tinydoc_pypi_check/bin/python -c "import tinydoc; print(tinydoc.__all__)"
 ```
 
-Confirm <https://pypi.org/project/tinydoc/0.3.0/> shows the new README. The
-0.2.0 upload token was rotated after a leak; use a fresh token for any future
-release and never commit it.
+Confirm <https://pypi.org/project/tinydoc/0.3.1/> shows the new README. The
+0.2.0 and 0.3.0 upload tokens were exposed in chat transcripts and must be
+revoked; use a fresh token for any future release and never commit it.
 
 ## 6. Hugging Face Space
 
@@ -96,9 +97,10 @@ Check the Space reaches `RUNNING` and renders the card.
 
 ## 7. Post-release
 
-- Tag **`sdk-v0.3.0`** at the 0.3.0 release commit and create a GitHub release
-  with the wheel/sdist. Do **not** reuse `v0.2.0` or `sdk-v0.2.0`: those tags
-  point at older commits and published tags should not be moved.
+- Tag **`sdk-v0.3.1`** at the 0.3.1 release commit and create a GitHub release
+  with the wheel/sdist. Do **not** reuse `v0.2.0`, `sdk-v0.2.0`, or
+  `sdk-v0.3.0`: those tags point at older commits and published tags should not
+  be moved.
 - Keep the README install line pinned to the latest PyPI release.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
@@ -109,7 +111,7 @@ Check the Space reaches `RUNNING` and renders the card.
 - The HF Space can be reverted with `git revert` on the Space repo (or re-upload
   the previous `app.py`).
 
-## Current status (2026-11-12)
+## 0.3.0 status (2026-11-12, superseded)
 
 - **0.3.0 is published on PyPI** with the wheel and sdist: `InvoicePipeline`,
   `ocr_totals.py`, `invoice.schema.json`, `ui.py`, and the `invoice`/`ui` CLI
@@ -123,8 +125,13 @@ Check the Space reaches `RUNNING` and renders the card.
 - Tag **`sdk-v0.3.0`** at the release commit; do not move `v0.2.0` or
   `sdk-v0.2.0`.
 
-## 0.3.1-dev status (unreleased)
+## 0.3.1 status (2026-11-13, published)
 
+- **0.3.1 is published on PyPI** with the wheel and sdist. It contains the
+  preserve-printed-total merge fix and the opt-in targeted tax retry. A clean
+  venv installs 0.3.1 from PyPI, imports both schemas, and runs the CLI.
+- Tag **`sdk-v0.3.1`** and the GitHub release point at the 0.3.1 commit; the
+  README install line points at 0.3.1.
 - **The 0.3.0 wheel does not contain the merge fix.** On `main`,
   `reconcile_totals` preserves a printed total and a printed tax; a total is
   derived only when missing or structurally impossible. This was measured by
@@ -148,11 +155,12 @@ Check the Space reaches `RUNNING` and renders the card.
   +1.8 pp), fully correct 19 → 21, with no field regression and 0 retry errors.
   23/100 triggered, 12 applied. This is the chosen structural lever for 0.3.1.
   See `evaluation/invoice/PT_TAX_RETRY.md`.
-- Before a 0.3.1 release: decide whether to make the retry the CLI default
-  (`--retry-tax-px 2400`), bump `sdk/setup.py` from the dev version, rebuild both
-  schemas into the wheel, clean-venv install, upload, tag **`sdk-v0.3.1`**, and
-  update the install lines and site. Do not reuse `sdk-v0.3.0`. A fresh PyPI
-  token is needed; the token used for 0.3.0 should be rotated/revoked.
+- **Shipped in 0.3.1, opt-in.** `sdk/setup.py` is 0.3.1, both schemas are in the
+  wheel, a clean venv installs from PyPI, and the GitHub release/tag exist. The
+  retry remains off by default (`retry_tax_px=0`, `--retry-tax-px` unset), so the
+  published default path is still the 72.0% / 22-of-100 held-out result. The
+  token used for 0.3.1 was also pasted in chat and should be revoked; create a
+  new token for the next release.
 
 ## 0.2.0 status (2026-11-07)
 

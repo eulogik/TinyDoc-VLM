@@ -395,9 +395,42 @@ dot-decimal ×1000. The merge no longer causes the double count.
 dates, flag quality, or confidence calibration. One country (Portugal,
 2019–2021), two sources, 1400 px phone photos, human labels with brand/legal-
 entity ambiguity and occasional tax noise. The 0.3.0 wheel on PyPI does **not**
-contain the fix; 72.0% measures the unreleased 0.3.1-dev path. No B2B
-supplier-invoice claim is supported. Full method and artifacts:
+contain the fix; 0.3.1 does, and 72.0% is the held-out result for that shipped
+path. No B2B supplier-invoice claim is supported. Full method and artifacts:
 [`evaluation/invoice/PT_REAL_RESULTS.md`](../evaluation/invoice/PT_REAL_RESULTS.md).
+
+### Targeted tax retry (fresh seed-44 validation, 0.3.1)
+
+A whole-document 2400 px rerun was rejected as a default (4.4× latency, total and
+vendor regressions). The shipped alternative is a structural, opt-in retry: when
+the first-pass printed tax is missing, non-positive, at least half of the total,
+or below 1% of it, the final page is read once at 2400 px. A candidate replaces
+`tax` only when `0 < tax < total` and the implied VAT rate
+`tax / (total − tax)` is 1.0–27.5%; every other field stays at 1400 px.
+
+**Fresh validation set:** 100 real photos, seed 44, disjoint from the seed-42
+development set and the seed-43 holdout; 80 company / 20 personal, 570 scored
+fields. Frozen before the run.
+
+| Metric | First pass (1400 px) | + targeted retry | Δ |
+|---|---:|---:|---:|
+| Field accuracy | 401/570 = **70.4%** | 411/570 = **72.1%** | +10 (+1.8 pp) |
+| Fully correct | 19/100 | **21/100** | +2 |
+| All six | 12/74 | **13/74** | +1 |
+| Tax | 51/82 = **62.2%** | 61/82 = **74.4%** | +10 |
+
+Per field, only tax changed: currency 94/100, date 91/98, invoice number 43/96,
+total 68/100, vendor 54/94 were identical before and after. Paired fields: 401
+correct in both, 0 first-pass-only, 10 retry-only, 159 neither. 23/100 documents
+triggered, 12 were applied, and there were 0 retry errors. Seven documents failed
+before the retry (three pages with no parseable JSON, four with no total) and none
+of those failures were retry failures. The retry is **off by default**; the
+72.0% / 22-of-100 holdout headline above does not include it.
+
+Development replay on saved predictions (no model calls) matched: +10 tax and
++10 fields on the 50-document holdout subset, +1 tax on the 30-document pilot,
+with 0 fields lost. Artifacts:
+[`evaluation/invoice/PT_TAX_RETRY.md`](../evaluation/invoice/PT_TAX_RETRY.md).
 
 ### DocVQA reading probe (2B, 200 questions, single reference)
 
