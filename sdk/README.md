@@ -6,7 +6,7 @@ arithmetic review flags for invoices. It runs local Qwen VLMs through Ollama;
 no API key, no cloud, no telemetry.**
 
 ```bash
-pip install tinydoc==0.3.1           # multipage + local UI + tax retry
+pip install tinydoc==0.3.1.post1     # multipage + local UI + tax retry
 pip install 'tinydoc[pdf,ui]'        # with PDF rendering + Gradio
 pip install -e ./sdk                 # development install
 ollama pull qwen2.5vl:3b             # quality tier
@@ -144,7 +144,7 @@ this is not a leaderboard number.
 ## Install
 
 ```bash
-pip install tinydoc==0.3.1
+pip install tinydoc==0.3.1.post1
 ```
 
 Core deps: `pydantic`, `pillow`, `jsonschema`. Optional extras:

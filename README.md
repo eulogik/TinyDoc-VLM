@@ -40,7 +40,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 | | |
 |---|---|
-| **Install** | `pip install tinydoc` (0.3.1) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
+| **Install** | `pip install tinydoc` (0.3.1.post1) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
 | **Runtime** | Local Ollama; Python 3.9+; no API key |
 | **Readers** | `qwen2.5vl:3b` (quality) · `qwen3-vl:2b-instruct` (fast) |
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
@@ -58,7 +58,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 ## Quick start
 
 ```bash
-pip install tinydoc==0.3.1
+pip install tinydoc==0.3.1.post1
 
 # Pull one local reader (choose one or both)
 ollama pull qwen2.5vl:3b            # quality tier
@@ -94,7 +94,7 @@ the total, or below 1% of it), and replaces only `tax`, only when the implied VA
 rate is 1.0–27.5%. It is off by default:
 
 ```bash
-pip install 'tinydoc[pdf,ui]==0.3.1'
+pip install 'tinydoc[pdf,ui]==0.3.1.post1'
 tinydoc invoice invoice.pdf --out result.jsonl --retry-tax-px 2400
 ```
 
