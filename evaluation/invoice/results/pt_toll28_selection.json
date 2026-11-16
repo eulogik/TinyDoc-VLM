@@ -1,0 +1,48 @@
+{
+  "criteria": {
+    "source_manifest": "evaluation/invoice/manifest_pt_real.jsonl",
+    "exclude": [
+      "manifest_pt_real_probe100.jsonl",
+      "manifest_pt_real_holdout100.jsonl",
+      "manifest_pt_retry100.jsonl",
+      "manifest_pt_totalfb100.jsonl"
+    ],
+    "vendor_regex": "brisa|bragaparques|infraestruturas|parques|estacionamento|ctt|comboios|metro|via verde|ascendi|lusoponte|toll",
+    "require_tax_unscored": true,
+    "note": "Targeted stress stratum; not a random population sample. Selection uses the vendor annotation only; the fallback rule uses no vendor or gold field values."
+  },
+  "documents": 28,
+  "sources": {
+    "zenodo:6371710": 28
+  },
+  "ids": [
+    "ptreal-company-20210316_223932",
+    "ptreal-company-20210318_110451",
+    "ptreal-company-20210318_123736",
+    "ptreal-company-20210318_125034",
+    "ptreal-company-20210323_175349",
+    "ptreal-company-20210323_183045",
+    "ptreal-company-20210323_183112",
+    "ptreal-company-20210323_183136",
+    "ptreal-company-20210324_190401",
+    "ptreal-company-20210324_190845",
+    "ptreal-company-20210324_200548",
+    "ptreal-company-20210324_200623",
+    "ptreal-company-20210324_200647",
+    "ptreal-company-20210427_162522",
+    "ptreal-company-20210428_145135",
+    "ptreal-company-20210428_153455",
+    "ptreal-company-20210428_181336",
+    "ptreal-company-20210428_191219",
+    "ptreal-company-20210429_191949",
+    "ptreal-company-20210507_182648",
+    "ptreal-company-20210507_214356",
+    "ptreal-company-20210507_214550",
+    "ptreal-company-20210508_175338",
+    "ptreal-company-20210508_175440",
+    "ptreal-company-20210508_180433",
+    "ptreal-company-20210508_205926",
+    "ptreal-company-20210508_210002",
+    "ptreal-company-20210508_210101"
+  ]
+}

@@ -110,6 +110,26 @@ def main() -> int:
         if unexpected:
             raise SystemExit(f"{doc_id}: rule changed unexpected fields {unexpected}")
 
+    gold_total = {
+        row["id"]: (row.get("expected") or {}).get("total") for row in manifest
+    }
+
+    def _total_correct(value: object, gold: object) -> bool:
+        if value is None or gold is None:
+            return False
+        try:
+            return abs(float(value) - float(gold)) < 0.005
+        except (TypeError, ValueError):
+            return False
+
+    for change in changes:
+        gold = gold_total.get(change["doc_id"])
+        change["gold_total"] = gold
+        change["before_total"] = change.get("total_before")
+        change["after_total"] = change.get("total_after")
+        change["before_correct"] = _total_correct(change.get("total_before"), gold)
+        change["after_correct"] = _total_correct(change.get("total_after"), gold)
+
     before_summary = _summary(manifest, before_by_doc, "first pass (1400 px)")
     after_summary = _summary(
         manifest, after, "first pass + single-amount total fallback"
