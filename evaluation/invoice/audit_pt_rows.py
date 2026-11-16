@@ -123,6 +123,22 @@ def main() -> int:
             retry_latencies.append(float(retry["latency_ms"]))
     retry_errors = [item for item in retries if item.get("error")]
 
+    fallbacks = []
+    for row in rows:
+        fallback = row.get("total_fallback")
+        if not fallback:
+            continue
+        pred = row.get("pred") or {}
+        fallbacks.append(
+            {
+                "doc_id": str(row["id"]),
+                "trigger": fallback.get("trigger"),
+                "total_before": fallback.get("total_before"),
+                "total_after": fallback.get("total_after"),
+                "total_final": pred.get("total_amount"),
+            }
+        )
+
     payload = {
         "manifest": str(args.manifest),
         "rows_path": str(args.rows),
@@ -143,6 +159,11 @@ def main() -> int:
                 statistics.median(retry_latencies) if retry_latencies else None
             ),
             "items": retries,
+        },
+        "total_fallback": {
+            "documents": len(fallbacks),
+            "applied": len(fallbacks),
+            "items": fallbacks,
         },
         "latency_ms": {
             "p50": statistics.median(latencies) if latencies else None,
@@ -171,6 +192,7 @@ def main() -> int:
                 "retried": payload["retry"]["documents"],
                 "retry_applied": payload["retry"]["applied"],
                 "retry_errors": len(retry_errors),
+                "total_fallback": payload["total_fallback"]["documents"],
                 "latency_p50_ms": payload["latency_ms"]["p50"],
                 "task": str(args.out),
             },

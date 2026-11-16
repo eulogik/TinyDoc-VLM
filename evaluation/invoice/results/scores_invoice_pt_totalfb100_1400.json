@@ -1,0 +1,5151 @@
+{
+  "meta": {
+    "system": "TinyDoc v1 1400px, fresh seed 45 (no total fallback trigger)",
+    "run_date": "2026-11-16",
+    "notes": ""
+  },
+  "summary": {
+    "documents": 100,
+    "fields": {
+      "currency": {
+        "correct": 94,
+        "scored": 100
+      },
+      "invoice_date": {
+        "correct": 90,
+        "scored": 99
+      },
+      "invoice_number": {
+        "correct": 46,
+        "scored": 96
+      },
+      "tax": {
+        "correct": 63,
+        "scored": 85
+      },
+      "total": {
+        "correct": 78,
+        "scored": 100
+      },
+      "vendor_name": {
+        "correct": 58,
+        "scored": 92
+      }
+    },
+    "field_correct": 429,
+    "field_scored": 572,
+    "field_accuracy": 0.75,
+    "fully_correct": 29,
+    "fully_correct_rate": 0.29,
+    "fully_correct_six": 22,
+    "six_scored": 76,
+    "fully_correct_six_rate": 0.2894736842105263,
+    "parse_errors": 2
+  },
+  "documents": [
+    {
+      "doc_id": "ptreal-company-20210318_110735",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "esil. parques de estacionamento s.a.",
+          "got": "Estacionamento S.A.",
+          "detail": "similarity 0.692"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "078477",
+          "got": "H78477",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-18",
+          "got": "2019-01-18",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 5.7,
+          "got": 5.7,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_120053",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "makro cash & carry",
+          "got": "NAKRO - EST. 001",
+          "detail": "similarity 0.483"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "A0000000032010",
+          "got": "00001093",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-06",
+          "got": "2019-02-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 61.72,
+          "got": 6172.0,
+          "detail": "off by 6,110.28"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_122114",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "sulaman minimercado",
+          "got": "SULAMAN MINIMERCADO",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/26752",
+          "got": "A/26752",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-04",
+          "got": "2019-02-04",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 3.74,
+          "got": 3.74,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 19.98,
+          "got": 19.98,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210318_165020",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "bragaparques, s.a.",
+          "got": "BRAGAPARQUES, S.A.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "K2190102308",
+          "got": "K2190102308",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-22",
+          "got": "2019-01-22",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 3.8,
+          "got": 3.8,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_172300",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "penha da graca ferragens unip, lda",
+          "got": "PENHA DA GRACA FERRAGENS UNIP, LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "1A1901/608",
+          "got": "FT 1A1901/608",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-29",
+          "got": "2019-01-29",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.99,
+          "got": 2.99,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 16.0,
+          "got": 16.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210318_172420",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "carvalho, batista, lda",
+          "got": "Carvalho, Batista, Lda.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "679 - 17",
+          "got": "679 - 17",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-30",
+          "got": "2019-01-30",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 33.5,
+          "got": 33.5,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 179.17,
+          "got": 179.17,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210318_201800",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "MINIPRECO",
+          "detail": "similarity 0.286"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "021140420190102/00000033",
+          "got": "36830",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-04",
+          "got": "2019-01-04",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.45,
+          "got": 0.45,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 7.92,
+          "got": 7.92,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210318_202525",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/573847",
+          "got": "A/573847",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-02",
+          "got": "2019-01-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.54,
+          "got": 0.54,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.46,
+          "got": 9.46,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210318_204623",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "ikea",
+          "got": "IKEA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "36701220190147/094",
+          "got": "03670012003830011",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-30",
+          "got": "2019-01-30",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 69.99,
+          "got": 69.99,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210320_170517",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "casa caravela",
+          "got": "CASA CARAVELA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "J1/204780",
+          "got": "FS J1/204780",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-30",
+          "got": "2019-03-30",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 6.0,
+          "got": 6.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210322_141301",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "intermarche",
+          "got": "Intermarche",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "3F5C101219/471",
+          "got": "3FSC101219/471",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-07-25",
+          "got": "2019-07-25",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 2.61,
+          "got": 13.95,
+          "detail": "off by 11.34"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 13.95,
+          "got": 13.95,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_161714",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "galp",
+          "got": "galp",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "012010002337FAAA00000191072019/000013670",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-06-19",
+          "got": "2019-06-20",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 11.22,
+          "got": 11.22,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 60.0,
+          "got": 60.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_165511",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "casa das chaves",
+          "got": "CASA DAS CHAVES",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "19FS 001/1700",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-06-06",
+          "got": "2019-06-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 15.74,
+          "got": 15.74,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 84.2,
+          "got": 84.2,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_171146",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "repsol",
+          "got": "ES REPSOL PORTIMAO",
+          "detail": "similarity 0.5"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FR 4371TPV3/390007838",
+          "got": "6F7g-Processado por Programa Certificado",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-07-15",
+          "got": "2019-07-15",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 5.9,
+          "got": 25.63,
+          "detail": "off by 19.73"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 31.53,
+          "got": 31.53,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_172306",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "carlos eduardo pires pereira",
+          "got": "Carlos Eduardo Pires Pereira",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "109 2019/3582",
+          "got": "109 2019/3582",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-07-19",
+          "got": "2019-07-19",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.3,
+          "got": 1.3,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 6.95,
+          "got": 6.95,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210323_173827",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "bp",
+          "got": "BP - PORCHES (S) - PETROMIX, LDA",
+          "detail": "similarity 0.174"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 268031001/001152",
+          "got": "FT 268031001/001152",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-05-07",
+          "got": "2019-05-07",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.14,
+          "got": 8.8,
+          "detail": "off by 8.66"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 41.2,
+          "got": 50.0,
+          "detail": "off by 8.80"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_174136",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "casa das chaves",
+          "got": "Casa das Chaves",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "19FS 001/1284",
+          "got": "19FS 001/1284",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-05-03",
+          "got": "2019-05-03",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.24,
+          "got": 2.24,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 12.0,
+          "got": 12.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210323_181953",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "lizzy's bar 1",
+          "got": "LIZZY'S BAR 1",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "BB/86861",
+          "got": "BB/86861",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-21",
+          "got": "2019-03-21",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.47,
+          "got": 2.5,
+          "detail": "off by 2.03"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 4.1,
+          "got": 10.0,
+          "detail": "off by 5.90"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_183034",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "brisa - concessão rodoviária s.a.",
+          "got": "Brisa - Concessão Rodoviária, S.A.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 05021051902/0019439",
+          "got": "FS 05021051902/0019439",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-27",
+          "got": "2019-01-27",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 1.35,
+          "got": 10289.0,
+          "detail": "off by 10,287.65"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210323_183125",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "infraestruturas de portugal, s.a.",
+          "got": "Infraestruturas de Portugal, S.A.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "160104/3538572",
+          "got": "TALAO DE PORTAGEM N° RB 160104/3538572",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-01-06",
+          "got": "2019-01-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.05,
+          "got": 1.05,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210323_184838",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "pastelaria mourapão ii",
+          "got": "Pastelaria MouraPao II",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 014/6831",
+          "got": "FT 014/6831",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-07",
+          "got": "2019-03-07",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.35,
+          "got": 0.59,
+          "detail": "off by 0.24"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 3.95,
+          "got": 3.95,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210323_194644",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "marinagel , similares de hotelaria, sa",
+          "got": "MARINAGEL, Similares de Hotelaria, SA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "35,00",
+          "got": "FA T5/3121",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-19",
+          "got": "2019-02-19",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 3.74,
+          "got": 35.0,
+          "detail": "off by 31.26"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 35.0,
+          "got": 35.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210324_202518",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "bp",
+          "got": "BP DOMINGOS SEQUEIRA",
+          "detail": "similarity 0.182"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FR 270652001/042320",
+          "got": "483",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-24",
+          "got": "2019-02-24",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.87,
+          "got": 1.87,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 10.0,
+          "got": 10.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210326_121938",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "drogaria s marcal lda",
+          "got": "DROGARTA S MARCAL LDA",
+          "detail": "similarity 0.941"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FR 001/12446",
+          "got": "FR 001/12446",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-14",
+          "got": "2019-03-14",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "NOR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.52,
+          "got": 0.52,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 2.8,
+          "got": 2.8,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_144030",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "rogerio pais, lda",
+          "got": "ROGERIO PAIS, LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1901/1568",
+          "got": "FS 1A1901/1568",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-02-02",
+          "got": "2019-02-21",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.43,
+          "got": 2.43,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 13.0,
+          "got": 13.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_150825",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "jmtd - ferragens do combro lda",
+          "got": "JMTD-FERRAGENS DO COMBRO LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/29567",
+          "got": "A/29567",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-04",
+          "got": "2019-03-04",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 15.24,
+          "got": 15.24,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 81.5,
+          "got": 81.5,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_153707",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "dia portugal",
+          "got": "Dia Portugal",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 020830320190102/00002869",
+          "got": "02770-190 PACO ARCOS",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-13",
+          "got": "2019-03-13",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.19,
+          "got": 0.19,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 0.99,
+          "got": 0.99,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_165351",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "jmtd - ferragens do combro lda",
+          "got": "JMTD-FERRAGENS DO COMBRO LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/29546",
+          "got": "A/29546",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-01",
+          "got": "2019-03-01",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.84,
+          "got": 0.84,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 4.5,
+          "got": 4.5,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_181146",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "alves bandeira, s.a.",
+          "got": "Alves Bandeira, S.A.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "POST 479A3/4682",
+          "got": "POST 479A3/4682",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-04-05",
+          "got": "2019-04-05",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.24,
+          "got": 2.24,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 11.97,
+          "got": 11.97,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_181905",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "de portugal, s.a.",
+          "got": "Portagens de Portugal, S.A.",
+          "detail": "similarity 0.75"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "160104/3649734",
+          "got": "RB 160104/3649734",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-03-26",
+          "got": "2019-03-26",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.05,
+          "got": 1.05,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_183535",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "lelimel",
+          "got": "LELIMEL",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FR 14/8385",
+          "got": "FR 14/8385",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-01-16",
+          "got": "2018-01-16",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 6.28,
+          "got": 6.28,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 33.6,
+          "got": 33.6,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_192622",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "staples",
+          "got": "STAPLES PORTUGAL SA",
+          "detail": "similarity 0.609"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "A0000000032010",
+          "got": "2795-684 CARNAXIDE",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-20",
+          "got": "2019-02-20",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 24.9,
+          "got": 24900.0,
+          "detail": "off by 24,875.10"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_195621",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "roque & sousa",
+          "got": "E.S. COVA DA PIED",
+          "detail": "similarity 0.37"
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-03",
+          "got": "2019-02-03",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 12.26,
+          "got": 12.26,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 65.57,
+          "got": 65.57,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_195747",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-02-15",
+          "got": "2019-02-15",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 73.38,
+          "got": 73.38,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210428_201826",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "easy style",
+          "got": "XIUCHUN CHEN",
+          "detail": "similarity 0.182"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FAC 1101/00004180",
+          "got": "FAC 1101/00004180",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-05-29",
+          "got": "2019-05-23",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.24,
+          "got": 2.24,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 12.0,
+          "got": 12.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210428_224509",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "rogerio pais, lda",
+          "got": "ROGERIO PAIS, LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1901/4080",
+          "got": "FS 1A1901/4080",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-05-22",
+          "got": "2019-05-22",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 3.99,
+          "got": 3.99,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 21.35,
+          "got": 21.35,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_232451",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "yanping guan",
+          "got": "YANPING GUAN",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 2/201700006490",
+          "got": "FT 2/201700006490",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-06-09",
+          "got": "2019-06-09",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.64,
+          "got": 0.64,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 3.4,
+          "got": 3.4,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210428_234910",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "ikea",
+          "got": "IKEA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FAC 36705120190118/444",
+          "got": "FAC 36705120190118/444",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-09-06",
+          "got": "2019-09-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 8.41,
+          "got": 8.41,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 45.0,
+          "got": 53.41,
+          "detail": "off by 8.41"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_181657",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "delta q",
+          "got": "Delta Q - Lisboa Avenida",
+          "detail": "similarity 0.483"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 2A1904/15202",
+          "got": "FS 2A1904/15202",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-09",
+          "got": "2019-08-09",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.1,
+          "got": 4.1,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 32.4,
+          "got": 36.5,
+          "detail": "off by 4.10"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_182800",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 1/23538",
+          "got": "FT 1/23538",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-16",
+          "got": "2019-08-16",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.5,
+          "got": 2.7,
+          "detail": "off by 2.20"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 75.1,
+          "got": 75.1,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_190814",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": false,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": null,
+          "detail": "similarity 0.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140220190102/00007007",
+          "got": null,
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-09-04",
+          "got": null,
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.12,
+          "got": null,
+          "detail": "missing"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 2.1,
+          "got": null,
+          "detail": "missing"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_190827",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "MINI PRECO",
+          "detail": "similarity 0.364"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140220190102/00007907",
+          "got": "510776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-09-04",
+          "got": "2019-09-04",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.12,
+          "got": 0.12,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 2.1,
+          "got": 2.1,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_192501",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "jmtd - ferragens do combro lda",
+          "got": "JMTD-FERRAGENS DO COMBRO LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/33866",
+          "got": "A/33866",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-02",
+          "got": "2019-10-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.68,
+          "got": 1.68,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.0,
+          "got": 9.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210429_192740",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "bragaparques, s.a.",
+          "got": "BRAGAPARQUES, S.A.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "K2190105383",
+          "got": "K2190105383",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-30",
+          "got": "2019-08-30",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.3,
+          "got": 1.3,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_194756",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "ferragens g lemos lda",
+          "got": "Ferragens G Lemos, Lda",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT POS19V12/1917629",
+          "got": "510776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-01",
+          "got": "2019-10-01",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.8,
+          "got": 0.8,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 4.3,
+          "got": 4.3,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_200744",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "pingo doce",
+          "got": "Pingo Doce - Distribuição Alimentar, S.A",
+          "detail": "similarity 0.426"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 04400031901010620/001214",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-07-02",
+          "got": "2019-07-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.15,
+          "got": 0.79,
+          "detail": "off by 0.64"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 4.57,
+          "got": 4.57,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_201537",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "pingo doce",
+          "got": "TOMAS RIBEIRO",
+          "detail": "similarity 0.261"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 04400061901010621/071607",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-16",
+          "got": "2019-08-16",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.02,
+          "got": 0.1,
+          "detail": "off by 0.08"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 11.6,
+          "got": 11.6,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_204223",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "pingo doce",
+          "got": "TOMAS RIBEIRO",
+          "detail": "similarity 0.261"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 02400041901010621/072375",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-07-29",
+          "got": "2019-07-29",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.3,
+          "got": 10.0,
+          "detail": "off by 9.70"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 4.27,
+          "got": 10.0,
+          "detail": "off by 5.73"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_204534",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "solar dos duques",
+          "got": "SOLAR DOS DUQUES",
+          "detail": "similarity 1.0"
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-11-29",
+          "got": "2019-11-29",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 10.68,
+          "got": 182.1,
+          "detail": "off by 171.42"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 182.1,
+          "got": 182.1,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_205531",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "h3",
+          "got": "new hamburgology",
+          "detail": "similarity 0.111"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 120/241322",
+          "got": "5107/6914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-17",
+          "got": "2019-10-17",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.95,
+          "got": 0.95,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 7.5,
+          "got": 7.5,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_210529",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "MINIPRECO",
+          "detail": "similarity 0.286"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140420190102/00008461",
+          "got": "510776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-28",
+          "got": "2019-08-28",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.1,
+          "got": 0.1,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.74,
+          "got": 1.74,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_210844",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "Dia Portugal - Sup. Soc. Unip. Ltda",
+          "detail": "similarity 0.571"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140220190102/00007067",
+          "got": "02770-190 PACO ARCOS",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-08",
+          "got": "2019-08-08",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.11,
+          "got": 0.11,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 1.88,
+          "got": 1.77,
+          "detail": "off by 0.11"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_211138",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "Dia Portugal - Sup. Soc. Unip., Lda",
+          "detail": "similarity 0.649"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140220190102/00007068",
+          "got": "510776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-08",
+          "got": "2019-08-08",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.11,
+          "got": 1.98,
+          "detail": "off by 1.87"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.98,
+          "got": 1.98,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_211236",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "dia portugal",
+          "got": "QIA FONTE EDF ALVARES CABRAL",
+          "detail": "similarity 0.35"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 021140320190102/00008127",
+          "got": "021140320190102/00008127",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-08-27",
+          "got": "2019-08-27",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.06,
+          "got": 0.06,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 1.05,
+          "got": 1.05,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210429_220654",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "S 10112019A/04117",
+          "got": "3239",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-11-06",
+          "got": "2019-11-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.87,
+          "got": 1.87,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 10.0,
+          "got": 11.87,
+          "detail": "off by 1.87"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210429_221310",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "worten",
+          "got": "Worten",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT HRX3016390",
+          "got": "11/BRX003/016396",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-11-11",
+          "got": "2019-11-17",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "BRL",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 3.56,
+          "got": 32.02,
+          "detail": "off by 28.46"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 17.98,
+          "got": 50.0,
+          "detail": "off by 32.02"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210507_162551",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "auchan",
+          "got": "AUCHAN AMORE TRAS",
+          "detail": "similarity 0.522"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "0246262019100800/095093",
+          "got": "00776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-18",
+          "got": "2019-10-18",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.39,
+          "got": 0.39,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 2.1,
+          "got": 2.49,
+          "detail": "off by 0.39"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210507_172114",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "mingfan zheng",
+          "got": "MINGFAN ZHENG",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FAC 201/00002263",
+          "got": "FAC 201/00002263",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-07",
+          "got": "2019-10-07",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.83,
+          "got": 1.83,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.8,
+          "got": 9.8,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_174041",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FTR 6/17381",
+          "got": "510776914",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-10-28",
+          "got": "2019-10-28",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.73,
+          "got": 0.73,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 3.9,
+          "got": 3.9,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210507_175318",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "bazarshopping",
+          "got": "BAZARSHOPPING",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FAC 101/00031763",
+          "got": "FAC 101/00031763",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2019-09-28",
+          "got": "2019-09-28",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.42,
+          "got": 0.42,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 2.25,
+          "got": 2.25,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_182805",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": false,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "delta q",
+          "got": null,
+          "detail": "similarity 0.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 2A1903/21475",
+          "got": null,
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2019-12-05",
+          "got": null,
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 1.15,
+          "got": null,
+          "detail": "missing"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 10.0,
+          "got": null,
+          "detail": "missing"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210507_191744",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "PO 001/1709679",
+          "got": "001/1709679",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-10",
+          "got": "2017-11-10",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.46,
+          "got": 1.46,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 7.83,
+          "got": 7.83,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210507_193014",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "jmtd - ferragens do combro lda",
+          "got": "JMTD-FERRAGENS DO COMBRO LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/20731",
+          "got": "A/20731",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-21",
+          "got": "2017-11-21",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 3.44,
+          "got": 3.44,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 18.4,
+          "got": 18.4,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_193128",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "jmtd - ferragens do combro lda",
+          "got": "JMTD-FERRAGENS DO COMBRO LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "A/20683",
+          "got": "A/20683",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-20",
+          "got": "2017-11-20",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.49,
+          "got": 0.49,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 2.6,
+          "got": 2.6,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_201437",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "lidl & cia",
+          "got": "LIDL & Cia - Lojas Alimentares",
+          "detail": "similarity 0.471"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "VD 033000117/003017",
+          "got": "033000117/003017",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-10-01",
+          "got": "2017-10-01",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.1,
+          "got": 1.1,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 5.87,
+          "got": 5.87,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210507_213627",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "franco & barbosa lda",
+          "got": "Franco & Barbosa Lda",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 002/51",
+          "got": "FT 002/51",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-24",
+          "got": "2017-11-24",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 1.68,
+          "got": 1.68,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.0,
+          "got": 9.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210507_215258",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "power",
+          "got": "POSTO da Lourinha",
+          "detail": "similarity 0.273"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "POST A1/61894",
+          "got": "POST A1/61894",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-10-18",
+          "got": "2017-10-18",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 9.35,
+          "got": 9.35,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 50.0,
+          "got": 50.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210507_215716",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS M/0040662",
+          "got": "FS M/0040662",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-24",
+          "got": "2017-11-24",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 3.2,
+          "got": 3.12,
+          "detail": "off by 0.08"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 27.29,
+          "got": 30.41,
+          "detail": "off by 3.12"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210507_220010",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "terra nostra garden hotel",
+          "got": "TERRA NOstra GARDEN HOTEL",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FTR 03/5254",
+          "got": "FTR03/5254",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2017-11-10",
+          "got": "2017-11-10",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 9.5,
+          "got": 105.5,
+          "detail": "off by 96.00"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 155.0,
+          "got": 155.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_144329",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "cp comboios de portugal, e. p. e.",
+          "got": "Comboios de Portugal, E.P.E.",
+          "detail": "similarity 0.945"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1664/260263",
+          "got": "FS 1664/260263",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-11-08",
+          "got": "2018-11-08",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 74.15,
+          "got": 74.15,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-company-20210508_152009",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "farmacia estacio",
+          "got": "FARMACIA ESTACIO",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "Y009/84646",
+          "got": "Y009/84646",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-11-06",
+          "got": "2018-11-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.32,
+          "got": 0.32,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 5.74,
+          "got": 5.74,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_152641",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "continente",
+          "got": "CONTINENTE",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 005/030395",
+          "got": "FS 00005/030395",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-07-14",
+          "got": "2018-07-14",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 8.07,
+          "got": 8.07,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 43.15,
+          "got": 43.15,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_170030",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "glória nunes pereira, lda",
+          "got": "FEELSLIKEHOME LDA",
+          "detail": "similarity 0.182"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "004/0004729",
+          "got": "004/0004729",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-08-23",
+          "got": "2018-08-23",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.55,
+          "got": 0.55,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 2.95,
+          "got": 2.95,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_180901",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "rogerio pais, lda",
+          "got": "ROGERIO PAIS, LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1801/4806",
+          "got": "FS 1A1801/4806",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-06-05",
+          "got": "2018-06-05",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 6.17,
+          "got": 6.17,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 26.83,
+          "got": 33.0,
+          "detail": "off by 6.17"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_181030",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "rogerio pais, lda",
+          "got": "ROGERIO PAIS, LDA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1801/4873",
+          "got": "FS 1A1801/4873",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-06-06",
+          "got": "2018-06-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.1,
+          "got": 4.1,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 21.9,
+          "got": 21.9,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_205409",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "restaurante rubro avenida",
+          "got": "Restaurante Rubro Avenida",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FT 102/7610",
+          "got": "FT 102/7610",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-06-28",
+          "got": "2018-06-28",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 6.09,
+          "got": 6.09,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 50.5,
+          "got": 50.5,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_205626",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "galp",
+          "got": "galp",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "012010004110FAAB00000112722018/000006889",
+          "got": "V716",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2018-07-08",
+          "got": "2018-07-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 5.61,
+          "got": 5.61,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 30.0,
+          "got": 35.61,
+          "detail": "off by 5.61"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-company-20210508_210504",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "tal costa braz",
+          "got": "Vital Costa Braz",
+          "detail": "similarity 0.933"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1801/2819",
+          "got": "FS 1A1801/2819",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-04-02",
+          "got": "2018-04-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.67,
+          "got": 4.67,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 25.0,
+          "got": 25.0,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_210525",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "costa braz",
+          "got": "Vital Costa Braz",
+          "detail": "similarity 0.769"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 1A1801/2821",
+          "got": "FS 1A1801/2821",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-04-02",
+          "got": "2018-04-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 3.41,
+          "got": 3.41,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 18.25,
+          "got": 18.25,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-company-20210508_211501",
+      "category": "real_pt_company",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "aki",
+          "got": "AKI",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FT 05549311/0052880",
+          "got": "FT 05540311/0052860",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2018-04-13",
+          "got": "2018-04-13",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 9.45,
+          "got": 9.45,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 50.56,
+          "got": 50.56,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_160646",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "100% açores",
+          "got": "Ana & Fernando Freixo, lda.",
+          "detail": "similarity 0.276"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "A/413",
+          "got": "Nº1 A/413",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-02-15",
+          "got": "2021-02-15",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.25,
+          "got": 4.25,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 22.71,
+          "got": 22.71,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_162230",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "nova gama gourmet sa",
+          "got": "Nova Gama Gourmet SA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 305/190507",
+          "got": "FS 805/190507",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-22",
+          "got": "2020-12-22",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.14,
+          "got": 190.23,
+          "detail": "off by 190.09"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 20.2,
+          "got": 20.2,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_163707",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "livraria almedina estadio",
+          "got": "Ana Patrícia Silva",
+          "detail": "similarity 0.279"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "031F / 224905",
+          "got": "031F/22A905",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-05",
+          "got": "2020-12-05",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.49,
+          "got": 4.49,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 31.59,
+          "got": 43.98,
+          "detail": "off by 12.39"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_164630",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "zara home",
+          "got": "ZARA HOME (PORTUGAL)",
+          "detail": "similarity 0.667"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 001715012020/013004",
+          "got": "FS 001715012020/013004",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-10-17",
+          "got": "2020-10-17",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.99,
+          "got": 9.99,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_164736",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "metro kids company",
+          "got": "Florinda Santos",
+          "detail": "similarity 0.32"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "TVL 20140200/24566",
+          "got": "24830",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-11-13",
+          "got": "2020-11-13",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.62,
+          "got": 2.62,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 14.0,
+          "got": 30.62,
+          "detail": "off by 16.62"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_164751",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "h",
+          "got": "ZARA HOME (PORTUGAL)",
+          "detail": "similarity 0.105"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 001715012020/016320",
+          "got": "FS 001715012020/016320",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-02",
+          "got": "2020-12-02",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 7.99,
+          "got": 7.99,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_165921",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "fotosport",
+          "got": "Coimbra Shopping",
+          "detail": "similarity 0.16"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "8/45872",
+          "got": "6/45872",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-17",
+          "got": "2020-12-17",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "BRL",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.32,
+          "got": 2.32,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 12.42,
+          "got": 12.42,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_172303",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "papelaria marciano , lda",
+          "got": "Papelaria Marciano, Lda.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 120/17439",
+          "got": "Nº FS 120/17439",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-17",
+          "got": "2020-12-17",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": false,
+          "expected": "EUR",
+          "got": "BRL",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.54,
+          "got": 0.54,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 2.85,
+          "got": 3.39,
+          "detail": "off by 0.54"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_172535",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "moinho velho padaria",
+          "got": "Moinho Velho",
+          "detail": "similarity 0.75"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "92 A/12019367434",
+          "got": "92 A/2019367434",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-01-06",
+          "got": "2021-01-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.66,
+          "got": 66.0,
+          "detail": "off by 65.34"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 11.71,
+          "got": 1171.0,
+          "detail": "off by 1,159.29"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_172640",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS 001715012020/019008",
+          "got": "FS 001715012020/019008",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-22",
+          "got": "2020-12-22",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 15.99,
+          "got": 15.99,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-personal-20210215_172922",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "miss lily",
+          "got": "MISS LILY",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "200826000036",
+          "got": "200826000036",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-08-26",
+          "got": "2020-08-26",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.41,
+          "got": 2.41,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 12.91,
+          "got": 12.91,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210316_215808",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "5àfil",
+          "got": "C. C. ALMA SHOPPING, LOJA 004",
+          "detail": "similarity 0.129"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "S 10162020A / 04475",
+          "got": "S 10162020A/04475",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-10-06",
+          "got": "2020-10-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 3.16,
+          "got": 3.16,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 16.92,
+          "got": 16.92,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210316_220410",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "el corte ingles",
+          "got": "EL CORTE INGLÉS - GRANDES ARMAZÉNS, S. A.",
+          "detail": "similarity 0.588"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FC 015520005A / 011186",
+          "got": "90150203C3",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-12-19",
+          "got": "2020-12-19",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 3.97,
+          "got": 27.14,
+          "detail": "off by 23.17"
+        },
+        "total": {
+          "field": "total",
+          "correct": false,
+          "expected": 48.38,
+          "got": 75.52,
+          "detail": "off by 27.14"
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_000502",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "tecidos coimbra",
+          "got": "TECIDOS COIMBRA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "02 0/639480",
+          "got": "Fatura Simplificada 02 0/639480",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-04-06",
+          "got": "2021-04-06",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.23,
+          "got": 2.23,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 11.9,
+          "got": 11.9,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_000517",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "maria da glória cab",
+          "got": "Maria da Glória Cab.",
+          "detail": "similarity 1.0"
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 4.88,
+          "got": 4.88,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 26.1,
+          "got": 26.1,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": false,
+      "fully_correct_six": null
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_000617",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "nova gama gourmet sa",
+          "got": "Nova Gama Gourmet SA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS BOS / 231378",
+          "got": "FS B05/231378",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": false,
+          "expected": "2011-04-06",
+          "got": "2021-04-08",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 0.73,
+          "got": 0.73,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 6.37,
+          "got": 6.37,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_000636",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "maria da glória cab.",
+          "got": "Maria da Glória Cab.",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": true,
+          "expected": "FS A / 42280",
+          "got": "FS A/42280",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2020-10-23",
+          "got": "2020-10-23",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 2.28,
+          "got": 2.28,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 12.2,
+          "got": 12.2,
+          "detail": ""
+        }
+      },
+      "fully_correct": true,
+      "all_six_scored": true,
+      "fully_correct_six": true
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_000657",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "nova gama gourmet sa",
+          "got": "Nova Gama Gourmet SA",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 305/232388",
+          "got": "FS 805/232388",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-04-10",
+          "got": "2021-04-10",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.17,
+          "got": 0.7,
+          "detail": "off by 0.53"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 3.7,
+          "got": 3.7,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002122",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": true,
+          "expected": "pingo doce",
+          "got": "Pingo Doce",
+          "detail": "similarity 1.0"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 03960652101021006/026435",
+          "got": "",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-04-10",
+          "got": "2021-04-10",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": false,
+          "expected": 0.84,
+          "got": 0.28,
+          "detail": "off by 0.56"
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 9.5,
+          "got": 9.5,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    },
+    {
+      "doc_id": "ptreal-personal-20210509_002445",
+      "category": "real_pt_personal",
+      "difficulty": "real",
+      "predicted": true,
+      "fields": {
+        "vendor_name": {
+          "field": "vendor_name",
+          "correct": false,
+          "expected": "bybebé sublinhar, lda",
+          "got": "ASUNCAO CRUZ",
+          "detail": "similarity 0.357"
+        },
+        "invoice_number": {
+          "field": "invoice_number",
+          "correct": false,
+          "expected": "FS 2021/84931",
+          "got": "2021/84931",
+          "detail": ""
+        },
+        "invoice_date": {
+          "field": "invoice_date",
+          "correct": true,
+          "expected": "2021-04-30",
+          "got": "2021-04-30",
+          "detail": ""
+        },
+        "currency": {
+          "field": "currency",
+          "correct": true,
+          "expected": "EUR",
+          "got": "EUR",
+          "detail": ""
+        },
+        "tax": {
+          "field": "tax",
+          "correct": true,
+          "expected": 24.58,
+          "got": 24.58,
+          "detail": ""
+        },
+        "total": {
+          "field": "total",
+          "correct": true,
+          "expected": 131.49,
+          "got": 131.49,
+          "detail": ""
+        }
+      },
+      "fully_correct": false,
+      "all_six_scored": true,
+      "fully_correct_six": false
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "label": "fresh seed45",
+  "documents": 100,
+  "manifest_documents": 100,
+  "triggered": 0,
+  "changes": [],
+  "baseline": {
+    "system": "first pass (1400 px)",
+    "run_date": "",
+    "n_docs": 100,
+    "field_accuracy": 0.75,
+    "field_correct": 429,
+    "field_scored": 572,
+    "fully_correct": 29,
+    "fully_correct_rate": 0.29,
+    "fully_correct_six": 22,
+    "six_scored": 76,
+    "fully_correct_six_rate": 0.2894736842105263,
+    "ci95_exact": {
+      "field_accuracy": [
+        0.7124039783475717,
+        0.7849911223299889
+      ],
+      "fully_correct_rate": [
+        0.20357418925073192,
+        0.3892659589074484
+      ],
+      "fully_correct_six_rate": [
+        0.19111218708831854,
+        0.40485143905736776
+      ],
+      "note": "Clopper-Pearson. The field interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level intervals for fully-correct rates."
+    },
+    "per_field": {
+      "currency": {
+        "correct": 94,
+        "scored": 100,
+        "accuracy": 0.94
+      },
+      "invoice_date": {
+        "correct": 90,
+        "scored": 99,
+        "accuracy": 0.9090909090909091
+      },
+      "invoice_number": {
+        "correct": 46,
+        "scored": 96,
+        "accuracy": 0.4791666666666667
+      },
+      "tax": {
+        "correct": 63,
+        "scored": 85,
+        "accuracy": 0.7411764705882353
+      },
+      "total": {
+        "correct": 78,
+        "scored": 100,
+        "accuracy": 0.78
+      },
+      "vendor_name": {
+        "correct": 58,
+        "scored": 92,
+        "accuracy": 0.6304347826086957
+      }
+    },
+    "per_category": {
+      "real_pt_company": {
+        "docs": 80,
+        "field_accuracy": 0.7641921397379913,
+        "field_correct": 350,
+        "field_scored": 458,
+        "fully_correct": 25,
+        "fully_correct_rate": 0.3125,
+        "fully_correct_six": 20,
+        "six_scored": 60,
+        "fully_correct_six_rate": 0.3333333333333333
+      },
+      "real_pt_personal": {
+        "docs": 20,
+        "field_accuracy": 0.6929824561403509,
+        "field_correct": 79,
+        "field_scored": 114,
+        "fully_correct": 4,
+        "fully_correct_rate": 0.2,
+        "fully_correct_six": 2,
+        "six_scored": 16,
+        "fully_correct_six_rate": 0.125
+      }
+    },
+    "latency_ms": {
+      "p50": null,
+      "p90": null,
+      "n": 0
+    },
+    "parse_errors": 0
+  },
+  "fallback": {
+    "system": "first pass + single-amount total fallback",
+    "run_date": "",
+    "n_docs": 100,
+    "field_accuracy": 0.75,
+    "field_correct": 429,
+    "field_scored": 572,
+    "fully_correct": 29,
+    "fully_correct_rate": 0.29,
+    "fully_correct_six": 22,
+    "six_scored": 76,
+    "fully_correct_six_rate": 0.2894736842105263,
+    "ci95_exact": {
+      "field_accuracy": [
+        0.7124039783475717,
+        0.7849911223299889
+      ],
+      "fully_correct_rate": [
+        0.20357418925073192,
+        0.3892659589074484
+      ],
+      "fully_correct_six_rate": [
+        0.19111218708831854,
+        0.40485143905736776
+      ],
+      "note": "Clopper-Pearson. The field interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level intervals for fully-correct rates."
+    },
+    "per_field": {
+      "currency": {
+        "correct": 94,
+        "scored": 100,
+        "accuracy": 0.94
+      },
+      "invoice_date": {
+        "correct": 90,
+        "scored": 99,
+        "accuracy": 0.9090909090909091
+      },
+      "invoice_number": {
+        "correct": 46,
+        "scored": 96,
+        "accuracy": 0.4791666666666667
+      },
+      "tax": {
+        "correct": 63,
+        "scored": 85,
+        "accuracy": 0.7411764705882353
+      },
+      "total": {
+        "correct": 78,
+        "scored": 100,
+        "accuracy": 0.78
+      },
+      "vendor_name": {
+        "correct": 58,
+        "scored": 92,
+        "accuracy": 0.6304347826086957
+      }
+    },
+    "per_category": {
+      "real_pt_company": {
+        "docs": 80,
+        "field_accuracy": 0.7641921397379913,
+        "field_correct": 350,
+        "field_scored": 458,
+        "fully_correct": 25,
+        "fully_correct_rate": 0.3125,
+        "fully_correct_six": 20,
+        "six_scored": 60,
+        "fully_correct_six_rate": 0.3333333333333333
+      },
+      "real_pt_personal": {
+        "docs": 20,
+        "field_accuracy": 0.6929824561403509,
+        "field_correct": 79,
+        "field_scored": 114,
+        "fully_correct": 4,
+        "fully_correct_rate": 0.2,
+        "fully_correct_six": 2,
+        "six_scored": 16,
+        "fully_correct_six_rate": 0.125
+      }
+    },
+    "latency_ms": {
+      "p50": null,
+      "p90": null,
+      "n": 0
+    },
+    "parse_errors": 0
+  },
+  "per_field": {
+    "currency": {
+      "before_correct": 94,
+      "after_correct": 94,
+      "scored": 100,
+      "delta": 0
+    },
+    "invoice_date": {
+      "before_correct": 90,
+      "after_correct": 90,
+      "scored": 99,
+      "delta": 0
+    },
+    "invoice_number": {
+      "before_correct": 46,
+      "after_correct": 46,
+      "scored": 96,
+      "delta": 0
+    },
+    "tax": {
+      "before_correct": 63,
+      "after_correct": 63,
+      "scored": 85,
+      "delta": 0
+    },
+    "total": {
+      "before_correct": 78,
+      "after_correct": 78,
+      "scored": 100,
+      "delta": 0
+    },
+    "vendor_name": {
+      "before_correct": 58,
+      "after_correct": 58,
+      "scored": 92,
+      "delta": 0
+    }
+  },
+  "fully_correct_delta": 0
+}

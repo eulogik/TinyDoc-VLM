@@ -2,7 +2,8 @@
 
 **Status:** the model-based total retry was rejected by a 7-document development
 probe. A deterministic single-amount fallback is implemented and replayed on the
-seed-44 fresh set; its seed-45 validation is in progress.
+seed-44 fresh set; a representative seed-45 sample did not exercise it, so a
+targeted toll/parking stress probe is the remaining validation.
 **Headline:** when a receipt prints exactly one amount and the reader puts it in
 `tax` or `subtotal` instead of `total`, reclassify that amount as the total. On
 the seed-44 set this recovers **4 fields and 4 fully-correct documents** with no
@@ -82,10 +83,27 @@ Artifacts: `results/total_fallback_replay_pt_retry100.json`, produced by
 
 The rule was found on the seed-44 failures, so the seed-44 replay is development
 evidence. A new 100-document set (seed 45, disjoint from seeds 42/43/44, 80
-company / 20 personal, 572 scored fields) was frozen before the run. It is run at
-1400 px with the shipped fallback; the pre-fallback predictions are reconstructed
-from each row's `total_fallback` block and scored separately. Results and the
-0.3.2 scope decision will be appended when the run completes and is audited.
+company / 20 personal, 572 scored fields) was frozen before the run and run at
+1400 px with the shipped fallback.
+
+Result: **429/572 = 75.0% field accuracy, 29/100 fully correct, 2 hard failures**
+(two pages with no parseable JSON). The rule **triggered 0 times**: on this
+sample the reader returned a total for every parsed receipt, so there was no
+case of "total missing with exactly one printed amount". Pre- and post-fallback
+scores are identical (429/572 and 29/100).
+
+This sample therefore **does not validate the rule's gain**; it only shows that
+shipping it changed nothing on a representative fresh set. Toll and parking
+receipts are the relevant stratum, and they were too rare here. A targeted
+stress probe over the remaining toll/parking/transport receipts in the pool is
+the next step; it must be labeled as a targeted probe, not as a population
+estimate.
+
+Artifacts: `manifest_pt_totalfb100.jsonl`,
+`results/rows_invoice_pt_totalfb100_1400.jsonl`,
+`results/summary_invoice_pt_totalfb100_1400.json`,
+`results/audit_invoice_pt_totalfb100_1400.json`,
+`results/total_fallback_replay_pt_totalfb100.json`.
 
 ## Product path
 

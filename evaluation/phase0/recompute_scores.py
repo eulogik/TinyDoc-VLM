@@ -1437,6 +1437,70 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"total-fallback check errored: {exc}")
 
+    # Fresh seed-45 validation of the fallback rule. The representative sample
+    # did not contain an applicable document; record that explicitly instead of
+    # treating the absence of triggers as evidence of a gain.
+    tf45_tag = "pt_totalfb100_1400"
+    tf45_manifest = ROOT.parent / f"invoice/manifest_{tf45_tag}.jsonl"
+    tf45_rows = ROOT.parent / f"invoice/results/rows_invoice_{tf45_tag}.jsonl"
+    tf45_summary = ROOT.parent / f"invoice/results/summary_invoice_{tf45_tag}.json"
+    tf45_audit = ROOT.parent / f"invoice/results/audit_invoice_{tf45_tag}.json"
+    tf45_replay = ROOT.parent / "invoice/results/total_fallback_replay_pt_totalfb100.json"
+    tf45_missing = [
+        path.name
+        for path in (
+            tf45_manifest,
+            tf45_rows,
+            tf45_summary,
+            tf45_audit,
+            tf45_replay,
+        )
+        if not path.exists()
+    ]
+    if tf45_missing:
+        failures.append(f"seed-45 total-fallback artifacts missing: {tf45_missing}")
+    else:
+        try:
+            m45 = [json.loads(line) for line in tf45_manifest.open() if line.strip()]
+            r45 = [json.loads(line) for line in tf45_rows.open() if line.strip()]
+            s45 = json.loads(tf45_summary.read_text())
+            a45 = json.loads(tf45_audit.read_text())
+            p45 = json.loads(tf45_replay.read_text())
+            tf45_ok = (
+                len(m45) == 100
+                and len(r45) == 100
+                and a45.get("documents") == 100
+                and a45.get("rows") == 100
+                and a45.get("missing") == []
+                and a45.get("failed") == 2
+                and a45.get("allowed_failed") == 2
+                and a45.get("done_reasons") == {"stop": 98, "length": 2}
+                and a45.get("retry", {}).get("documents") == 0
+                and a45.get("total_fallback", {}).get("documents") == 0
+                and s45.get("field_correct") == 429
+                and s45.get("field_scored") == 572
+                and s45.get("fully_correct") == 29
+                and s45.get("fully_correct_six") == 22
+                and s45.get("six_scored") == 76
+                and p45.get("manifest_documents") == 100
+                and p45.get("documents") == 100
+                and p45.get("triggered") == 0
+                and p45.get("baseline", {}).get("field_correct") == 429
+                and p45.get("fallback", {}).get("field_correct") == 429
+                and p45.get("baseline", {}).get("fully_correct") == 29
+                and p45.get("fallback", {}).get("fully_correct") == 29
+            )
+            print(
+                "claim: seed-45 fresh total-fallback sample -> "
+                f"{s45.get('field_correct')}/572 fields, fully {s45.get('fully_correct')}, "
+                f"fallback triggers {p45.get('triggered')} "
+                f"(rule not exercised) -> {'PASS' if tf45_ok else 'FAIL'}"
+            )
+            if not tf45_ok:
+                failures.append("seed-45 total-fallback counts, audit, or replay changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"seed-45 total-fallback check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"
