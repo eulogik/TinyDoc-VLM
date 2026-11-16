@@ -340,6 +340,9 @@ before using it as a gate.
 - `PT_TAX_RETRY.md` — the targeted high-resolution tax retry (structural
   trigger, 1.0–27.5% rate acceptance, development replay; fresh validation in
   progress).
+- `PT_TOTAL_FALLBACK.md` — the rejected model total retry and the shipped
+  deterministic single-amount total fallback (seed-44 replay; seed-45 validation
+  in progress).
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

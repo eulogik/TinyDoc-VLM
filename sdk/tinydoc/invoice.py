@@ -621,6 +621,53 @@ def retry_tax_is_plausible(prediction: dict, candidate: Any) -> bool:
     return RETRY_TAX_MIN_RATE <= implied_rate <= RETRY_TAX_MAX_RATE
 
 
+# --- Single-amount total fallback (deterministic, no model call) -------------
+
+
+def apply_single_amount_total_fallback(prediction: dict) -> Optional[Dict[str, Any]]:
+    """Use the only printed amount as the total when the total itself is missing.
+
+    Some receipts (Portuguese toll booths, card-payment slips) print one amount
+    and no ``Total`` line; the reader may put that amount in ``tax`` ("Taxa") or
+    ``subtotal`` ("Compra") instead of ``total``. Reclassifying a lone amount is
+    arithmetic, not a guess: if both a subtotal and a tax were printed, this
+    function does nothing. The mutation and the reason are returned so callers
+    can record the correction and route it for review.
+
+    This is deliberately separate from :func:`tax_retry_reason`: a missing total
+    is not evidence that the tax is wrong, and the fix needs no model call.
+    """
+    total = _number(prediction.get("total_amount", prediction.get("total")))
+    if total is not None and total > 0:
+        return None
+    subtotal = _number(prediction.get("subtotal"))
+    tax = _number(prediction.get("tax"))
+
+    if subtotal is None and tax is not None and tax > 0:
+        info: Dict[str, Any] = {
+            "trigger": "total_from_single_amount_tax",
+            "total_before": total,
+            "tax_before": tax,
+            "total_after": round(tax, 2),
+            "tax_after": None,
+        }
+        prediction["total_amount"] = info["total_after"]
+        prediction["tax"] = None
+        return info
+
+    if tax is None and subtotal is not None and subtotal > 0:
+        info = {
+            "trigger": "total_from_single_amount_subtotal",
+            "total_before": total,
+            "subtotal_before": subtotal,
+            "total_after": round(subtotal, 2),
+        }
+        prediction["total_amount"] = info["total_after"]
+        return info
+
+    return None
+
+
 def check_prediction(
     prediction: dict,
     rel_tol: float = 0.001,
@@ -776,6 +823,7 @@ class InvoiceResult:
     arithmetic_issues: List[Dict[str, Any]] = field(default_factory=list)
     ocr_totals: Optional[Dict[str, Any]] = None
     retry: Optional[Dict[str, Any]] = None
+    total_fallback: Optional[Dict[str, Any]] = None
     pages: List[Dict[str, Any]] = field(default_factory=list)
     evidence: Dict[str, Any] = field(default_factory=dict)
     latency_ms: float = 0.0
@@ -797,6 +845,7 @@ class InvoiceResult:
             "arithmetic_issues": self.arithmetic_issues,
             "ocr_totals": self.ocr_totals,
             "retry": self.retry,
+            "total_fallback": self.total_fallback,
             "evidence": self.evidence,
             "pages": self.pages,
             "latency_ms": round(self.latency_ms, 1),
@@ -930,9 +979,21 @@ class InvoicePipeline:
                 if retry and retry.get("applied"):
                     corrections.append("tax_from_high_res_retry")
 
+            total_fallback = None
+            if not page_records[-1].get("error"):
+                total_fallback = apply_single_amount_total_fallback(merged)
+            if total_fallback:
+                corrections.append(total_fallback["trigger"])
+
             issues = check_prediction(merged)
             review_flags = [issue["check"] for issue in issues]
             review_flags.extend(merge_is_sane(merged, parsed_pages))
+            if total_fallback:
+                review_flags.append(
+                    "total_from_single_amount_tax"
+                    if total_fallback["trigger"] == "total_from_single_amount_tax"
+                    else "total_from_single_amount_subtotal"
+                )
             failed_pages = sorted(
                 {
                     int(record["page"])
@@ -979,6 +1040,8 @@ class InvoicePipeline:
             method = "page_wise_merge"
             if retry and retry.get("applied"):
                 method += "+high_res_tax_retry"
+            if total_fallback:
+                method += "+single_amount_total"
             if with_ocr_totals:
                 method += "+ocr_totals"
             return InvoiceResult(
@@ -993,6 +1056,7 @@ class InvoicePipeline:
                 arithmetic_issues=issues,
                 ocr_totals=ocr_totals,
                 retry=retry,
+                total_fallback=total_fallback,
                 pages=page_records,
                 evidence=evidence,
                 latency_ms=(time.time() - started) * 1000,
@@ -1180,6 +1244,7 @@ __all__ = [
     "check_prediction",
     "tax_retry_reason",
     "retry_tax_is_plausible",
+    "apply_single_amount_total_fallback",
     "render_pdf_pages",
     "invoice_schema_is_valid",
 ]

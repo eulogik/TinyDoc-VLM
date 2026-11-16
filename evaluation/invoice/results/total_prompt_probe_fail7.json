@@ -1,0 +1,75 @@
+{
+  "prompt": "Read this receipt or invoice page. Return only the final amount the customer paid, as JSON:\n{\"total_amount\": <number or null>}\n\nRules:\n- Prefer the line labeled Total, TOTAL, Total a pagar, Valor, Taxa, Compra, or the amount charged.\n- Do not return VAT (IVA), subtotal, change, or a single line item.\n- If no final amount is printed, return {\"total_amount\": null}.\n- Use a dot decimal separator and no currency symbol. JSON only.",
+  "results": [
+    {
+      "id": "ptreal-company-20210318_202746",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210318_202746.jpg",
+      "candidate": "1560",
+      "gold_total": 15.6,
+      "raw": "```json\n{\"total_amount\": \"1560\"}\n```",
+      "done_reason": "stop",
+      "eval_count": 15,
+      "latency_ms": 24663.5
+    },
+    {
+      "id": "ptreal-company-20210324_190659",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210324_190659.jpg",
+      "candidate": "75000.00",
+      "gold_total": 1.35,
+      "raw": "```json\n{\"total_amount\": \"75000.00\"}\n```",
+      "done_reason": "stop",
+      "eval_count": 19,
+      "latency_ms": 28178.4
+    },
+    {
+      "id": "ptreal-company-20210428_153516",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210428_153516.jpg",
+      "candidate": "75000.00",
+      "gold_total": 1.35,
+      "raw": "```json\n{\"total_amount\": \"75000.00\"}\n```",
+      "done_reason": "stop",
+      "eval_count": 19,
+      "latency_ms": 28621.1
+    },
+    {
+      "id": "ptreal-company-20210428_191151",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210428_191151.jpg",
+      "candidate": "75000.00",
+      "gold_total": 0.35,
+      "raw": "```json\n{\"total_amount\": \"75000.00\"}\n```",
+      "done_reason": "stop",
+      "eval_count": 19,
+      "latency_ms": 29673.7
+    },
+    {
+      "id": "ptreal-company-20210507_203027",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210507_203027.jpg",
+      "candidate": "4.37",
+      "gold_total": 4.37,
+      "raw": "```json\n{\"total_amount\": \"4.37\"}\n```",
+      "done_reason": "stop",
+      "eval_count": 15,
+      "latency_ms": 29120.1
+    },
+    {
+      "id": "ptreal-company-20210508_203806",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-company-20210508_203806.jpg",
+      "candidate": "59.00",
+      "gold_total": 59.0,
+      "raw": "```json\n{\n  \"total_amount\": \"59.00\"\n}\n```",
+      "done_reason": "stop",
+      "eval_count": 19,
+      "latency_ms": 25486.5
+    },
+    {
+      "id": "ptreal-personal-20210509_002158",
+      "image_path": "/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/datasets/pt_invoices/prepared_fail7_2400/ptreal-personal-20210509_002158.jpg",
+      "candidate": "2.51",
+      "gold_total": 2.51,
+      "raw": "```json\n{\n  \"total_amount\": \"2.51\"\n}\n```",
+      "done_reason": "stop",
+      "eval_count": 18,
+      "latency_ms": 27253.6
+    }
+  ]
+}

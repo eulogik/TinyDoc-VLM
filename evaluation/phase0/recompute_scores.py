@@ -1348,6 +1348,95 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"fresh tax-retry check errored: {exc}")
 
+    # Total recovery: model retries were rejected; the deterministic fallback
+    # was replayed on the seed-44 first pass and probed on the seven failures.
+    tf_replay_path = ROOT.parent / "invoice/results/total_fallback_replay_pt_retry100.json"
+    tf_probe_path = ROOT.parent / "invoice/results/total_prompt_probe_fail7.json"
+    tf_rows_path = ROOT.parent / "invoice/results/rows_invoice_pt_fail7_2400.jsonl"
+    tf_manifest_path = ROOT.parent / "invoice/manifest_pt_retry100.jsonl"
+    tf_missing = [
+        path.name
+        for path in (tf_replay_path, tf_probe_path, tf_rows_path, tf_manifest_path)
+        if not path.exists()
+    ]
+    if tf_missing:
+        failures.append(f"total-fallback artifacts missing: {tf_missing}")
+    else:
+        try:
+            tf = json.loads(tf_replay_path.read_text())
+            probe = json.loads(tf_probe_path.read_text())
+            rows = {
+                json.loads(line)["id"]: json.loads(line)
+                for line in tf_rows_path.open()
+                if line.strip()
+            }
+            manifest = {
+                json.loads(line)["id"]: json.loads(line)
+                for line in tf_manifest_path.open()
+                if line.strip()
+            }
+            gold_total = {
+                doc_id: row["expected"].get("total") for doc_id, row in manifest.items()
+            }
+            probe_correct = 0
+            for item in probe.get("results") or []:
+                candidate = item.get("candidate")
+                gold = gold_total.get(item["id"])
+                if candidate is None or gold is None:
+                    continue
+                if abs(float(candidate) - float(gold)) < 0.005:
+                    probe_correct += 1
+            probe_candidates = [
+                float(item["candidate"])
+                for item in probe.get("results") or []
+                if item.get("candidate") is not None
+            ]
+            row_correct = 0
+            for doc_id, row in rows.items():
+                got = (row.get("pred") or {}).get("total_amount")
+                gold = gold_total.get(doc_id)
+                if got is not None and gold is not None and abs(float(got) - float(gold)) < 0.005:
+                    row_correct += 1
+            tf_per_field = tf.get("per_field") or {}
+            tf_ok = (
+                tf.get("documents") == 97
+                and tf.get("manifest_documents") == 100
+                and tf.get("triggered") == 4
+                and tf.get("fully_correct_delta") == 4
+                and tf.get("baseline", {}).get("field_correct") == 401
+                and tf.get("baseline", {}).get("field_scored") == 570
+                and tf.get("baseline", {}).get("fully_correct") == 19
+                and tf.get("fallback", {}).get("field_correct") == 405
+                and tf.get("fallback", {}).get("field_scored") == 570
+                and tf.get("fallback", {}).get("fully_correct") == 23
+                and tf_per_field.get("total", {}).get("before_correct") == 68
+                and tf_per_field.get("total", {}).get("after_correct") == 72
+                and all(
+                    item.get("delta") == 0
+                    for name, item in tf_per_field.items()
+                    if name != "total"
+                )
+                and len(rows) == 7
+                and row_correct == 0
+                and len(probe.get("results") or []) == 7
+                and probe_correct == 3
+                and probe_candidates.count(75000.0) == 3
+                and 1560.0 in probe_candidates
+            )
+            print(
+                "claim: total fallback replay -> "
+                f"field {tf['baseline']['field_correct']}->{tf['fallback']['field_correct']}/570, "
+                f"fully {tf['baseline']['fully_correct']}->{tf['fallback']['fully_correct']}, "
+                f"total {tf_per_field.get('total', {}).get('before_correct')}->"
+                f"{tf_per_field.get('total', {}).get('after_correct')}; "
+                f"rejected retries 0/7 full-page and 3/7 total-only -> "
+                f"{'PASS' if tf_ok else 'FAIL'}"
+            )
+            if not tf_ok:
+                failures.append("total-fallback replay or rejected-retry counts changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"total-fallback check errored: {exc}")
+
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.
     product = RESULTS / "preds_product_hybrid_clean.jsonl"

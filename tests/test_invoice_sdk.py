@@ -24,6 +24,7 @@ for path in (SDK, EVAL):
 
 from tinydoc.invoice import (
     InvoicePipeline,
+    apply_single_amount_total_fallback,
     check_prediction,
     invoice_schema_is_valid,
     merge_pages,
@@ -499,8 +500,121 @@ def test_evaluation_runner_uses_the_sdk_retry_decision(tmp_path):
 
     assert eval_runner.tax_retry_reason is tax_retry_reason
     assert eval_runner.retry_tax_is_plausible is retry_tax_is_plausible
+    assert (
+        eval_runner.apply_single_amount_total_fallback
+        is apply_single_amount_total_fallback
+    )
     assert eval_runner.find_retry_image(None, "doc") is None
     _png(tmp_path / "doc.png")
     assert eval_runner.find_retry_image(str(tmp_path), "doc") == str(
         tmp_path / "doc.png"
     )
+
+
+# --- Single-amount total fallback ------------------------------------------
+
+
+def test_single_amount_total_fallback_reclassifies_tax():
+    pred = {"total_amount": None, "subtotal": None, "tax": 1.35}
+    info = apply_single_amount_total_fallback(pred)
+    assert info == {
+        "trigger": "total_from_single_amount_tax",
+        "total_before": None,
+        "tax_before": 1.35,
+        "total_after": 1.35,
+        "tax_after": None,
+    }
+    assert pred == {"total_amount": 1.35, "subtotal": None, "tax": None}
+
+
+def test_single_amount_total_fallback_uses_subtotal():
+    pred = {"total_amount": None, "subtotal": 4.37, "tax": None}
+    info = apply_single_amount_total_fallback(pred)
+    assert info == {
+        "trigger": "total_from_single_amount_subtotal",
+        "total_before": None,
+        "subtotal_before": 4.37,
+        "total_after": 4.37,
+    }
+    assert pred == {"total_amount": 4.37, "subtotal": 4.37, "tax": None}
+
+
+def test_single_amount_total_fallback_does_not_guess_when_two_amounts_exist():
+    pred = {"total_amount": None, "subtotal": 47.97, "tax": 11.03}
+    assert apply_single_amount_total_fallback(pred) is None
+    assert pred["total_amount"] is None
+
+
+def test_single_amount_total_fallback_keeps_a_good_total():
+    pred = {"total_amount": 59.0, "subtotal": 59.0, "tax": 11.03}
+    assert apply_single_amount_total_fallback(pred) is None
+    assert pred["total_amount"] == 59.0
+
+    pred = {"total_amount": 0.0, "subtotal": 4.37, "tax": None}
+    assert apply_single_amount_total_fallback(pred)["total_after"] == 4.37
+
+
+def test_single_amount_total_fallback_does_nothing_without_an_amount():
+    pred = {"total_amount": None, "subtotal": None, "tax": None}
+    assert apply_single_amount_total_fallback(pred) is None
+
+
+def test_pipeline_uses_a_lone_tax_as_the_total(tmp_path):
+    image = _png(tmp_path / "toll.png")
+    engine = FakeEngine(
+        [
+            json.dumps(
+                {
+                    "vendor_name": "Brisa",
+                    "invoice_number": "FS 1",
+                    "invoice_date": "2019-02-21",
+                    "currency": "EUR",
+                    "subtotal": None,
+                    "tax": 1.35,
+                    "total": None,
+                }
+            )
+        ]
+    )
+    result = InvoicePipeline(engine).extract(
+        image,
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert len(engine.calls) == 1
+    assert result.fields["total_amount"] == 1.35
+    assert result.fields["tax"] is None
+    assert result.total_fallback["trigger"] == "total_from_single_amount_tax"
+    assert "total_from_single_amount_tax" in result.corrections
+    assert "total_from_single_amount_tax" in result.review_flags
+    assert result.method == "page_wise_merge+single_amount_total"
+    assert result.to_dict()["total_fallback"]["total_after"] == 1.35
+
+
+def test_pipeline_uses_a_lone_subtotal_as_the_total(tmp_path):
+    image = _png(tmp_path / "card.png")
+    engine = FakeEngine(
+        [
+            json.dumps(
+                {
+                    "vendor_name": "CTT",
+                    "invoice_number": None,
+                    "invoice_date": "2017-10-06",
+                    "currency": "EUR",
+                    "subtotal": 4.37,
+                    "tax": None,
+                    "total": None,
+                }
+            )
+        ]
+    )
+    result = InvoicePipeline(engine).extract(
+        image,
+        with_ocr_totals=False,
+        with_evidence=False,
+    )
+    assert result.fields["total_amount"] == 4.37
+    assert result.fields["tax"] is None
+    assert result.total_fallback["trigger"] == "total_from_single_amount_subtotal"
+    assert "total_from_single_amount_subtotal" in result.corrections
+    assert "total_from_single_amount_subtotal" in result.review_flags

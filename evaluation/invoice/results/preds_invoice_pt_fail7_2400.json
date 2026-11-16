@@ -1,0 +1,93 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-16",
+  "page_mode": "pagewise",
+  "notes": "Page-by-page extraction with deterministic merge; synthetic benchmark; see evaluation/invoice/README.md",
+  "documents": {
+    "ptreal-company-20210318_202746": {
+      "vendor_name": "AUTO T\u00c1XIS HEBEPE, Unipessoal Lda.",
+      "invoice_number": "13212",
+      "invoice_date": "2019-10-04",
+      "due_date": "2019-10-04",
+      "currency": "EUR",
+      "subtotal": 2560.0,
+      "tax": 156.0,
+      "total_amount": 2716.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Tax\u00edmetro",
+          "amount": 1480.0
+        },
+        {
+          "description": "Suplementos",
+          "amount": 1080.0
+        },
+        {
+          "description": "Outros",
+          "amount": 0.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_203806": {
+      "vendor_name": "LIKEHOME, MED IMOB, LDA",
+      "invoice_number": "FAC 36706120180033/390",
+      "invoice_date": "2018-07-19",
+      "due_date": "2018-07-19",
+      "currency": "EUR",
+      "subtotal": 59.0,
+      "tax": 11.03,
+      "total_amount": 70.03,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "EKBY MOSSBY pratel 119x28 a\u00e7o in",
+          "amount": 29.5
+        },
+        {
+          "description": "2 *",
+          "amount": 59.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-personal-20210509_002158": {
+      "vendor_name": "EL CORTE INGL\u00c9S - GRANDES ARMAZ\u00c9NS, S. A.",
+      "invoice_number": "FC 015521002A/001936",
+      "invoice_date": "2021-04-26",
+      "due_date": "2021-04-26",
+      "currency": "EUR",
+      "subtotal": 2.51,
+      "tax": 0.15,
+      "total_amount": 2.66,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "SACOS T-SHIRT 55MICR",
+          "amount": 0.15
+        },
+        {
+          "description": "BAGUETE RUSTI NUTRIV",
+          "amount": 0.59
+        },
+        {
+          "description": "BAGUETE RUSTI NUTRIV",
+          "amount": 0.59
+        },
+        {
+          "description": "BAGUETE RUSTI NUTRIV",
+          "amount": 0.59
+        },
+        {
+          "description": "BAGUETE RUSTI NUTRIV",
+          "amount": 0.59
+        }
+      ],
+      "flagged": false,
+      "references": []
+    }
+  }
+}

@@ -58,6 +58,7 @@ from run_invoice_eval import (
 # the shipped product path cannot drift (tests/test_invoice_prompt_parity.py).
 from tinydoc.invoice import (
     PAGE_PROMPT_V2,
+    apply_single_amount_total_fallback,
     page_prompt,
     retry_tax_is_plausible,
     tax_retry_reason,
@@ -510,11 +511,19 @@ def main() -> int:
                     retry["latency_ms"] = (time.time() - retry_started) * 1000
                 row["retry"] = retry
 
+        total_fallback = None
+        if not (row["pages"] and row["pages"][-1].get("error")):
+            total_fallback = apply_single_amount_total_fallback(merged)
+        if total_fallback:
+            row["total_fallback"] = total_fallback
+
         sanity = merge_is_sane(merged, page_preds)
         if page_errors:
             sanity.extend(page_errors)
         row["pred"] = merged
         row["review_flags"] = [issue["check"] for issue in check_prediction(merged)]
+        if total_fallback:
+            row["review_flags"].append(total_fallback["trigger"])
         row["error"] = "; ".join(sanity) if sanity else None
         row["latency_ms"] = (time.time() - started_doc) * 1000
         rows.append(row)
