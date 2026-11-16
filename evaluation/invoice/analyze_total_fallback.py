@@ -46,41 +46,71 @@ def _summary(manifest: list[dict], predictions: dict[str, dict], name: str) -> d
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", required=True)
-    ap.add_argument("--preds", required=True)
+    ap.add_argument("--preds", help="Saved first-pass predictions (replay mode)")
+    ap.add_argument("--rows", help="Page-wise rows from a shipped-rule run")
     ap.add_argument("--out", required=True)
     ap.add_argument("--label", default="")
     args = ap.parse_args()
+    if not args.preds and not args.rows:
+        ap.error("one of --preds or --rows is required")
 
     manifest = [
         json.loads(line)
         for line in Path(args.manifest).read_text().splitlines()
         if line.strip()
     ]
-    first = json.loads(Path(args.preds).read_text())["documents"]
 
     after: dict[str, dict] = {}
+    before_by_doc: dict[str, dict] = {}
     changes: list[dict] = []
-    for row in manifest:
-        doc_id = row["id"]
-        before = first.get(doc_id)
-        if before is None:
-            continue
-        pred = copy.deepcopy(before)
-        info = apply_single_amount_total_fallback(pred)
-        after[doc_id] = pred
-        if info:
-            # The rule must never touch a field other than total / tax.
-            changed = {
-                key
-                for key in set(before) | set(pred)
-                if before.get(key) != pred.get(key)
-            }
-            unexpected = changed - {"total_amount", "tax", "subtotal"}
-            if unexpected:
-                raise SystemExit(f"{doc_id}: rule changed unexpected fields {unexpected}")
-            changes.append({"doc_id": doc_id, **info})
+    if args.rows:
+        # Shipped-rule run: invert the recorded fallback to recover the exact
+        # pre-fallback prediction, then score both sides.
+        for line in Path(args.rows).read_text().splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            pred = row.get("pred")
+            if pred is None:
+                continue
+            doc_id = row["id"]
+            after[doc_id] = pred
+            before = copy.deepcopy(pred)
+            info = row.get("total_fallback")
+            if info:
+                before["total_amount"] = info.get("total_before")
+                if info.get("trigger") == "total_from_single_amount_tax":
+                    before["tax"] = info.get("tax_before")
+                elif info.get("trigger") == "total_from_single_amount_subtotal":
+                    before["subtotal"] = info.get(
+                        "subtotal_before", before.get("subtotal")
+                    )
+                changes.append({"doc_id": doc_id, **info})
+            before_by_doc[doc_id] = before
+    else:
+        first = json.loads(Path(args.preds).read_text())["documents"]
+        for row in manifest:
+            doc_id = row["id"]
+            before = first.get(doc_id)
+            if before is None:
+                continue
+            pred = copy.deepcopy(before)
+            info = apply_single_amount_total_fallback(pred)
+            after[doc_id] = pred
+            before_by_doc[doc_id] = before
+            if info:
+                changes.append({"doc_id": doc_id, **info})
 
-    before_summary = _summary(manifest, first, "first pass (1400 px)")
+    for doc_id, pred in after.items():
+        before = before_by_doc[doc_id]
+        changed = {
+            key for key in set(before) | set(pred) if before.get(key) != pred.get(key)
+        }
+        unexpected = changed - {"total_amount", "tax", "subtotal"}
+        if unexpected:
+            raise SystemExit(f"{doc_id}: rule changed unexpected fields {unexpected}")
+
+    before_summary = _summary(manifest, before_by_doc, "first pass (1400 px)")
     after_summary = _summary(
         manifest, after, "first pass + single-amount total fallback"
     )
