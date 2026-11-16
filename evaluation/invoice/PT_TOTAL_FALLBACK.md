@@ -109,8 +109,10 @@ shipped rule now requires an empty `subtotal` and an empty `line_items` list, so
 that document is left with a missing total instead of a wrong one.
 
 Artifacts: `manifest_pt_toll28.jsonl`, `results/pt_toll28_selection.json`,
-`results/rows_invoice_pt_toll28_1400*.jsonl`,
-`results/total_fallback_replay_pt_toll28.json`.
+`results/rows_invoice_pt_toll28_1400_narrowed.jsonl`,
+`results/total_fallback_replay_pt_toll28_narrowed.json`. The earlier run
+`rows_invoice_pt_toll28_1400.jsonl` is kept as the counterexample that narrowed
+the rule.
 
 **Residual:** this is 6/6 correct triggers across development and stress sets,
 not a guarantee. A single-amount receipt that is genuinely VAT (not a fee) and

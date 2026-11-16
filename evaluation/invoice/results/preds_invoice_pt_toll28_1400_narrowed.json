@@ -1,0 +1,645 @@
+{
+  "system": "TinyDoc engine eval (qwen3-vl:2b-instruct)",
+  "run_date": "2026-11-16",
+  "page_mode": "pagewise",
+  "notes": "Page-by-page extraction with deterministic merge; synthetic benchmark; see evaluation/invoice/README.md",
+  "documents": {
+    "ptreal-company-20210316_223932": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05021061902/0018579",
+      "invoice_date": "2019-01-23",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": null,
+      "tax": 1.35,
+      "total_amount": 1.35,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_110451": {
+      "vendor_name": "Estacionamento S.A.",
+      "invoice_number": "H77852",
+      "invoice_date": "2019-01-07",
+      "due_date": "2019-01-07",
+      "currency": "EUR",
+      "subtotal": 2400.0,
+      "tax": 0.0,
+      "total_amount": 2400.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRA-CHIP HH/HH",
+          "amount": 2400.0
+        },
+        {
+          "description": "ALMEIDA/JORGE",
+          "amount": 2400.0
+        },
+        {
+          "description": "Cartao: HH OP: 00824",
+          "amount": 2400.0
+        },
+        {
+          "description": "MILLENNium BCP",
+          "amount": 2400.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_123736": {
+      "vendor_name": "AGAPARQUES, S.A.",
+      "invoice_number": "K1190120396",
+      "invoice_date": "2019-01-29",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 7.5,
+      "tax": 0.0,
+      "total_amount": 7.5,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "QUANTIA",
+          "amount": 7.5
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210318_125034": {
+      "vendor_name": "BRAGAPARQUES, S.A.",
+      "invoice_number": "K2190102033",
+      "invoice_date": "2019-01-02",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 1.7,
+      "tax": 0.0,
+      "total_amount": 1.7,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "QUANTIA:",
+          "amount": 1.7
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_175349": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 01281161902/0065754",
+      "invoice_date": "2019-05-13",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 24.0,
+      "tax": 22.2,
+      "total_amount": 46.2,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0134 - IC 24 pv",
+          "amount": 24.0
+        },
+        {
+          "description": "T\u00edtulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 22,20 \u20ac",
+          "amount": 22.2
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_183045": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05021141902/0019318",
+      "invoice_date": "2019-01-27",
+      "due_date": "2019-01-27",
+      "currency": "EUR",
+      "subtotal": 135.0,
+      "tax": 135.0,
+      "total_amount": 135.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "PAGAMENTO AUTOMATICO num: 2018",
+          "amount": 135.0
+        },
+        {
+          "description": "NOVO BANCO",
+          "amount": 135.0
+        },
+        {
+          "description": "Local de pagamento: A05-02",
+          "amount": 135.0
+        },
+        {
+          "description": "IVA incluido \u00e0 taxa normal",
+          "amount": 135.0
+        },
+        {
+          "description": "Ez0J-Processado por programa certificado n.2011/AT",
+          "amount": 135.0
+        },
+        {
+          "description": "Obrigado e Boa Viagem!",
+          "amount": 135.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_183112": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 12131101902/0000361",
+      "invoice_date": "2019-01-01",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 15.25,
+      "tax": 15.25,
+      "total_amount": 15.25,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0219 - Castro Verde",
+          "amount": 0.0
+        },
+        {
+          "description": "Titulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 15,25 \u20ac",
+          "amount": 15.25
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210323_183136": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05021051902/0007499",
+      "invoice_date": "2019-01-11",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 405.0,
+      "tax": 135.0,
+      "total_amount": 135.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "PAGAMENTO AUTOMATICO num: 8004",
+          "amount": 135.0
+        },
+        {
+          "description": "NOVO BANCO",
+          "amount": 135.0
+        },
+        {
+          "description": "Local de pagamento: A05-02",
+          "amount": 135.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210324_190401": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05051021901/0025040",
+      "invoice_date": "2019-02-13",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": null,
+      "tax": null,
+      "total_amount": 0.35,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210324_190845": {
+      "vendor_name": "Infraestruturas de Portugal, SA",
+      "invoice_number": "FS 21011021901/0010722",
+      "invoice_date": "2019-02-12",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 2.9,
+      "tax": 2.9,
+      "total_amount": 3.495375,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0811 - Loures",
+          "amount": 0.0
+        },
+        {
+          "description": "Titulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Numer\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 2,90 \u20ac",
+          "amount": 2.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210324_200548": {
+      "vendor_name": "ESII, Parques de Estacionamento S.A.",
+      "invoice_number": "869673",
+      "invoice_date": "2019-03-06",
+      "due_date": "2019-03-06",
+      "currency": "EUR",
+      "subtotal": 2.95,
+      "tax": 0.0,
+      "total_amount": 2.95,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "PARQUE CAM\u00d5ES",
+          "amount": 2.95
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210324_200623": {
+      "vendor_name": "Estacionamento S.A.",
+      "invoice_number": "081011",
+      "invoice_date": "2019-03-08",
+      "due_date": "2019-03-08",
+      "currency": "EUR",
+      "subtotal": 3.7,
+      "tax": -1.85,
+      "total_amount": 1.85,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRO-CHIP",
+          "amount": 1.85
+        },
+        {
+          "description": "ISABEL MATIAS CRAUO/",
+          "amount": 1.85
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210324_200647": {
+      "vendor_name": "Estacionamento S.A.",
+      "invoice_number": "081168",
+      "invoice_date": "2019-03-11",
+      "due_date": "2019-03-11",
+      "currency": "EUR",
+      "subtotal": 4.3,
+      "tax": 0.0,
+      "total_amount": 4.3,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRO-A-CIP",
+          "amount": 4.3
+        },
+        {
+          "description": "ISABEL MATIAS CRAVO/",
+          "amount": 4.3
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210427_162522": {
+      "vendor_name": "Estacionamento S.A.",
+      "invoice_number": "H81H11",
+      "invoice_date": "2019-03-08",
+      "due_date": "2019-03-08",
+      "currency": "EUR",
+      "subtotal": 1.85,
+      "tax": 0.0,
+      "total_amount": 1.85,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRO-A CHIP",
+          "amount": 1.85
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_145135": {
+      "vendor_name": "BRAGAPARQUES, S.A.",
+      "invoice_number": "K1190120925",
+      "invoice_date": "2019-02-26",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 8.0,
+      "tax": 0.0,
+      "total_amount": 8.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "QUANTIA",
+          "amount": 8.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_153455": {
+      "vendor_name": "Brisa - Concession Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05021131901/0022947",
+      "invoice_date": "2019-02-11",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": null,
+      "tax": null,
+      "total_amount": 1.35,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_181336": {
+      "vendor_name": "Estacionamento S.A.",
+      "invoice_number": "503311685",
+      "invoice_date": "2019-03-28",
+      "due_date": "2019-03-28",
+      "currency": "EUR",
+      "subtotal": 2.4,
+      "tax": 0.0,
+      "total_amount": 2.4,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "COMPRO-A CHIP",
+          "amount": 2.4
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210428_191219": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05021051902/0059628",
+      "invoice_date": "2019-03-24",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": null,
+      "tax": null,
+      "total_amount": 1.35,
+      "document_type": "invoice",
+      "line_items": [],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210429_191949": {
+      "vendor_name": "Infraestruturas de Portugal, S.A.",
+      "invoice_number": "TALAO DE PORTAGEM N\u00ba RB 160103/2944972",
+      "invoice_date": "2019-09-09",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 2.1,
+      "tax": 0.23,
+      "total_amount": 1.05,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Portagem.: Sao Pedro",
+          "amount": 1.05
+        },
+        {
+          "description": "Entrada.: Virtual South",
+          "amount": 1.05
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210507_182648": {
+      "vendor_name": "Metropolitano de Lisboa, E.P.E.",
+      "invoice_number": "FS 01081900/0084237",
+      "invoice_date": "2019-12-06",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 5.0,
+      "tax": 0.3,
+      "total_amount": 5.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "ZAPPING",
+          "amount": 5.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210507_214356": {
+      "vendor_name": "CP - Comboios de Portugal, E.P.E.",
+      "invoice_number": "1663-687626",
+      "invoice_date": "2017-11-10",
+      "due_date": "2017-12-09",
+      "currency": "EUR",
+      "subtotal": 72.7,
+      "tax": 72.7,
+      "total_amount": 72.7,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Metro/CP Sintra 30 dias Sintra/Lisboa Oriente",
+          "amount": 72.7
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210507_214550": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 06141011702/0019388",
+      "invoice_date": "2017-08-20",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 1213.0,
+      "tax": 9.15,
+      "total_amount": 1222.15,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 1213 - Pinnal Novo pv",
+          "amount": 1213.0
+        },
+        {
+          "description": "T\u00edtulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 1213.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 1213.0
+        },
+        {
+          "description": "Classe: 1",
+          "amount": 9.15
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_175338": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05011071802/0078900",
+      "invoice_date": "2018-06-06",
+      "due_date": "2018-06-06",
+      "currency": "EUR",
+      "subtotal": 20433.0,
+      "tax": 0.35,
+      "total_amount": 6811.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "PAGAMENTO AUTOM\u00c1TICO num: 6811",
+          "amount": 6811.0
+        },
+        {
+          "description": "BANCO BPI",
+          "amount": 6811.0
+        },
+        {
+          "description": "Local de pagamento: A05-01",
+          "amount": 6811.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_175440": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 05011031802/0109368",
+      "invoice_date": "2018-06-06",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 10680.0,
+      "tax": 0.35,
+      "total_amount": 3560.0,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "PAGAMENTO AUTOMATICO num: 3560",
+          "amount": 3560.0
+        },
+        {
+          "description": "BANCO BPI",
+          "amount": 3560.0
+        },
+        {
+          "description": "Local de pagamento: A05-01",
+          "amount": 3560.0
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_205926": {
+      "vendor_name": "Infraestruturas de Portugal, SA",
+      "invoice_number": "FS 21011011802/0020903",
+      "invoice_date": "2018-05-23",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 2.9,
+      "tax": 2.9,
+      "total_amount": 5.8,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 0811 - Loures",
+          "amount": 0.0
+        },
+        {
+          "description": "Titulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 0.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 0.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 2,90 \u20ac",
+          "amount": 2.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_210002": {
+      "vendor_name": "Infraestruturas de Portugal, SA",
+      "invoice_number": "FS 21021061801/0009747",
+      "invoice_date": "2018-05-24",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 3495.375,
+      "tax": 0.55,
+      "total_amount": 3495.925,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Bem lido-Tr\u00e2nsito-",
+          "amount": 3495.375
+        },
+        {
+          "description": "Taxa: 0,55 \u20ac",
+          "amount": 0.55
+        }
+      ],
+      "flagged": false,
+      "references": []
+    },
+    "ptreal-company-20210508_210101": {
+      "vendor_name": "Brisa - Concess\u00e3o Rodovi\u00e1ria, S.A.",
+      "invoice_number": "FS 09131011802/0038347",
+      "invoice_date": "2018-05-23",
+      "due_date": null,
+      "currency": "EUR",
+      "subtotal": 1603.0,
+      "tax": 0.9,
+      "total_amount": 1603.9,
+      "document_type": "invoice",
+      "line_items": [
+        {
+          "description": "Entrada: 1603 - Belas PV",
+          "amount": 1603.0
+        },
+        {
+          "description": "Titulo: Bem lido-Tr\u00e2nsito-",
+          "amount": 1603.0
+        },
+        {
+          "description": "Modo de Pagamento: Cart\u00e3o Banc\u00e1rio",
+          "amount": 1603.0
+        },
+        {
+          "description": "Classe: 1 Taxa: 0,90 \u20ac",
+          "amount": 0.9
+        }
+      ],
+      "flagged": false,
+      "references": []
+    }
+  }
+}

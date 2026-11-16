@@ -1437,6 +1437,41 @@ def main() -> int:
         except Exception as exc:  # noqa: BLE001
             failures.append(f"total-fallback check errored: {exc}")
 
+    # Combined opt-in path: tax retry plus the lone-tax fallback, replayed from
+    # the saved post-tax-retry predictions (no model calls).
+    combined_path = ROOT.parent / "invoice/results/total_fallback_replay_pt_retry100_with_tax_retry.json"
+    if not combined_path.exists():
+        failures.append("combined tax-retry + total-fallback replay missing")
+    else:
+        try:
+            cb = json.loads(combined_path.read_text())
+            cb_ok = (
+                cb.get("documents") == 97
+                and cb.get("manifest_documents") == 100
+                and cb.get("triggered") == 3
+                and cb.get("baseline", {}).get("field_correct") == 411
+                and cb.get("baseline", {}).get("field_scored") == 570
+                and cb.get("baseline", {}).get("fully_correct") == 21
+                and cb.get("fallback", {}).get("field_correct") == 414
+                and cb.get("fallback", {}).get("field_scored") == 570
+                and cb.get("fallback", {}).get("fully_correct") == 24
+                and cb.get("per_field", {}).get("tax", {}).get("after_correct") == 61
+                and cb.get("per_field", {}).get("total", {}).get("before_correct") == 68
+                and cb.get("per_field", {}).get("total", {}).get("after_correct") == 71
+            )
+            print(
+                "claim: combined tax retry + total fallback -> "
+                f"{cb.get('baseline', {}).get('field_correct')}->"
+                f"{cb.get('fallback', {}).get('field_correct')}/570, fully "
+                f"{cb.get('baseline', {}).get('fully_correct')}->"
+                f"{cb.get('fallback', {}).get('fully_correct')} -> "
+                f"{'PASS' if cb_ok else 'FAIL'}"
+            )
+            if not cb_ok:
+                failures.append("combined tax-retry + total-fallback counts changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"combined total-fallback check errored: {exc}")
+
     # Fresh seed-45 validation of the fallback rule. The representative sample
     # did not contain an applicable document; record that explicitly instead of
     # treating the absence of triggers as evidence of a gain.
@@ -1500,6 +1535,67 @@ def main() -> int:
                 failures.append("seed-45 total-fallback counts, audit, or replay changed")
         except Exception as exc:  # noqa: BLE001
             failures.append(f"seed-45 total-fallback check errored: {exc}")
+
+    # Targeted toll/parking stress probe for the narrowed lone-tax fallback.
+    toll_manifest = ROOT.parent / "invoice/manifest_pt_toll28_1400.jsonl"
+    toll_rows = ROOT.parent / "invoice/results/rows_invoice_pt_toll28_1400_narrowed.jsonl"
+    toll_audit = ROOT.parent / "invoice/results/audit_invoice_pt_toll28_1400_narrowed.json"
+    toll_replay = ROOT.parent / "invoice/results/total_fallback_replay_pt_toll28_narrowed.json"
+    toll_missing = [
+        path.name
+        for path in (toll_manifest, toll_rows, toll_audit, toll_replay)
+        if not path.exists()
+    ]
+    if toll_missing:
+        failures.append(f"toll28 total-fallback artifacts missing: {toll_missing}")
+    else:
+        try:
+            tm = [json.loads(line) for line in toll_manifest.open() if line.strip()]
+            tr = [json.loads(line) for line in toll_rows.open() if line.strip()]
+            ta = json.loads(toll_audit.read_text())
+            tp = json.loads(toll_replay.read_text())
+            toll_changes = tp.get("changes") or []
+            toll_ok = (
+                len(tm) == 28
+                and len(tr) == 28
+                and ta.get("documents") == 28
+                and ta.get("rows") == 28
+                and ta.get("missing") == []
+                and ta.get("failed") == 0
+                and ta.get("allowed_failed") == 0
+                and ta.get("done_reasons") == {"stop": 28}
+                and ta.get("retry", {}).get("documents") == 0
+                and ta.get("total_fallback", {}).get("documents") == 3
+                and tp.get("documents") == 28
+                and tp.get("manifest_documents") == 28
+                and tp.get("triggered") == 3
+                and tp.get("baseline", {}).get("field_correct") == 111
+                and tp.get("baseline", {}).get("field_scored") == 139
+                and tp.get("baseline", {}).get("fully_correct") == 4
+                and tp.get("fallback", {}).get("field_correct") == 114
+                and tp.get("fallback", {}).get("field_scored") == 139
+                and tp.get("fallback", {}).get("fully_correct") == 7
+                and len(toll_changes) == 3
+                and all(item.get("after_correct") is True for item in toll_changes)
+                and all(item.get("before_correct") is False for item in toll_changes)
+                and all(
+                    item.get("trigger") == "total_from_single_amount_tax"
+                    for item in toll_changes
+                )
+            )
+            print(
+                "claim: total fallback toll/parking stress -> "
+                f"{tp.get('baseline', {}).get('field_correct')}->"
+                f"{tp.get('fallback', {}).get('field_correct')}/139, "
+                f"fully {tp.get('baseline', {}).get('fully_correct')}->"
+                f"{tp.get('fallback', {}).get('fully_correct')}, "
+                f"triggers {tp.get('triggered')} all correct -> "
+                f"{'PASS' if toll_ok else 'FAIL'}"
+            )
+            if not toll_ok:
+                failures.append("toll28 total-fallback counts or correctness changed")
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"toll28 total-fallback check errored: {exc}")
 
     # Paired hybrid-vs-base counts on the shipped product path. The earlier
     # 31/8/61 came from the harness path and must not be quoted as shipped.

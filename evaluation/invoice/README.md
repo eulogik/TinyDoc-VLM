@@ -341,8 +341,8 @@ before using it as a gate.
   trigger, 1.0–27.5% rate acceptance, development replay; fresh validation in
   progress).
 - `PT_TOTAL_FALLBACK.md` — the rejected model total retry and the shipped
-  deterministic single-amount total fallback (seed-44 replay; seed-45 validation
-  in progress).
+  lone-tax total fallback (validated on a targeted 28-document toll/parking
+  set; the seed-45 representative sample had 0 triggers).
 - `manifest_pt_real_probe100.jsonl` / `manifest_pt_real_probe100_1400.jsonl` —
   frozen real-document probe; images are external, only the manifest is
   committed.

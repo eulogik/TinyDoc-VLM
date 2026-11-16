@@ -1,0 +1,71 @@
+{
+  "system": "TinyDoc v1 1400px + lone-tax total fallback, targeted toll/parking stress set",
+  "run_date": "2026-11-16",
+  "n_docs": 28,
+  "field_accuracy": 0.7985611510791367,
+  "field_correct": 111,
+  "field_scored": 139,
+  "fully_correct": 7,
+  "fully_correct_rate": 0.25,
+  "fully_correct_six": 0,
+  "six_scored": 0,
+  "fully_correct_six_rate": null,
+  "ci95_exact": {
+    "field_accuracy": [
+      0.7221941512546719,
+      0.8617752835751197
+    ],
+    "fully_correct_rate": [
+      0.10690799182922664,
+      0.4487154515286084
+    ],
+    "fully_correct_six_rate": null,
+    "note": "Clopper-Pearson. The field interval treats fields as independent and is optimistic because fields cluster within documents; cite the document-level intervals for fully-correct rates."
+  },
+  "per_field": {
+    "currency": {
+      "correct": 27,
+      "scored": 28,
+      "accuracy": 0.9642857142857143
+    },
+    "invoice_date": {
+      "correct": 26,
+      "scored": 27,
+      "accuracy": 0.9629629629629629
+    },
+    "invoice_number": {
+      "correct": 19,
+      "scored": 28,
+      "accuracy": 0.6785714285714286
+    },
+    "total": {
+      "correct": 16,
+      "scored": 28,
+      "accuracy": 0.5714285714285714
+    },
+    "vendor_name": {
+      "correct": 23,
+      "scored": 28,
+      "accuracy": 0.8214285714285714
+    }
+  },
+  "per_category": {
+    "real_pt_company": {
+      "docs": 28,
+      "field_accuracy": 0.7985611510791367,
+      "field_correct": 111,
+      "field_scored": 139,
+      "fully_correct": 7,
+      "fully_correct_rate": 0.25,
+      "fully_correct_six": 0,
+      "six_scored": 0,
+      "fully_correct_six_rate": null
+    }
+  },
+  "latency_ms": {
+    "p50": 4268.536806106567,
+    "p90": 5996.323823928833,
+    "n": 28
+  },
+  "parse_errors": 1
+}

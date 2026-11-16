@@ -1,0 +1,65 @@
+{
+  "manifest": "evaluation/invoice/manifest_pt_toll28_1400.jsonl",
+  "rows_path": "evaluation/invoice/results/rows_invoice_pt_toll28_1400_narrowed.jsonl",
+  "documents": 28,
+  "rows": 28,
+  "missing": [],
+  "failed": 0,
+  "allowed_failed": 0,
+  "failures": [],
+  "merge_sanity": [
+    {
+      "doc_id": "ptreal-company-20210508_180433",
+      "error": "no total"
+    }
+  ],
+  "done_reasons": {
+    "stop": 28
+  },
+  "truncated_pages": [],
+  "retry": {
+    "documents": 0,
+    "applied": 0,
+    "errors": [],
+    "p50_latency_ms": null,
+    "items": []
+  },
+  "total_fallback": {
+    "documents": 3,
+    "applied": 3,
+    "items": [
+      {
+        "doc_id": "ptreal-company-20210324_190401",
+        "trigger": "total_from_single_amount_tax",
+        "total_before": null,
+        "total_after": 0.35,
+        "total_final": 0.35
+      },
+      {
+        "doc_id": "ptreal-company-20210428_153455",
+        "trigger": "total_from_single_amount_tax",
+        "total_before": null,
+        "total_after": 1.35,
+        "total_final": 1.35
+      },
+      {
+        "doc_id": "ptreal-company-20210428_191219",
+        "trigger": "total_from_single_amount_tax",
+        "total_before": null,
+        "total_after": 1.35,
+        "total_final": 1.35
+      }
+    ]
+  },
+  "latency_ms": {
+    "p50": 4084.764838218689,
+    "p90": 5996.323823928833,
+    "n": 28
+  },
+  "tokens": {
+    "prompt_p50": 1829.0,
+    "prompt_max": 1829,
+    "output_p50": 174.0,
+    "output_max": 312
+  }
+}
