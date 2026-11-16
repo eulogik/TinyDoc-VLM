@@ -625,17 +625,20 @@ def retry_tax_is_plausible(prediction: dict, candidate: Any) -> bool:
 
 
 def apply_single_amount_total_fallback(prediction: dict) -> Optional[Dict[str, Any]]:
-    """Use the only printed amount as the total when the total itself is missing.
+    """Use a lone ``tax`` amount as the total when the total itself is missing.
 
-    Some receipts (Portuguese toll booths, card-payment slips) print one amount
-    and no ``Total`` line; the reader may put that amount in ``tax`` ("Taxa") or
-    ``subtotal`` ("Compra") instead of ``total``. Reclassifying a lone amount is
-    arithmetic, not a guess: if both a subtotal and a tax were printed, this
-    function does nothing. The mutation and the reason are returned so callers
+    Portuguese toll and parking receipts often print one amount labelled
+    ``Taxa`` (fee) and no ``Total`` line. The reader may put that amount in
+    ``tax`` instead of ``total``. Reclassifying it is arithmetic, not a guess:
+    the page must have no subtotal, no line items, and no total, so the amount
+    is the only candidate. The mutation and the reason are returned so callers
     can record the correction and route it for review.
 
-    This is deliberately separate from :func:`tax_retry_reason`: a missing total
-    is not evidence that the tax is wrong, and the fix needs no model call.
+    A lone ``subtotal`` is deliberately **not** reclassified: the targeted
+    probe found a parking receipt with a 29.40 subtotal against a 4.20 printed
+    total, so that case is ambiguous. This is separate from
+    :func:`tax_retry_reason`: a missing total is not evidence that the tax is
+    wrong, and the fix needs no model call.
     """
     total = _number(prediction.get("total_amount", prediction.get("total")))
     if total is not None and total > 0:
@@ -643,7 +646,15 @@ def apply_single_amount_total_fallback(prediction: dict) -> Optional[Dict[str, A
     subtotal = _number(prediction.get("subtotal"))
     tax = _number(prediction.get("tax"))
 
-    if subtotal is None and tax is not None and tax > 0:
+    # Only a lone tax is reclassified, and only when the page has no line
+    # items. A subtotal-only page is not safe to reclassify: a parking receipt
+    # in the targeted probe had a 29.40 subtotal against a 4.20 printed total.
+    if (
+        subtotal is None
+        and not prediction.get("line_items")
+        and tax is not None
+        and tax > 0
+    ):
         info: Dict[str, Any] = {
             "trigger": "total_from_single_amount_tax",
             "total_before": total,
@@ -653,16 +664,6 @@ def apply_single_amount_total_fallback(prediction: dict) -> Optional[Dict[str, A
         }
         prediction["total_amount"] = info["total_after"]
         prediction["tax"] = None
-        return info
-
-    if tax is None and subtotal is not None and subtotal > 0:
-        info = {
-            "trigger": "total_from_single_amount_subtotal",
-            "total_before": total,
-            "subtotal_before": subtotal,
-            "total_after": round(subtotal, 2),
-        }
-        prediction["total_amount"] = info["total_after"]
         return info
 
     return None

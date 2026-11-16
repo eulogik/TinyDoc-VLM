@@ -74,7 +74,6 @@ def main() -> int:
             if pred is None:
                 continue
             doc_id = row["id"]
-            after[doc_id] = pred
             before = copy.deepcopy(pred)
             info = row.get("total_fallback")
             if info:
@@ -85,8 +84,14 @@ def main() -> int:
                     before["subtotal"] = info.get(
                         "subtotal_before", before.get("subtotal")
                     )
-                changes.append({"doc_id": doc_id, **info})
+            # Re-apply the current rule to the recovered pre-fallback view, so
+            # this script can replay a narrowed rule on an older run.
+            reapplied = copy.deepcopy(before)
+            new_info = apply_single_amount_total_fallback(reapplied)
+            after[doc_id] = reapplied
             before_by_doc[doc_id] = before
+            if new_info:
+                changes.append({"doc_id": doc_id, **new_info})
     else:
         first = json.loads(Path(args.preds).read_text())["documents"]
         for row in manifest:

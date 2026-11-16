@@ -2,7 +2,7 @@
   "label": "fresh seed44",
   "documents": 97,
   "manifest_documents": 100,
-  "triggered": 4,
+  "triggered": 3,
   "changes": [
     {
       "doc_id": "ptreal-company-20210324_190659",
@@ -10,7 +10,12 @@
       "total_before": null,
       "tax_before": 1.35,
       "total_after": 1.35,
-      "tax_after": null
+      "tax_after": null,
+      "gold_total": 1.35,
+      "before_total": null,
+      "after_total": 1.35,
+      "before_correct": false,
+      "after_correct": true
     },
     {
       "doc_id": "ptreal-company-20210428_153516",
@@ -18,7 +23,12 @@
       "total_before": null,
       "tax_before": 1.35,
       "total_after": 1.35,
-      "tax_after": null
+      "tax_after": null,
+      "gold_total": 1.35,
+      "before_total": null,
+      "after_total": 1.35,
+      "before_correct": false,
+      "after_correct": true
     },
     {
       "doc_id": "ptreal-company-20210428_191151",
@@ -26,14 +36,12 @@
       "total_before": null,
       "tax_before": 0.35,
       "total_after": 0.35,
-      "tax_after": null
-    },
-    {
-      "doc_id": "ptreal-company-20210507_203027",
-      "trigger": "total_from_single_amount_subtotal",
-      "total_before": null,
-      "subtotal_before": 4.37,
-      "total_after": 4.37
+      "tax_after": null,
+      "gold_total": 0.35,
+      "before_total": null,
+      "after_total": 0.35,
+      "before_correct": false,
+      "after_correct": true
     }
   ],
   "baseline": {
@@ -130,22 +138,22 @@
     "system": "first pass + single-amount total fallback",
     "run_date": "",
     "n_docs": 100,
-    "field_accuracy": 0.7105263157894737,
-    "field_correct": 405,
+    "field_accuracy": 0.7087719298245614,
+    "field_correct": 404,
     "field_scored": 570,
-    "fully_correct": 23,
-    "fully_correct_rate": 0.23,
+    "fully_correct": 22,
+    "fully_correct_rate": 0.22,
     "fully_correct_six": 12,
     "six_scored": 74,
     "fully_correct_six_rate": 0.16216216216216217,
     "ci95_exact": {
       "field_accuracy": [
-        0.6713932016525442,
-        0.7474610938711309
+        0.6695818214023495,
+        0.7457821360057091
       ],
       "fully_correct_rate": [
-        0.15173161130104754,
-        0.3248587327751031
+        0.14330357674981448,
+        0.3139196537863178
       ],
       "fully_correct_six_rate": [
         0.08669896395830816,
@@ -175,9 +183,9 @@
         "accuracy": 0.6219512195121951
       },
       "total": {
-        "correct": 72,
+        "correct": 71,
         "scored": 100,
-        "accuracy": 0.72
+        "accuracy": 0.71
       },
       "vendor_name": {
         "correct": 54,
@@ -188,11 +196,11 @@
     "per_category": {
       "real_pt_company": {
         "docs": 80,
-        "field_accuracy": 0.7076923076923077,
-        "field_correct": 322,
+        "field_accuracy": 0.7054945054945055,
+        "field_correct": 321,
         "field_scored": 455,
-        "fully_correct": 20,
-        "fully_correct_rate": 0.25,
+        "fully_correct": 19,
+        "fully_correct_rate": 0.2375,
         "fully_correct_six": 10,
         "six_scored": 59,
         "fully_correct_six_rate": 0.1694915254237288
@@ -243,9 +251,9 @@
     },
     "total": {
       "before_correct": 68,
-      "after_correct": 72,
+      "after_correct": 71,
       "scored": 100,
-      "delta": 4
+      "delta": 3
     },
     "vendor_name": {
       "before_correct": 54,
@@ -254,5 +262,5 @@
       "delta": 0
     }
   },
-  "fully_correct_delta": 4
+  "fully_correct_delta": 3
 }

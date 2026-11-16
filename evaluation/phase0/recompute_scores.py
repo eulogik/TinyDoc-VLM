@@ -1401,16 +1401,16 @@ def main() -> int:
             tf_ok = (
                 tf.get("documents") == 97
                 and tf.get("manifest_documents") == 100
-                and tf.get("triggered") == 4
-                and tf.get("fully_correct_delta") == 4
+                and tf.get("triggered") == 3
+                and tf.get("fully_correct_delta") == 3
                 and tf.get("baseline", {}).get("field_correct") == 401
                 and tf.get("baseline", {}).get("field_scored") == 570
                 and tf.get("baseline", {}).get("fully_correct") == 19
-                and tf.get("fallback", {}).get("field_correct") == 405
+                and tf.get("fallback", {}).get("field_correct") == 404
                 and tf.get("fallback", {}).get("field_scored") == 570
-                and tf.get("fallback", {}).get("fully_correct") == 23
+                and tf.get("fallback", {}).get("fully_correct") == 22
                 and tf_per_field.get("total", {}).get("before_correct") == 68
-                and tf_per_field.get("total", {}).get("after_correct") == 72
+                and tf_per_field.get("total", {}).get("after_correct") == 71
                 and all(
                     item.get("delta") == 0
                     for name, item in tf_per_field.items()

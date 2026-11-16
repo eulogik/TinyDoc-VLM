@@ -527,16 +527,24 @@ def test_single_amount_total_fallback_reclassifies_tax():
     assert pred == {"total_amount": 1.35, "subtotal": None, "tax": None}
 
 
-def test_single_amount_total_fallback_uses_subtotal():
+def test_single_amount_total_fallback_does_not_use_a_lone_subtotal():
+    # A parking receipt in the targeted probe had 29.40 in subtotal and 4.20
+    # printed total; reclassifying subtotal would be wrong.
     pred = {"total_amount": None, "subtotal": 4.37, "tax": None}
-    info = apply_single_amount_total_fallback(pred)
-    assert info == {
-        "trigger": "total_from_single_amount_subtotal",
-        "total_before": None,
-        "subtotal_before": 4.37,
-        "total_after": 4.37,
+    assert apply_single_amount_total_fallback(pred) is None
+    assert pred == {"total_amount": None, "subtotal": 4.37, "tax": None}
+
+
+def test_single_amount_total_fallback_requires_no_line_items():
+    pred = {
+        "total_amount": None,
+        "subtotal": None,
+        "tax": 1.35,
+        "line_items": [{"description": "Toll", "amount": 1.35}],
     }
-    assert pred == {"total_amount": 4.37, "subtotal": 4.37, "tax": None}
+    assert apply_single_amount_total_fallback(pred) is None
+    assert pred["total_amount"] is None
+    assert pred["tax"] == 1.35
 
 
 def test_single_amount_total_fallback_does_not_guess_when_two_amounts_exist():
@@ -550,7 +558,7 @@ def test_single_amount_total_fallback_keeps_a_good_total():
     assert apply_single_amount_total_fallback(pred) is None
     assert pred["total_amount"] == 59.0
 
-    pred = {"total_amount": 0.0, "subtotal": 4.37, "tax": None}
+    pred = {"total_amount": 0.0, "subtotal": None, "tax": 4.37, "line_items": []}
     assert apply_single_amount_total_fallback(pred)["total_after"] == 4.37
 
 
@@ -591,7 +599,7 @@ def test_pipeline_uses_a_lone_tax_as_the_total(tmp_path):
     assert result.to_dict()["total_fallback"]["total_after"] == 1.35
 
 
-def test_pipeline_uses_a_lone_subtotal_as_the_total(tmp_path):
+def test_pipeline_does_not_use_a_lone_subtotal_as_the_total(tmp_path):
     image = _png(tmp_path / "card.png")
     engine = FakeEngine(
         [
@@ -613,8 +621,6 @@ def test_pipeline_uses_a_lone_subtotal_as_the_total(tmp_path):
         with_ocr_totals=False,
         with_evidence=False,
     )
-    assert result.fields["total_amount"] == 4.37
-    assert result.fields["tax"] is None
-    assert result.total_fallback["trigger"] == "total_from_single_amount_subtotal"
-    assert "total_from_single_amount_subtotal" in result.corrections
-    assert "total_from_single_amount_subtotal" in result.review_flags
+    assert result.fields["total_amount"] is None
+    assert result.total_fallback is None
+    assert "total_from_single_amount_subtotal" not in result.corrections
