@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TinyDoc">
   <meta property="og:title" content="TinyDoc — cited document extraction that runs locally">
-  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 10/10 multipage key fields with OCR reconciliation (n=10); 0.3.1.post1 on PyPI.">
+  <meta property="og:description" content="Schema-valid JSON, exact OCR-span evidence, and field confidence from local Qwen VLMs. 0.9475 receipt field F1; 10/10 multipage key fields with OCR reconciliation (n=10); 0.3.2 on PyPI.">
   <meta property="og:url" content="https://eulogik.github.io/TinyDoc-VLM/">
   <meta property="og:image" content="https://eulogik.github.io/TinyDoc-VLM/assets/og-card.png">
   <meta property="og:image:width" content="1200">
@@ -205,7 +205,7 @@
         "alternateName": "TinyDoc Engine 3.0",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "macOS, Linux",
-        "softwareVersion": "0.3.1",
+        "softwareVersion": "0.3.2",
         "description": "Local-first receipt and invoice extraction: schema-valid JSON with OCR-span evidence and per-field confidence, powered by local Qwen VLMs.",
         "url": "https://eulogik.github.io/TinyDoc-VLM/",
         "downloadUrl": "https://pypi.org/project/tinydoc/",
@@ -226,7 +226,7 @@
           {
             "@type": "Question",
             "name": "Is there a local UI?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. 0.3.1 is on PyPI and adds `tinydoc ui`, a local Gradio app for receipt and multipage invoice extraction, and `tinydoc invoice`, a page-wise PDF/CLI path. It is local-only." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. 0.3.2 is on PyPI and adds `tinydoc ui`, a local Gradio app for receipt and multipage invoice extraction, and `tinydoc invoice`, a page-wise PDF/CLI path. It is local-only." }
           },
           {
             "@type": "Question",
@@ -236,12 +236,12 @@
           {
             "@type": "Question",
             "name": "Does TinyDoc work on invoices?",
-            "acceptedAnswer": { "@type": "Answer", "text": "On a synthetic public benchmark of 181 invoices, page 1 only, TinyDoc reaches 91.9% key-header accuracy and 65.7% fully correct with Qwen2.5-VL-3B, and 93.5% and 71.8% with Qwen3-VL-2B-Instruct. A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. Real B2B supplier invoices remain unmeasured and flagging fails. Multipage is a separate 10-document probe; the 0.3.1 SDK exposes the page-wise method, but that is probe-quality." }
+            "acceptedAnswer": { "@type": "Answer", "text": "On a synthetic public benchmark of 181 invoices, page 1 only, TinyDoc reaches 91.9% key-header accuracy and 65.7% fully correct with Qwen2.5-VL-3B, and 93.5% and 71.8% with Qwen3-VL-2B-Instruct. A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. The 0.3.2 lone-tax total fallback moves the seed-44 path from 401/570 to 404/570 and fully 19 to 22, and a targeted 28-document toll/parking set from 111/139 to 114/139 and fully 4 to 7; a representative seed-45 sample triggered it 0 times. Real B2B supplier invoices remain unmeasured and flagging fails. Multipage is a separate 10-document probe; the 0.3.2 SDK exposes the page-wise method, but that is probe-quality." }
           },
           {
             "@type": "Question",
             "name": "Does TinyDoc handle multipage invoices?",
-            "acceptedAnswer": { "@type": "Answer", "text": "The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4 of 10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise VLM gets 6 of 10 fully correct and 93.3% key-header. Adding deterministic reconciliation (last-page currency, arithmetic repairs, and OCR-read printed totals accepted only when subtotal plus tax equals total) reaches 10 of 10 on the nine key-header fields, with an exact 95% CI of 69.2 to 100 percent at n=10. That is a pipeline result, not a pure VLM score: line-item F1 is 0.848, all lines are right on 1 of 10, and the 0.3.1 SDK exposes the page-wise path, but that is probe-quality. A deterministic degraded copy of the same 46 pages completed 8 of 10 documents, with 7 of 8 fully correct, 71 of 72 key-header fields, and 2 page failures." }
+            "acceptedAnswer": { "@type": "Answer", "text": "The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4 of 10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise VLM gets 6 of 10 fully correct and 93.3% key-header. Adding deterministic reconciliation (last-page currency, arithmetic repairs, and OCR-read printed totals accepted only when subtotal plus tax equals total) reaches 10 of 10 on the nine key-header fields, with an exact 95% CI of 69.2 to 100 percent at n=10. That is a pipeline result, not a pure VLM score: line-item F1 is 0.848, all lines are right on 1 of 10, and the 0.3.2 SDK exposes the page-wise path, but that is probe-quality. A deterministic degraded copy of the same 46 pages completed 8 of 10 documents, with 7 of 8 fully correct, 71 of 72 key-header fields, and 2 page failures." }
           },
           {
             "@type": "Question",
@@ -299,7 +299,7 @@
     <header class="hero">
       <div class="wrap hero-grid">
         <div class="reveal">
-          <p class="kicker">TinyDoc Engine 3.0 · v0.3.1</p>
+          <p class="kicker">TinyDoc Engine 3.0 · v0.3.2</p>
           <h1>Document extraction you can <em>check</em>.</h1>
           <p class="lede">Receipts and invoices become schema-valid JSON, with the exact OCR span and a confidence score behind every field. Local Qwen VLMs. No API key, no cloud, no telemetry.</p>
           <div class="hero-actions">
@@ -449,6 +449,7 @@
               <tr><td>Invoice multipage, page-wise — same 10 docs, 2B</td><td>Fully correct</td><td class="num">6/10</td><td><span class="tag warn">93.3% key-header · 0.848 line F1 · ~2× slower</span></td></tr>
               <tr><td>Invoice multipage, page-wise + OCR totals — same 10 docs, 2B</td><td>Fully correct</td><td class="num"><b>10/10</b></td><td><span class="tag warn">90/90 key fields · pipeline, not pure VLM · 95% CI 69–100%</span></td></tr>
               <tr><td>Real Portuguese receipts/invoices — held-out 100 real photos, 5 fields, 2B</td><td>Field accuracy</td><td class="num"><b>72.0%</b></td><td><span class="tag warn">22/100 fully correct · merge fix shipped in 0.3.1 · development 74.2% / 18 · 0.3.0 merge 64.8% / 3/100</span></td></tr>
+              <tr><td>Lone-tax total fallback — seed-44 replay + 28-doc toll/parking stress, 2B</td><td>Field accuracy</td><td class="num"><b>404/570 · 114/139</b></td><td><span class="tag ok">+3 fields each · 6/6 triggers correct · targeted, not population</span></td></tr>
               <tr><td>Targeted tax retry — fresh 100 real photos (seed 44), 5 fields, 2B</td><td>Field accuracy</td><td class="num"><b>72.1%</b></td><td><span class="tag ok">first pass 70.4% · tax 51/82 → 61/82 · 0 fields lost · opt-in</span></td></tr>
               <tr><td>DocVQA reading probe — 200 public images, 2B</td><td>ANLS</td><td class="num"><b>0.829</b></td><td><span class="tag warn">single-reference · not a leaderboard number</span></td></tr>
               <tr><td>Invoice flags — inconsistent + multi-invoice</td><td>Recall</td><td class="num"><b>0/7</b></td><td><span class="tag bad">not usable</span></td></tr>
@@ -460,7 +461,7 @@
         </div>
 
         <div class="caveat">
-          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real B2B supplier invoices are unmeasured, and flagging fails (0/7). A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts VAT on tax-inclusive receipts. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive: all-pages gets 4/10 fully correct and page-wise VLM gets 6/10; deterministic reconciliation plus OCR-read printed totals reaches 10/10 on the nine key-header fields, but that is a pipeline result, not a pure VLM score, with a 69.2–100% exact 95% CI at n=10. Line items remain weak (0.848 F1, 1/10 all right), page-wise is ~2× slower, the OCR parser was not held out from these pages, and the 181-document page-1 numbers remain VLM-only. DocVQA is a 200-image public reading probe with one reference answer per question; it is not comparable to leaderboard numbers. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
+          <b>Provenance.</b> clean-100 is a duplicate-filtered split of the public SROIE <b>train</b> pool, not an external test; Qwen may have seen it in pretraining. The original 100-doc set is <b>60% leaked</b>. The invoice set is synthetic, vendor-made, and page-1 only; real B2B supplier invoices are unmeasured, and flagging fails (0/7). A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts VAT on tax-inclusive receipts. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. The 0.3.2 lone-tax total fallback moves the seed-44 path from 401/570 to 404/570 and fully 19 to 22, and a targeted 28-document toll/parking set from 111/139 to 114/139 and fully 4 to 7; a representative seed-45 sample triggered it 0 times. The multipage probe is 10 synthetic documents at 1400 px, 2B only, and descriptive: all-pages gets 4/10 fully correct and page-wise VLM gets 6/10; deterministic reconciliation plus OCR-read printed totals reaches 10/10 on the nine key-header fields, but that is a pipeline result, not a pure VLM score, with a 69.2–100% exact 95% CI at n=10. Line items remain weak (0.848 F1, 1/10 all right), page-wise is ~2× slower, the OCR parser was not held out from these pages, and the 181-document page-1 numbers remain VLM-only. DocVQA is a 200-image public reading probe with one reference answer per question; it is not comparable to leaderboard numbers. These numbers are for same-document engine comparisons, not generalization claims. Recompute with <code>python3 evaluation/phase0/recompute_scores.py</code>.
         </div>
       </div>
     </section>
@@ -487,7 +488,7 @@
         <div class="grid-2">
           <div>
             <pre class="code"><code><span class="c"># 1. install</span>
-pip install tinydoc==0.3.1.post1
+pip install tinydoc==0.3.2
 
 <span class="c"># 2. pull a local reader (choose one)</span>
 ollama pull qwen2.5vl:3b            <span class="c"># quality</span>
@@ -530,7 +531,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         </details>
         <details>
           <summary>Is there a local UI?</summary>
-          <p>Yes. 0.3.1 is on PyPI and adds <code>tinydoc ui</code>, a local Gradio app for receipt and multipage invoice extraction, and <code>tinydoc invoice</code>, a page-wise PDF/CLI path with deterministic OCR total reconciliation and an opt-in <code>--retry-tax-px</code> high-resolution tax retry. It is local-only.</p>
+          <p>Yes. 0.3.2 is on PyPI and adds <code>tinydoc ui</code>, a local Gradio app for receipt and multipage invoice extraction, and <code>tinydoc invoice</code>, a page-wise PDF/CLI path with deterministic OCR total reconciliation, an opt-in <code>--retry-tax-px</code> high-resolution tax retry, and a default lone-tax total fallback for toll/parking receipts. It is local-only.</p>
         </details>
         <details>
           <summary>Does TinyDoc ship its own model?</summary>
@@ -538,7 +539,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         </details>
         <details>
           <summary>Does it work on invoices?</summary>
-          <p>On a synthetic public benchmark of 181 invoices (page 1 only), it reaches 91.9% key-header accuracy and 65.7% fully correct with the 3B, and 93.5% / 71.8% with the 2B. A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts VAT on tax-inclusive receipts. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. Real B2B supplier invoices are unmeasured and flagging fails (0/7); multipage is a separate 10-document probe. The 0.3.1 SDK exposes the page-wise method, but that is probe-quality.</p>
+          <p>On a synthetic public benchmark of 181 invoices (page 1 only), it reaches 91.9% key-header accuracy and 65.7% fully correct with the 3B, and 93.5% / 71.8% with the 2B. A separate real Portuguese receipt/invoice probe (five fields) reaches 72.0% field accuracy and 22/100 fully correct on a held-out 100-document set with the merge fix shipped in 0.3.1; the development set gets 74.2% / 18, and the 0.3.0 merge gets 64.8% / 3/100 because it double-counts VAT on tax-inclusive receipts. The opt-in targeted tax retry in 0.3.1 moves a fresh 100-document set from 401/570 = 70.4% to 411/570 = 72.1% (tax 51/82 to 61/82, fully correct 19 to 21) with no field regression. The 0.3.2 lone-tax total fallback moves the seed-44 path from 401/570 to 404/570 and fully 19 to 22, and a targeted 28-document toll/parking set from 111/139 to 114/139 and fully 4 to 7; a representative seed-45 sample triggered it 0 times. Real B2B supplier invoices are unmeasured and flagging fails (0/7); multipage is a separate 10-document probe. The 0.3.2 SDK exposes the page-wise method, but that is probe-quality.</p>
         </details>
         <details>
           <summary>How well does it read documents?</summary>
@@ -546,7 +547,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         </details>
         <details>
           <summary>Does it handle multipage invoices?</summary>
-          <p>The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4/10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise VLM gets <b>6/10 fully correct</b> and <b>93.3% key-header</b>. Adding deterministic reconciliation — last-page currency, arithmetic repairs, and OCR-read printed totals accepted only when <code>subtotal + tax == total</code> — reaches <b>10/10 on the nine key-header fields</b>, with an exact 95% CI of 69.2–100% at n=10. That is a <b>pipeline result, not a pure VLM score</b>: line-item F1 is 0.848, all lines are right on 1/10, page-wise is ~2× slower, and the 0.3.1 SDK exposes the page-wise path, but that is probe-quality. A deterministic degraded copy of the same 46 pages completed 8 of 10 documents, with 7 of 8 fully correct, 71 of 72 key-header fields, and 2 page failures.</p>
+          <p>The evaluation harness can send every page, or read one page per request and merge deterministically. On 10 synthetic multipage invoices (46 pages, 2B), all-pages gets 4/10 fully correct and 71.1% key-header, with two 8-page runaway failures; page-wise VLM gets <b>6/10 fully correct</b> and <b>93.3% key-header</b>. Adding deterministic reconciliation — last-page currency, arithmetic repairs, and OCR-read printed totals accepted only when <code>subtotal + tax == total</code> — reaches <b>10/10 on the nine key-header fields</b>, with an exact 95% CI of 69.2–100% at n=10. That is a <b>pipeline result, not a pure VLM score</b>: line-item F1 is 0.848, all lines are right on 1/10, page-wise is ~2× slower, and the 0.3.2 SDK exposes the page-wise path, but that is probe-quality. A deterministic degraded copy of the same 46 pages completed 8 of 10 documents, with 7 of 8 fully correct, 71 of 72 key-header fields, and 2 page failures.</p>
         </details>
         <details>
           <summary>Does my data leave my machine?</summary>
@@ -582,7 +583,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/BENCHMARKS.md"><b>Benchmarks</b><span>Every measured number and caveat</span></a>
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/MODEL_CARD.md"><b>System card</b><span>Intended use, limits, confidence</span></a>
           <a href="https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md"><b>Plan and evidence ledger</b><span>What was tried, what failed, what is next</span></a>
-          <a href="https://pypi.org/project/tinydoc/"><b>PyPI</b><span>tinydoc 0.3.1.post1</span></a>
+          <a href="https://pypi.org/project/tinydoc/"><b>PyPI</b><span>tinydoc 0.3.2</span></a>
           <a href="https://huggingface.co/spaces/eulogik/TinyDoc-VLM"><b>Evidence card</b><span>Hugging Face Space</span></a>
         </div>
       </div>
@@ -595,7 +596,7 @@ result = pipe.extract(<span class="s">"receipt.jpg"</span>)
         <div>Built by <a href="https://eulogik.com">eulogik</a> — AI infrastructure for document intelligence.</div>
         <div><a href="llms.txt">llms.txt</a> · <a href="https://github.com/eulogik/TinyDoc-VLM">GitHub</a> · <a href="https://pypi.org/project/tinydoc/">PyPI</a> · Apache 2.0</div>
       </div>
-      <p class="foot-note">Last updated 2026-11-13. TinyDoc is a developer preview: real B2B supplier invoices are unmeasured; a 100-document held-out Portuguese receipt/invoice probe (five fields) reaches 72.0% field / 22-of-100 fully correct, with a separate development set; the opt-in targeted tax retry reaches 72.1% on a fresh 100-document set (401/570 → 411/570, no field lost); multipage is a 10-document probe (page-wise VLM 6/10; 10/10 key-header only with deterministic OCR reconciliation, ~2× slower); DocVQA is a single-reference reading probe rather than a leaderboard score; and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
+      <p class="foot-note">Last updated 2026-11-16. TinyDoc is a developer preview: real B2B supplier invoices are unmeasured; a 100-document held-out Portuguese receipt/invoice probe (five fields) reaches 72.0% field / 22-of-100 fully correct, with a separate development set; the opt-in targeted tax retry reaches 72.1% on a fresh 100-document set (401/570 → 411/570, no field lost); the 0.3.2 lone-tax total fallback moves the seed-44 replay from 401/570 to 404/570 and a targeted 28-document toll/parking set from 111/139 to 114/139, with 6/6 observed triggers correct; multipage is a 10-document probe (page-wise VLM 6/10; 10/10 key-header only with deterministic OCR reconciliation, ~2× slower); DocVQA is a single-reference reading probe rather than a leaderboard score; and confidence is for review routing only. Numbers on this page are reproduced from committed artifacts by <code>evaluation/phase0/recompute_scores.py</code>.</p>
     </div>
   </footer>
 </body>

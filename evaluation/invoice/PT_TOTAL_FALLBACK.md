@@ -1,8 +1,8 @@
 # Total recovery: rejected model retry, validated single-amount fallback
 
-**Status:** the model-based total retry was rejected. A deterministic fallback
-that reclassifies a lone `tax` amount as the total is implemented and validated
-on a targeted toll/parking stress set.
+**Status:** the model-based total retry was rejected. The deterministic lone-tax
+fallback shipped in 0.3.2 and was validated on a targeted toll/parking stress
+set.
 **Headline:** on Portuguese toll and parking receipts that print one `Taxa`/fee
 amount and no total, the reader often puts that amount in `tax`. Reclassifying it
 as `total` recovers **3 fields and 3 fully-correct documents on the seed-44

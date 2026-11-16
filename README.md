@@ -10,7 +10,7 @@ Schema-valid JSON · exact OCR-span evidence · per-field confidence · Apache 2
 [![CI](https://github.com/eulogik/TinyDoc-VLM/actions/workflows/ci.yml/badge.svg)](https://github.com/eulogik/TinyDoc-VLM/actions)
 [![License](https://img.shields.io/badge/license-Apache_2.0-1E6F5C.svg)](LICENSE)
 [![HF Space](https://img.shields.io/badge/%F0%9F%A4%97-evidence%20card-1E6F5C)](https://huggingface.co/spaces/eulogik/TinyDoc-VLM)
-[![Tests](https://img.shields.io/badge/tests-228-1E6F5C.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-262-1E6F5C.svg)](tests/)
 
 </div>
 
@@ -40,7 +40,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 | | |
 |---|---|
-| **Install** | `pip install tinydoc` (0.3.1.post1) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
+| **Install** | `pip install tinydoc` (0.3.2) · `pip install 'tinydoc[pdf,ui]'` for multipage + local UI |
 | **Runtime** | Local Ollama; Python 3.9+; no API key |
 | **Readers** | `qwen2.5vl:3b` (quality) · `qwen3-vl:2b-instruct` (fast) |
 | **Output** | Schema-valid JSON + per-field quote/bbox + confidence + optional overlay PNG |
@@ -50,7 +50,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 | **Multipage (page-wise + OCR totals)** | **10/10 fully correct** · 100% key-header (90/90) · 0.848 line F1 · 2B · n=10 · **not a pure VLM score** |
 | **Multipage (VLM only, page-wise)** | 6/10 fully correct · 93.3% key-header · 0.848 line F1 · 2B · n=10 |
 | **Multipage (degraded, page-wise + OCR)** | 7/8 fully correct · 98.6% key-header · 2/10 documents failed · 2B · n=10 |
-| **Real Portuguese probe (5 fields)** | **72.0%** field · **22/100** fully correct on the held-out 100; development 74.2% / 18; 0.3.0 merge 64.8% / 3/100 · shipped in 0.3.1 |
+| **Real Portuguese probe (5 fields)** | **72.0%** field · **22/100** fully correct on the held-out 100; development 74.2% / 18; 0.3.0 merge 64.8% / 3/100 · shipped in 0.3.1 · 0.3.2 total fallback 404/570, fully 22 |
 | **DocVQA (reading)** | 0.829 ANLS / 0.765 exact · 200 public images · single-reference |
 | **Not yet measured** | Real B2B supplier invoices, harsher/adversarial scans, real-document line items |
 | **License** | Apache 2.0 (SDK); Qwen base models are Apache 2.0 |
@@ -58,7 +58,7 @@ in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 ## Quick start
 
 ```bash
-pip install tinydoc==0.3.1.post1
+pip install tinydoc==0.3.2
 
 # Pull one local reader (choose one or both)
 ollama pull qwen2.5vl:3b            # quality tier
@@ -84,6 +84,31 @@ tinydoc extract ./receipts/ --engine ollama:qwen2.5vl:3b \
     --out results.jsonl --overlay overlays/
 ```
 
+### 0.3.2: total recovery on toll and parking receipts
+
+0.3.2 is on PyPI. Some Portuguese toll and parking receipts print a single
+amount labelled `Taxa` (fee) and no `Total` line; the reader can put that amount
+in `tax` and leave `total` empty. The new deterministic fallback reclassifies a
+lone, positive `tax` amount as `total` when the merged page has no subtotal, no
+line items, and no total. It makes no model call; if the page has more than one
+amount, it does nothing.
+
+```bash
+pip install tinydoc==0.3.2
+tinydoc invoice toll-receipt.jpg --out result.jsonl   # fallback is on by default
+```
+
+On the seed-44 development replay it moves field accuracy **401/570 → 404/570**,
+total **68 → 71**, and fully-correct documents **19 → 22**, with 3/3 triggers
+correct. On a targeted 28-document toll/parking stress set it moves
+**111/139 → 114/139** and fully-correct **4 → 7**, again 3/3 triggers correct.
+A representative seed-45 fresh sample did not trigger the rule (0/100), so the
+evidence is the replay plus the targeted probe, not a population estimate. With
+the opt-in tax retry also on, the seed-44 path is **414/570 = 72.6%, fully
+24/100**. The published held-out headline remains 72.0% / 22-of-100 on the
+seed-43 set. See
+[`evaluation/invoice/PT_TOTAL_FALLBACK.md`](evaluation/invoice/PT_TOTAL_FALLBACK.md).
+
 ### 0.3.1: merge fix and targeted tax retry
 
 0.3.1 is on PyPI. It ships the preserve-printed-total merge fix behind the
@@ -94,7 +119,7 @@ the total, or below 1% of it), and replaces only `tax`, only when the implied VA
 rate is 1.0–27.5%. It is off by default:
 
 ```bash
-pip install 'tinydoc[pdf,ui]==0.3.1.post1'
+pip install 'tinydoc[pdf,ui]==0.3.2'
 tinydoc invoice invoice.pdf --out result.jsonl --retry-tax-px 2400
 ```
 
@@ -270,6 +295,16 @@ re-reads only the final page at 2400 px on ~23% of documents, triggered by a
 structurally implausible printed tax, and accepts a candidate only when the
 implied VAT rate is 1.0–27.5%. See
 [`evaluation/invoice/PT_TAX_RETRY.md`](evaluation/invoice/PT_TAX_RETRY.md).
+
+0.3.2 adds the complementary total fallback. On the same seed-44 set, a lone
+`Taxa` amount that the reader put in `tax` is reclassified as the total when the
+page has no subtotal, no line items, and no total: **401/570 → 404/570**, total
+**68 → 71**, fully correct **19 → 22**, 3/3 triggers correct. A targeted
+28-document toll/parking stress set moves **111/139 → 114/139** and fully
+correct **4 → 7**, also 3/3 correct. The probe also found a subtotal
+counterexample (29.40 vs a 4.20 printed total), which is why subtotal is never
+reclassified. A representative seed-45 sample triggered the rule 0 times. See
+[`evaluation/invoice/PT_TOTAL_FALLBACK.md`](evaluation/invoice/PT_TOTAL_FALLBACK.md).
 
 **DocVQA reading probe** — 200 public images, one question per image, 768 px
 mirror, one reference answer. Qwen3-VL-2B-Instruct scores **0.829 ANLS** and

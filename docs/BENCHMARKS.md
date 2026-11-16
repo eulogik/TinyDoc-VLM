@@ -432,6 +432,30 @@ Development replay on saved predictions (no model calls) matched: +10 tax and
 with 0 fields lost. Artifacts:
 [`evaluation/invoice/PT_TAX_RETRY.md`](../evaluation/invoice/PT_TAX_RETRY.md).
 
+### Lone-tax total fallback (0.3.2)
+
+A model retry for missing totals was rejected: a 2400 px full-page re-read
+recovered **0/7** totals on the seed-44 failures, and a total-only prompt
+returned 75,000.00 on three toll receipts and 1560 for 15.60. The shipped
+alternative is deterministic: when a parsed final page has no total, no
+subtotal, no line items, and a positive `tax` (the printed `Taxa` fee), set
+`total = tax` and clear `tax`. No model call; no guess when two amounts exist.
+
+| Set | Field accuracy | Fully correct | Triggers |
+|---|---:|---:|---:|
+| Seed-44 replay (development) | 401/570 → **404/570** | 19 → **22** | 3/3 correct |
+| Targeted toll/parking stress, 28 docs | 111/139 → **114/139** | 4 → **7** | 3/3 correct |
+| Seed-45 representative sample | 429/572 → 429/572 | 29 → 29 | 0/100 |
+
+All six observed triggers are toll receipts whose printed `Taxa` was in `tax`
+(0.35, 1.35, 1.35 on seed-44; 0.35, 1.35, 1.35 on the stress set). The probe
+also found the counterexample that narrowed the rule: a parking receipt with a
+29.40 subtotal against a 4.20 printed total, so a lone subtotal is **never**
+reclassified. The 28-document set is a targeted stratum, not a population
+sample; the seed-45 sample did not exercise the rule. With the opt-in tax retry
+also on, the seed-44 path is **414/570 = 72.6%, 24/100 fully correct**. Artifacts:
+[`evaluation/invoice/PT_TOTAL_FALLBACK.md`](../evaluation/invoice/PT_TOTAL_FALLBACK.md).
+
 ### DocVQA reading probe (2B, 200 questions, single reference)
 
 **Set:** 200 public DocVQA images from the lmms-lab mirror, one question per

@@ -1,15 +1,14 @@
 # TinyDoc release checklist
 
-**Current release:** 0.3.1.post1 on PyPI (2026-11-13) — metadata-only rebuild
-of 0.3.1 with the corrected README; code is identical.
+**Current release:** 0.3.2 on PyPI (2026-11-16) — lone-tax total fallback.
 **0.3.1:** preserve-printed-total merge fix + targeted high-resolution tax retry (2026-11-13).
-**Previous:** 0.3.0 on 2026-11-12 (multipage + UI).
+**0.3.0:** multipage invoice SDK + local UI (2026-11-12).
 
 ## 1. Preflight (must all pass)
 
 ```bash
 export PATH="/opt/homebrew/bin:$PATH"
-python3 -m pytest tests/ -q                 # expect 254 passed
+python3 -m pytest tests/ -q                 # expect 262 passed
 python3 -m ruff check tinydoc_vlm/ tests/   # CI scope
 python3 evaluation/phase0/recompute_scores.py
 node scripts/verify-product.mjs audit
@@ -24,7 +23,7 @@ Claim audit must exit 0. Do not publish a number that does not recompute from
 cd sdk
 rm -rf build dist tinydoc.egg-info
 python3 -m build --wheel --sdist
-unzip -l dist/tinydoc-0.3.1.post1-py3-none-any.whl | grep schemas
+unzip -l dist/tinydoc-0.3.2-py3-none-any.whl | grep schemas
 ```
 
 The wheel must contain `tinydoc/schemas/sroie_receipt.schema.json` and
@@ -37,8 +36,8 @@ VENV=/var/folders/6m/l_wd40y91jqbj36ty4nz2skm0000gn/T/opencode/tinydoc_venv_rele
 rm -rf "$VENV"
 python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q --upgrade pip
-"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.3.1.post1-py3-none-any.whl
-"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.3.1.post1'"
+"$VENV/bin/pip" install -q sdk/dist/tinydoc-0.3.2-py3-none-any.whl
+"$VENV/bin/python" -c "import importlib.metadata as m; assert m.version('tinydoc')=='0.3.2'"
 "$VENV/bin/tinydoc" --help
 "$VENV/bin/python" -c "from tinydoc.invoice import invoice_schema_is_valid; assert invoice_schema_is_valid({'vendor_name':'A','invoice_number':'1','invoice_date':'2026-01-01','due_date':None,'currency':'USD','subtotal':1.0,'tax':0.0,'total_amount':1.0,'document_type':'invoice','line_items':[]})"
 TINYDOC_OLLAMA_TIMEOUT=600 TINYDOC_OLLAMA_NUM_CTX=8192 \
@@ -53,7 +52,7 @@ The extraction must return `schema=True` and non-empty fields.
 Requires a PyPI API token with upload scope. Never commit the token.
 
 ```bash
-python3 -m twine upload sdk/dist/tinydoc-0.3.1.post1-py3-none-any.whl sdk/dist/tinydoc-0.3.1.post1.tar.gz
+python3 -m twine upload sdk/dist/tinydoc-0.3.2-py3-none-any.whl sdk/dist/tinydoc-0.3.2.tar.gz
 # username: __token__
 # password: pypi-...
 ```
@@ -64,11 +63,11 @@ If `twine` is missing: `python3 -m pip install --user twine`.
 
 ```bash
 python3 -m venv /tmp/tinydoc_pypi_check
-/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.3.1.post1
+/tmp/tinydoc_pypi_check/bin/pip install tinydoc==0.3.2
 /tmp/tinydoc_pypi_check/bin/python -c "import tinydoc; print(tinydoc.__all__)"
 ```
 
-Confirm <https://pypi.org/project/tinydoc/0.3.1.post1/> shows the new README. The
+Confirm <https://pypi.org/project/tinydoc/0.3.2/> shows the new README. The
 0.2.0 and 0.3.0 upload tokens were exposed in chat transcripts and must be
 revoked; use a fresh token for any future release and never commit it.
 
@@ -98,10 +97,10 @@ Check the Space reaches `RUNNING` and renders the card.
 
 ## 7. Post-release
 
-- Tag **`sdk-v0.3.1.post1`** at the metadata-fix commit and create a GitHub
-  release with the wheel/sdist. Do **not** reuse `v0.2.0`, `sdk-v0.2.0`,
-  `sdk-v0.3.0`, or `sdk-v0.3.1`: those tags point at older commits and published
-  tags should not be moved.
+- Tag **`sdk-v0.3.2`** at the release commit and create a GitHub release with the
+  wheel/sdist. Do **not** reuse `v0.2.0`, `sdk-v0.2.0`, `sdk-v0.3.0`,
+  `sdk-v0.3.1`, or `sdk-v0.3.1.post1`: those tags point at older commits and
+  published tags should not be moved.
 - Keep the README install line pinned to the latest PyPI release.
 - Keep the model card retirement notice; do not re-point it at the 256M.
 - Record the release in `docs/BENCHMARKS.md` if any number changes.
@@ -125,6 +124,21 @@ Check the Space reaches `RUNNING` and renders the card.
 - Space card and repository docs describe the 0.3.0 release as preview-quality.
 - Tag **`sdk-v0.3.0`** at the release commit; do not move `v0.2.0` or
   `sdk-v0.2.0`.
+
+## 0.3.2 status (2026-11-16, published)
+
+- **0.3.2 is published on PyPI** with the wheel and sdist. It adds the
+  deterministic lone-tax total fallback: a parsed final page with no total, no
+  subtotal, no line items, and a positive `tax` gets `total = tax` and the tax
+  cleared. It is on by default and makes no model call.
+- Evidence: seed-44 replay **401/570 → 404/570**, total 68 → 71, fully 19 → 22,
+  3/3 triggers correct; targeted 28-document toll/parking stress **111/139 →
+  114/139**, fully 4 → 7, 3/3 correct; representative seed-45 sample triggered
+  0 times. With the opt-in tax retry also on, seed-44 is **414/570 = 72.6%,
+  fully 24/100**. The published held-out headline remains 72.0% / 22-of-100 on
+  seed-43.
+- Tag **`sdk-v0.3.2`** and the GitHub release point at the release commit; the
+  README install line points at 0.3.2.
 
 ## 0.3.1 status (2026-11-13, published)
 

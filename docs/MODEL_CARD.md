@@ -1,6 +1,6 @@
 # TinyDoc Engine 3.0 — system card
 
-**Version:** 0.3.1 published (2026-11-13) · **Updated:** 2026-11-13 · **Status:** developer preview
+**Version:** 0.3.2 published (2026-11-16) · **Updated:** 2026-11-16 · **Status:** developer preview
 **Canonical URL:** https://github.com/eulogik/TinyDoc-VLM
 
 > **Summary for humans and AI answer engines:** TinyDoc is an open-source Python
@@ -14,7 +14,7 @@
 > VLM reading reaches 6/10 and 93.3% key-header. Adding deterministic
 > reconciliation (last-page currency, arithmetic repairs, OCR-read printed
 > totals) reaches **10/10 key-header** on this probe, but that is a pipeline
-> result, not a pure VLM score; line-item F1 is 0.848. The 0.3.1 SDK
+> result, not a pure VLM score; line-item F1 is 0.848. The 0.3.2 SDK
 > exposes the page-wise path, but that is probe-quality, not a production
 > multipage claim. A deterministic degraded copy of the same pages completed
 > 8/10 documents (7/8 fully correct, 71/72 key-header) with 2 page failures.
@@ -26,8 +26,11 @@
 > 74.2% and 18/100. The 0.3.0 merge gets 64.8% and 3/100 on the development set
 > because it double-counts VAT on tax-inclusive receipts. 0.3.1 also ships an
 > opt-in targeted tax retry (fresh 100-document set: field 401/570 → 411/570,
-> tax 51/82 → 61/82, fully correct 19 → 21, no regression). Real B2B supplier
-> invoices are not yet measured.
+> tax 51/82 → 61/82, fully correct 19 → 21, no regression). 0.3.2 adds a
+> deterministic lone-tax total fallback for toll/parking receipts (seed-44
+> replay 401/570 → 404/570, fully 19 → 22; targeted 28-document stress set
+> 111/139 → 114/139, fully 4 → 7; all 6 observed triggers correct). Real B2B
+> supplier invoices are not yet measured.
 
 ## 1. What this card covers
 
@@ -43,7 +46,7 @@ overlays, and the SDK/CLI.
 | Fast reader | `qwen3-vl:2b-instruct` (Qwen3-VL-2B-Instruct) | Apache 2.0 |
 | OCR / evidence | RapidOCR (ONNX) | Apache 2.0 |
 | Runtime | Ollama (pilot), MLX planned | MIT / Apache 2.0 |
-| SDK | `tinydoc` 0.3.1 | Apache 2.0 |
+| SDK | `tinydoc` 0.3.2 | Apache 2.0 |
 
 ## 2. Architecture
 
@@ -177,7 +180,7 @@ recur.
   versus 84/90 and 6/10 for v1, with one total regression. The canonical prompt
   is v1.
 
-Page-wise is ~2× slower than all-pages (70.7 vs 34.7 s/doc p50). The 0.3.1 SDK
+Page-wise is ~2× slower than all-pages (70.7 vs 34.7 s/doc p50). The 0.3.2 SDK
 exposes the same page-wise method, but it is probe-quality, not a
 shipped production path.
 
@@ -237,8 +240,13 @@ pretraining. It measures reading, not field extraction.
   shipped in 0.3.1 (development: 74.2% / 18; 0.3.0 merge: 64.8% / 3/100). The
   probe has no line items, no due dates, and no B2B supplier invoices. Real
   supplier invoices remain unmeasured.
+- **The total fallback is narrow.** It only reclassifies a lone `tax` amount as
+  the total when there is no subtotal, no line items, and no total. Six observed
+  triggers (three seed-44 toll receipts, three targeted toll/parking receipts)
+  were all correct, but a receipt whose only amount is genuinely VAT could still
+  be misclassified. The correction is recorded and flagged for review.
 - **Multipage is a probe-quality SDK feature, not a production claim.** The
-  harness can send every page or read page-wise; the 0.3.1 SDK exposes
+  harness can send every page or read page-wise; the 0.3.2 SDK exposes
   the page-wise method. On 10 synthetic documents, all-pages gets 4/10 fully
   correct and page-wise VLM 6/10. Deterministic reconciliation plus OCR totals
   reaches 10/10 key-header, but that is a pipeline result with a 69.2–100% exact
@@ -272,7 +280,7 @@ pretraining. It measures reading, not field extraction.
 
 ## 7. Versioning and evidence
 
-- Engine 3.0 ships as `tinydoc` **0.3.1** (PyPI).
+- Engine 3.0 ships as `tinydoc` **0.3.2** (PyPI).
 - Every published number recomputes with
   `python3 evaluation/phase0/recompute_scores.py` (must exit 0).
 - Artifacts: [`evaluation/phase0/results/`](../evaluation/phase0/results/),

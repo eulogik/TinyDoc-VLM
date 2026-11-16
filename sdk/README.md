@@ -1,4 +1,4 @@
-# TinyDoc 0.3.1 — local-first grounded document extraction
+# TinyDoc 0.3.2 — local-first grounded document extraction
 
 **TinyDoc turns receipt and invoice images into schema-validated JSON with
 per-field evidence (quote + OCR bbox), confidence for receipt review routing, and
@@ -6,21 +6,24 @@ arithmetic review flags for invoices. It runs local Qwen VLMs through Ollama;
 no API key, no cloud, no telemetry.**
 
 ```bash
-pip install tinydoc==0.3.1.post1     # multipage + local UI + tax retry
+pip install tinydoc==0.3.2           # multipage + local UI + tax retry + total fallback
 pip install 'tinydoc[pdf,ui]'        # with PDF rendering + Gradio
 pip install -e ./sdk                 # development install
 ollama pull qwen2.5vl:3b             # quality tier
 ollama pull qwen3-vl:2b-instruct     # fast tier
 ```
 
-> **Status (2026-11-13):** 0.3.1 is the current release (PyPI). It ships the
+> **Status (2026-11-16):** 0.3.2 is the current release (PyPI). It ships the
 > preserve-printed-total merge fix (real Portuguese probe: 74.2% field /
-> 18-of-100 development, 72.0% / 22-of-100 held out at 1400 px) and the
-> validated targeted tax retry (fresh 100-doc set: 401/570 → 411/570, tax
-> 51/82 → 61/82, +2 fully correct, no regression). The 0.3.0 wheel on PyPI
-> does not contain these fixes. The first-party 256M model is retired (OCRBench
-> 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over base). The
-> product is the engine + trust layer, not the old checkpoint. Full analysis:
+> 18-of-100 development, 72.0% / 22-of-100 held out at 1400 px), the validated
+> targeted tax retry (fresh 100-doc set: 401/570 → 411/570, tax 51/82 → 61/82,
+> +2 fully correct, no regression), and the lone-tax total fallback (seed-44
+> replay 401/570 → 404/570, fully 19 → 22; targeted toll/parking stress
+> 111/139 → 114/139, fully 4 → 7; all triggers correct). The 0.3.0 wheel on
+> PyPI does not contain these fixes. The first-party 256M model is retired
+> (OCRBench 0.0%) and the SmolVLM2-2.2B SFT track is closed (no gain over
+> base). The product is the engine + trust layer, not the old checkpoint. Full
+> analysis:
 > [docs/v3_plan.md](https://github.com/eulogik/TinyDoc-VLM/blob/main/docs/v3_plan.md).
 
 ![TinyDoc architecture](https://raw.githubusercontent.com/eulogik/TinyDoc-VLM/main/docs/assets/architecture.png)
@@ -59,8 +62,8 @@ from those pages; the 181-document page-1 numbers remain VLM-only.
 
 ### Multipage invoices in the SDK
 
-`tinydoc 0.3.0` added that page-wise path as `InvoicePipeline`; `0.3.1` keeps it
-and adds the opt-in tax retry. It renders a PDF
+`tinydoc 0.3.0` added that page-wise path as `InvoicePipeline`; `0.3.1` added
+the opt-in tax retry and `0.3.2` the lone-tax total fallback. It renders a PDF
 to page images capped at 1400 px (matching the probe), reads one page per
 request, merges deterministically, and can reconcile the printed totals with
 OCR. No model calls happen in the merge; every repair is recorded.
@@ -101,6 +104,15 @@ accuracy **401/570 = 70.4% → 411/570 = 72.1%**, tax **51/82 → 61/82**, fully
 correct **19 → 21**, zero field regressions and zero retry errors; 23/100
 documents triggered and 12 applied. See
 [`evaluation/invoice/PT_TAX_RETRY.md`](https://github.com/eulogik/TinyDoc-VLM/blob/main/evaluation/invoice/PT_TAX_RETRY.md).
+
+The total fallback is on by default and needs no flag. When a parsed final page
+has no total, no subtotal, no line items, and a positive `tax` (a toll/parking
+`Taxa` fee), it sets `total = tax` and clears `tax`. On the seed-44 replay this
+moves 401/570 → **404/570** fields and 19 → **22** fully-correct documents; on a
+targeted 28-document toll/parking set it moves 111/139 → **114/139** and
+4 → **7** fully correct, with 3/3 triggers correct. It never guesses when two
+amounts exist or when line items are present. See
+[`evaluation/invoice/PT_TOTAL_FALLBACK.md`](https://github.com/eulogik/TinyDoc-VLM/blob/main/evaluation/invoice/PT_TOTAL_FALLBACK.md).
 
 The OCR total reader needs system `tesseract` (`pip install 'tinydoc[ocr]'`) and
 is applied only when the final page yields a consistent subtotal/tax/total block.
@@ -144,7 +156,7 @@ this is not a leaderboard number.
 ## Install
 
 ```bash
-pip install tinydoc==0.3.1.post1
+pip install tinydoc==0.3.2
 ```
 
 Core deps: `pydantic`, `pillow`, `jsonschema`. Optional extras:
